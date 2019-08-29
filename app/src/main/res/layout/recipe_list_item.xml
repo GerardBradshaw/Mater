@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <!-- Image -->
+        <ImageView
+            android:id="@+id/recipeListItem_image"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/colorAccent"
+            android:contentDescription="@string/recipeListItem_image_contentDescription"
+            android:scaleType="centerInside"
+            android:transitionName="recipeImageTransition" />
+        
+        <!-- Title -->
+        <TextView
+            android:id="@+id/recipeListItem_title"
+            style="@style/RecipeTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/recipeListItem_image"
+            android:layout_alignBottom="@id/recipeListItem_image"
+            tools:text="Title" />
+
+        <!-- Summary -->
+        <TextView
+            android:id="@+id/recipeListItem_summary"
+            style="@style/SummaryStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recipeListItem_image"
+            tools:text="Summary summary summary" />
+        
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
