@@ -40,6 +40,10 @@ public class Recipe {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
+  public int getRecipeId() {
+    return recipeId;
+  }
+
   @NonNull
   public String getTitle() {
     return title;
@@ -52,6 +56,10 @@ public class Recipe {
 
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
+
+  public void setRecipeId(int recipeId) {
+    this.recipeId = recipeId;
+  }
 
   public void setTitle(@NonNull String title) {
     this.title = title;

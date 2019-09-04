@@ -191,7 +191,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       steps.add("Allow lasagne to cool for 5-10 minutes and slice into desired portion sizes.");
       steps.add("Enjoy!");
 
-      return new Recipe(title, description, ingredients, steps, quantities);
+      return new Recipe(title, description);
 
     }
 

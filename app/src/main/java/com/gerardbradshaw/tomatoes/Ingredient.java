@@ -20,31 +20,31 @@ public class Ingredient {
   private String name;
 
   @ColumnInfo(name = "containsMilk")
-  private int containsMilk;
+  private String containsMilk;
 
   @ColumnInfo(name = "containsEgg")
-  private int containsEgg;
+  private String containsEgg;
 
   @ColumnInfo(name = "containsFish")
-  private int containsFish;
+  private String containsFish;
 
   @ColumnInfo(name = "containsCrustacean")
-  private int containsCrustacean;
+  private String containsCrustacean;
 
   @ColumnInfo(name = "containsTreeNuts")
-  private int containsTreeNuts;
+  private String containsTreeNuts;
 
   @ColumnInfo(name = "containsPeanuts")
-  private int containsPeanuts;
+  private String containsPeanuts;
 
   @ColumnInfo(name = "containsWheat")
-  private int containsWheat;
+  private String containsWheat;
 
   @ColumnInfo(name = "containsSoy")
-  private int containsSoy;
+  private String containsSoy;
 
   @ColumnInfo(name = "containsFodmap")
-  private int containsFodmap;
+  private String containsFodmap;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -73,39 +73,39 @@ public class Ingredient {
     return name;
   }
 
-  public int getContainsMilk() {
+  public String getContainsMilk() {
     return containsMilk;
   }
 
-  public int getContainsEgg() {
+  public String getContainsEgg() {
     return containsEgg;
   }
 
-  public int getContainsFish() {
+  public String getContainsFish() {
     return containsFish;
   }
 
-  public int getContainsCrustacean() {
+  public String getContainsCrustacean() {
     return containsCrustacean;
   }
 
-  public int getContainsTreeNuts() {
+  public String getContainsTreeNuts() {
     return containsTreeNuts;
   }
 
-  public int getContainsPeanuts() {
+  public String getContainsPeanuts() {
     return containsPeanuts;
   }
 
-  public int getContainsWheat() {
+  public String getContainsWheat() {
     return containsWheat;
   }
 
-  public int getContainsSoy() {
+  public String getContainsSoy() {
     return containsSoy;
   }
 
-  public int getContainsFodmap() {
+  public String getContainsFodmap() {
     return containsFodmap;
   }
 
@@ -116,66 +116,53 @@ public class Ingredient {
     this.name = name;
   }
 
-  public void setContainsMilk(ContainsAllergen containsMilk) {
-    this.containsMilk = containsMilk.index;
+  public void setContainsMilk(String containsMilk) {
+    this.containsMilk = containsMilk;
   }
 
-  public void setContainsEgg(ContainsAllergen containsEgg) {
-    this.containsEgg = containsEgg.index;
+  public void setContainsEgg(String containsEgg) {
+    this.containsEgg = containsEgg;
   }
 
-  public void setContainsFish(ContainsAllergen containsFish) {
-    this.containsFish = containsFish.index;
+  public void setContainsFish(String containsFish) {
+    this.containsFish = containsFish;
   }
 
-  public void setContainsCrustacean(ContainsAllergen containsCrustacean) {
-    this.containsCrustacean = containsCrustacean.index;
+  public void setContainsCrustacean(String containsCrustacean) {
+    this.containsCrustacean = containsCrustacean;
   }
 
-  public void setContainsTreeNuts(ContainsAllergen containsTreeNuts) {
-    this.containsTreeNuts = containsTreeNuts.index;
+  public void setContainsTreeNuts(String containsTreeNuts) {
+    this.containsTreeNuts = containsTreeNuts;
   }
 
-  public void setContainsPeanuts(ContainsAllergen containsPeanuts) {
-    this.containsPeanuts = containsPeanuts.index;
+  public void setContainsPeanuts(String containsPeanuts) {
+    this.containsPeanuts = containsPeanuts;
   }
 
-  public void setContainsWheat(ContainsAllergen containsWheat) {
-    this.containsWheat = containsWheat.index;
+  public void setContainsWheat(String containsWheat) {
+    this.containsWheat = containsWheat;
   }
 
-  public void setContainsSoy(ContainsAllergen containsSoy) {
-    this.containsSoy = containsSoy.index;
+  public void setContainsSoy(String containsSoy) {
+    this.containsSoy = containsSoy;
   }
 
-  public void setContainsFodmap(ContainsAllergen containsFodmap) {
-    this.containsFodmap = containsFodmap.index;
+  public void setContainsFodmap(String containsFodmap) {
+    this.containsFodmap = containsFodmap;
   }
 
 
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-
   @Ignore
-  private static final int CONTAINS_NONE = 0;
-
-  @Ignore
-  public static final int CONTAINS_TRACES = 1;
-
-  @Ignore
-  public static final int CONTAINS_AS_INGREDIENT = 2;
+  private String CONTAINS_NONE = "CONTAINS_NONE";
 
   private enum ContainsAllergen {
-    CONTAINS_NONE(0),
-    CONTAINS_TRACES(1),
-    CONTAINS_AS_INGREDIENT(2);
-
-    private final int index;
-
-    ContainsAllergen(int index) {
-      this.index = index;
-    }
+    CONTAINS_NONE,
+    CONTAINS_TRACES,
+    CONTAINS_AS_INGREDIENT;
   };
 
 }
