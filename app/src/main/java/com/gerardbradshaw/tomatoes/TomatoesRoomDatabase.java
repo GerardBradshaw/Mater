@@ -11,8 +11,11 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.gerardbradshaw.tomatoes.daos.IngredientDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
 import com.gerardbradshaw.tomatoes.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.entities.Recipe;
+import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +28,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   // Define the DAOs that the database will use to interact with SQL
-  public abstract IngredientDao ingredientDao();
   public abstract RecipeDao recipeDao();
+  public abstract IngredientDao ingredientDao();
+  public abstract RecipeIngredientDao recipeIngredientDao();
+  public abstract RecipeStepDao recipeStepDao();
 
   // Create an instance variable to ensure that the database is a singleton
   private static TomatoesRoomDatabase INSTANCE;
@@ -84,8 +89,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
     // - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - -
 
-    final IngredientDao ingredientDao;
     final RecipeDao recipeDao;
+    final IngredientDao ingredientDao;
+    final RecipeIngredientDao recipeIngredientDao;
+    final RecipeStepDao recipeStepDao;
 
 
     // - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - -
@@ -97,8 +104,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
      */
     PopulateDbAsyncTask(TomatoesRoomDatabase database) {
       // Set the DAOs
-      ingredientDao = database.ingredientDao();
       recipeDao = database.recipeDao();
+      ingredientDao = database.ingredientDao();
+      recipeIngredientDao = database.recipeIngredientDao();
+      recipeStepDao = database.recipeStepDao();
     }
 
 
@@ -116,12 +125,21 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       // If there are no recipes, add the lasagne recipe
       if (recipeDao.getAnyRecipe().length < 1) {
 
-        // Create the lasagne recipe
+        // Create the lasagne Recipe and Ingredients
         Recipe lasagneRecipe = createLasagneRecipe();
+        List<Ingredient> lasagneIngredients = createLasagneIngredients();
+
+        // Add these to the database
+        recipeDao.insertRecipe(lasagneRecipe);
+
+        for(Ingredient i : lasagneIngredients) {
+          ingredientDao.insertIngredient(i);
+        }
+
 
         // Add the recipe to the database using the DAO
-        recipeDao.insertRecipe(lasagneRecipe);
-      }
+
+        }
 
       return null;
     }
@@ -140,47 +158,47 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       String title = "Beyond Lasagne";
       String description = "A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!";
 
+      return new Recipe(title, description);
+
+    }
+
+    /**
+     * Simple method used to create a list of ingredients for the lasagne recipe
+     *
+     * @return a List of ingredients for lasagne.
+     */
+    List<Ingredient> createLasagneIngredients() {
+
       List<Ingredient> ingredients = new ArrayList<>();
-      Map<Ingredient, Quantity> quantities = new HashMap<>();
 
-      Ingredient sweetPotato = new Ingredient("Sweet potato");
-      ingredients.add(sweetPotato);
+      ingredients.add(new Ingredient("Sweet potato"));
+      ingredients.add(new Ingredient("Capsicum"));
+      ingredients.add(new Ingredient("Zucchini"));
+      ingredients.add(new Ingredient("Frozen spinach"));
+      ingredients.add(new Ingredient("Diced tomatoes"));
+      ingredients.add(new Ingredient("Beyond burgers"));
+      ingredients.add(new Ingredient("Merlot"));
+      ingredients.add(new Ingredient("Lasagne sheets"));
+      ingredients.add(new Ingredient("Vegan cheese slices"));
+      ingredients.add(new Ingredient("Vegenaise"));
+
+      return ingredients;
+
+    }
+
+
+
+    //Map<Ingredient, Quantity> quantities = new HashMap<>();
+
       quantities.put(sweetPotato, new Quantity(800, Quantity.Unit.GRAMS));
-
-      Ingredient capsicum = new Ingredient("Capsicum");
-      ingredients.add(capsicum);
       quantities.put(capsicum, new Quantity(1, Quantity.Unit.NO_UNIT));
-
-      Ingredient zucchini = new Ingredient("Zucchini");
-      ingredients.add(zucchini);
       quantities.put(zucchini, new Quantity(1, Quantity.Unit.NO_UNIT));
-
-      Ingredient frozenSpinach = new Ingredient("Frozen spinach");
-      ingredients.add(frozenSpinach);
       quantities.put(frozenSpinach, new Quantity(100, Quantity.Unit.GRAMS));
-
-      Ingredient dicedTomatoes = new Ingredient("Diced tomatoes");
-      ingredients.add(dicedTomatoes);
       quantities.put(dicedTomatoes, new Quantity(800, Quantity.Unit.GRAMS));
-
-      Ingredient beyondBurgers = new Ingredient("Beyond burgers");
-      ingredients.add(beyondBurgers);
       quantities.put(beyondBurgers, new Quantity(4, Quantity.Unit.NO_UNIT));
-
-      Ingredient merlot = new Ingredient("Merlot");
-      ingredients.add(merlot);
       quantities.put(merlot, new Quantity(500, Quantity.Unit.MILLILITRES));
-
-      Ingredient lasagneSheets = new Ingredient("Lasagne sheets");
-      ingredients.add(lasagneSheets);
       quantities.put(lasagneSheets, new Quantity(1, Quantity.Unit.NO_UNIT));
-
-      Ingredient cheese = new Ingredient("Vegan cheese slices");
-      ingredients.add(cheese);
       quantities.put(cheese, new Quantity(18, Quantity.Unit.NO_UNIT));
-
-      Ingredient vegenaise = new Ingredient("Vegenaise");
-      ingredients.add(vegenaise);
       quantities.put(vegenaise, new Quantity(100, Quantity.Unit.GRAMS));
 
       List<String> steps = new ArrayList<>();

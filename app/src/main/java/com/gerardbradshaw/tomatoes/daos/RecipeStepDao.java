@@ -23,5 +23,5 @@ public interface RecipeStepDao {
 
   @Query("select * from RecipeStep where recipe_id = :recipeId")
   RecipeStep[] getRecipeSteps(int recipeId);
-  
+
 }
