@@ -1,9 +1,8 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(foreignKeys = {

@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 import java.util.Arrays;
 import java.util.List;
 
-@Entity(tableName = "ingredient_table")
+@Entity
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -

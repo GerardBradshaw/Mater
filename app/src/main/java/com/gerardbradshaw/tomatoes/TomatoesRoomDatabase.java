@@ -9,6 +9,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.gerardbradshaw.tomatoes.daos.IngredientDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeDao;
+import com.gerardbradshaw.tomatoes.entities.Ingredient;
+import com.gerardbradshaw.tomatoes.entities.Recipe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
