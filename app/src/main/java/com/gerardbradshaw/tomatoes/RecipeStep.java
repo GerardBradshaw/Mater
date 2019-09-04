@@ -1,10 +1,15 @@
 package com.gerardbradshaw.tomatoes;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "recipe_steps_table")
+@Entity(foreignKeys = {
+    @ForeignKey(entity = Recipe.class,
+        parentColumns = "recipe_id",
+        childColumns = "recipe_id")})
 public class RecipeStep {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -19,13 +24,14 @@ public class RecipeStep {
   @ColumnInfo(name = "number")
   private int number;
 
+  @NonNull
   @ColumnInfo(name = "description")
-  private int description;
+  private String description;
 
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public RecipeStep(int recipeId, int number, int description) {
+  public RecipeStep(int recipeId, int number, @NonNull String description) {
     this.recipeId = recipeId;
     this.number = number;
     this.description = description;
@@ -46,7 +52,8 @@ public class RecipeStep {
     return number;
   }
 
-  public int getDescription() {
+  @NonNull
+  public String getDescription() {
     return description;
   }
 
@@ -65,7 +72,7 @@ public class RecipeStep {
     this.number = number;
   }
 
-  public void setDescription(int description) {
+  public void setDescription(@NonNull String description) {
     this.description = description;
   }
 

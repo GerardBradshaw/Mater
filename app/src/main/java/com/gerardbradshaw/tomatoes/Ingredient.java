@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 import java.util.Arrays;
 import java.util.List;
 
-@Entity(tableName = "ingredients_table")
+@Entity(tableName = "ingredient_table")
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -

@@ -17,40 +17,24 @@ public class Recipe {
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
   @PrimaryKey
+  @ColumnInfo(name = "recipe_id")
+  private int recipeId;
+
   @NonNull
   @ColumnInfo(name = "title")
   private String title;
 
+  @NonNull
   @ColumnInfo(name = "description")
   private String description;
-
-  @ColumnInfo(name = "ingredients")
-  private List<Ingredient> ingredients;
-
-  @ColumnInfo(name = "steps")
-  private List<String> steps;
-
-  @ColumnInfo(name = "quantities")
-  private Map<Ingredient, Quantity> quantities;
 
 
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
   // Default constructor
-  public Recipe(@NonNull String title) {
-    this.title = title;
-  }
-
-  // Secondary constructor
-  @Ignore
-  public Recipe(@NonNull String title, String description, List<Ingredient> ingredients,
-                List<String> steps, Map<Ingredient, Quantity> quantities) {
-
+  public Recipe(@NonNull String title, @NonNull String description) {
     this.title = title;
     this.description = description;
-    this.ingredients = ingredients;
-    this.steps = steps;
-    this.quantities = quantities;
   }
 
 
@@ -61,20 +45,9 @@ public class Recipe {
     return title;
   }
 
+  @NonNull
   public String getDescription() {
     return description;
-  }
-
-  public List<Ingredient> getIngredients() {
-    return ingredients;
-  }
-
-  public List<String> getSteps() {
-    return steps;
-  }
-
-  public Map<Ingredient, Quantity> getQuantities() {
-    return quantities;
   }
 
 
@@ -84,20 +57,8 @@ public class Recipe {
     this.title = title;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(@NonNull String description) {
     this.description = description;
-  }
-
-  public void setIngredients(List<Ingredient> ingredients) {
-    this.ingredients = ingredients;
-  }
-
-  public void setSteps(List<String> steps) {
-    this.steps = steps;
-  }
-
-  public void setQuantities(Map<Ingredient, Quantity> quantities) {
-    this.quantities =  quantities;
   }
 
 }
