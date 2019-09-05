@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity
   private RecipeViewModel viewModel;
 
 
-
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
   @Override
