@@ -43,7 +43,7 @@ public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - Wrapper methods - - - - - - - - - - - - - - -
 
-  public ArrayList<RecipeSummary> getAllRecipes() {
+  public ArrayList<RecipeSummary> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 
