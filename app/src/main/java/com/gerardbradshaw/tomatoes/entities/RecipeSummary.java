@@ -16,7 +16,7 @@ public class RecipeSummary {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
-  @PrimaryKey
+  @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
 
