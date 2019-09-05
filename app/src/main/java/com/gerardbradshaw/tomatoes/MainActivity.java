@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_main_drawer);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.toolbar);

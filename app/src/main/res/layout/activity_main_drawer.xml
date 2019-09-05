@@ -9,11 +9,13 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <!-- Main Content -->
     <include
-        layout="@layout/activity_main_app_bar"
+        layout="@layout/activity_main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- Navigation View -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
