@@ -21,7 +21,7 @@ public interface RecipeStepDao {
   @Delete
   void deleteRecipeStep(RecipeStep recipeStep);
 
-  @Query("select * from RecipeStep where recipe_id = :recipeId")
+  @Query("select * from recipe_step_table where recipe_id = :recipeId")
   RecipeStep[] getRecipeSteps(int recipeId);
 
 }

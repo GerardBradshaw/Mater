@@ -21,7 +21,10 @@ import com.gerardbradshaw.tomatoes.entities.RecipeStep;
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {Recipe.class, Ingredient.class}, version = 1, exportSchema = false)
+@Database(
+    entities = {Recipe.class, Ingredient.class, RecipeIngredient.class, RecipeStep.class},
+    version = 1,
+    exportSchema = false)
 public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
@@ -221,7 +224,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
       return null;
     }
-    
+
   }
 
 }
