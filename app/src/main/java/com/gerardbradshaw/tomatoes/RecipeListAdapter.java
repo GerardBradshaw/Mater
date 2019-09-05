@@ -57,7 +57,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    * @param position: The position of the holder in the adapter.
    */
   @Override
-  public void onBindViewHolder(@NonNull final RecipeViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull final RecipeViewHolder holder, final int position) {
 
     if (recipeSummaryList != null) {
       // Retrieve the data for that position and add the data to the view
@@ -71,7 +71,21 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     }
 
     // Set up listener for clicks
-    // TODO set up listener for clicks
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        // Get the current position
+        int currentPosition = holder.getAdapterPosition();
+
+        // Get the Recipe at the current position
+        RecipeSummary currentRecipe = recipeSummaryList.get(position);
+
+        // Call the onRecipeClicked method (called in MainActivity using an override)
+        if (recipeClickedListener != null) {
+          recipeClickedListener.onRecipeClicked(currentRecipe);
+        }
+      }
+    });
 
   }
 

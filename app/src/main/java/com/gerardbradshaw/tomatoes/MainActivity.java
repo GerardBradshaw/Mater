@@ -1,5 +1,6 @@
 package com.gerardbradshaw.tomatoes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
   private RecipeViewModel viewModel;
+  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -66,7 +68,19 @@ public class MainActivity extends AppCompatActivity
     // Set up the RecyclerView's adapter
     recipeListAdapter = new RecipeListAdapter(this);
 
-    // TODO set onClick functionality
+    // Set onClick functionality
+    recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
+      @Override
+      public void onRecipeClicked(RecipeSummary recipeSummary) {
+
+        // Add the ID of the clicked recipe to the intent
+        Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
+        intent.putExtra(EXTRA_RECIPE_ID, recipeSummary.getRecipeId());
+
+        // Start the activity
+        startActivity(intent);
+      }
+    });
 
 
     // Set up RecyclerView
