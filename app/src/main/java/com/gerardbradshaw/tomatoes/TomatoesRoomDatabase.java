@@ -168,16 +168,16 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
         // Add each ingredient name, amount and unit to the ingredient list in the form
         // {name (String), amount (double), unit (String)}
-        ingredientsList.add(new Object[] {"sweet potato", 800, RecipeIngredient.Unit.GRAMS.name()});
-        ingredientsList.add(new Object[] {"capsicum", 1, RecipeIngredient.Unit.NO_UNIT.name()});
-        ingredientsList.add(new Object[] {"zucchini", 1, RecipeIngredient.Unit.NO_UNIT.name()});
-        ingredientsList.add(new Object[] {"frozen spinach", 100, RecipeIngredient.Unit.GRAMS.name()});
-        ingredientsList.add(new Object[] {"diced tomatoes", 800, RecipeIngredient.Unit.GRAMS.name()});
-        ingredientsList.add(new Object[] {beyondBurgers, 4, RecipeIngredient.Unit.NO_UNIT.name()});
-        ingredientsList.add(new Object[] {"merlot", 500, RecipeIngredient.Unit.MILLILITRES.name()});
-        ingredientsList.add(new Object[] {lasagneSheets, 1, RecipeIngredient.Unit.NO_UNIT.name()});
-        ingredientsList.add(new Object[] {"vegan cheese slices", 18, RecipeIngredient.Unit.NO_UNIT.name()});
-        ingredientsList.add(new Object[] {vegenaise, 100, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {"sweet potato", 800d, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {"capsicum", 1d, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"zucchini", 1d, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"frozen spinach", 100d, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {"diced tomatoes", 800d, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {beyondBurgers, 4d, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"merlot", 500d, RecipeIngredient.Unit.MILLILITRES.name()});
+        ingredientsList.add(new Object[] {lasagneSheets, 1d, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"vegan cheese slices", 18d, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {vegenaise, 100d, RecipeIngredient.Unit.GRAMS.name()});
 
         // Create ingredients from each
         for(int i = 0; i < ingredientsList.size(); i++) {

@@ -3,17 +3,19 @@ package com.gerardbradshaw.tomatoes;
 import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private RecipeRepository recipeRepository;
-  private ArrayList<RecipeSummary> recipeSummaryList;
+  private LiveData<List<RecipeSummary>> recipeSummaryList;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -29,7 +31,7 @@ public class RecipeViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
 
-  public ArrayList<RecipeSummary> getAllRecipeSummaries() {
+  public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 

@@ -16,7 +16,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private ArrayList<RecipeSummary> recipeSummaryList; // Cached copy
+  private List<RecipeSummary> recipeSummaryList; // Cached copy
   private RecipeClickedListener recipeClickedListener;
 
 
@@ -72,7 +72,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  void setRecipeSummaryList(ArrayList<RecipeSummary> recipeSummaryList) {
+  void setRecipeSummaryList(List<RecipeSummary> recipeSummaryList) {
     this.recipeSummaryList = recipeSummaryList;
   }
 

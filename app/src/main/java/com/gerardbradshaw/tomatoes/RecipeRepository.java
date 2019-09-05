@@ -2,6 +2,8 @@ package com.gerardbradshaw.tomatoes;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import com.gerardbradshaw.tomatoes.daos.IngredientDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeSummaryDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
@@ -10,6 +12,7 @@ import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RecipeRepository {
 
@@ -20,7 +23,7 @@ public class RecipeRepository {
   private RecipeIngredientDao recipeIngredientDao;
   private RecipeStepDao recipeStepDao;
 
-  private ArrayList<RecipeSummary> recipeSummaryList;
+  private LiveData<List<RecipeSummary>> recipeSummaryList;
 
   //TODO add live data
 
@@ -37,13 +40,13 @@ public class RecipeRepository {
     recipeStepDao = db.recipeStepDao();
 
     // Get the list of recipes and cache them in recipeSummaryList
-    recipeSummaryList = new ArrayList<> (Arrays.asList(recipeSummaryDao.getAllRecipes()));
+    recipeSummaryList = recipeSummaryDao.getAllRecipes();
   }
 
 
   // - - - - - - - - - - - - - - - Wrapper methods - - - - - - - - - - - - - - -
 
-  public ArrayList<RecipeSummary> getAllRecipeSummaries() {
+  public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 

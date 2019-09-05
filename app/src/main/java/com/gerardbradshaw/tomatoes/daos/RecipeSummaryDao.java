@@ -1,5 +1,6 @@
 package com.gerardbradshaw.tomatoes.daos;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -8,6 +9,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+
+import java.util.List;
 
 @Dao
 public interface RecipeSummaryDao {
@@ -31,7 +34,7 @@ public interface RecipeSummaryDao {
   int getRecipeId(String recipeTitle);
 
   @Query("select * from recipe_summary_table ORDER BY title ASC")
-  RecipeSummary[] getAllRecipes();
+  LiveData<List<RecipeSummary>> getAllRecipes();
 
   @Query("select * from recipe_summary_table LIMIT 1")
   RecipeSummary[] getAnyRecipe();
