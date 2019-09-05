@@ -21,6 +21,12 @@ public interface IngredientDao {
   @Update
   void updateIngredient(Ingredient ingredient);
 
+  @Query("select * from Ingredient where name = :ingredientName limit 1")
+  Ingredient getIngredient(String ingredientName);
+
+  @Query("select ingredient_id from Ingredient where name = :ingredientName")
+  int getIngredientId(String ingredientName);
+
   @Query("select * from Ingredient limit 1")
   Ingredient[] getAnyIngredient();
 

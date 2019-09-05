@@ -14,7 +14,10 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
-  @PrimaryKey
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "ingredient_id")
+  private int ingredientId;
+
   @NonNull
   @ColumnInfo(name = "name")
   private String name;
@@ -53,6 +56,7 @@ public class Ingredient {
     this.name = name;
 
     // Set all allergens as not present
+    String CONTAINS_NONE = ContainsAllergen.CONTAINS_NONE.name();
     containsMilk = CONTAINS_NONE;
     containsEgg = CONTAINS_NONE;
     containsFish = CONTAINS_NONE;
@@ -156,10 +160,7 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-  @Ignore
-  private String CONTAINS_NONE = "CONTAINS_NONE";
-
-  private enum ContainsAllergen {
+  public enum ContainsAllergen {
     CONTAINS_NONE,
     CONTAINS_TRACES,
     CONTAINS_AS_INGREDIENT;

@@ -36,11 +36,11 @@ public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public RecipeIngredient(int recipeId, int ingredientId, double amount, Unit units) {
+  public RecipeIngredient(int recipeId, int ingredientId, double amount, String units) {
     this.recipeId = recipeId;
     this.ingredientId = ingredientId;
     this.amount = amount;
-    this.units = units.name();
+    this.units = units;
   }
 
 

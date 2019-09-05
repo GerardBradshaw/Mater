@@ -24,9 +24,17 @@ public interface RecipeDao {
   @Query("select description from Recipe where title = :recipeTitle")
   String getDescription(String recipeTitle);
 
+  @Query("select title from Recipe where recipe_id = :recipeId")
+  String getTitle(int recipeId);
+
+  @Query("select recipe_id from Recipe where title = :recipeTitle")
+  int getRecipeId(String recipeTitle);
+
   @Query("select * from Recipe ORDER BY title ASC")
   Recipe[] getAllRecipes();
 
   @Query("select * from Recipe LIMIT 1")
   Recipe[] getAnyRecipe();
+
+
 }

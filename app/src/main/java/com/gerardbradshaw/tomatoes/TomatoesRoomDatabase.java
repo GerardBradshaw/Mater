@@ -16,11 +16,10 @@ import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
 import com.gerardbradshaw.tomatoes.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.entities.Recipe;
 import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.entities.RecipeStep;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Database(entities = {Recipe.class, Ingredient.class}, version = 1, exportSchema = false)
 public abstract class TomatoesRoomDatabase extends RoomDatabase {
@@ -125,100 +124,104 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       // If there are no recipes, add the lasagne recipe
       if (recipeDao.getAnyRecipe().length < 1) {
 
-        // Create the lasagne Recipe and Ingredients
-        Recipe lasagneRecipe = createLasagneRecipe();
-        List<Ingredient> lasagneIngredients = createLasagneIngredients();
+        // Define the title and description of a Lasagne recipe
+        String title = "Beyond Lasagne";
+        String description = "A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!";
 
-        // Add these to the database
-        recipeDao.insertRecipe(lasagneRecipe);
+        // Add a new Lasagne recipe to the DAO
+        recipeDao.insertRecipe(new Recipe(title, description));
 
-        for(Ingredient i : lasagneIngredients) {
-          ingredientDao.insertIngredient(i);
+        // Retrieve the unique ID of the lasagne recipe
+        int lasagneRecipeId = recipeDao.getRecipeId(title);
+
+        // Create the cooking steps
+        List<String> steps = new ArrayList<>();
+        steps.add("Dice the sweet potato, zucchini, and capsicum into small cubes.");
+        steps.add("Sauté diced vegetables in large fry pan on medium-high temperature for 10 minutes or until sweet potato has softened.");
+        steps.add("Add diced tomatoes and Beyond burgers to pan. Break up the burger patties and combine.");
+        steps.add("Add red wine and set pan to simmer, stirring occasionally.");
+        steps.add("While vegetables are simmering, line baking dish with lasagne sheets and place Vegenaise into a snap-lock bag.");
+        steps.add("When most of the juice has boiled away (some juice is desirable to properly soften the lasagne sheets), use a spoon to spread a thin layer of the mix over the lasagne sheets.");
+        steps.add("Cover the mix with cheese. Add another 2 layers of lasagne sheets, vegetable mix, and cheese as before.");
+        steps.add("Make a small cut in the corner of the snap-lock bag and squeeze (pipe) the vegenaise over the top layer of cheese.");
+        steps.add("Bake for ~30 minutes at 215°C (420°F) or until golden brown on top.");
+        steps.add("Allow lasagne to cool for 5-10 minutes and slice into desired portion sizes.");
+        steps.add("Enjoy!");
+
+        // Add the steps to the database using the lasagne ID
+        for(int i = 0; i < steps.size(); i++) {
+          int stepNumber = i + 1;
+          RecipeStep recipeStep = new RecipeStep(lasagneRecipeId, stepNumber, steps.get(i));
+          recipeStepDao.insertRecipeStep(recipeStep);
         }
 
+        // Create an arrayList to store the ingredient name
+        List<Object[]> ingredientsList = new ArrayList<>();
 
-        // Add the recipe to the database using the DAO
+        // Define the names of ingredients that contain allergens
+        String beyondBurgers = "Beyond burgers";
+        String lasagneSheets = "lasagne sheets";
+        String vegenaise = "Vegenaise";
+
+        // Add each ingredient name, amount and unit to the ingredient list in the form
+        // {name (String), amount (double), unit (String)}
+        ingredientsList.add(new Object[] {"sweet potato", 800, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {"capsicum", 1, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"zucchini", 1, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"frozen spinach", 100, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {"diced tomatoes", 800, RecipeIngredient.Unit.GRAMS.name()});
+        ingredientsList.add(new Object[] {beyondBurgers, 4, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"merlot", 500, RecipeIngredient.Unit.MILLILITRES.name()});
+        ingredientsList.add(new Object[] {lasagneSheets, 1, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {"vegan cheese slices", 18, RecipeIngredient.Unit.NO_UNIT.name()});
+        ingredientsList.add(new Object[] {vegenaise, 100, RecipeIngredient.Unit.GRAMS.name()});
+
+        // Create ingredients from each
+        for(int i = 0; i < ingredientsList.size(); i++) {
+
+          // Get the name, amount, and units of the ingredient from the array
+          String name = (String) ingredientsList.get(i)[0];
+          double amount = (double) ingredientsList.get(i)[1];
+          String units = (String) ingredientsList.get(i)[2];
+
+          // Create an ingredient from the name
+          Ingredient ingredient = new Ingredient(name);
+
+          // Add the Ingredient to the DAO
+          ingredientDao.insertIngredient(ingredient);
+
+          // Get the ID of the ingredient from the DAO
+          int ingredientId = ingredientDao.getIngredientId(name);
+
+          // Create a RecipeIngredient using this ID along with the Recipe ID, amount, and units
+          RecipeIngredient recipeIngredient =
+              new RecipeIngredient(lasagneRecipeId, ingredientId, amount, units);
+
+          // Add the RecipeIngredient to the DAO
+          recipeIngredientDao.insertRecipeIngredient(recipeIngredient);
+
+        }
+
+        // Update Beyond burger Ingredient because it contains allergens
+        Ingredient beyondBurgerIngredient = ingredientDao.getIngredient(beyondBurgers);
+        beyondBurgerIngredient.setContainsSoy(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+        ingredientDao.updateIngredient(beyondBurgerIngredient);
+
+        // Update lasagne sheets because it contains allergens
+        Ingredient lasagneSheetsIngredient = ingredientDao.getIngredient(lasagneSheets);
+        lasagneSheetsIngredient.setContainsWheat(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+        ingredientDao.updateIngredient(lasagneSheetsIngredient);
+
+        // Update vegenaise because it contains allergens
+        Ingredient vegenaiseIngredient = ingredientDao.getIngredient(vegenaise);
+        vegenaiseIngredient.setContainsSoy(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+        ingredientDao.updateIngredient(vegenaiseIngredient);
 
         }
 
       return null;
     }
-
-
-    // - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - -
-
-    /**
-     * Simple method used to create a Recipe object for lasagne.
-     *
-     * @return a Recipe object for a lasagne.
-     */
-    Recipe createLasagneRecipe() {
-
-      // Create the lasagne recipe
-      String title = "Beyond Lasagne";
-      String description = "A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!";
-
-      return new Recipe(title, description);
-
-    }
-
-    /**
-     * Simple method used to create a list of ingredients for the lasagne recipe
-     *
-     * @return a List of ingredients for lasagne.
-     */
-    List<Ingredient> createLasagneIngredients() {
-
-      List<Ingredient> ingredients = new ArrayList<>();
-
-      ingredients.add(new Ingredient("Sweet potato"));
-      ingredients.add(new Ingredient("Capsicum"));
-      ingredients.add(new Ingredient("Zucchini"));
-      ingredients.add(new Ingredient("Frozen spinach"));
-      ingredients.add(new Ingredient("Diced tomatoes"));
-      ingredients.add(new Ingredient("Beyond burgers"));
-      ingredients.add(new Ingredient("Merlot"));
-      ingredients.add(new Ingredient("Lasagne sheets"));
-      ingredients.add(new Ingredient("Vegan cheese slices"));
-      ingredients.add(new Ingredient("Vegenaise"));
-
-      return ingredients;
-
-    }
-
-
-
-    //Map<Ingredient, Quantity> quantities = new HashMap<>();
-
-      quantities.put(sweetPotato, new Quantity(800, Quantity.Unit.GRAMS));
-      quantities.put(capsicum, new Quantity(1, Quantity.Unit.NO_UNIT));
-      quantities.put(zucchini, new Quantity(1, Quantity.Unit.NO_UNIT));
-      quantities.put(frozenSpinach, new Quantity(100, Quantity.Unit.GRAMS));
-      quantities.put(dicedTomatoes, new Quantity(800, Quantity.Unit.GRAMS));
-      quantities.put(beyondBurgers, new Quantity(4, Quantity.Unit.NO_UNIT));
-      quantities.put(merlot, new Quantity(500, Quantity.Unit.MILLILITRES));
-      quantities.put(lasagneSheets, new Quantity(1, Quantity.Unit.NO_UNIT));
-      quantities.put(cheese, new Quantity(18, Quantity.Unit.NO_UNIT));
-      quantities.put(vegenaise, new Quantity(100, Quantity.Unit.GRAMS));
-
-      List<String> steps = new ArrayList<>();
-      steps.add("Dice the sweet potato, zucchini, and capsicum into small cubes.");
-      steps.add("Sauté diced vegetables in large fry pan on medium-high temperature for 10 minutes or until sweet potato has softened.");
-      steps.add("Add diced tomatoes and Beyond burgers to pan. Break up the burger patties and combine.");
-      steps.add("Add red wine and set pan to simmer, stirring occasionally.");
-      steps.add("While vegetables are simmering, line baking dish with lasagne sheets and place Vegenaise into a snap-lock bag.");
-      steps.add("When most of the juice has boiled away (some juice is desirable to properly soften the lasagne sheets), use a spoon to spread a thin layer of the mix over the lasagne sheets.");
-      steps.add("Cover the mix with cheese. Add another 2 layers of lasagne sheets, vegetable mix, and cheese as before.");
-      steps.add("Make a small cut in the corner of the snap-lock bag and squeeze (pipe) the vegenaise over the top layer of cheese.");
-      steps.add("Bake for ~30 minutes at 215°C (420°F) or until golden brown on top.");
-      steps.add("Allow lasagne to cool for 5-10 minutes and slice into desired portion sizes.");
-      steps.add("Enjoy!");
-
-      return new Recipe(title, description);
-
-    }
-
+    
   }
-
 
 }
