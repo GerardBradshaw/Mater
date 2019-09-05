@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    // Set up FAB
     FloatingActionButton fab = findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -52,8 +54,7 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-
-    // Set up the drawer
+    // Set up Drawer
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
     NavigationView navigationView = findViewById(R.id.nav_view);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

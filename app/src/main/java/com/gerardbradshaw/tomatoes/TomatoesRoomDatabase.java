@@ -316,7 +316,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       ingredientsList.add(new Object[] {"frozen broccoli", 454d, RecipeIngredient.Unit.GRAMS.name()});
       ingredientsList.add(new Object[] {"carrots", 800d, RecipeIngredient.Unit.GRAMS.name()});
       ingredientsList.add(new Object[] {"potatoes", 800d, RecipeIngredient.Unit.GRAMS.name()});
-      ingredientsList.add(new Object[] {"bamboo shoots", 225, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"bamboo shoots", 225d, RecipeIngredient.Unit.GRAMS.name()});
       ingredientsList.add(new Object[] {curryPaste, 566d, RecipeIngredient.Unit.GRAMS.name()});
       ingredientsList.add(new Object[] {coconutMilk, 600d, RecipeIngredient.Unit.MILLILITRES.name()});
 
