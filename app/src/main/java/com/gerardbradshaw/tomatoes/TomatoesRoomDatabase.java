@@ -10,11 +10,11 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.gerardbradshaw.tomatoes.daos.IngredientDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeSummaryDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
 import com.gerardbradshaw.tomatoes.entities.Ingredient;
-import com.gerardbradshaw.tomatoes.entities.Recipe;
+import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
 import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.entities.RecipeStep;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Database(
-    entities = {Recipe.class, Ingredient.class, RecipeIngredient.class, RecipeStep.class},
+    entities = {RecipeSummary.class, Ingredient.class, RecipeIngredient.class, RecipeStep.class},
     version = 1,
     exportSchema = false)
 public abstract class TomatoesRoomDatabase extends RoomDatabase {
@@ -30,7 +30,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   // Define the DAOs that the database will use to interact with SQL
-  public abstract RecipeDao recipeDao();
+  public abstract RecipeSummaryDao recipeDao();
   public abstract IngredientDao ingredientDao();
   public abstract RecipeIngredientDao recipeIngredientDao();
   public abstract RecipeStepDao recipeStepDao();
@@ -91,7 +91,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
     // - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - -
 
-    final RecipeDao recipeDao;
+    final RecipeSummaryDao recipeSummaryDao;
     final IngredientDao ingredientDao;
     final RecipeIngredientDao recipeIngredientDao;
     final RecipeStepDao recipeStepDao;
@@ -106,7 +106,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
      */
     PopulateDbAsyncTask(TomatoesRoomDatabase database) {
       // Set the DAOs
-      recipeDao = database.recipeDao();
+      recipeSummaryDao = database.recipeDao();
       ingredientDao = database.ingredientDao();
       recipeIngredientDao = database.recipeIngredientDao();
       recipeStepDao = database.recipeStepDao();
@@ -125,17 +125,17 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
     protected Void doInBackground(Void... voids) {
 
       // If there are no recipes, add the lasagne recipe
-      if (recipeDao.getAnyRecipe().length < 1) {
+      if (recipeSummaryDao.getAnyRecipe().length < 1) {
 
         // Define the title and description of a Lasagne recipe
         String title = "Beyond Lasagne";
         String description = "A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!";
 
         // Add a new Lasagne recipe to the DAO
-        recipeDao.insertRecipe(new Recipe(title, description));
+        recipeSummaryDao.insertRecipe(new RecipeSummary(title, description));
 
         // Retrieve the unique ID of the lasagne recipe
-        int lasagneRecipeId = recipeDao.getRecipeId(title);
+        int lasagneRecipeId = recipeSummaryDao.getRecipeId(title);
 
         // Create the cooking steps
         List<String> steps = new ArrayList<>();
@@ -196,7 +196,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
           // Get the ID of the ingredient from the DAO
           int ingredientId = ingredientDao.getIngredientId(name);
 
-          // Create a RecipeIngredient using this ID along with the Recipe ID, amount, and units
+          // Create a RecipeIngredient using this ID along with the RecipeSummary ID, amount, and units
           RecipeIngredient recipeIngredient =
               new RecipeIngredient(lasagneRecipeId, ingredientId, amount, units);
 
