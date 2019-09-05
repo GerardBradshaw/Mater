@@ -1,19 +1,23 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = {
-    @ForeignKey(entity = Recipe.class,
+@Entity(tableName = "recipe_ingredient_table",
+
+    foreignKeys = {
+    @ForeignKey(entity = RecipeSummary.class,
         parentColumns = "recipe_id",
         childColumns = "recipe_id"),
 
     @ForeignKey(entity = Ingredient.class,
         parentColumns = "ingredient_id",
-        childColumns = "ingredient_id")})
+        childColumns = "ingredient_id")},
+
+    indices = {@Index(value = "recipe_id"), @Index(value = "ingredient_id")})
 public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -37,11 +41,11 @@ public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public RecipeIngredient(int recipeId, int ingredientId, double amount, Unit units) {
+  public RecipeIngredient(int recipeId, int ingredientId, double amount, String units) {
     this.recipeId = recipeId;
     this.ingredientId = ingredientId;
     this.amount = amount;
-    this.units = units.name();
+    this.units = units;
   }
 
 

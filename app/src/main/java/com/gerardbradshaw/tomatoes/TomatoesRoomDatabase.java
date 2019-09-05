@@ -9,19 +9,31 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.gerardbradshaw.tomatoes.daos.IngredientDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeSummaryDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
+import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
+import com.gerardbradshaw.tomatoes.entities.Ingredient;
+import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.entities.RecipeStep;
 
-@Database(entities = {Recipe.class, Ingredient.class}, version = 1, exportSchema = false)
+import java.util.ArrayList;
+import java.util.List;
+
+@Database(
+    entities = {RecipeSummary.class, Ingredient.class, RecipeIngredient.class, RecipeStep.class},
+    version = 1,
+    exportSchema = false)
 public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   // Define the DAOs that the database will use to interact with SQL
+  public abstract RecipeSummaryDao recipeDao();
   public abstract IngredientDao ingredientDao();
-  public abstract RecipeDao recipeDao();
+  public abstract RecipeIngredientDao recipeIngredientDao();
+  public abstract RecipeStepDao recipeStepDao();
 
   // Create an instance variable to ensure that the database is a singleton
   private static TomatoesRoomDatabase INSTANCE;
@@ -79,8 +91,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
     // - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - -
 
+    final RecipeSummaryDao recipeSummaryDao;
     final IngredientDao ingredientDao;
-    final RecipeDao recipeDao;
+    final RecipeIngredientDao recipeIngredientDao;
+    final RecipeStepDao recipeStepDao;
 
 
     // - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - -
@@ -92,8 +106,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
      */
     PopulateDbAsyncTask(TomatoesRoomDatabase database) {
       // Set the DAOs
+      recipeSummaryDao = database.recipeDao();
       ingredientDao = database.ingredientDao();
-      recipeDao = database.recipeDao();
+      recipeIngredientDao = database.recipeIngredientDao();
+      recipeStepDao = database.recipeStepDao();
     }
 
 
@@ -108,15 +124,16 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
     @Override
     protected Void doInBackground(Void... voids) {
 
-      // If there are no recipes, add the lasagne recipe
-      if (recipeDao.getAnyRecipe().length < 1) {
+      // If there are no recipes, add some
+      if (recipeSummaryDao.getAnyRecipe().length < 1) {
 
         // Create the lasagne recipe
-        Recipe lasagneRecipe = createLasagneRecipe();
+        addLasagneRecipeToDb();
 
-        // Add the recipe to the database using the DAO
-        recipeDao.insertRecipe(lasagneRecipe);
-      }
+        // Create the curry
+        addCurryRecipeToDb();
+
+        }
 
       return null;
     }
@@ -125,59 +142,79 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
     // - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - -
 
     /**
-     * Simple method used to create a Recipe object for lasagne.
+     * Simple helper method to add the steps of a recipe to the database.
      *
-     * @return a Recipe object for a lasagne.
+     * @param recipeId, int: The recipe ID of the corresponding recipe.
+     * @param steps, List<String>: The steps of the recipe in order.
      */
-    Recipe createLasagneRecipe() {
+    private void addStepsToDb(int recipeId, List<String> steps) {
 
-      // Create the lasagne recipe
-      String title = "Beyond Lasagne";
+      for(int i = 0; i < steps.size(); i++) {
+        int stepNumber = i + 1;
+        RecipeStep recipeStep = new RecipeStep(recipeId, stepNumber, steps.get(i));
+        recipeStepDao.insertRecipeStep(recipeStep);
+      }
+    }
+
+    /**
+     * Helper method used to add a list of Ingredients and the amounts used in a specific recipe to
+     * the database. If an ingredient already exists as an ingredient, it is not duplicated.
+     *
+     * @param recipeId, int: The ID of the recipe to which the ingredients belong.
+     * @param ingredientsList, List<Object[]>: A list of object arrays that contain the ingredient
+     *                         details in the form {name (String), amount (double), unit (String)}.
+     */
+    private void addIngredientsToDbAndRecipe(int recipeId, List<Object[]> ingredientsList) {
+
+      for(int i = 0; i < ingredientsList.size(); i++) {
+
+        // Get the name, amount, and units of the ingredient from the array
+        String name = (String) ingredientsList.get(i)[0];
+        double amount = (double) ingredientsList.get(i)[1];
+        String units = (String) ingredientsList.get(i)[2];
+
+        // Get the ID of the ingredient, assuming it exists in the DB
+        int ingredientId = ingredientDao.getIngredientId(name);
+
+
+        // If the ingredient does not exist in the ingredient_table, then add it
+        if (ingredientId == 0) {
+          // Create an ingredient from the name
+          Ingredient ingredient = new Ingredient(name);
+
+          // Add the Ingredient to the DAO
+          ingredientDao.insertIngredient(ingredient);
+
+          // Get the ID of the ingredient from the DAO
+          ingredientId = ingredientDao.getIngredientId(name);
+        }
+
+        // Create a RecipeIngredient using this ID along with the RecipeSummary ID, amount, and units
+        RecipeIngredient recipeIngredient =
+            new RecipeIngredient(recipeId, ingredientId, amount, units);
+
+        // Add the RecipeIngredient to the DAO
+        recipeIngredientDao.insertRecipeIngredient(recipeIngredient);
+
+      }
+    }
+
+    /**
+     * Adds the default lasagne recipe and ingredients to the database.
+     */
+    private void addLasagneRecipeToDb() {
+
+      // Define the title and description of a Lasagne recipe
+      String title = "Vegan Lasagne";
       String description = "A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!";
 
-      List<Ingredient> ingredients = new ArrayList<>();
-      Map<Ingredient, Quantity> quantities = new HashMap<>();
+      // Add a new Lasagne recipe to the DAO
+      recipeSummaryDao.insertRecipe(new RecipeSummary(title, description));
 
-      Ingredient sweetPotato = new Ingredient("Sweet potato");
-      ingredients.add(sweetPotato);
-      quantities.put(sweetPotato, new Quantity(800, Quantity.Unit.GRAMS));
+      // Retrieve the unique ID of the lasagne recipe
+      int lasagneRecipeId = recipeSummaryDao.getRecipeId(title);
 
-      Ingredient capsicum = new Ingredient("Capsicum");
-      ingredients.add(capsicum);
-      quantities.put(capsicum, new Quantity(1, Quantity.Unit.NO_UNIT));
-
-      Ingredient zucchini = new Ingredient("Zucchini");
-      ingredients.add(zucchini);
-      quantities.put(zucchini, new Quantity(1, Quantity.Unit.NO_UNIT));
-
-      Ingredient frozenSpinach = new Ingredient("Frozen spinach");
-      ingredients.add(frozenSpinach);
-      quantities.put(frozenSpinach, new Quantity(100, Quantity.Unit.GRAMS));
-
-      Ingredient dicedTomatoes = new Ingredient("Diced tomatoes");
-      ingredients.add(dicedTomatoes);
-      quantities.put(dicedTomatoes, new Quantity(800, Quantity.Unit.GRAMS));
-
-      Ingredient beyondBurgers = new Ingredient("Beyond burgers");
-      ingredients.add(beyondBurgers);
-      quantities.put(beyondBurgers, new Quantity(4, Quantity.Unit.NO_UNIT));
-
-      Ingredient merlot = new Ingredient("Merlot");
-      ingredients.add(merlot);
-      quantities.put(merlot, new Quantity(500, Quantity.Unit.MILLILITRES));
-
-      Ingredient lasagneSheets = new Ingredient("Lasagne sheets");
-      ingredients.add(lasagneSheets);
-      quantities.put(lasagneSheets, new Quantity(1, Quantity.Unit.NO_UNIT));
-
-      Ingredient cheese = new Ingredient("Vegan cheese slices");
-      ingredients.add(cheese);
-      quantities.put(cheese, new Quantity(18, Quantity.Unit.NO_UNIT));
-
-      Ingredient vegenaise = new Ingredient("Vegenaise");
-      ingredients.add(vegenaise);
-      quantities.put(vegenaise, new Quantity(100, Quantity.Unit.GRAMS));
-
+      // Create the cooking steps
       List<String> steps = new ArrayList<>();
       steps.add("Dice the sweet potato, zucchini, and capsicum into small cubes.");
       steps.add("Sauté diced vegetables in large fry pan on medium-high temperature for 10 minutes or until sweet potato has softened.");
@@ -191,11 +228,119 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       steps.add("Allow lasagne to cool for 5-10 minutes and slice into desired portion sizes.");
       steps.add("Enjoy!");
 
-      return new Recipe(title, description, ingredients, steps, quantities);
+      // Add the steps to the database using the lasagne ID
+      addStepsToDb(lasagneRecipeId, steps);
 
+      // Create an arrayList to store the ingredient name
+      List<Object[]> ingredientsList = new ArrayList<>();
+
+      // Define the names of ingredients that contain allergens
+      String beyondBurgers = "Beyond burgers";
+      String lasagneSheets = "lasagne sheets";
+      String vegenaise = "Vegenaise";
+
+      // Add each ingredient name, amount and unit to the ingredient list in the form
+      // {name (String), amount (double), unit (String)}
+      ingredientsList.add(new Object[] {"sweet potato", 800d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"capsicum", 1d, RecipeIngredient.Unit.NO_UNIT.name()});
+      ingredientsList.add(new Object[] {"zucchini", 1d, RecipeIngredient.Unit.NO_UNIT.name()});
+      ingredientsList.add(new Object[] {"frozen spinach", 100d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"diced tomatoes", 800d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {beyondBurgers, 4d, RecipeIngredient.Unit.NO_UNIT.name()});
+      ingredientsList.add(new Object[] {"merlot", 500d, RecipeIngredient.Unit.MILLILITRES.name()});
+      ingredientsList.add(new Object[] {lasagneSheets, 1d, RecipeIngredient.Unit.NO_UNIT.name()});
+      ingredientsList.add(new Object[] {"vegan cheese slices", 18d, RecipeIngredient.Unit.NO_UNIT.name()});
+      ingredientsList.add(new Object[] {vegenaise, 100d, RecipeIngredient.Unit.GRAMS.name()});
+
+      // Create ingredients from each
+      addIngredientsToDbAndRecipe(lasagneRecipeId, ingredientsList);
+
+      // Update Beyond burger Ingredient because it contains allergens
+      Ingredient beyondBurgerIngredient = ingredientDao.getIngredient(beyondBurgers);
+      beyondBurgerIngredient.setContainsSoy(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+      ingredientDao.updateIngredient(beyondBurgerIngredient);
+
+      // Update lasagne sheets because it contains allergens
+      Ingredient lasagneSheetsIngredient = ingredientDao.getIngredient(lasagneSheets);
+      lasagneSheetsIngredient.setContainsWheat(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+      ingredientDao.updateIngredient(lasagneSheetsIngredient);
+
+      // Update vegenaise because it contains allergens
+      Ingredient vegenaiseIngredient = ingredientDao.getIngredient(vegenaise);
+      vegenaiseIngredient.setContainsSoy(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+      ingredientDao.updateIngredient(vegenaiseIngredient);
     }
 
-  }
+    /**
+     * Adds the default curry recipe to the database.
+     */
+    private void addCurryRecipeToDb() {
 
+      // Define the title and description of the recipe
+      String title = "Tikka Masala Curry";
+      String description = "Tired of hot curries? Try this bad boy; not too spicy, not too weak.";
+
+      // Add a new recipe to the DAO
+      recipeSummaryDao.insertRecipe(new RecipeSummary(title, description));
+
+      // Retrieve the unique ID of the recipe
+      int recipeId = recipeSummaryDao.getRecipeId(title);
+
+      // Create the cooking steps
+      List<String> steps = new ArrayList<>();
+      steps.add("Prepare steam pot on hotplate.");
+      steps.add("Dice the carrots and potatoes and add the and steam pot.");
+      steps.add("Dice the tofu.");
+      steps.add("Add tofu, bamboo shoots, water, and curry sauce to a large pot. Simmer on low temperature.");
+      steps.add("Steam the broccoli in the microwave per packet directions.");
+      steps.add("Prepare rice in rice cooker or stove and turn on.");
+      steps.add("Add steamed potatoes, carrots, and broccoli to the curry pot when softened and simmer for 20 minutes, stirring frequently.");
+      steps.add("Add coconut milk and simmer for a further 10 minutes on a very low temperature. Stir frequently.");
+      steps.add("Enjoy!");
+
+      // Add the steps to the database using the recipe ID
+      addStepsToDb(recipeId, steps);
+
+      // Create an arrayList to store the ingredient name
+      List<Object[]> ingredientsList = new ArrayList<>();
+
+      // Define the names of ingredients that contain allergens
+      String tofu = "tofu";
+      String curryPaste = "Patak's concentrated Tikka Masala curry paste";
+      String coconutMilk = "coconut milk";
+
+      // Add each ingredient name, amount and unit to the ingredient list in the form
+      // {name (String), amount (double), unit (String)}
+      ingredientsList.add(new Object[] {"rice (dry)", 5d, RecipeIngredient.Unit.METRIC_CUPS.name()});
+      ingredientsList.add(new Object[] {tofu, 454d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"frozen broccoli", 454d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"carrots", 800d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"potatoes", 800d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {"bamboo shoots", 225d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {curryPaste, 566d, RecipeIngredient.Unit.GRAMS.name()});
+      ingredientsList.add(new Object[] {coconutMilk, 600d, RecipeIngredient.Unit.MILLILITRES.name()});
+
+      // Create ingredients from each
+      addIngredientsToDbAndRecipe(recipeId, ingredientsList);
+
+      // Update tofu because it contains allergens
+      Ingredient tofuIngredient = ingredientDao.getIngredient(tofu);
+      tofuIngredient.setContainsSoy(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+      ingredientDao.updateIngredient(tofuIngredient);
+
+      // Update curry paste  because it contains allergens
+      Ingredient curryPasteIngredient = ingredientDao.getIngredient(curryPaste);
+      curryPasteIngredient.setContainsTreeNuts(Ingredient.ContainsAllergen.CONTAINS_TRACES.name());
+      curryPasteIngredient.setContainsPeanuts(Ingredient.ContainsAllergen.CONTAINS_TRACES.name());
+      ingredientDao.updateIngredient(curryPasteIngredient);
+
+      // Update coconut milk because it contains allergens
+      Ingredient coconutMilkIngredient = ingredientDao.getIngredient(coconutMilk);
+      coconutMilkIngredient.setContainsTreeNuts(Ingredient.ContainsAllergen.CONTAINS_AS_INGREDIENT.name());
+      ingredientDao.updateIngredient(coconutMilkIngredient);
+    }
+
+
+  }
 
 }

@@ -1,8 +1,10 @@
 package com.gerardbradshaw.tomatoes;
 
 import android.os.Bundle;
+
+import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+
 import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -12,16 +14,23 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.Menu;
-import android.widget.Toast;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-
-
+  private RecyclerView recyclerView;
+  private RecipeListAdapter recipeListAdapter;
+  private RecipeViewModel viewModel;
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -29,11 +38,13 @@ public class MainActivity extends AppCompatActivity
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_main_drawer);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
+
+    // Set up FAB
     FloatingActionButton fab = findViewById(R.id.fab);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
@@ -42,8 +53,7 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-
-    // Set up the drawer
+    // Set up Drawer
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
     NavigationView navigationView = findViewById(R.id.nav_view);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -53,7 +63,27 @@ public class MainActivity extends AppCompatActivity
     navigationView.setNavigationItemSelectedListener(this);
 
 
-    Toast.makeText(this, "Hi", Toast.LENGTH_SHORT).show();
+    // Set up the RecyclerView's adapter
+    recipeListAdapter = new RecipeListAdapter(this);
+
+    // TODO set onClick functionality
+
+
+    // Set up RecyclerView
+    recyclerView = findViewById(R.id.mainActivity_recyclerView);
+    recyclerView.setAdapter(recipeListAdapter);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+    // Set up the ViewModel and its observer
+    viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+
+    viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
+      @Override
+      public void onChanged(List<RecipeSummary> recipeSummaries) {
+        recipeListAdapter.setRecipeSummaryList(recipeSummaries);
+      }
+    });
   }
 
 

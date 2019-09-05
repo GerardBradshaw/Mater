@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -10,13 +10,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Entity(tableName = "recipe_table")
-public class Recipe {
+@Entity(tableName = "recipe_summary_table")
+public class RecipeSummary {
 
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
-  @PrimaryKey
+  @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
 
@@ -32,13 +32,17 @@ public class Recipe {
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
   // Default constructor
-  public Recipe(@NonNull String title, @NonNull String description) {
+  public RecipeSummary(@NonNull String title, @NonNull String description) {
     this.title = title;
     this.description = description;
   }
 
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
+
+  public int getRecipeId() {
+    return recipeId;
+  }
 
   @NonNull
   public String getTitle() {
@@ -52,6 +56,10 @@ public class Recipe {
 
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
+
+  public void setRecipeId(int recipeId) {
+    this.recipeId = recipeId;
+  }
 
   public void setTitle(@NonNull String title) {
     this.title = title;
