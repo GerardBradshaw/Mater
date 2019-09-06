@@ -7,14 +7,13 @@ import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private RecipeRepository recipeRepository;
+  private RecipeRepository repository;
   private LiveData<List<RecipeSummary>> recipeSummaryList;
 
 
@@ -24,8 +23,8 @@ public class RecipeViewModel extends AndroidViewModel {
     super(application);
 
     // Set variables from repo
-    recipeRepository = new RecipeRepository(application);
-    recipeSummaryList = recipeRepository.getAllRecipeSummaries();
+    repository = new RecipeRepository(application);
+    recipeSummaryList = repository.getAllRecipeSummaries();
   }
 
 

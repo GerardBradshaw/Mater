@@ -128,7 +128,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       if (recipeSummaryDao.getAnyRecipe().length < 1) {
 
         // Create the lasagne recipe
-        addLasagneRecipeToDb();
+        //addLasagneRecipeToDb();
 
         // Create the curry
         addCurryRecipeToDb();
