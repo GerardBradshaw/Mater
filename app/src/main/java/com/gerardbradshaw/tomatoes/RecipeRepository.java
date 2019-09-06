@@ -52,6 +52,10 @@ public class RecipeRepository {
     return recipeSummaryList;
   }
 
+  public void createNewRecipe() {
+
+  }
+
   /**
    * Wrapper method for the InsertRecipeAsyncTask class, which calls the insertRecipeSummary method
    * for the RecipeSummaryDao.
