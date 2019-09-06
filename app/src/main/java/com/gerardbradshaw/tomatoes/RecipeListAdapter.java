@@ -77,7 +77,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
         // Get the current position
         int currentPosition = holder.getAdapterPosition();
 
-        // Get the Recipe at the current position
+        // Get the RecipeHolder at the current position
         RecipeSummary currentRecipe = recipeSummaryList.get(position);
 
         // Call the onRecipeClicked method (called in MainActivity using an override)

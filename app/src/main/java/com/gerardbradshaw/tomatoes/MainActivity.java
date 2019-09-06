@@ -29,11 +29,13 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
+  // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
   private RecipeViewModel viewModel;
-  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
 
+  // Intent extras
+  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -63,7 +65,6 @@ public class MainActivity extends AppCompatActivity
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
-
 
     // Set up the RecyclerView's adapter
     recipeListAdapter = new RecipeListAdapter(this);

@@ -1,9 +1,9 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.holders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recipe {
+public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -11,18 +11,18 @@ public class Recipe {
   private String title;
   private String description;
   private List<String> steps;
-  private List<Object[]> ingredients;
+  private List<RecipeIngredientHolder> recipeIngredients;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public Recipe() {
-    ingredients = new ArrayList<>();
+  public RecipeHolder() {
+    recipeIngredients = new ArrayList<>();
     steps = new ArrayList<>();
   }
 
 
-  // - - - - - - - - - - - - - - - Summary methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
   /**
    * Setter method for title.
@@ -42,8 +42,44 @@ public class Recipe {
     this.description = description;
   }
 
+  /**
+   * Setter method for steps.
+   *
+   * @param steps List<String>: The steps.
+   */
+  public void setSteps(List<String> steps) {
+    this.steps = steps;
+  }
 
-  // - - - - - - - - - - - - - - - Step methods - - - - - - - - - - - - - - -
+  /**
+   * Setter method for recipeIngredients.
+   *
+   * @param recipeIngredientHolders: The recipeIngredients.
+   */
+  public void setRecipeIngredients(List<RecipeIngredientHolder> recipeIngredientHolders) {
+    this.recipeIngredients = recipeIngredientHolders;
+  }
+
+
+  // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
+
+  /**
+   * Getter for title.
+   *
+   * @return String: The title.
+   */
+  public String getTitle() {
+    return title;
+  }
+
+  /**
+   * Getter for description.
+   *
+   * @return String: the description.
+   */
+  public String getDescription() {
+    return description;
+  }
 
   /**
    * Getter method for all the steps
@@ -53,6 +89,18 @@ public class Recipe {
   public List<String> getSteps() {
     return steps;
   }
+
+  /**
+   * Getter for recipeIngredients.
+   *
+   * @return List<IngredientHolder>: the recipeIngredients.
+   */
+  public List<RecipeIngredientHolder> getRecipeIngredients() {
+    return recipeIngredients;
+  }
+
+
+  // - - - - - - - - - - - - - - - Other step methods - - - - - - - - - - - - - - -
 
   /**
    * Gets the specified step.
@@ -72,15 +120,6 @@ public class Recipe {
     } else {
       return "";
     }
-  }
-
-  /**
-   * Setter method for steps.
-   *
-   * @param steps List<String>: The steps.
-   */
-  public void setSteps(List<String> steps) {
-    this.steps = steps;
   }
 
   /**
@@ -138,14 +177,15 @@ public class Recipe {
   }
 
 
-  // - - - - - - - - - - - - - - - Ingredient methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Other ingredient methods - - - - - - - - - - - - - - -
 
-  public void addIngredient(String name, double amount, String units) {
-
-    Object[] newIngredient = {name, amount, units};
-
-    ingredients.add(newIngredient);
-
+  /**
+   * Adds an ingredient to the recipe.
+   *
+   * @param recipeIngredientHolder: The ingredient to be added.
+   */
+  public void addIngredient(RecipeIngredientHolder recipeIngredientHolder) {
+    recipeIngredients.add(recipeIngredientHolder);
   }
 
 }

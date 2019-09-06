@@ -9,8 +9,14 @@ import com.gerardbradshaw.tomatoes.daos.IngredientDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeSummaryDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
 import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
+import com.gerardbradshaw.tomatoes.entities.Ingredient;
+import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
+import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeRepository {
@@ -52,8 +58,13 @@ public class RecipeRepository {
     return recipeSummaryList;
   }
 
-  public void createNewRecipe() {
-
+  public void insertRecipeFromHolder(RecipeHolder recipeHolder) {
+    new insertRecipeFromHolderAsyncTask(
+        recipeSummaryDao,
+        recipeIngredientDao,
+        recipeStepDao,
+        ingredientDao)
+        .execute(recipeHolder);
   }
 
   /**
@@ -88,6 +99,132 @@ public class RecipeRepository {
 
 
   // - - - - - - - - - - - - - - - AsyncTasks for wrapper methods - - - - - - - - - - - - - - -
+
+  private static class insertRecipeFromHolderAsyncTask
+      extends AsyncTask<RecipeHolder, Void, Void> {
+
+    // Member variables
+    private RecipeSummaryDao recipeSummaryDao;
+    private RecipeIngredientDao recipeIngredientDao;
+    private RecipeStepDao recipeStepDao;
+    private IngredientDao ingredientDao;
+
+
+    // Constructor
+    insertRecipeFromHolderAsyncTask(
+        RecipeSummaryDao recipeSummaryDao,
+        RecipeIngredientDao recipeIngredientDao,
+        RecipeStepDao recipeStepDao,
+        IngredientDao ingredientDao) {
+
+      this.recipeSummaryDao = recipeSummaryDao;
+      this.recipeIngredientDao = recipeIngredientDao;
+      this.recipeStepDao = recipeStepDao;
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Void doInBackground(RecipeHolder... recipeHolders) {
+
+      // Get the RecipeHolder object
+      RecipeHolder recipe = recipeHolders[0];
+
+      // Add the Title and Description to the database
+      addSummaryToDb(recipe.getTitle(), recipe.getDescription());
+
+      // Get the ID of the new recipe
+      int recipeId = recipeSummaryDao.getRecipeId(recipe.getTitle());
+
+      // Add the steps to the database
+      addStepsToDb(recipeId, recipe.getSteps());
+
+      // Add the ingredients to database
+      addIngredientsToDb(recipeId, recipe.getRecipeIngredients());
+
+      return null;
+    }
+
+
+    /**
+     * Simple helper method to add the summary of a recipe to the database.
+     *
+     * @param title, String: The title of the recipe.
+     * @param description, String: The description of the recipe.
+     */
+    private void addSummaryToDb(String title, String description) {
+
+      // Create a RecipeSummary from the input
+      RecipeSummary recipeSummary = new RecipeSummary(title, description);
+
+      // Add the title and description to the database.
+      recipeSummaryDao.insertRecipe(recipeSummary);
+
+    }
+
+    /**
+     * Simple helper method to add the steps of a recipe to the database.
+     *
+     * @param recipeId, int: The recipe ID of the corresponding recipe.
+     * @param steps, List of Strings: The steps of the recipe in order.
+     */
+    private void addStepsToDb(int recipeId, List<String> steps) {
+
+      for(int i = 0; i < steps.size(); i++) {
+
+        // Define the step number
+        int stepNumber = i + 1;
+
+        // Create a RecipeStep to add to the DAO
+        RecipeStep recipeStep = new RecipeStep(recipeId, stepNumber, steps.get(i));
+
+        // Add the RecipeStep to the DAO
+        recipeStepDao.insertRecipeStep(recipeStep);
+      }
+    }
+
+    /**
+     * Helper method used to add a list of Ingredients and the amounts used in a specific recipe to
+     * the database. If an ingredient already exists as an ingredient, it is not duplicated.
+     *
+     * @param recipeId, int: The ID of the recipe to which the ingredients belong.
+     * @param ingredients, List of RecipeIngredientHolder: The ingredients.
+     */
+    private void addIngredientsToDb(int recipeId, List<RecipeIngredientHolder> ingredients) {
+
+      for(int i = 0; i < ingredients.size(); i++) {
+
+        // Get the name, amount, and units of the ingredient from the array
+        String name = ingredients.get(i).getName();
+        double amount = ingredients.get(i).getAmount();
+        String units = ingredients.get(i).getUnits();
+
+        // Get the ID of the ingredient from the DB. If it does not exist yet, the ID = 0.
+        int ingredientId = ingredientDao.getIngredientId(name);
+
+        // If the ingredient does not exist in the ingredient_table, then add it
+        if (ingredientId == 0) {
+          // Create an ingredient from the name
+          Ingredient ingredient = new Ingredient(name);
+
+          // Add the Ingredient to the DAO
+          ingredientDao.insertIngredient(ingredient);
+
+          // Get the ID of the ingredient from the DAO
+          ingredientId = ingredientDao.getIngredientId(name);
+        }
+
+        // Create a RecipeIngredient using this ID along with the RecipeSummary ID, amount, and units
+        RecipeIngredient recipeIngredient =
+            new RecipeIngredient(recipeId, ingredientId, amount, units);
+
+        // Add the RecipeIngredient to the DAO
+        recipeIngredientDao.insertRecipeIngredient(recipeIngredient);
+
+      }
+    }
+
+
+  }
 
   /**
    * AsyncTask for insertRecipeSummary.

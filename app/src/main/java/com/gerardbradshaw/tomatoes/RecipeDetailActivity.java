@@ -37,7 +37,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
 
-    // Get the Recipe information from the database
+    // Get the RecipeHolder information from the database
 
 
 
