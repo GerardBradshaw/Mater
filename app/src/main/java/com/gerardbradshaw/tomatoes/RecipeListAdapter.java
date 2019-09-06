@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
 

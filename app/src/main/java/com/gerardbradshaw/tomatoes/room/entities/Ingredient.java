@@ -1,13 +1,9 @@
-package com.gerardbradshaw.tomatoes.entities;
+package com.gerardbradshaw.tomatoes.room.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Entity(tableName = "ingredient_table")
 public class Ingredient {

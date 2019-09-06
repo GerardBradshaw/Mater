@@ -1,22 +1,21 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.room;
 
 import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.gerardbradshaw.tomatoes.daos.IngredientDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeSummaryDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
-import com.gerardbradshaw.tomatoes.entities.Ingredient;
-import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.entities.RecipeStep;
-import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.daos.IngredientDao;
+import com.gerardbradshaw.tomatoes.room.daos.RecipeSummaryDao;
+import com.gerardbradshaw.tomatoes.room.daos.RecipeIngredientDao;
+import com.gerardbradshaw.tomatoes.room.daos.RecipeStepDao;
+import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
 import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeRepository {
@@ -38,7 +37,7 @@ public class RecipeRepository {
    *
    * @param application: Application context wrapper
    */
-  RecipeRepository(Application application) {
+  public RecipeRepository(Application application) {
 
     // Initialize the database and get a handle on the DAOs
     TomatoesRoomDatabase db = TomatoesRoomDatabase.getDatabase(application);

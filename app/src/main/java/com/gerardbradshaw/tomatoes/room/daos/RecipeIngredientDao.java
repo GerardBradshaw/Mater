@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes.daos;
+package com.gerardbradshaw.tomatoes.room.daos;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 
 @Dao
 public interface RecipeIngredientDao {

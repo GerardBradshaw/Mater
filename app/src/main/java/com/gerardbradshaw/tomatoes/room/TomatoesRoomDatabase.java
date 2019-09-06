@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.room;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,14 +9,14 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.gerardbradshaw.tomatoes.daos.IngredientDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeSummaryDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeIngredientDao;
-import com.gerardbradshaw.tomatoes.daos.RecipeStepDao;
-import com.gerardbradshaw.tomatoes.entities.Ingredient;
-import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
-import com.gerardbradshaw.tomatoes.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.daos.IngredientDao;
+import com.gerardbradshaw.tomatoes.room.daos.RecipeSummaryDao;
+import com.gerardbradshaw.tomatoes.room.daos.RecipeIngredientDao;
+import com.gerardbradshaw.tomatoes.room.daos.RecipeStepDao;
+import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 
 import java.util.ArrayList;
 import java.util.List;

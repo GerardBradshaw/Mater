@@ -3,6 +3,7 @@ package com.gerardbradshaw.tomatoes;
 import android.app.Application;
 import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
 import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
+import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
