@@ -16,5 +16,15 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="recipeListItem_image_contentDescription">Recipe Image</string>
+    <string name="addRecipeActivity_pageHeader">Add a new recipe</string>
+    <string name="addRecipeActivity_titleInput_hint">Recipe title...</string>
+    <string name="addRecipeActivity_descriptionInput_hint">Quick description of the dish...</string>
+    <string name="addRecipeActivity_ingredientNameInput_hint">Ingredient name...</string>
+    <string name="addRecipeActivity_ingredientAmountInput_hint">Amount</string>
+    <string name="addRecipeActivity_addStepLayout_stepInput_hint">Describe the step...</string>
+    <string name="addRecipeActivity_addStepLayout_saveButton">Add</string>
+    <string name="addRecipeActivity_addStepsHeaderTextView">Steps</string>
+    <string name="addRecipeActivity_ingredientsHeaderTextView">Ingredients</string>
+    <string name="addRecipeActivity_saveButton">Save Recipe</string>
 
 </resources>
