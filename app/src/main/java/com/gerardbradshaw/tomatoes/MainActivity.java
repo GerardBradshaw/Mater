@@ -53,7 +53,9 @@ public class MainActivity extends AppCompatActivity
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        //TODO set FAB behaviour
+        // Create an intent to open the AddRecipeActivity and start it
+        Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+        startActivity(intent);
       }
     });
 
