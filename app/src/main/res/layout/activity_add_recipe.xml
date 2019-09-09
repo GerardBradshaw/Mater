@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecipeDetailActivity">
+    tools:context=".AddRecipeActivity">
 
     <LinearLayout
         style="@style/ActivityParentView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".AddRecipeActivity">
+        android:orientation="vertical">
 
         <!-- Page Header -->
         <TextView
@@ -45,32 +44,7 @@
             android:id="@+id/addRecipeActivity_addIngredientLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!-- Ingredient Name Input -->
-            <EditText
-                android:id="@+id/addRecipeActivity_addIngredientLayout_nameInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:hint="@string/addRecipeActivity_ingredientNameInput_hint"
-                android:inputType="text" />
-
-            <!-- Ingredient Amount Input -->
-            <EditText
-                android:id="@+id/addRecipeActivity_addIngredientLayout_amountInput"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:hint="@string/addRecipeActivity_ingredientAmountInput_hint"
-                android:inputType="numberDecimal" />
-
-            <!-- Ingredient Units Spinner -->
-            <Spinner
-                android:id="@+id/addRecipeActivity_addIngredientLayout_unitSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2" />
+            android:orientation="vertical">
 
         </LinearLayout>
 
