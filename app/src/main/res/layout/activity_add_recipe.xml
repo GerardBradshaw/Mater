@@ -45,7 +45,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
         </LinearLayout>
 
         <!-- Add Ingredient Button -->
@@ -65,28 +64,12 @@
             android:id="@+id/addRecipeActivity_addStepLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!-- Step Number TextView -->
-            <TextView
-                android:id="@+id/addRecipeActivity_addStepLayout_stepNumberTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="1. " />
-
-            <!-- Step Input -->
-            <EditText
-                android:id="@+id/addRecipeActivity_addStepLayout_stepInput"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/addRecipeActivity_addStepLayout_stepInput_hint" />
-
+            android:orientation="vertical">
         </LinearLayout>
 
         <!-- Add Step Button -->
         <Button
-            android:id="@+id/addRecipeActivity_addStepLayout_saveButton"
+            android:id="@+id/addRecipeActivity_addStepButton"
             style="@style/ButtonStyle"
             android:text="@string/addRecipeActivity_addStepLayout_saveButton" />
 
