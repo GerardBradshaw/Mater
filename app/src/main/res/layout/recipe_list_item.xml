@@ -25,7 +25,7 @@
         <!-- Title -->
         <TextView
             android:id="@+id/recipeListItem_title"
-            style="@style/RecipeTitle"
+            style="@style/RecipeTitleStyle"
             android:transitionName="recipeTitleTransition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

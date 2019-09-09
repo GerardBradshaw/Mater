@@ -57,6 +57,11 @@ public class RecipeRepository {
     return recipeSummaryList;
   }
 
+  /**
+   * Inserts a recipe to the database from a RecipeHolder.
+   *
+   * @param recipeHolder: the recipe to be inserted.
+   */
   public void insertRecipeFromHolder(RecipeHolder recipeHolder) {
     new insertRecipeFromHolderAsyncTask(
         recipeSummaryDao,
@@ -65,6 +70,21 @@ public class RecipeRepository {
         ingredientDao)
         .execute(recipeHolder);
   }
+
+  public RecipeHolder getRecipeHolder(int recipeId) {
+
+    Integer recipeIdInteger = (Integer) recipeId;
+
+    try {
+      return new getRecipeHolderAsyncTask().execute(recipeIdInteger).get();
+
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
+
+
 
   /**
    * Wrapper method for the InsertRecipeAsyncTask class, which calls the insertRecipeSummary method
@@ -99,6 +119,9 @@ public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - AsyncTasks for wrapper methods - - - - - - - - - - - - - - -
 
+  /**
+   * AsyncTask class for insertRecipeFromHolder.
+   */
   private static class insertRecipeFromHolderAsyncTask
       extends AsyncTask<RecipeHolder, Void, Void> {
 
@@ -224,6 +247,24 @@ public class RecipeRepository {
 
 
   }
+
+  /**
+   * AsyncTask class for getRecipeHolder.
+   */
+  private static class getRecipeHolderAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
+
+     @Override
+    protected RecipeHolder doInBackground(Integer... integers) {
+
+       // Get the primitive integer type
+       int recipeId = Integer.valueOf(integers[0]);
+
+
+
+      return null;
+    }
+  }
+
 
   /**
    * AsyncTask for insertRecipeSummary.

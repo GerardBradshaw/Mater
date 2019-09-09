@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
 import androidx.annotation.NonNull;

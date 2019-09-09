@@ -1,8 +1,10 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -53,7 +55,9 @@ public class MainActivity extends AppCompatActivity
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        //TODO set FAB behaviour
+        // Create an intent to open the AddRecipeActivity and start it
+        Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+        startActivity(intent);
       }
     });
 
