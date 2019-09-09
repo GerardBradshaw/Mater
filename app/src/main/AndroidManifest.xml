@@ -13,17 +13,17 @@
 
         <!-- Add Recipe -->
         <activity
-            android:name=".AddRecipeActivity">
+            android:name=".activities.AddRecipeActivity">
         </activity>
 
         <!-- Recipe Detail -->
         <activity
-            android:name=".RecipeDetailActivity">
+            android:name=".activities.RecipeDetailActivity">
         </activity>
 
         <!-- Main Activity -->
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 

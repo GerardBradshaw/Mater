@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
 import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;

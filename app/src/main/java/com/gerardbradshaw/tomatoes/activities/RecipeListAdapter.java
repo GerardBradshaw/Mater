@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    *
    * @param context: The activity context.
    */
-  RecipeListAdapter(Context context) {
+  public RecipeListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
   }
 
@@ -115,7 +117,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    * Set the list of words to use in the RecyclerView.
    * @param recipeSummaryList: The list of recipe summaries.
    */
-  void setRecipeSummaryList(List<RecipeSummary> recipeSummaryList) {
+  public void setRecipeSummaryList(List<RecipeSummary> recipeSummaryList) {
     this.recipeSummaryList = recipeSummaryList;
     notifyDataSetChanged();
   }
@@ -150,7 +152,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     final RecipeListAdapter adapter;
 
     // Constructor
-    RecipeViewHolder(@NonNull View itemView, RecipeListAdapter adapter) {
+    public RecipeViewHolder(@NonNull View itemView, RecipeListAdapter adapter) {
       super(itemView);
 
       // Initialize the views and adapter.

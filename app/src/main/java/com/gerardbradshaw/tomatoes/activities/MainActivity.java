@@ -1,8 +1,10 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
