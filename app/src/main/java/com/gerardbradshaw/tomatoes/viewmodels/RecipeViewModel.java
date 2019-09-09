@@ -5,22 +5,31 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
 
-public class RecipeSummaryViewModel extends AndroidViewModel {
+public class RecipeViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
+  // Repo
   private RecipeRepository repository;
+
+  // LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeSummaryViewModel(@NonNull Application application) {
+  /**
+   * VM constructor required to initialise functionality.
+   *
+   * @param application: The app.
+   */
+  public RecipeViewModel(@NonNull Application application) {
     super(application);
 
     // Set variables from repo
@@ -31,6 +40,11 @@ public class RecipeSummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
 
+  /**
+   * Gets the Titles and Descriptions of all recipes in the database.
+   *
+   * @return LiveData List of RecipeSummary: the list of recipes
+   */
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
@@ -38,7 +52,14 @@ public class RecipeSummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
 
-  // TODO add more functionality!
+  /**
+   * Adds all recipe and ingredient information contained in a RecipeHolder.
+   *
+   * @param holder, RecipeHolder: The RecipeHolder to insert.
+   */
+  public void insertRecipeHolder(RecipeHolder holder) {
+    repository.insertRecipeFromHolder(holder);
+  }
 
 
 }

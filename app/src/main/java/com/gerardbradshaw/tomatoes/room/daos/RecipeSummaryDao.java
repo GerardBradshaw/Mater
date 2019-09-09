@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
@@ -24,11 +25,8 @@ public interface RecipeSummaryDao {
   @Update
   void updateRecipe(RecipeSummary recipeSummary);
 
-  @Query("select description from recipe_summary_table where title = :recipeTitle")
-  String getDescription(String recipeTitle);
-
-  @Query("select title from recipe_summary_table where recipe_id = :recipeId")
-  String getTitle(int recipeId);
+  @Query("select * from recipe_summary_table where recipe_id = :recipeId")
+  LiveData<RecipeSummary[]> getRecipeSummary(int recipeId);
 
   @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
   int getRecipeId(String recipeTitle);
@@ -40,4 +38,11 @@ public interface RecipeSummaryDao {
   RecipeSummary[] getAnyRecipe();
 
 
+  // Not used
+
+  @Query("select description from recipe_summary_table where title = :recipeTitle")
+  String getDescription(String recipeTitle);
+
+  @Query("select title from recipe_summary_table where recipe_id = :recipeId")
+  String getTitle(int recipeId);
 }

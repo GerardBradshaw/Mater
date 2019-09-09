@@ -22,12 +22,15 @@ public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
+  // DAOs
   private IngredientDao ingredientDao;
   private RecipeSummaryDao recipeSummaryDao;
   private RecipeIngredientDao recipeIngredientDao;
   private RecipeStepDao recipeStepDao;
 
+  // LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
+  // private LiveData<RecipeSummary>
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
