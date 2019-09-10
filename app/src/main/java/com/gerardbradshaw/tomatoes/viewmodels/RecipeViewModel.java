@@ -49,6 +49,17 @@ public class RecipeViewModel extends AndroidViewModel {
     return recipeSummaryList;
   }
 
+  /**
+   * Gets a RecipeHolder for the specific recipe.
+   *
+   * @param recipeId, int: the ID of the recipe.
+   * @return LiveData RecipeHolder: the requested recipe.
+   */
+  public LiveData<RecipeHolder> getRecipeHolder(int recipeId) {
+    return null;
+    // TODO create getRecipeHolder method with LiveData
+  }
+
 
   // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
 
@@ -60,6 +71,8 @@ public class RecipeViewModel extends AndroidViewModel {
   public void insertRecipeHolder(RecipeHolder holder) {
     repository.insertRecipeFromHolder(holder);
   }
+
+
 
 
 }

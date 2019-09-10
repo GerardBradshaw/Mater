@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.viewholders.AddIngredientViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.AddStepViewHolder;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +30,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Default layout views
-  private Button addIngredientButton;
-  private Button addStepButton;
-  private Button saveButton;
+  // Layout views
   private EditText titleInput;
   private EditText descriptionInput;
 
@@ -39,7 +38,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<AddIngredientViewHolder> ingredientViewHolders;
   private List<AddStepViewHolder> stepViewHolders;
 
-
+  // Data objects
+  private RecipeViewModel viewModel;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -49,10 +49,13 @@ public class AddRecipeActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_recipe);
 
+    // Initialize the ViewModel
+    viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+
     // Get a handle on the views
-    addIngredientButton = findViewById(R.id.addRecipeActivity_addIngredientButton);
-    addStepButton = findViewById(R.id.addRecipeActivity_addStepButton);
-    saveButton = findViewById(R.id.addRecipeActivity_saveButton);
+    Button addIngredientButton = findViewById(R.id.addRecipeActivity_addIngredientButton);
+    Button addStepButton = findViewById(R.id.addRecipeActivity_addStepButton);
+    Button saveButton = findViewById(R.id.addRecipeActivity_saveButton);
     titleInput = findViewById(R.id.addRecipeActivity_titleInput);
     descriptionInput = findViewById(R.id.addRecipeActivity_descriptionInput);
 
@@ -153,11 +156,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Save the new EditText to the list
     stepViewHolders.add(new AddStepViewHolder(number, step));
 
-    // Get the index of the view
-    int index = numberOfSteps;
-
     // Insert the view into the main view
-    insertPoint.addView(addStepView, index, new ViewGroup.LayoutParams(
+    insertPoint.addView(addStepView, numberOfSteps, new ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
 
@@ -199,7 +199,8 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.addNewStep(step);
     }
 
-    // TODO save the recipe to the database using a VH
+    // Save the recipe to the database
+    viewModel.insertRecipeHolder(recipe);
 
     // TODO add a ProgressBar
 

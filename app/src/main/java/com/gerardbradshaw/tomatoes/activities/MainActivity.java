@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity
   // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
+
+  // Data objects
   private RecipeViewModel viewModel;
 
   // Intent extras
