@@ -54,11 +54,11 @@ public class TomatoesApplication extends Application {
   private RecipePojo createLasagneRecipe() {
 
     // Create a new RecipePojo object
-    RecipePojo holder = new RecipePojo();
+    RecipePojo recipe = new RecipePojo();
 
     // Set the title and description of the recipe
-    holder.setTitle("Vegan Lasagne");
-    holder.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
+    recipe.setTitle("Vegan Lasagne");
+    recipe.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -75,7 +75,7 @@ public class TomatoesApplication extends Application {
     steps.add("Enjoy!");
 
     // Add the steps to the recipe
-    holder.setSteps(steps);
+    recipe.setSteps(steps);
 
     // Create a RecipeIngredientPojo object
     List<RecipeIngredientPojo> ingredients = new ArrayList<>();
@@ -120,10 +120,10 @@ public class TomatoesApplication extends Application {
         vegenaise, 100d, RecipeIngredientPojo.Unit.GRAMS));
 
     // Add the RecipeIngredients to the Recipe
-    holder.setRecipeIngredients(ingredients);
+    recipe.setRecipeIngredients(ingredients);
 
-    // Return the holder
-    return holder;
+    // Return the recipe
+    return recipe;
 
   }
 

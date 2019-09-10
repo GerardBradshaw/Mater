@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientPojo;
@@ -166,77 +167,85 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Create setup fields
     boolean allFieldsOk = true;
-    int promptColor = getResources().getColor(R.color.colorPrimary);
+    int hintColor = getResources().getColor(R.color.colorPrimary);
 
     // Check the title
     if(titleInput.getText().toString().isEmpty()) {
-      titleInput.setHintTextColor(promptColor);
+      titleInput.setHintTextColor(hintColor);
       allFieldsOk = false;
     }
 
     // Check the description
     if(descriptionInput.getText().toString().isEmpty()) {
-      descriptionInput.setHintTextColor(promptColor);
+      descriptionInput.setHintTextColor(hintColor);
       allFieldsOk = false;
     }
 
     // Check the ingredients
     for(AddIngredientViewHolder holder : ingredientViewHolders) {
 
+      if(holder.getNameInput().getText().toString().isEmpty()) {
+        holder.getNameInput().setHintTextColor(hintColor);
+        allFieldsOk = false;
+      }
+
+      if(holder.getAmountInput().getText().toString().isEmpty()) {
+        holder.getAmountInput().setHintTextColor(hintColor);
+        allFieldsOk = false;
+      }
+
+      // TODO add checker for spinner
     }
 
-
-
-
-
-    // Create a RecipePojo object
-    RecipePojo recipe = new RecipePojo();
-
-    // Check all fields to make sure data has been entered correctly
-    //boolean allFieldsOk = false;
-
-
-
-
-
-    // Get the title and description
-
-    recipe.setTitle(titleInput.getText().toString());
-    recipe.setDescription(descriptionInput.getText().toString());
-
-    // Set up lists for steps and ingredients
-    List<RecipeIngredient> ingredients = new ArrayList<>();
-    List<String> steps = new ArrayList<>();
-
-    // Get the ingredients, amounts, and units from each and add them to the recipe
-    for(AddIngredientViewHolder holder : ingredientViewHolders) {
-
-      // Get user input
-      String name = holder.getNameInput().getText().toString();
-      double amount = Double.parseDouble(holder.getNameInput().getText().toString());
-      RecipeIngredientPojo.Unit unit = RecipeIngredientPojo.Unit.NO_UNIT;
-      // TODO implement spinner functionality and retrieval
-
-      // Add a RecipeIngredientPojo to the recipe
-      recipe.addIngredient(new RecipeIngredientPojo(name, amount, unit));
-    }
-
-    // Get the steps from each and add them to the recipe
+    // Check the steps
     for(AddStepViewHolder holder : stepViewHolders) {
-
-      // Get user input
-      String step = holder.getStep().getText().toString();
-
-      // Add the step to the recipe
-      recipe.addNewStep(step);
+      if(holder.getStep().getText().toString().isEmpty()) {
+        holder.getStep().setHintTextColor(hintColor);
+        allFieldsOk = false;
+      }
     }
 
-    // Save the recipe to the database
-    viewModel.insertRecipeHolder(recipe);
+    // If all is well, add the recipe to the database
+    if(allFieldsOk) {
 
-    // TODO add a ProgressBar
+      // Create a RecipePojo object
+      RecipePojo recipe = new RecipePojo();
 
+      // Set up lists for steps and ingredients
+      List<RecipeIngredientPojo> ingredients = new ArrayList<>();
+      List<String> steps = new ArrayList<>();
+
+      // Get the ingredients info from each ViewHolder and add them to the list
+      for(AddIngredientViewHolder holder : ingredientViewHolders) {
+        ingredients.add(new RecipeIngredientPojo(
+            holder.getNameInput().getText().toString(),
+            Double.parseDouble(holder.getAmountInput().getText().toString()),
+            RecipeIngredientPojo.Unit.NO_UNIT));
+
+        // TODO implement spinner functionality and retrieval
+      }
+
+      // Get the steps from each ViewHolder and add them to the list
+      for(AddStepViewHolder holder : stepViewHolders) {
+        steps.add(holder.getStep().getText().toString());
+      }
+
+      // Add everything to the recipe
+      recipe.setTitle(titleInput.getText().toString());
+      recipe.setDescription(descriptionInput.getText().toString());
+      recipe.setRecipeIngredients(ingredients);
+      recipe.setSteps(steps);
+
+      // Save the recipe to the database
+      viewModel.insertRecipeHolder(recipe);
+
+      // TODO add a ProgressBar
+
+    } else {
+      Toast
+          .makeText(this, "Please complete indicated fields", Toast.LENGTH_SHORT)
+          .show();
+    }
   }
-
 
 }

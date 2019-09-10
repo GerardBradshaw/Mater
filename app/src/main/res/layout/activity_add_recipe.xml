@@ -22,6 +22,7 @@
         <!-- Title Input -->
         <EditText
             android:id="@+id/addRecipeActivity_titleInput"
+            android:inputType="textCapWords"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/addRecipeActivity_titleInput_hint" />
@@ -29,6 +30,7 @@
         <!-- Description Input -->
         <EditText
             android:id="@+id/addRecipeActivity_descriptionInput"
+            android:inputType="textCapSentences"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/addRecipeActivity_descriptionInput_hint" />
