@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import com.gerardbradshaw.tomatoes.pojos.RecipePojo;
 import com.gerardbradshaw.tomatoes.room.daos.IngredientDao;
 import com.gerardbradshaw.tomatoes.room.daos.RecipeSummaryDao;
 import com.gerardbradshaw.tomatoes.room.daos.RecipeIngredientDao;
@@ -13,8 +14,7 @@ import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
-import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
-import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
+import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientPojo;
 
 import java.util.List;
 
@@ -61,20 +61,20 @@ public class RecipeRepository {
   }
 
   /**
-   * Inserts a recipe to the database from a RecipeHolder.
+   * Inserts a recipe to the database from a RecipePojo.
    *
-   * @param recipeHolder: the recipe to be inserted.
+   * @param recipePojo: the recipe to be inserted.
    */
-  public void insertRecipeFromHolder(RecipeHolder recipeHolder) {
+  public void insertRecipeFromHolder(RecipePojo recipePojo) {
     new insertRecipeFromHolderAsyncTask(
         recipeSummaryDao,
         recipeIngredientDao,
         recipeStepDao,
         ingredientDao)
-        .execute(recipeHolder);
+        .execute(recipePojo);
   }
 
-  public RecipeHolder getRecipeHolder(int recipeId) {
+  public RecipePojo getRecipeHolder(int recipeId) {
 
     Integer recipeIdInteger = (Integer) recipeId;
 
@@ -126,7 +126,7 @@ public class RecipeRepository {
    * AsyncTask class for insertRecipeFromHolder.
    */
   private static class insertRecipeFromHolderAsyncTask
-      extends AsyncTask<RecipeHolder, Void, Void> {
+      extends AsyncTask<RecipePojo, Void, Void> {
 
     // Member variables
     private RecipeSummaryDao recipeSummaryDao;
@@ -149,10 +149,10 @@ public class RecipeRepository {
     }
 
     @Override
-    protected Void doInBackground(RecipeHolder... recipeHolders) {
+    protected Void doInBackground(RecipePojo... recipePojos) {
 
-      // Get the RecipeHolder object
-      RecipeHolder recipe = recipeHolders[0];
+      // Get the RecipePojo object
+      RecipePojo recipe = recipePojos[0];
 
       // Add the Title and Description to the database
       addSummaryToDb(recipe.getTitle(), recipe.getDescription());
@@ -212,9 +212,9 @@ public class RecipeRepository {
      * the database. If an ingredient already exists as an ingredient, it is not duplicated.
      *
      * @param recipeId, int: The ID of the recipe to which the ingredients belong.
-     * @param ingredients, List of RecipeIngredientHolder: The ingredients.
+     * @param ingredients, List of RecipeIngredientPojo: The ingredients.
      */
-    private void addIngredientsToDb(int recipeId, List<RecipeIngredientHolder> ingredients) {
+    private void addIngredientsToDb(int recipeId, List<RecipeIngredientPojo> ingredients) {
 
       for(int i = 0; i < ingredients.size(); i++) {
 
@@ -254,10 +254,10 @@ public class RecipeRepository {
   /**
    * AsyncTask class for getRecipeHolder.
    */
-  private static class getRecipeHolderAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
+  private static class getRecipeHolderAsyncTask extends AsyncTask<Integer, Void, RecipePojo> {
 
      @Override
-    protected RecipeHolder doInBackground(Integer... integers) {
+    protected RecipePojo doInBackground(Integer... integers) {
 
        // Get the primitive integer type
        int recipeId = Integer.valueOf(integers[0]);

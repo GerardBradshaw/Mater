@@ -1,8 +1,9 @@
 package com.gerardbradshaw.tomatoes;
 
 import android.app.Application;
-import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
-import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
+
+import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientPojo;
+import com.gerardbradshaw.tomatoes.pojos.RecipePojo;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 
 import java.util.ArrayList;
@@ -35,25 +36,25 @@ public class TomatoesApplication extends Application {
       sharedPrefHelper.setAsLaunched();
 
       // Create the default recipes
-      RecipeHolder lasagneRecipeHolder = createLasagneRecipe();
-      RecipeHolder curryRecipeHolder = createCurryRecipe();
+      RecipePojo lasagneRecipePojo = createLasagneRecipe();
+      RecipePojo curryRecipePojo = createCurryRecipe();
 
       // Add the recipes to the database
-      repository.insertRecipeFromHolder(lasagneRecipeHolder);
-      repository.insertRecipeFromHolder(curryRecipeHolder);
+      repository.insertRecipeFromHolder(lasagneRecipePojo);
+      repository.insertRecipeFromHolder(curryRecipePojo);
 
     }
   }
 
   /**
-   * Creates a lasagne RecipeHolder.
+   * Creates a lasagne RecipePojo.
    *
-   * @return RecipeHolder: The lasagne recipe.
+   * @return RecipePojo: The lasagne recipe.
    */
-  private RecipeHolder createLasagneRecipe() {
+  private RecipePojo createLasagneRecipe() {
 
-    // Create a new RecipeHolder object
-    RecipeHolder holder = new RecipeHolder();
+    // Create a new RecipePojo object
+    RecipePojo holder = new RecipePojo();
 
     // Set the title and description of the recipe
     holder.setTitle("Vegan Lasagne");
@@ -76,8 +77,8 @@ public class TomatoesApplication extends Application {
     // Add the steps to the recipe
     holder.setSteps(steps);
 
-    // Create a RecipeIngredientHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create a RecipeIngredientPojo object
+    List<RecipeIngredientPojo> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String beyondBurgers = "Beyond burgers";
@@ -85,38 +86,38 @@ public class TomatoesApplication extends Application {
     String vegenaise = "Vegenaise";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "sweet potato", 800d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "sweet potato", 800d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "capsicum", 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+    ingredients.add(new RecipeIngredientPojo(
+        "capsicum", 1d, RecipeIngredientPojo.Unit.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "zucchini", 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+    ingredients.add(new RecipeIngredientPojo(
+        "zucchini", 1d, RecipeIngredientPojo.Unit.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "frozen spinach", 100d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "frozen spinach", 100d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "diced tomatoes", 800d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "diced tomatoes", 800d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        beyondBurgers, 4d, RecipeIngredientHolder.Unit.NO_UNIT));
+    ingredients.add(new RecipeIngredientPojo(
+        beyondBurgers, 4d, RecipeIngredientPojo.Unit.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "merlot", 500d, RecipeIngredientHolder.Unit.MILLILITRES));
+    ingredients.add(new RecipeIngredientPojo(
+        "merlot", 500d, RecipeIngredientPojo.Unit.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
-        lasagneSheets, 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+    ingredients.add(new RecipeIngredientPojo(
+        lasagneSheets, 1d, RecipeIngredientPojo.Unit.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "vegan cheese slices", 18d, RecipeIngredientHolder.Unit.NO_UNIT));
+    ingredients.add(new RecipeIngredientPojo(
+        "vegan cheese slices", 18d, RecipeIngredientPojo.Unit.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        vegenaise, 100d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        vegenaise, 100d, RecipeIngredientPojo.Unit.GRAMS));
 
     // Add the RecipeIngredients to the Recipe
     holder.setRecipeIngredients(ingredients);
@@ -127,14 +128,14 @@ public class TomatoesApplication extends Application {
   }
 
   /**
-   * Creates a curry RecipeHolder.
+   * Creates a curry RecipePojo.
    *
-   * @return RecipeHolder: The curry recipe.
+   * @return RecipePojo: The curry recipe.
    */
-  private RecipeHolder createCurryRecipe() {
+  private RecipePojo createCurryRecipe() {
 
-    // Create a new RecipeHolder object
-    RecipeHolder holder = new RecipeHolder();
+    // Create a new RecipePojo object
+    RecipePojo holder = new RecipePojo();
 
     holder.setTitle("Tikka Masala Curry");
     holder.setDescription("Tired of hot curries? Try this bad boy; not too spicy, not too weak.");
@@ -155,7 +156,7 @@ public class TomatoesApplication extends Application {
     holder.setSteps(steps);
 
     // Create the RecipeIngredientsHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    List<RecipeIngredientPojo> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String tofu = "tofu";
@@ -163,31 +164,31 @@ public class TomatoesApplication extends Application {
     String coconutMilk = "coconut milk";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
-        "rice (dry)", 5d, RecipeIngredientHolder.Unit.METRIC_CUPS));
+    ingredients.add(new RecipeIngredientPojo(
+        "rice (dry)", 5d, RecipeIngredientPojo.Unit.METRIC_CUPS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        tofu, 454d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        tofu, 454d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "frozen broccoli", 454d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "frozen broccoli", 454d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "carrots", 800d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "carrots", 800d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "potatoes", 800d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "potatoes", 800d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "bamboo shoots", 225d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        "bamboo shoots", 225d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        curryPaste, 566d, RecipeIngredientHolder.Unit.GRAMS));
+    ingredients.add(new RecipeIngredientPojo(
+        curryPaste, 566d, RecipeIngredientPojo.Unit.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        coconutMilk, 600d, RecipeIngredientHolder.Unit.MILLILITRES));
+    ingredients.add(new RecipeIngredientPojo(
+        coconutMilk, 600d, RecipeIngredientPojo.Unit.MILLILITRES));
 
-    // Add the list to the RecipeHolder
+    // Add the list to the RecipePojo
     holder.setRecipeIngredients(ingredients);
 
     // Return the holder

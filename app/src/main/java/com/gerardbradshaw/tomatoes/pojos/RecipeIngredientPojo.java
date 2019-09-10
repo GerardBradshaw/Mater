@@ -1,6 +1,6 @@
-package com.gerardbradshaw.tomatoes.holders;
+package com.gerardbradshaw.tomatoes.pojos;
 
-public class RecipeIngredientHolder {
+public class RecipeIngredientPojo {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -11,10 +11,10 @@ public class RecipeIngredientHolder {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeIngredientHolder() {
+  public RecipeIngredientPojo() {
   }
 
-  public RecipeIngredientHolder(String name, double amount, Unit unit) {
+  public RecipeIngredientPojo(String name, double amount, Unit unit) {
     this.name = name;
     this.amount = amount;
     this.units = unit.name();

@@ -76,7 +76,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
       super.onOpen(db);
 
       // Start a new AsyncTask to populate the database if it's empty
-      new PopulateDbAsyncTask(INSTANCE).execute();
+      //new PopulateDbAsyncTask(INSTANCE).execute();
     }
   };
 
@@ -104,7 +104,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
      *
      * @param database: The instance of the database to issue the queries to via the DAOs.
      */
-    PopulateDbAsyncTask(TomatoesRoomDatabase database) {
+    private PopulateDbAsyncTask(TomatoesRoomDatabase database) {
       // Set the DAOs
       recipeSummaryDao = database.recipeDao();
       ingredientDao = database.ingredientDao();
@@ -124,16 +124,7 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
     @Override
     protected Void doInBackground(Void... voids) {
 
-      // If there are no recipes, add some
-      if (recipeSummaryDao.getAnyRecipe().length < 1) {
-
-        // Create the lasagne recipe
-        //addLasagneRecipeToDb();
-
-        // Create the curry
-        addCurryRecipeToDb();
-
-        }
+      // Do nothing
 
       return null;
     }

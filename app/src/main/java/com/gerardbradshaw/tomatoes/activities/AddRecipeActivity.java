@@ -15,9 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
-import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
-import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
+import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientPojo;
+import com.gerardbradshaw.tomatoes.pojos.RecipePojo;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.viewholders.AddIngredientViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.AddStepViewHolder;
@@ -59,7 +58,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     titleInput = findViewById(R.id.addRecipeActivity_titleInput);
     descriptionInput = findViewById(R.id.addRecipeActivity_descriptionInput);
 
-    // Initialize the view holders
+    // Initialize the ViewHolders
     ingredientViewHolders = new ArrayList<>();
     stepViewHolders = new ArrayList<>();
 
@@ -165,14 +164,47 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   private void saveRecipe() {
 
-    // Create a RecipeHolder object
-    RecipeHolder recipe = new RecipeHolder();
+    // Create setup fields
+    boolean allFieldsOk = true;
+    int promptColor = getResources().getColor(R.color.colorPrimary);
+
+    // Check the title
+    if(titleInput.getText().toString().isEmpty()) {
+      titleInput.setHintTextColor(promptColor);
+      allFieldsOk = false;
+    }
+
+    // Check the description
+    if(descriptionInput.getText().toString().isEmpty()) {
+      descriptionInput.setHintTextColor(promptColor);
+      allFieldsOk = false;
+    }
+
+    // Check the ingredients
+    for(AddIngredientViewHolder holder : ingredientViewHolders) {
+
+    }
+
+
+
+
+
+    // Create a RecipePojo object
+    RecipePojo recipe = new RecipePojo();
+
+    // Check all fields to make sure data has been entered correctly
+    //boolean allFieldsOk = false;
+
+
+
+
 
     // Get the title and description
+
     recipe.setTitle(titleInput.getText().toString());
     recipe.setDescription(descriptionInput.getText().toString());
 
-    // Set up holders for steps and ingredients
+    // Set up lists for steps and ingredients
     List<RecipeIngredient> ingredients = new ArrayList<>();
     List<String> steps = new ArrayList<>();
 
@@ -182,11 +214,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Get user input
       String name = holder.getNameInput().getText().toString();
       double amount = Double.parseDouble(holder.getNameInput().getText().toString());
-      RecipeIngredientHolder.Unit unit = RecipeIngredientHolder.Unit.NO_UNIT;
+      RecipeIngredientPojo.Unit unit = RecipeIngredientPojo.Unit.NO_UNIT;
       // TODO implement spinner functionality and retrieval
 
-      // Add a RecipeIngredientHolder to the recipe
-      recipe.addIngredient(new RecipeIngredientHolder(name, amount, unit));
+      // Add a RecipeIngredientPojo to the recipe
+      recipe.addIngredient(new RecipeIngredientPojo(name, amount, unit));
     }
 
     // Get the steps from each and add them to the recipe

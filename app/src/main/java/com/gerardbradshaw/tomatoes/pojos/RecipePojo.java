@@ -1,9 +1,9 @@
-package com.gerardbradshaw.tomatoes.holders;
+package com.gerardbradshaw.tomatoes.pojos;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeHolder {
+public class RecipePojo {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -11,12 +11,12 @@ public class RecipeHolder {
   private String title;
   private String description;
   private List<String> steps;
-  private List<RecipeIngredientHolder> recipeIngredients;
+  private List<RecipeIngredientPojo> recipeIngredients;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeHolder() {
+  public RecipePojo() {
     recipeIngredients = new ArrayList<>();
     steps = new ArrayList<>();
   }
@@ -54,10 +54,10 @@ public class RecipeHolder {
   /**
    * Setter method for recipeIngredients.
    *
-   * @param recipeIngredientHolders: The recipeIngredients.
+   * @param recipeIngredientPojos: The recipeIngredients.
    */
-  public void setRecipeIngredients(List<RecipeIngredientHolder> recipeIngredientHolders) {
-    this.recipeIngredients = recipeIngredientHolders;
+  public void setRecipeIngredients(List<RecipeIngredientPojo> recipeIngredientPojos) {
+    this.recipeIngredients = recipeIngredientPojos;
   }
 
 
@@ -93,9 +93,9 @@ public class RecipeHolder {
   /**
    * Getter for recipeIngredients.
    *
-   * @return List<IngredientHolder>: the recipeIngredients.
+   * @return List<IngredientPojo>: the recipeIngredients.
    */
-  public List<RecipeIngredientHolder> getRecipeIngredients() {
+  public List<RecipeIngredientPojo> getRecipeIngredients() {
     return recipeIngredients;
   }
 
@@ -182,10 +182,10 @@ public class RecipeHolder {
   /**
    * Adds an ingredient to the recipe.
    *
-   * @param recipeIngredientHolder: The ingredient to be added.
+   * @param recipeIngredientPojo: The ingredient to be added.
    */
-  public void addIngredient(RecipeIngredientHolder recipeIngredientHolder) {
-    recipeIngredients.add(recipeIngredientHolder);
+  public void addIngredient(RecipeIngredientPojo recipeIngredientPojo) {
+    recipeIngredients.add(recipeIngredientPojo);
   }
 
 }
