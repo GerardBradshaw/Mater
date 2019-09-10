@@ -39,7 +39,7 @@
         <TextView
             android:id="@+id/addRecipeActivity_ingredientsHeaderTextView"
             style="@style/SectionHeaderStyle"
-            android:text="@string/addRecipeActivity_ingredientsHeaderTextView" />
+            android:text="@string/ingredientsHeader" />
 
         <!-- Add Ingredient Layout -->
         <LinearLayout
@@ -59,7 +59,7 @@
         <TextView
             android:id="@+id/addRecipeActivity_addStepsHeaderTextView"
             style="@style/SectionHeaderStyle"
-            android:text="@string/addRecipeActivity_addStepsHeaderTextView" />
+            android:text="@string/stepsHeader" />
 
         <!-- Add Step Layout -->
         <LinearLayout

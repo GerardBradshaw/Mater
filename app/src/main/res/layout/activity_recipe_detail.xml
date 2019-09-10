@@ -15,66 +15,53 @@
 
         <!-- Image -->
         <ImageView
-            android:id="@+id/recipeDetailActivity_image"
+            android:id="@+id/recipeDetail_image"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:adjustViewBounds="true"
             android:background="@color/colorAccent"
-            android:contentDescription="Photo of finished product"
+            android:contentDescription="@string/recipeDetail_image_contentDescription"
             android:transitionName="recipeImageTransition"
             tools:src="@drawable/vegan_lasagne"/>
 
         <!-- Title -->
         <TextView
-            android:id="@+id/recipeDetailActivity_title"
-            style="@style/TextAppearance.AppCompat.Headline"
+            android:id="@+id/recipeDetail_title"
+            style="@style/PageHeaderStyle"
             android:transitionName="recipeTitleTransition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="16dp"
             tools:text="Vegan Lasagne"/>
 
         <!-- Summary -->
         <TextView
-            android:id="@+id/recipeDetailActivity_summary"
-            android:transitionName="recipeSummaryTransition"
+            android:id="@+id/recipeDetail_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
+            android:transitionName="recipeSummaryTransition"
             tools:text="Summary of recipe. It's delicious and nutritious!"/>
 
         <!-- Ingredients Header -->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ingredients"
-            android:textStyle="bold" />
+            style="@style/SectionHeaderStyle"
+            android:text="@string/ingredientsHeader" />
 
-        <!-- Ingredients -->
-        <TextView
-            android:id="@+id/recipeDetailActivity_ingredients"
+        <!-- Ingredients Layout -->
+        <LinearLayout
+            android:id="@+id/recipeDetail_ingredientsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="- Ingredient 1\n- Ingredient 2"/>
+            android:orientation="vertical" />
 
         <!-- Steps Header -->
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:text="Method"
-            android:textStyle="bold" />
+            style="@style/SectionHeaderStyle"
+            android:text="@string/stepsHeader" />
 
         <!-- Steps -->
-        <TextView
-            android:id="@+id/recipeDetailActivity_steps"
+        <LinearLayout
+            android:id="@+id/recipeDetail_stepsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="1. Do a thing.\n2. Do another thing." />
-
-
-
-        <!-- -->
+            android:orientation="vertical" />
 
     </LinearLayout>
 

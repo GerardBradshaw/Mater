@@ -27,8 +27,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     setContentView(R.layout.activity_recipe_detail);
 
     // Get a handle to the Views
-    titleView = findViewById(R.id.recipeDetailActivity_title);
-    summaryView = findViewById(R.id.recipeDetailActivity_summary);
+    titleView = findViewById(R.id.recipeDetail_title);
+    summaryView = findViewById(R.id.recipeDetail_summary);
     ingredientsView = findViewById(R.id.recipeDetailActivity_ingredients);
     stepsView = findViewById(R.id.recipeDetailActivity_steps);
 

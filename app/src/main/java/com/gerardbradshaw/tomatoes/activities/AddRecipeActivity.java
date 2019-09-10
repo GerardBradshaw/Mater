@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientPojo;
 import com.gerardbradshaw.tomatoes.pojos.RecipePojo;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.viewholders.AddIngredientViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.AddStepViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.RecipeViewModel;
@@ -103,7 +102,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Inflate the view
     LinearLayout addIngredientView =
-        (LinearLayout) inflater.inflate(R.layout.add_ingredient, insertPoint, false);
+        (LinearLayout) inflater.inflate(R.layout.view_ingredient_input, insertPoint, false);
 
     // Get the children of the View
     EditText nameInput = (EditText) addIngredientView.getChildAt(0);
@@ -132,7 +131,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Inflate the view
     LinearLayout addStepView =
-        (LinearLayout) inflater.inflate(R.layout.add_step, insertPoint, false);
+        (LinearLayout) inflater.inflate(R.layout.view_step_input, insertPoint, false);
 
     // Get the children of the View
     TextView number = (TextView) addStepView.getChildAt(0);

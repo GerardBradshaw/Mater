@@ -50,6 +50,8 @@
     <!-- Summary style -->
     <style name="SummaryStyle" >
         <item name="android:padding">16dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <!-- Button style -->

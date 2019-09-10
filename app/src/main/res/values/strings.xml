@@ -23,9 +23,10 @@
     <string name="addRecipeActivity_ingredientAmountInput_hint">Amount</string>
     <string name="addRecipeActivity_addStepLayout_stepInput_hint">Describe the step…</string>
     <string name="addRecipeActivity_addStepLayout_saveButton">Add</string>
-    <string name="addRecipeActivity_addStepsHeaderTextView">Steps</string>
-    <string name="addRecipeActivity_ingredientsHeaderTextView">Ingredients</string>
+    <string name="stepsHeader">Steps</string>
+    <string name="ingredientsHeader">Ingredients</string>
     <string name="addRecipeActivity_saveButton">Save Recipe</string>
     <string name="addRecipeActivity_addIngredientButton">Add</string>
+    <string name="recipeDetail_image_contentDescription">Photo of dish</string>
 
 </resources>
