@@ -55,7 +55,7 @@ public class UnitFormatter {
     return Units.convertVolume(amount, unit, newUnit);
   }
 
-  public String forDetailView(double amount, Mass unit) {
+  public static String forDetailView(double amount, Mass unit) {
 
     Mass newUnit;
 
@@ -81,4 +81,40 @@ public class UnitFormatter {
     return Units.convertMass(amount, unit, newUnit);
   }
 
+  public static String forDetailView(double amount, NoUnits unit) {
+
+    String amountString = String.format(Locale.getDefault(), "%.0f", amount);
+
+    switch (unit) {
+      case DROPS:
+        return amountString + " drops ";
+      case PINCH:
+        return amountString + " pinch ";
+      default:
+        return amountString + " ";
+    }
+  }
+
+  public static String forDetailView(double amount, String unit) {
+
+    try {
+      Volume volumeUnit = Volume.valueOf(unit);
+      return forDetailView(amount, volumeUnit);
+
+    } catch (IllegalArgumentException notVolume) {
+      try {
+        Mass massUnit = Mass.valueOf(unit);
+        return forDetailView(amount, massUnit);
+
+      } catch (IllegalArgumentException notMass) {
+        try {
+          NoUnits noUnit = NoUnits.valueOf(unit);
+          return forDetailView(amount, noUnit);
+
+        } catch (IllegalArgumentException notNoUnit) {
+          return "Units error";
+        }
+      }
+    }
+  }
 }

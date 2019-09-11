@@ -28,37 +28,37 @@ public class Units {
     String newAmountString = String.format(Locale.getDefault(), "%.1f", newAmount);
 
     String unit;
-    String ml = " mL";
-    String cups = " cups";
-    String tsp = " tsp";
-    String tbsp = " tbsp";
-    String usCups = " US cups";
-    String qt = " qt";
-    String usTsp = " US tsp";
-    String usTbsp = " US tbsp";
-    String flOz = " flOz";
 
     switch (to) {
       case MILLILITRES:
-        unit = ml;
+        unit = " mL ";
+        break;
       case AU_CUPS:
-        unit = cups;
+        unit = " cups ";
+        break;
       case AU_TEASPOONS:
-        unit = tsp;
+        unit = " tsp ";
+        break;
       case AU_TABLESPOONS:
-        unit = tbsp;
+        unit = " tbsp ";
+        break;
       case US_CUPS:
-        unit = usCups;
+        unit = " US cups ";
+        break;
       case FLUID_OUNCES:
-        unit = flOz;
+        unit = " flOz ";
+        break;
       case QUARTS:
-        unit = qt;
+        unit = " qt ";
+        break;
       case US_TEASPOONS:
-        unit = usTsp;
+        unit = " US tsp ";
+        break;
       case US_TABLESPOONS:
-        unit = usTbsp;
+        unit = " US tbsp ";
+        break;
       default:
-        unit = "";
+        unit = " ";
     }
 
     return newAmountString + unit;
@@ -81,21 +81,21 @@ public class Units {
 
     String unit;
 
-    String grams = " grams";
-    String kg = " kgs";
-    String oz = " oz";
-    String lbs = " lbs";
     switch (to) {
       case GRAMS:
-        unit = grams;
+        unit = " grams ";
+        break;
       case KILOGRAMS:
-        unit = kg;
+        unit = " kgs ";
+        break;
       case OUNCES:
-        unit = oz;
+        unit = " oz ";
+        break;
       case POUNDS:
-        unit = lbs;
+        unit = " lbs ";
+        break;
       default:
-        unit = "";
+        unit = " ";
     }
 
     return newAmountString + unit;

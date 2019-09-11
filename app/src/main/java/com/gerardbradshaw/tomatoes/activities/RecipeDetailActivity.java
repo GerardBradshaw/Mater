@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.helpers.UnitFormatter;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
@@ -114,10 +115,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
       int ingredientId = ingredient.getIngredientId();
 
       String name = viewModel.getIngredient(ingredientId).getName();
-      double amount = ingredient.getAmount();
-      String units = ingredient.getUnits();
+      String quantity = UnitFormatter.forDetailView(ingredient.getAmount(), ingredient.getUnits());
 
-      String ingredientDescription = amount + " " + units + " " + name;
+      String ingredientDescription = quantity + name;
 
       // Instantiate a LayoutInflater
       LayoutInflater inflater = (LayoutInflater) getApplicationContext()
