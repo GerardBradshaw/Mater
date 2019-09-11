@@ -6,13 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
-
-import java.util.List;
 
 public class RecipeDetailViewModel extends AndroidViewModel {
 
@@ -56,7 +53,7 @@ public class RecipeDetailViewModel extends AndroidViewModel {
    * @return LiveData String of the title.
    */
   public LiveData<String> getTitle(int recipeId) {
-    return repository.getTitle(recipeId);
+    return repository.getRecipeTitle(recipeId);
   }
 
   /**
@@ -66,15 +63,31 @@ public class RecipeDetailViewModel extends AndroidViewModel {
    * @return LiveData String of the description.
    */
   public LiveData<String> getDescription(int recipeId) {
-    return repository.getDescription(recipeId);
+    return repository.getRecipeDescription(recipeId);
   }
 
-  public LiveData<RecipeIngredient> getIngredients(int recipeId) {
-    return repository.getIngredients(recipeId);
+  /**
+   * Gets the ingredients of the specified recipe.
+   *
+   * @param recipeId, int: The ID of the recipe.
+   * @return LiveList of RecipeIngredient
+   */
+  public LiveData<RecipeIngredient[]> getIngredients(int recipeId) {
+    return repository.getRecipeIngredients(recipeId);
   }
 
-  public LiveData<RecipeStep> getSteps(int recipeId) {
+  /**
+   * Gets the steps of the specified recipe.
+   *
+   * @param recipeId, int: The ID of the recipe.
+   * @return LiveList of RecipeStep
+   */
+  public LiveData<RecipeStep[]> getSteps(int recipeId) {
     return repository.getRecipeSteps(recipeId);
+  }
+
+  public Ingredient getIngredient(int ingredientId) {
+    return repository.getIngredient(ingredientId);
   }
 
 

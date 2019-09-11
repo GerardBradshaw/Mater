@@ -70,7 +70,7 @@ public class RecipeRepository {
    * @param recipeId, int: The ID of the recipe
    * @return LiveData String of the title.
    */
-  public LiveData<String> getTitle(int recipeId) {
+  public LiveData<String> getRecipeTitle(int recipeId) {
     return recipeSummaryDao.getTitle(recipeId);
   }
 
@@ -80,7 +80,7 @@ public class RecipeRepository {
    * @param recipeId, int: The ID of the recipe.
    * @return LiveData String of the description.
    */
-  public LiveData<String> getDescription(int recipeId) {
+  public LiveData<String> getRecipeDescription(int recipeId) {
     return recipeSummaryDao.getDescription(recipeId);
   }
 
@@ -90,7 +90,7 @@ public class RecipeRepository {
    * @param recipeId, int: The ID of the recipe.
    * @return LiveData List of RecipeIngredients for the given ID.
    */
-  public LiveData<RecipeIngredient> getIngredients(int recipeId) {
+  public LiveData<RecipeIngredient[]> getRecipeIngredients(int recipeId) {
     return recipeIngredientDao.getRecipeIngredients(recipeId);
   }
 
@@ -100,8 +100,12 @@ public class RecipeRepository {
    * @param recipeId, int: The ID of the recipe.
    * @return LiveData List of RecipeSteps for the given ID.
    */
-  public LiveData<RecipeStep> getRecipeSteps(int recipeId) {
+  public LiveData<RecipeStep[]> getRecipeSteps(int recipeId) {
     return recipeStepDao.getRecipeSteps(recipeId);
+  }
+
+  public Ingredient getIngredient(int ingredientId) {
+    return ingredientDao.getIngredientFromId(ingredientId);
   }
 
 
@@ -320,8 +324,8 @@ public class RecipeRepository {
 
       // Get the recipe information from the DAOs
       //LiveData<RecipeSummary> summary = recipeSummaryDao.getRecipeSummary(recipeId);
-      LiveData<RecipeIngredient> ingredients = recipeIngredientDao.getRecipeIngredients(recipeId);
-      LiveData<RecipeStep> steps = recipeStepDao.getRecipeSteps(recipeId);
+      //LiveData<RecipeIngredient> ingredients = recipeIngredientDao.getRecipeIngredients(recipeId);
+      //LiveData<RecipeStep> steps = recipeStepDao.getRecipeSteps(recipeId);
 
 
 

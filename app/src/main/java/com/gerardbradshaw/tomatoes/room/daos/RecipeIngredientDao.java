@@ -23,5 +23,5 @@ public interface RecipeIngredientDao {
   void deleteRecipeIngredient(RecipeIngredient recipeIngredient);
 
   @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")
-  LiveData<RecipeIngredient> getRecipeIngredients(int recipeId);
+  LiveData<RecipeIngredient[]> getRecipeIngredients(int recipeId);
 }
