@@ -3,7 +3,7 @@ package com.gerardbradshaw.tomatoes.pojos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipePojo {
+public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -11,12 +11,12 @@ public class RecipePojo {
   private String title;
   private String description;
   private List<String> steps;
-  private List<RecipeIngredientPojo> recipeIngredients;
+  private List<RecipeIngredientHolder> recipeIngredients;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipePojo() {
+  public RecipeHolder() {
     recipeIngredients = new ArrayList<>();
     steps = new ArrayList<>();
   }
@@ -54,10 +54,10 @@ public class RecipePojo {
   /**
    * Setter method for recipeIngredients.
    *
-   * @param recipeIngredientPojos: The recipeIngredients.
+   * @param recipeIngredientHolders: The recipeIngredients.
    */
-  public void setRecipeIngredients(List<RecipeIngredientPojo> recipeIngredientPojos) {
-    this.recipeIngredients = recipeIngredientPojos;
+  public void setRecipeIngredients(List<RecipeIngredientHolder> recipeIngredientHolders) {
+    this.recipeIngredients = recipeIngredientHolders;
   }
 
 
@@ -93,9 +93,9 @@ public class RecipePojo {
   /**
    * Getter for recipeIngredients.
    *
-   * @return List<IngredientPojo>: the recipeIngredients.
+   * @return List<IngredientHolder>: the recipeIngredients.
    */
-  public List<RecipeIngredientPojo> getRecipeIngredients() {
+  public List<RecipeIngredientHolder> getRecipeIngredients() {
     return recipeIngredients;
   }
 
@@ -182,10 +182,10 @@ public class RecipePojo {
   /**
    * Adds an ingredient to the recipe.
    *
-   * @param recipeIngredientPojo: The ingredient to be added.
+   * @param recipeIngredientHolder: The ingredient to be added.
    */
-  public void addIngredient(RecipeIngredientPojo recipeIngredientPojo) {
-    recipeIngredients.add(recipeIngredientPojo);
+  public void addIngredient(RecipeIngredientHolder recipeIngredientHolder) {
+    recipeIngredients.add(recipeIngredientHolder);
   }
 
 }

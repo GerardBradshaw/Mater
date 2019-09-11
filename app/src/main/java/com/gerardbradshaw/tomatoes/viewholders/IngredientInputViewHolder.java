@@ -3,7 +3,7 @@ package com.gerardbradshaw.tomatoes.viewholders;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-public class AddIngredientViewHolder {
+public class IngredientInputViewHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -14,7 +14,7 @@ public class AddIngredientViewHolder {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public AddIngredientViewHolder(EditText nameInput, EditText amountInput, Spinner unitsSpinner) {
+  public IngredientInputViewHolder(EditText nameInput, EditText amountInput, Spinner unitsSpinner) {
     this.nameInput = nameInput;
     this.amountInput = amountInput;
     this.unitsSpinner = unitsSpinner;

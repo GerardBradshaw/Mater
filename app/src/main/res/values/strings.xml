@@ -21,7 +21,7 @@
     <string name="addRecipeActivity_descriptionInput_hint">Short description…</string>
     <string name="addRecipeActivity_ingredientNameInput_hint">Ingredient name…</string>
     <string name="addRecipeActivity_ingredientAmountInput_hint">Amount</string>
-    <string name="addRecipeActivity_addStepLayout_stepInput_hint">Describe the step…</string>
+    <string name="addRecipeActivity_addStepLayout_stepInput_hint">Describe the stepView…</string>
     <string name="addRecipeActivity_addStepLayout_saveButton">Add</string>
     <string name="stepsHeader">Steps</string>
     <string name="ingredientsHeader">Ingredients</string>

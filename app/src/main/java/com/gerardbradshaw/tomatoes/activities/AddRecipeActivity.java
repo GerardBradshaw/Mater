@@ -16,10 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientPojo;
-import com.gerardbradshaw.tomatoes.pojos.RecipePojo;
-import com.gerardbradshaw.tomatoes.viewholders.AddIngredientViewHolder;
-import com.gerardbradshaw.tomatoes.viewholders.AddStepViewHolder;
+import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
+import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
+import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
+import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.RecipeViewModel;
 
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText descriptionInput;
 
   // Dynamically added view references
-  private List<AddIngredientViewHolder> ingredientViewHolders;
-  private List<AddStepViewHolder> stepViewHolders;
+  private List<IngredientInputViewHolder> ingredientViewHolders;
+  private List<StepInputViewHolder> stepViewHolders;
 
   // Data objects
   private RecipeViewModel viewModel;
@@ -110,7 +110,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     Spinner unitsSpinner = (Spinner) addIngredientView.getChildAt(2);
 
     // Save the new views to the list
-    ingredientViewHolders.add(new AddIngredientViewHolder(nameInput, amountInput, unitsSpinner));
+    ingredientViewHolders.add(new IngredientInputViewHolder(nameInput, amountInput, unitsSpinner));
 
     // Get the index of the view
     int index = ingredientViewHolders.size() - 1;
@@ -153,7 +153,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     number.setText(numberOfStepsString);
 
     // Save the new EditText to the list
-    stepViewHolders.add(new AddStepViewHolder(number, step));
+    stepViewHolders.add(new StepInputViewHolder(number, step));
 
     // Insert the view into the main view
     insertPoint.addView(addStepView, numberOfSteps, new ViewGroup.LayoutParams(
@@ -181,7 +181,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Check the ingredients
-    for(AddIngredientViewHolder holder : ingredientViewHolders) {
+    for(IngredientInputViewHolder holder : ingredientViewHolders) {
 
       if(holder.getNameInput().getText().toString().isEmpty()) {
         holder.getNameInput().setHintTextColor(hintColor);
@@ -197,7 +197,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Check the steps
-    for(AddStepViewHolder holder : stepViewHolders) {
+    for(StepInputViewHolder holder : stepViewHolders) {
       if(holder.getStep().getText().toString().isEmpty()) {
         holder.getStep().setHintTextColor(hintColor);
         allFieldsOk = false;
@@ -207,25 +207,25 @@ public class AddRecipeActivity extends AppCompatActivity {
     // If all is well, add the recipe to the database
     if(allFieldsOk) {
 
-      // Create a RecipePojo object
-      RecipePojo recipe = new RecipePojo();
+      // Create a RecipeHolder object
+      RecipeHolder recipe = new RecipeHolder();
 
       // Set up lists for steps and ingredients
-      List<RecipeIngredientPojo> ingredients = new ArrayList<>();
+      List<RecipeIngredientHolder> ingredients = new ArrayList<>();
       List<String> steps = new ArrayList<>();
 
       // Get the ingredients info from each ViewHolder and add them to the list
-      for(AddIngredientViewHolder holder : ingredientViewHolders) {
-        ingredients.add(new RecipeIngredientPojo(
+      for(IngredientInputViewHolder holder : ingredientViewHolders) {
+        ingredients.add(new RecipeIngredientHolder(
             holder.getNameInput().getText().toString(),
             Double.parseDouble(holder.getAmountInput().getText().toString()),
-            RecipeIngredientPojo.Unit.NO_UNIT));
+            RecipeIngredientHolder.Unit.NO_UNIT));
 
         // TODO implement spinner functionality and retrieval
       }
 
       // Get the steps from each ViewHolder and add them to the list
-      for(AddStepViewHolder holder : stepViewHolders) {
+      for(StepInputViewHolder holder : stepViewHolders) {
         steps.add(holder.getStep().getText().toString());
       }
 
@@ -236,7 +236,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.setSteps(steps);
 
       // Save the recipe to the database
-      viewModel.insertRecipeHolder(recipe);
+      viewModel.insertRecipePojo(recipe);
 
       // TODO add a ProgressBar
 

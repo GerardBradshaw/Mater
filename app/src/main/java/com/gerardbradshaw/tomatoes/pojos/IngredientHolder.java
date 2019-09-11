@@ -1,4 +1,4 @@
 package com.gerardbradshaw.tomatoes.pojos;
 
-public class IngredientPojo {
+public class IngredientHolder {
 }

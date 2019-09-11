@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.gerardbradshaw.tomatoes.pojos.RecipePojo;
+import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
@@ -50,12 +50,12 @@ public class RecipeViewModel extends AndroidViewModel {
   }
 
   /**
-   * Gets a RecipePojo for the specific recipe.
+   * Gets a RecipeHolder for the specific recipe.
    *
    * @param recipeId, int: the ID of the recipe.
-   * @return LiveData RecipePojo: the requested recipe.
+   * @return LiveData RecipeHolder: the requested recipe.
    */
-  public LiveData<RecipePojo> getRecipeHolder(int recipeId) {
+  public LiveData<RecipeHolder> getRecipeHolder(int recipeId) {
     return null;
     // TODO create getRecipeHolder method with LiveData
   }
@@ -64,12 +64,16 @@ public class RecipeViewModel extends AndroidViewModel {
   // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
 
   /**
-   * Adds all recipe and ingredient information contained in a RecipePojo.
+   * Adds all recipe and ingredient information contained in a RecipeHolder.
    *
-   * @param holder, RecipePojo: The RecipePojo to insert.
+   * @param recipeHolder, RecipeHolder: The RecipeHolder to insert.
    */
-  public void insertRecipeHolder(RecipePojo holder) {
-    repository.insertRecipeFromHolder(holder);
+  public void insertRecipePojo(RecipeHolder recipeHolder) {
+    repository.insertRecipeFromHolder(recipeHolder);
+  }
+
+  public RecipeHolder getRecipePojo(int recipeId) {
+    return repository.getRecipeHolder(recipeId);
   }
 
 

@@ -25,24 +25,26 @@ public interface RecipeSummaryDao {
   @Update
   void updateRecipe(RecipeSummary recipeSummary);
 
-  @Query("select * from recipe_summary_table where recipe_id = :recipeId")
-  LiveData<RecipeSummary[]> getRecipeSummary(int recipeId);
 
-  @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
-  int getRecipeId(String recipeTitle);
+  // - - - - - - - - - - - - - - - LiveData Getters - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_summary_table ORDER BY title ASC")
   LiveData<List<RecipeSummary>> getAllRecipes();
 
+  @Query("select title from recipe_summary_table where recipe_id = :recipeId")
+  LiveData<String> getTitle(int recipeId);
+
+  @Query("select description from recipe_summary_table where recipe_id = :recipeId")
+  LiveData<String> getDescription(int recipeId);
+
+
+  // - - - - - - - - - - - - - - - Non-LiveData Getters - - - - - - - - - - - - - - -
+
   @Query("select * from recipe_summary_table LIMIT 1")
   RecipeSummary[] getAnyRecipe();
 
+  @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
+  int getRecipeId(String recipeTitle);
 
-  // Not used
 
-  @Query("select description from recipe_summary_table where title = :recipeTitle")
-  String getDescription(String recipeTitle);
-
-  @Query("select title from recipe_summary_table where recipe_id = :recipeId")
-  String getTitle(int recipeId);
 }

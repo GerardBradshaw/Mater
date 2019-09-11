@@ -1,5 +1,6 @@
 package com.gerardbradshaw.tomatoes.room.daos;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -22,6 +23,6 @@ public interface RecipeStepDao {
   void deleteRecipeStep(RecipeStep recipeStep);
 
   @Query("select * from recipe_step_table where recipe_id = :recipeId")
-  RecipeStep[] getRecipeSteps(int recipeId);
+  LiveData<RecipeStep> getRecipeSteps(int recipeId);
 
 }
