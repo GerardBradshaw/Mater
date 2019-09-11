@@ -1,5 +1,7 @@
 package com.gerardbradshaw.tomatoes.helpers;
 
+import java.util.Locale;
+
 public class Units {
 
   // - - - - - - - - - - - - - - - Private constructor - - - - - - - - - - - - - - -
@@ -19,14 +21,13 @@ public class Units {
    * @param to the new unit
    * @return the volume expressed in the new unit
    */
-  public String volume(double amount, Volume from, Volume to) {
+  public static String convertVolume(double amount, Volume from, Volume to) {
 
     double mlAmount = convertToMl(amount, from);
     double newAmount = convertFromMl(mlAmount, to);
-    String newAmountString = String.valueOf(newAmount);
+    String newAmountString = String.format(Locale.getDefault(), "%.1f", newAmount);
 
     String unit;
-
     String ml = " mL";
     String cups = " cups";
     String tsp = " tsp";
@@ -36,6 +37,7 @@ public class Units {
     String usTsp = " US tsp";
     String usTbsp = " US tbsp";
     String flOz = " flOz";
+
     switch (to) {
       case MILLILITRES:
         unit = ml;
@@ -71,11 +73,11 @@ public class Units {
    * @param to the new unit
    * @return the mass expressed in the new unit
    */
-  public String mass(double amount, Mass from, Mass to) {
+  public static String convertMass(double amount, Mass from, Mass to) {
 
     double gramAmount = convertToGrams(amount, from);
     double newAmount = convertFromGrams(gramAmount, to);
-    String newAmountString = String.valueOf(newAmount);
+    String newAmountString = String.format(Locale.getDefault(), "%.1f", newAmount);
 
     String unit;
 
@@ -100,10 +102,9 @@ public class Units {
   }
 
 
-
   // - - - - - - - - - - - - - - - Private methods - - - - - - - - - - - - - - -
 
-  private double convertToMl(double amount, Volume originalUnit) {
+  private static double convertToMl(double amount, Volume originalUnit) {
     switch (originalUnit) {
       case MILLILITRES:
         return amount;
@@ -128,7 +129,7 @@ public class Units {
     }
   }
 
-  private double convertFromMl(double amount, Volume desiredUnit) {
+  private static double convertFromMl(double amount, Volume desiredUnit) {
     switch (desiredUnit) {
       case MILLILITRES:
         return amount;
@@ -153,7 +154,7 @@ public class Units {
     }
   }
 
-  private double convertToGrams(double amount, Mass originalUnit) {
+  private static double convertToGrams(double amount, Mass originalUnit) {
     switch (originalUnit) {
       case GRAMS:
         return amount;
@@ -168,7 +169,7 @@ public class Units {
     }
   }
 
-  private double convertFromGrams(double amount, Mass desiredUnit) {
+  private static double convertFromGrams(double amount, Mass desiredUnit) {
     switch (desiredUnit) {
       case GRAMS:
         return amount;
