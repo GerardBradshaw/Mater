@@ -5,6 +5,9 @@ import android.app.Application;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.Units.Mass;
+import com.gerardbradshaw.tomatoes.Units.Volume;
+import com.gerardbradshaw.tomatoes.Units.NoUnits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,34 +87,34 @@ public class TomatoesApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "sweet potato", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "capsicum", 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "capsicum", 1d, NoUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "zucchini", 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "zucchini", 1d, NoUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "frozen spinach", 100d, RecipeIngredientHolder.Unit.GRAMS));
+        "frozen spinach", 100d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "diced tomatoes", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "diced tomatoes", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        beyondBurgers, 4d, RecipeIngredientHolder.Unit.NO_UNIT));
+        beyondBurgers, 4d, NoUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "merlot", 500d, RecipeIngredientHolder.Unit.MILLILITRES));
+        "merlot", 500d, Volume.MILLILITRES));
 
     ingredients.add(new RecipeIngredientHolder(
-        lasagneSheets, 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+        lasagneSheets, 1d, NoUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "vegan cheese slices", 18d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "vegan cheese slices", 18d, NoUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        vegenaise, 100d, RecipeIngredientHolder.Unit.GRAMS));
+        vegenaise, 100d, Mass.GRAMS));
 
     // Add the RecipeIngredients to the Recipe
     recipe.setRecipeIngredients(ingredients);
@@ -159,28 +162,28 @@ public class TomatoesApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new RecipeIngredientHolder(
-        "rice (dry)", 5d, RecipeIngredientHolder.Unit.METRIC_CUPS));
+        "rice (dry)", 5d, Volume.AU_CUPS));
 
     ingredients.add(new RecipeIngredientHolder(
-        tofu, 454d, RecipeIngredientHolder.Unit.GRAMS));
+        tofu, 454d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "frozen broccoli", 454d, RecipeIngredientHolder.Unit.GRAMS));
+        "frozen broccoli", 454d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "carrots", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "carrots", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "potatoes", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "potatoes", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "bamboo shoots", 225d, RecipeIngredientHolder.Unit.GRAMS));
+        "bamboo shoots", 225d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        curryPaste, 566d, RecipeIngredientHolder.Unit.GRAMS));
+        curryPaste, 566d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        coconutMilk, 600d, RecipeIngredientHolder.Unit.MILLILITRES));
+        coconutMilk, 600d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
     holder.setRecipeIngredients(ingredients);

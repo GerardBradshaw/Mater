@@ -1,10 +1,10 @@
 package com.gerardbradshaw.tomatoes;
 
-public class UnitConverter {
+public class Units {
 
   // - - - - - - - - - - - - - - - Private constructor - - - - - - - - - - - - - - -
 
-  private UnitConverter(){
+  private Units(){
     throw new RuntimeException("DO NOT INSTANTIATE!");
   }
 
@@ -202,7 +202,13 @@ public class UnitConverter {
     GRAMS,
     KILOGRAMS,
     POUNDS,
-    OUNCES
+    OUNCES;
+  }
+
+  public enum NoUnits {
+    DROPS,
+    NO_UNIT,
+    PINCH;
   }
 
 }

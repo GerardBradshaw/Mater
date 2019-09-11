@@ -28,5 +28,7 @@
     <string name="addRecipeActivity_saveButton">Save Recipe</string>
     <string name="addRecipeActivity_addIngredientButton">Add</string>
     <string name="recipeDetail_image_contentDescription">Photo of dish</string>
+    <string name="no_recipes_message">No recipes</string>
+    <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
 
 </resources>

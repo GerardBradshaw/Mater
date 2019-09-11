@@ -1,12 +1,16 @@
 package com.gerardbradshaw.tomatoes.pojos;
 
+import com.gerardbradshaw.tomatoes.Units.Mass;
+import com.gerardbradshaw.tomatoes.Units.Volume;
+import com.gerardbradshaw.tomatoes.Units.NoUnits;
+
 public class RecipeIngredientHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private String name;
   private double amount;
-  private String units;
+  private String unit;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -14,15 +18,26 @@ public class RecipeIngredientHolder {
   public RecipeIngredientHolder() {
   }
 
-  public RecipeIngredientHolder(String name, double amount, Unit unit) {
+  public RecipeIngredientHolder(String name, double amount, Volume unit) {
     this.name = name;
     this.amount = amount;
-    this.units = unit.name();
+    this.unit = unit.name();
+  }
+
+  public RecipeIngredientHolder(String name, double amount, Mass unit) {
+    this.name = name;
+    this.amount = amount;
+    this.unit = unit.name();
+  }
+
+  public RecipeIngredientHolder(String name, double amount, NoUnits unit) {
+    this.name = name;
+    this.amount = amount;
+    this.unit = unit.name();
   }
 
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
-
 
   public String getName() {
     return name;
@@ -32,13 +47,12 @@ public class RecipeIngredientHolder {
     return amount;
   }
 
-  public String getUnits() {
-    return units;
+  public String getUnit() {
+    return unit;
   }
 
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
-
 
   public void setName(String name) {
     this.name = name;
@@ -48,21 +62,7 @@ public class RecipeIngredientHolder {
     this.amount = amount;
   }
 
-  public void setUnits(String units) {
-    this.units = units;
+  public void setUnit(String unit) {
+    this.unit = unit;
   }
-
-
-
-  public enum Unit {
-    MILLILITRES,
-    DROPS,
-    GRAMS,
-    KILOGRAMS,
-    METRIC_CUPS,
-    TEASPOONS,
-    TABLESPOONS,
-    PINCH,
-    NO_UNIT;
-  };
 }

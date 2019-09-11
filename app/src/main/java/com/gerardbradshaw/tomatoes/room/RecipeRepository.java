@@ -280,7 +280,7 @@ public class RecipeRepository {
         // Get the name, amount, and units of the ingredient from the array
         String name = ingredients.get(i).getName();
         double amount = ingredients.get(i).getAmount();
-        String units = ingredients.get(i).getUnits();
+        String units = ingredients.get(i).getUnit();
 
         // Get the ID of the ingredient from the DB. If it does not exist yet, the ID = 0.
         int ingredientId = ingredientDao.getIngredientId(name);

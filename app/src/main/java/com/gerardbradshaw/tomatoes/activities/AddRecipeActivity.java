@@ -21,6 +21,9 @@ import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
+import com.gerardbradshaw.tomatoes.Units.Mass;
+import com.gerardbradshaw.tomatoes.Units.Volume;
+import com.gerardbradshaw.tomatoes.Units.NoUnits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +69,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     addIngredientButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        addIngredient();
+        addIngredientToView();
       }
     });
 
@@ -74,7 +77,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     addStepButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        addStep();
+        addStepToView();
       }
     });
 
@@ -82,7 +85,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     saveButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        saveRecipe();
+        saveRecipeToRepository();
       }
     });
 
@@ -91,7 +94,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-  private void addIngredient() {
+  private void addIngredientToView() {
 
     // Instantiate a LayoutInflater
     LayoutInflater inflater = (LayoutInflater) getApplicationContext()
@@ -120,7 +123,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
-  private void addStep() {
+  private void addStepToView() {
 
     // Instantiate a LayoutInflater
     LayoutInflater inflater = (LayoutInflater) getApplicationContext()
@@ -162,7 +165,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   }
 
-  private void saveRecipe() {
+  private void saveRecipeToRepository() {
 
     // Create setup fields
     boolean allFieldsOk = true;
@@ -219,7 +222,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         ingredients.add(new RecipeIngredientHolder(
             holder.getNameInput().getText().toString(),
             Double.parseDouble(holder.getAmountInput().getText().toString()),
-            RecipeIngredientHolder.Unit.NO_UNIT));
+            NoUnits.NO_UNIT));
 
         // TODO implement spinner functionality and retrieval
       }
@@ -237,6 +240,8 @@ public class AddRecipeActivity extends AppCompatActivity {
 
       // Save the recipe to the database
       viewModel.insertRecipeHolder(recipe);
+
+      finish();
 
       // TODO add a ProgressBar
 
