@@ -53,7 +53,7 @@ public class RecipeRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Query methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - LiveData methods - - - - - - - - - - - - - - -
 
   /**
    * Gets a live list of recipe summaries from the database
@@ -104,12 +104,7 @@ public class RecipeRepository {
     return recipeStepDao.getRecipeSteps(recipeId);
   }
 
-  public Ingredient getIngredient(int ingredientId) {
-    return ingredientDao.getIngredientFromId(ingredientId);
-  }
-
-
-  // - - - - - - - - - - - - - - - Insert, Update and Delete methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Non-LiveData Wrappers - - - - - - - - - - - - - - -
 
   /**
    * Inserts a recipe to the database from a RecipeHolder.
@@ -154,10 +149,37 @@ public class RecipeRepository {
     new updateRecipeSummaryAsyncTask(recipeSummaryDao).execute(recipeSummary);
   }
 
+  public Ingredient getIngredient(int ingredientId) {
+    try {
+      return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
+    } catch (Exception e) {
+      // TODO handle exception
+      return null;
+    }
+
+  }
+
   // TODO add proper update methods
 
 
-  // - - - - - - - - - - - - - - - AsyncTasks for Insert, Update and Delete - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - AsyncTasks for Non-LiveData methods - - - - - - - - - - - - - - -
+
+  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Ingredient> {
+
+    // Member variables
+    private IngredientDao ingredientDao;
+
+    // Constructor
+    getIngredientAsyncTask(IngredientDao ingredientDao) {
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Ingredient doInBackground(Integer... recipeIds) {
+      return ingredientDao.getIngredientFromId(recipeIds[0]);
+    }
+  }
+
 
   /**
    * AsyncTask class for insertRecipeFromHolder.
@@ -354,5 +376,7 @@ public class RecipeRepository {
       return null;
     }
   }
+
+
 
 }

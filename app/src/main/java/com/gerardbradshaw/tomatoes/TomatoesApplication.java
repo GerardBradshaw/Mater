@@ -11,12 +11,6 @@ import java.util.List;
 
 public class TomatoesApplication extends Application {
 
-  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
-
-  private SharedPrefHelper sharedPrefHelper;
-  private RecipeRepository repository;
-
-
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
   @Override
@@ -24,10 +18,10 @@ public class TomatoesApplication extends Application {
     super.onCreate();
 
     // Initialize shared prefs
-    sharedPrefHelper = new SharedPrefHelper(this);
+    SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
 
     // Initialize the repository
-    repository = new RecipeRepository(this);
+    RecipeRepository repository = new RecipeRepository(this);
 
     // Check if the application has been launched before. If not, create some recipes.
     if (sharedPrefHelper.isFirstLaunch()) {
@@ -45,6 +39,9 @@ public class TomatoesApplication extends Application {
 
     }
   }
+
+
+  // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
   /**
    * Creates a lasagne RecipeHolder.
@@ -86,9 +83,6 @@ public class TomatoesApplication extends Application {
     String vegenaise = "Vegenaise";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
-
     ingredients.add(new RecipeIngredientHolder(
         "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
 

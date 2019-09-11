@@ -14,8 +14,8 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailViewModel;
@@ -90,50 +90,68 @@ public class RecipeDetailActivity extends AppCompatActivity {
     viewModel.getIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
       @Override
       public void onChanged(RecipeIngredient[] recipeIngredients) {
-
-        // Clear the ViewHolder references
-        recipeIngredientViewHolders.clear();
-
-        for(RecipeIngredient ingredient : recipeIngredients) {
-
-          // Get the details of each ingredient
-          String name = viewModel.getIngredient(ingredient.getIngredientId()).getName();
-          double amount = ingredient.getAmount();
-          String units = ingredient.getUnits();
-
-          String ingredientDescription = amount + " " + units + " " + name;
-
-          // Instantiate a LayoutInflater
-          LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-              .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-          // Get the insert point
-          ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
-
-          // Inflate the view
-          LinearLayout ingredientView = (LinearLayout) inflater
-                  .inflate(R.layout.view_ingredient_view, insertPoint, false);
-
-          // Get the children of the View
-          RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
-          TextView textView = (TextView) ingredientView.getChildAt(1);
-
-          // Update the views
-          textView.setText(ingredientDescription);
-
-          // Create an ingredient view and update it
-          recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, textView));
-
-          // Get the index of the view
-          int index = recipeIngredientViewHolders.size() - 1;
-
-          // Insert the view into the main view
-          insertPoint.addView(ingredientView,index, new ViewGroup.LayoutParams(
-              ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        }
-
+        loadIngredientsIntoView(recipeIngredients);
       }
     });
 
+    // Set the steps
+    viewModel.getSteps(recipeId).observe(this, new Observer<RecipeStep[]>() {
+      @Override
+      public void onChanged(RecipeStep[] recipeSteps) {
+        loadStepsIntoView(recipeSteps);
+      }
+    });
   }
+
+  private void loadIngredientsIntoView(RecipeIngredient[] recipeIngredients) {
+
+    // Clear the ViewHolder references
+    recipeIngredientViewHolders.clear();
+
+    for(RecipeIngredient ingredient : recipeIngredients) {
+
+      // Get the details of each ingredient
+      int ingredientId = ingredient.getIngredientId();
+
+      String name = viewModel.getIngredient(ingredientId).getName();
+      double amount = ingredient.getAmount();
+      String units = ingredient.getUnits();
+
+      String ingredientDescription = amount + " " + units + " " + name;
+
+      // Instantiate a LayoutInflater
+      LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+          .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+      // Get the insert point
+      ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
+
+      // Inflate the view
+      LinearLayout ingredientView = (LinearLayout) inflater
+          .inflate(R.layout.view_ingredient_detail, insertPoint, false);
+
+      // Get the children of the View
+      RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
+      TextView textView = (TextView) ingredientView.getChildAt(1);
+
+      // Update the views
+      textView.setText(ingredientDescription);
+
+      // Create an ingredient view and update it
+      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, textView));
+
+      // Get the index of the view
+      int index = recipeIngredientViewHolders.size() - 1;
+
+      // Insert the view into the main view
+      insertPoint.addView(ingredientView,index, new ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
+  }
+
+  private void loadStepsIntoView(RecipeStep[] recipeSteps) {
+    // TODO load steps
+  }
+
+
 }
