@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
@@ -70,6 +72,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       RecipeSummary currentRecipeSummary = recipeSummaryList.get(position);
       holder.recipeTitleView.setText(currentRecipeSummary.getTitle());
       holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
+      Glide.with(context)
+          .load(context.getDrawable(R.drawable.vegan_lasagne))
+          .into(holder.recipeImageView);
 
     } else {
       holder.recipeTitleView
@@ -142,6 +147,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     // Member variables
     final TextView recipeTitleView;
     final TextView recipeDescriptionView;
+    final ImageView recipeImageView;
     final RecipeListAdapter adapter;
 
     // Constructor
@@ -151,6 +157,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       // Initialize the views and adapter.
       recipeTitleView = itemView.findViewById(R.id.recipeListItem_title);
       recipeDescriptionView = itemView.findViewById(R.id.recipeListItem_summary);
+      recipeImageView = itemView.findViewById(R.id.recipeListItem_image);
       this.adapter = adapter;
     }
   }

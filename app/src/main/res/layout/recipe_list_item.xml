@@ -19,26 +19,26 @@
             android:layout_height="150dp"
             android:background="@color/colorAccent"
             android:contentDescription="@string/recipeListItem_image_contentDescription"
-            android:scaleType="centerInside"
-            android:transitionName="recipeImageTransition" />
+            android:scaleType="centerCrop"
+            android:transitionName="recipeImageTransition"
+            tools:src="@drawable/vegan_lasagne"/>
         
         <!-- Title -->
         <TextView
             android:id="@+id/recipeListItem_title"
             style="@style/RecipeTitleStyle"
-            android:transitionName="recipeTitleTransition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_alignStart="@id/recipeListItem_image"
             android:layout_alignBottom="@id/recipeListItem_image"
+            android:background="@color/opaqueWhite"
+            android:transitionName="recipeTitleTransition"
             tools:text="Title" />
 
         <!-- Summary -->
         <TextView
             android:id="@+id/recipeListItem_summary"
             style="@style/SummaryStyle"
-            android:transitionName="recipeSummaryTransition"
             android:layout_below="@id/recipeListItem_image"
+            android:transitionName="recipeSummaryTransition"
             tools:text="Summary summary summary" />
         
     </RelativeLayout>

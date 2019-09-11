@@ -9,10 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.helpers.Units;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
@@ -31,6 +33,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   // Views
   private TextView titleView;
   private TextView descriptionView;
+  private ImageView imageView;
 
   // Dynamically added view references
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders;
@@ -41,6 +44,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   // Other global variables
   private int recipeId;
+  private Context context;
 
 
   // - - - - - - - - - - - - - - - Activity Methods - - - - - - - - - - - - - - -
@@ -55,6 +59,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Get a handle to the Views
     titleView = findViewById(R.id.recipeDetail_title);
     descriptionView = findViewById(R.id.recipeDetail_summary);
+    imageView = findViewById(R.id.recipeDetail_image);
 
     // Initialize the ViewHolders
     stepViewHolders = new ArrayList<>();
@@ -63,6 +68,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Get the ID of the recipe that was clicked
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
+
+    // Set the context
+    this.context = this;
 
     // Load the recipe
     loadRecipe();
@@ -86,6 +94,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
         descriptionView.setText(s);
       }
     });
+
+    // Set the image
+    // TODO load image from database
+    Glide.with(context)
+        .load(context.getDrawable(R.drawable.vegan_lasagne))
+        .into(imageView);
 
     // Set the ingredients
     viewModel.getIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {

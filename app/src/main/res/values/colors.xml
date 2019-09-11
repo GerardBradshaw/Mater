@@ -9,5 +9,8 @@
     <color name="textColorSecondary">@android:color/white</color>
     <color name="hintTextColorPrimary">@android:color/darker_gray</color>
 
+    <!-- Other colors -->
+    <color name="opaqueWhite">#80ffffff</color>
+
 
 </resources>
