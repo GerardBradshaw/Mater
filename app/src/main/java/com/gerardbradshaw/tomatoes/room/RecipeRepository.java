@@ -323,8 +323,6 @@ public class RecipeRepository {
       LiveData<RecipeIngredient> ingredients = recipeIngredientDao.getRecipeIngredients(recipeId);
       LiveData<RecipeStep> steps = recipeStepDao.getRecipeSteps(recipeId);
 
-      // Add the LiveData to a LiveRecipeHolder object
-
 
 
 

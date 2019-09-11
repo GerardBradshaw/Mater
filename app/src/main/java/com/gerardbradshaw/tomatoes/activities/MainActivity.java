@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
 
   // Data objects
-  private RecipeViewModel viewModel;
+  private RecipeListViewModel viewModel;
 
   // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
 
 
     // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+    viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
     viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override

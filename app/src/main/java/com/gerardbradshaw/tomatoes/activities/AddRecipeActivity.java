@@ -20,7 +20,7 @@ import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<StepInputViewHolder> stepViewHolders;
 
   // Data objects
-  private RecipeViewModel viewModel;
+  private AddRecipeViewModel viewModel;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -49,7 +49,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
 
     // Initialize the ViewModel
-    viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+    viewModel = ViewModelProviders.of(this).get(AddRecipeViewModel.class);
 
     // Get a handle on the views
     Button addIngredientButton = findViewById(R.id.addRecipeActivity_addIngredientButton);
@@ -236,7 +236,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.setSteps(steps);
 
       // Save the recipe to the database
-      viewModel.insertRecipePojo(recipe);
+      viewModel.insertRecipeHolder(recipe);
 
       // TODO add a ProgressBar
 

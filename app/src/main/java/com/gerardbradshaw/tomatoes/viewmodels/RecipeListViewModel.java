@@ -11,7 +11,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
 
-public class RecipeViewModel extends AndroidViewModel {
+public class RecipeListViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -29,7 +29,7 @@ public class RecipeViewModel extends AndroidViewModel {
    *
    * @param application: The app.
    */
-  public RecipeViewModel(@NonNull Application application) {
+  public RecipeListViewModel(@NonNull Application application) {
     super(application);
 
     // Set variables from repo
@@ -48,35 +48,5 @@ public class RecipeViewModel extends AndroidViewModel {
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
-
-  /**
-   * Gets a RecipeHolder for the specific recipe.
-   *
-   * @param recipeId, int: the ID of the recipe.
-   * @return LiveData RecipeHolder: the requested recipe.
-   */
-  public LiveData<RecipeHolder> getRecipeHolder(int recipeId) {
-    return null;
-    // TODO create getRecipeHolder method with LiveData
-  }
-
-
-  // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
-
-  /**
-   * Adds all recipe and ingredient information contained in a RecipeHolder.
-   *
-   * @param recipeHolder, RecipeHolder: The RecipeHolder to insert.
-   */
-  public void insertRecipePojo(RecipeHolder recipeHolder) {
-    repository.insertRecipeFromHolder(recipeHolder);
-  }
-
-  public RecipeHolder getRecipePojo(int recipeId) {
-    return repository.getRecipeHolder(recipeId);
-  }
-
-
-
 
 }

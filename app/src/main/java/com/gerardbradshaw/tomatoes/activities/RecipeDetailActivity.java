@@ -9,12 +9,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailViewModel;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
