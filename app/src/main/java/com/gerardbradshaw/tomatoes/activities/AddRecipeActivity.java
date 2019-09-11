@@ -21,9 +21,7 @@ import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
-import com.gerardbradshaw.tomatoes.Units.Mass;
-import com.gerardbradshaw.tomatoes.Units.Volume;
-import com.gerardbradshaw.tomatoes.Units.NoUnits;
+import com.gerardbradshaw.tomatoes.helpers.Units.NoUnits;
 
 import java.util.ArrayList;
 import java.util.List;

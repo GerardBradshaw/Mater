@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.helpers;
 
 public class Units {
 

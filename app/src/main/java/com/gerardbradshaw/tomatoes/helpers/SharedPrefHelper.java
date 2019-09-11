@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;

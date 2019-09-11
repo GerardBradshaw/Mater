@@ -1,8 +1,8 @@
 package com.gerardbradshaw.tomatoes.pojos;
 
-import com.gerardbradshaw.tomatoes.Units.Mass;
-import com.gerardbradshaw.tomatoes.Units.Volume;
-import com.gerardbradshaw.tomatoes.Units.NoUnits;
+import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
+import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
+import com.gerardbradshaw.tomatoes.helpers.Units.NoUnits;
 
 public class RecipeIngredientHolder {
 
