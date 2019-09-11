@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.helpers;
 
 import java.util.Locale;
+import java.util.Map;
 
 public class Units {
 
@@ -16,7 +17,7 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
 
-  public static String forDetailView(double amount, Volume unit) {
+  public static String formatForDetailView(double amount, Volume unit) {
 
     Volume newUnit;
 
@@ -52,7 +53,7 @@ public class Units {
     return Units.convertVolume(amount, unit, newUnit);
   }
 
-  public static String forDetailView(double amount, Mass unit) {
+  public static String formatForDetailView(double amount, Mass unit) {
 
     Mass newUnit;
 
@@ -78,7 +79,7 @@ public class Units {
     return Units.convertMass(amount, unit, newUnit);
   }
 
-  public static String forDetailView(double amount, NoUnits unit) {
+  public static String formatForDetailView(double amount, MiscUnits unit) {
 
     String amountString = String.format(Locale.getDefault(), "%.0f", amount);
 
@@ -92,27 +93,30 @@ public class Units {
     }
   }
 
-  public static String forDetailView(double amount, String unit) {
+  public static String formatForDetailView(double amount, String unit) {
 
-    try {
-      Volume volumeUnit = Volume.valueOf(unit);
-      return forDetailView(amount, volumeUnit);
-
-    } catch (IllegalArgumentException notVolume) {
-      try {
-        Mass massUnit = Mass.valueOf(unit);
-        return forDetailView(amount, massUnit);
-
-      } catch (IllegalArgumentException notMass) {
-        try {
-          NoUnits noUnit = NoUnits.valueOf(unit);
-          return forDetailView(amount, noUnit);
-
-        } catch (IllegalArgumentException notNoUnit) {
-          return "Units error";
-        }
+    // Check if the String is in Volume
+    for(Volume volumeValue : Volume.values()) {
+      if(volumeValue.name().equals(unit)) {
+        return formatForDetailView(amount, volumeValue);
       }
     }
+
+    // Check if the String is in Mass
+    for(Mass massValue : Mass.values()) {
+      if(massValue.name().equals(unit)) {
+        return formatForDetailView(amount, massValue);
+      }
+    }
+
+    // Check if the String is in MiscValues
+    for(MiscUnits miscUnitsValue : MiscUnits.values()) {
+      if(miscUnitsValue.name().equals(unit)) {
+        return formatForDetailView(amount, miscUnitsValue);
+      }
+    }
+
+    return "Units error";
   }
 
 
@@ -325,7 +329,7 @@ public class Units {
     OUNCES;
   }
 
-  public enum NoUnits {
+  public enum MiscUnits {
     DROPS,
     NO_UNIT,
     PINCH;

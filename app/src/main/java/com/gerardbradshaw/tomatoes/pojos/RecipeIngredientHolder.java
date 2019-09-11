@@ -2,7 +2,7 @@ package com.gerardbradshaw.tomatoes.pojos;
 
 import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
 import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
-import com.gerardbradshaw.tomatoes.helpers.Units.NoUnits;
+import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 
 public class RecipeIngredientHolder {
 
@@ -30,7 +30,7 @@ public class RecipeIngredientHolder {
     this.unit = unit.name();
   }
 
-  public RecipeIngredientHolder(String name, double amount, NoUnits unit) {
+  public RecipeIngredientHolder(String name, double amount, MiscUnits unit) {
     this.name = name;
     this.amount = amount;
     this.unit = unit.name();

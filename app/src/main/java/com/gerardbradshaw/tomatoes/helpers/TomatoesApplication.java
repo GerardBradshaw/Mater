@@ -2,13 +2,12 @@ package com.gerardbradshaw.tomatoes.helpers;
 
 import android.app.Application;
 
-import com.gerardbradshaw.tomatoes.helpers.SharedPrefHelper;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
 import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
-import com.gerardbradshaw.tomatoes.helpers.Units.NoUnits;
+import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,10 +90,10 @@ public class TomatoesApplication extends Application {
         "sweet potato", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "capsicum", 1d, NoUnits.NO_UNIT));
+        "capsicum", 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "zucchini", 1d, NoUnits.NO_UNIT));
+        "zucchini", 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
         "frozen spinach", 100d, Mass.GRAMS));
@@ -103,16 +102,16 @@ public class TomatoesApplication extends Application {
         "diced tomatoes", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        beyondBurgers, 4d, NoUnits.NO_UNIT));
+        beyondBurgers, 4d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
         "merlot", 500d, Volume.MILLILITRES));
 
     ingredients.add(new RecipeIngredientHolder(
-        lasagneSheets, 1d, NoUnits.NO_UNIT));
+        lasagneSheets, 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "vegan cheese slices", 18d, NoUnits.NO_UNIT));
+        "vegan cheese slices", 18d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
         vegenaise, 100d, Mass.GRAMS));

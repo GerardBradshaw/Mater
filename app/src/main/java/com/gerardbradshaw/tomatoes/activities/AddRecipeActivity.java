@@ -21,7 +21,7 @@ import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
-import com.gerardbradshaw.tomatoes.helpers.Units.NoUnits;
+import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -220,7 +220,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         ingredients.add(new RecipeIngredientHolder(
             holder.getNameInput().getText().toString(),
             Double.parseDouble(holder.getAmountInput().getText().toString()),
-            NoUnits.NO_UNIT));
+            MiscUnits.NO_UNIT));
 
         // TODO implement spinner functionality and retrieval
       }

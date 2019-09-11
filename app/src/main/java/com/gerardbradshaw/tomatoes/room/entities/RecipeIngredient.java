@@ -101,7 +101,7 @@ public class RecipeIngredient {
     this.units = units.name();
   }
 
-  public void setUnits(Units.NoUnits units) {
+  public void setUnits(Units.MiscUnits units) {
     this.units = units.name();
   }
 
