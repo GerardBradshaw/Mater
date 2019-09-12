@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes.entities;
+package com.gerardbradshaw.tomatoes.room.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

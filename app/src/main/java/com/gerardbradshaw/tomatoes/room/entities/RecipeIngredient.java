@@ -1,10 +1,12 @@
-package com.gerardbradshaw.tomatoes.entities;
+package com.gerardbradshaw.tomatoes.room.entities;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.gerardbradshaw.tomatoes.helpers.Units;
 
 @Entity(tableName = "recipe_ingredient_table",
 
@@ -91,22 +93,16 @@ public class RecipeIngredient {
     this.amount = amount;
   }
 
-  public void setUnits(Unit units) {
+  public void setUnits(Units.Volume units) {
     this.units = units.name();
   }
 
+  public void setUnits(Units.Mass units) {
+    this.units = units.name();
+  }
 
-  // - - - - - - - - - - - - - - - Unit Enum - - - - - - - - - - - - - - -
+  public void setUnits(Units.MiscUnits units) {
+    this.units = units.name();
+  }
 
-  public enum Unit {
-    MILLILITRES,
-    DROPS,
-    GRAMS,
-    KILOGRAMS,
-    METRIC_CUPS,
-    TEASPOONS,
-    TABLESPOONS,
-    PINCH,
-    NO_UNIT;
-  };
 }

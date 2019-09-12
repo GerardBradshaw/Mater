@@ -1,9 +1,11 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.View;
@@ -29,11 +31,15 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
+  // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
-  private RecipeViewModel viewModel;
-  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
 
+  // Data objects
+  private RecipeListViewModel viewModel;
+
+  // Intent extras
+  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -51,7 +57,9 @@ public class MainActivity extends AppCompatActivity
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        //TODO set FAB behaviour
+        // Create an intent to open the AddRecipeActivity and start it
+        Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+        startActivity(intent);
       }
     });
 
@@ -63,7 +71,6 @@ public class MainActivity extends AppCompatActivity
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
-
 
     // Set up the RecyclerView's adapter
     recipeListAdapter = new RecipeListAdapter(this);
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity
 
 
     // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
+    viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
     viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override

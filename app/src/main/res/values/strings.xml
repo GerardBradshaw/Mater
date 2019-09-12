@@ -5,7 +5,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Tomatoes</string>
-    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_subtitle">TODO</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -16,5 +16,19 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="recipeListItem_image_contentDescription">Recipe Image</string>
+    <string name="addRecipeActivity_pageHeader">Add a new recipe</string>
+    <string name="addRecipeActivity_titleInput_hint">Title…</string>
+    <string name="addRecipeActivity_descriptionInput_hint">Short description…</string>
+    <string name="addRecipeActivity_ingredientNameInput_hint">Ingredient name…</string>
+    <string name="addRecipeActivity_ingredientAmountInput_hint">Amount</string>
+    <string name="addRecipeActivity_addStepLayout_stepInput_hint">Describe the step…</string>
+    <string name="addRecipeActivity_addStepLayout_saveButton">Add</string>
+    <string name="stepsHeader">Steps</string>
+    <string name="ingredientsHeader">Ingredients</string>
+    <string name="addRecipeActivity_saveButton">Save Recipe</string>
+    <string name="addRecipeActivity_addIngredientButton">Add</string>
+    <string name="recipeDetail_image_contentDescription">Photo of dish</string>
+    <string name="no_recipes_message">No recipes</string>
+    <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
 
 </resources>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.NoActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:theme="@style/AppTheme.NoActionBar">
+
+    <!-- In stock button -->
+    <RadioButton
+        android:id="@+id/ingredientView_radioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Ingredient details -->
+    <TextView
+        android:id="@+id/ingredientView_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="500mL milk" />
+
+</LinearLayout>
