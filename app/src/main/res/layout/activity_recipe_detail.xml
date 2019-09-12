@@ -43,15 +43,6 @@
                 android:transitionName="recipeImageTransition"
                 tools:src="@drawable/img_lasagne"/>
 
-            <!-- Title -->
-            <TextView
-                android:id="@+id/recipeDetail_title"
-                style="@style/PageHeaderStyle"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:transitionName="recipeTitleTransition"
-                tools:text="Vegan Lasagne"/>
-
             <!-- Summary -->
             <TextView
                 android:id="@+id/recipeDetail_summary"

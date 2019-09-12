@@ -32,9 +32,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Member Variables - - - - - - - - - - - - - - -
 
   // Views
-  private TextView titleView;
   private TextView descriptionView;
   private ImageView imageView;
+  private Toolbar toolbar;
 
   // Dynamically added view references
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders;
@@ -55,14 +55,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
     setContentView(R.layout.activity_recipe_detail);
 
     // Set up toolbar
-    Toolbar toolbar = findViewById(R.id.recipeDetail_toolbar);
+    toolbar = findViewById(R.id.recipeDetail_toolbar);
     setSupportActionBar(toolbar);
+
 
     // Initialize the ViewModel
     viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
 
     // Get a handle to the Views
-    titleView = findViewById(R.id.recipeDetail_title);
     descriptionView = findViewById(R.id.recipeDetail_summary);
     imageView = findViewById(R.id.recipeDetail_image);
 
@@ -88,7 +88,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     viewModel.getTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
-        titleView.setText(s);
+        toolbar.setTitle(s);
       }
     });
 
