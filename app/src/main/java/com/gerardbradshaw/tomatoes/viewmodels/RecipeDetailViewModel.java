@@ -46,42 +46,22 @@ public class RecipeDetailViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
 
-  /**
-   * Gets the title of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData String of the title.
-   */
   public LiveData<String> getTitle(int recipeId) {
     return repository.getRecipeTitle(recipeId);
   }
 
-  /**
-   * Gets the description of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData String of the description.
-   */
   public LiveData<String> getDescription(int recipeId) {
     return repository.getRecipeDescription(recipeId);
   }
 
-  /**
-   * Gets the ingredients of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveList of RecipeIngredient
-   */
+  public LiveData<String> getImageDirectory(int recipeId) {
+    return repository.getRecipeImageDirectory(recipeId);
+  }
+
   public LiveData<RecipeIngredient[]> getIngredients(int recipeId) {
     return repository.getRecipeIngredients(recipeId);
   }
 
-  /**
-   * Gets the steps of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveList of RecipeStep
-   */
   public LiveData<RecipeStep[]> getSteps(int recipeId) {
     return repository.getRecipeSteps(recipeId);
   }

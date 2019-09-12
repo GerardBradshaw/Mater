@@ -78,7 +78,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
       Glide.with(context)
           .load(imageDirectory)
-          .placeholder(context.getDrawable(R.drawable.img_placeholder))
+          .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
 
     } else {

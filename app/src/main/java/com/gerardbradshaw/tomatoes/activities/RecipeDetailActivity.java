@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -58,7 +59,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     toolbar = findViewById(R.id.recipeDetail_toolbar);
     setSupportActionBar(toolbar);
 
-
     // Initialize the ViewModel
     viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
 
@@ -84,6 +84,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   private void loadRecipe() {
 
+    // Load the image
+    viewModel.getImageDirectory(recipeId).observe(this, new Observer<String>() {
+      @Override
+      public void onChanged(String imageDirectoryString) {
+        // TODO load image from database
+
+        Uri imageUri = Uri.parse(imageDirectoryString);
+
+        Glide.with(context)
+            .load(imageUri)
+            .placeholder(context.getDrawable(R.drawable.img_placeholder_detail_view))
+            .into(imageView);
+      }
+    });
+
     // Set the title
     viewModel.getTitle(recipeId).observe(this, new Observer<String>() {
       @Override
@@ -100,11 +115,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       }
     });
 
-    // Set the image
-    // TODO load image from database
-    Glide.with(context)
-        .load(context.getDrawable(R.drawable.img_lasagne))
-        .into(imageView);
+
 
     // Set the ingredients
     viewModel.getIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {

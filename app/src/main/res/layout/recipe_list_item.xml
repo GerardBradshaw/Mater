@@ -20,7 +20,7 @@
             android:contentDescription="@string/recipeListItem_image_contentDescription"
             android:scaleType="centerCrop"
             android:transitionName="recipeImageTransition"
-            tools:src="@drawable/img_placeholder"/>
+            tools:src="@drawable/img_placeholder_detail_view"/>
         
         <!-- Title -->
         <TextView
