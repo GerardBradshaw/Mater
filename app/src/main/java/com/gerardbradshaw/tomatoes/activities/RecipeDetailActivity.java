@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -31,9 +32,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Member Variables - - - - - - - - - - - - - - -
 
   // Views
-  private TextView titleView;
   private TextView descriptionView;
   private ImageView imageView;
+  private Toolbar toolbar;
 
   // Dynamically added view references
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders;
@@ -53,11 +54,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
 
+    // Set up toolbar
+    toolbar = findViewById(R.id.recipeDetail_toolbar);
+    setSupportActionBar(toolbar);
+
+
     // Initialize the ViewModel
     viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
 
     // Get a handle to the Views
-    titleView = findViewById(R.id.recipeDetail_title);
     descriptionView = findViewById(R.id.recipeDetail_summary);
     imageView = findViewById(R.id.recipeDetail_image);
 
@@ -83,7 +88,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     viewModel.getTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
-        titleView.setText(s);
+        toolbar.setTitle(s);
       }
     });
 
@@ -98,7 +103,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Set the image
     // TODO load image from database
     Glide.with(context)
-        .load(context.getDrawable(R.drawable.vegan_lasagne))
+        .load(context.getDrawable(R.drawable.img_lasagne))
         .into(imageView);
 
     // Set the ingredients

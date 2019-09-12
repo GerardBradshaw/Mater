@@ -21,7 +21,7 @@
             android:contentDescription="@string/recipeListItem_image_contentDescription"
             android:scaleType="centerCrop"
             android:transitionName="recipeImageTransition"
-            tools:src="@drawable/vegan_lasagne"/>
+            tools:src="@drawable/img_lasagne"/>
         
         <!-- Title -->
         <TextView
@@ -36,7 +36,7 @@
         <!-- Summary -->
         <TextView
             android:id="@+id/recipeListItem_summary"
-            style="@style/SummaryStyle"
+            style="@style/DescriptionStyle"
             android:layout_below="@id/recipeListItem_image"
             android:transitionName="recipeSummaryTransition"
             tools:text="Summary summary summary" />

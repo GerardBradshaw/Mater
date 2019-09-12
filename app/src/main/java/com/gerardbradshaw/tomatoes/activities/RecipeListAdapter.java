@@ -73,7 +73,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       holder.recipeTitleView.setText(currentRecipeSummary.getTitle());
       holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
       Glide.with(context)
-          .load(context.getDrawable(R.drawable.vegan_lasagne))
+          .load(context.getDrawable(R.drawable.img_lasagne))
           .into(holder.recipeImageView);
 
     } else {

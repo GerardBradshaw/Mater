@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main_drawer);
 
     // Set up toolbar
-    Toolbar toolbar = findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.main_toolbar);
     setSupportActionBar(toolbar);
 
     // Set up FAB
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 
     // Set up Drawer
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
-    NavigationView navigationView = findViewById(R.id.nav_view);
+    NavigationView navigationView = findViewById(R.id.main_nav_view);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     drawer.addDrawerListener(toggle);
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity
 
 
     // Set up RecyclerView
-    recyclerView = findViewById(R.id.mainActivity_recyclerView);
+    recyclerView = findViewById(R.id.main_recyclerView);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

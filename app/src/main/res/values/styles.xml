@@ -52,8 +52,8 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <!-- Summary style -->
-    <style name="SummaryStyle" >
+    <!-- Description style -->
+    <style name="DescriptionStyle" >
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
