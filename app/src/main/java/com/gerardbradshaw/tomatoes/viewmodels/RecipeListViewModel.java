@@ -24,11 +24,6 @@ public class RecipeListViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  /**
-   * VM constructor required to initialise functionality.
-   *
-   * @param application: The app.
-   */
   public RecipeListViewModel(@NonNull Application application) {
     super(application);
 
@@ -40,11 +35,6 @@ public class RecipeListViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
 
-  /**
-   * Gets the Titles and Descriptions of all recipes in the database.
-   *
-   * @return LiveData List of RecipeSummary: the list of recipes
-   */
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }

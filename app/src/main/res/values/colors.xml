@@ -11,6 +11,6 @@
     <color name="hintTextColorPrimary">@android:color/darker_gray</color>
 
     <!-- Other colors -->
-    <color name="opaqueWhite">#80ffffff</color>
+    <color name="opaqueWhite">#BFffffff</color>
 
 </resources>

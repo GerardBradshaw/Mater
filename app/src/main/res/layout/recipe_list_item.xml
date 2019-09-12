@@ -17,11 +17,10 @@
             android:id="@+id/recipeListItem_image"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:background="@color/colorAccent"
             android:contentDescription="@string/recipeListItem_image_contentDescription"
             android:scaleType="centerCrop"
             android:transitionName="recipeImageTransition"
-            tools:src="@drawable/img_lasagne"/>
+            tools:src="@drawable/img_placeholder"/>
         
         <!-- Title -->
         <TextView

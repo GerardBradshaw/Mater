@@ -23,13 +23,20 @@ public class RecipeSummary {
   @ColumnInfo(name = "description")
   private String description;
 
+  @NonNull
+  @ColumnInfo(name = "image_directory")
+  private String imageDirectory;
+
 
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
   // Default constructor
-  public RecipeSummary(@NonNull String title, @NonNull String description) {
+  public RecipeSummary(@NonNull String title,
+                       @NonNull String description,
+                       @NonNull String imageDirectory) {
     this.title = title;
     this.description = description;
+    this.imageDirectory = imageDirectory;
   }
 
 
@@ -49,6 +56,11 @@ public class RecipeSummary {
     return description;
   }
 
+  @NonNull
+  public String getImageDirectory() {
+    return imageDirectory;
+  }
+
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
@@ -62,6 +74,10 @@ public class RecipeSummary {
 
   public void setDescription(@NonNull String description) {
     this.description = description;
+  }
+
+  public void setImageDirectory(@NonNull String imageDirectory) {
+    this.imageDirectory = imageDirectory;
   }
 
 }

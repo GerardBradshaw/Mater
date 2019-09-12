@@ -28,7 +28,7 @@ public class RecipeRepository {
   private RecipeIngredientDao recipeIngredientDao;
   private RecipeStepDao recipeStepDao;
 
-  // LiveData
+  // Cache of LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
 
 
@@ -53,53 +53,29 @@ public class RecipeRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - LiveData methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - LiveData Getters - - - - - - - - - - - - - - -
 
-  /**
-   * Gets a live list of recipe summaries from the database
-   *
-   * @return LiveData List of all RecipeSummary in the database
-   */
+
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 
-  /**
-   * Gets a live String of the title.
-   *
-   * @param recipeId, int: The ID of the recipe
-   * @return LiveData String of the title.
-   */
   public LiveData<String> getRecipeTitle(int recipeId) {
     return recipeSummaryDao.getTitle(recipeId);
   }
 
-  /**
-   * Gets a live String of the description.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData String of the description.
-   */
   public LiveData<String> getRecipeDescription(int recipeId) {
     return recipeSummaryDao.getDescription(recipeId);
   }
 
-  /**
-   * Gets a live list of recipe ingredients for a given recipe ID.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData List of RecipeIngredients for the given ID.
-   */
+  public LiveData<String> getRecipeImageDirectory(int recipeId) {
+    return recipeSummaryDao.getImageDirectory(recipeId);
+  }
+
   public LiveData<RecipeIngredient[]> getRecipeIngredients(int recipeId) {
     return recipeIngredientDao.getRecipeIngredients(recipeId);
   }
 
-  /**
-   * Gets a live list of recipe steps for a given recipe ID.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData List of RecipeSteps for the given ID.
-   */
   public LiveData<RecipeStep[]> getRecipeSteps(int recipeId) {
     return recipeStepDao.getRecipeSteps(recipeId);
   }
@@ -195,11 +171,10 @@ public class RecipeRepository {
 
 
     // Constructor
-    insertRecipeFromHolderAsyncTask(
-        RecipeSummaryDao recipeSummaryDao,
-        RecipeIngredientDao recipeIngredientDao,
-        RecipeStepDao recipeStepDao,
-        IngredientDao ingredientDao) {
+    insertRecipeFromHolderAsyncTask(RecipeSummaryDao recipeSummaryDao,
+                                    RecipeIngredientDao recipeIngredientDao,
+                                    RecipeStepDao recipeStepDao,
+                                    IngredientDao ingredientDao) {
 
       this.recipeSummaryDao = recipeSummaryDao;
       this.recipeIngredientDao = recipeIngredientDao;
@@ -213,8 +188,8 @@ public class RecipeRepository {
       // Get the RecipeHolder object
       RecipeHolder recipe = recipeHolders[0];
 
-      // Add the Title and Description to the database
-      addSummaryToDb(recipe.getTitle(), recipe.getDescription());
+      // Add the info to the database
+      addSummaryToDb(recipe.getTitle(), recipe.getDescription(), recipe.getImageDirectory());
 
       // Get the ID of the new recipe
       int recipeId = recipeSummaryDao.getRecipeId(recipe.getTitle());
@@ -228,29 +203,27 @@ public class RecipeRepository {
       return null;
     }
 
+    private void addSummaryToDb(String title, String description, String imageDirectory) {
 
-    /**
-     * Simple helper method to add the summary of a recipe to the database.
-     *
-     * @param title, String: The title of the recipe.
-     * @param description, String: The description of the recipe.
-     */
-    private void addSummaryToDb(String title, String description) {
+      // Change the input if anything is null
+      if(title == null) {
+        title = "Not set";
+      }
+      if(description == null) {
+        description = "Not set";
+      }
+      if(imageDirectory == null) {
+        imageDirectory = "";
+      }
 
       // Create a RecipeSummary from the input
-      RecipeSummary recipeSummary = new RecipeSummary(title, description);
+      RecipeSummary recipeSummary = new RecipeSummary(title, description, imageDirectory);
 
       // Add the title and description to the database.
       recipeSummaryDao.insertRecipe(recipeSummary);
 
     }
 
-    /**
-     * Simple helper method to add the steps of a recipe to the database.
-     *
-     * @param recipeId, int: The recipe ID of the corresponding recipe.
-     * @param steps, List of Strings: The steps of the recipe in order.
-     */
     private void addStepsToDb(int recipeId, List<String> steps) {
 
       for(int i = 0; i < steps.size(); i++) {
@@ -266,13 +239,6 @@ public class RecipeRepository {
       }
     }
 
-    /**
-     * Helper method used to add a list of Ingredients and the amounts used in a specific recipe to
-     * the database. If an ingredient already exists as an ingredient, it is not duplicated.
-     *
-     * @param recipeId, int: The ID of the recipe to which the ingredients belong.
-     * @param ingredients, List of RecipeIngredientHolder: The ingredients.
-     */
     private void addIngredientsToDb(int recipeId, List<RecipeIngredientHolder> ingredients) {
 
       for(int i = 0; i < ingredients.size(); i++) {

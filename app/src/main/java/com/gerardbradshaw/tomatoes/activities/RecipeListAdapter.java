@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,12 +69,16 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   public void onBindViewHolder(@NonNull final RecipeViewHolder holder, final int position) {
 
     if (recipeSummaryList != null) {
+
       // Retrieve the data for that position and add the data to the view
       RecipeSummary currentRecipeSummary = recipeSummaryList.get(position);
       holder.recipeTitleView.setText(currentRecipeSummary.getTitle());
       holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
+      Uri imageDirectory = Uri.parse(currentRecipeSummary.getImageDirectory());
+
       Glide.with(context)
-          .load(context.getDrawable(R.drawable.img_lasagne))
+          .load(imageDirectory)
+          .placeholder(context.getDrawable(R.drawable.img_placeholder))
           .into(holder.recipeImageView);
 
     } else {
