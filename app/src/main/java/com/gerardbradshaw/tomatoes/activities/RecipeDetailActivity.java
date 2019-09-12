@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -52,6 +53,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
+
+    // Set up toolbar
+    Toolbar toolbar = findViewById(R.id.recipeDetail_toolbar);
+    setSupportActionBar(toolbar);
 
     // Initialize the ViewModel
     viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);

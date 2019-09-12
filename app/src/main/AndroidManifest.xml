@@ -18,7 +18,8 @@
 
         <!-- Recipe Detail -->
         <activity
-            android:name=".activities.RecipeDetailActivity">
+            android:name=".activities.RecipeDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <!-- Main Activity -->
