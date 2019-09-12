@@ -46,6 +46,7 @@
             <!-- Summary -->
             <TextView
                 android:id="@+id/recipeDetail_summary"
+                style="@style/DescriptionStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
