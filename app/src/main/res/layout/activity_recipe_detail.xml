@@ -10,24 +10,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Image -->
         <ImageView
             android:id="@+id/recipeDetail_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="200dp"
             android:adjustViewBounds="true"
-            android:background="@color/colorAccent"
             android:contentDescription="@string/recipeDetail_image_contentDescription"
+            android:scaleType="centerCrop"
             android:transitionName="recipeImageTransition"
-            tools:src="@drawable/vegan_lasagne"/>
+            tools:src="@drawable/img_lasagne"/>
 
         <!-- Title -->
         <TextView
             android:id="@+id/recipeDetail_title"
             style="@style/PageHeaderStyle"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:transitionName="recipeTitleTransition"
             tools:text="Vegan Lasagne"/>
 
@@ -36,12 +37,16 @@
             android:id="@+id/recipeDetail_summary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:transitionName="recipeSummaryTransition"
             tools:text="Summary of recipe. It's delicious and nutritious!"/>
 
         <!-- Ingredients Header -->
         <TextView
             style="@style/SectionHeaderStyle"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:text="@string/ingredientsHeader" />
 
         <!-- Ingredients Layout -->
@@ -49,11 +54,15 @@
             android:id="@+id/recipeDetail_ingredientsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
 
         <!-- Steps Header -->
         <TextView
             style="@style/SectionHeaderStyle"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:text="@string/stepsHeader" />
 
         <!-- Steps -->
@@ -61,7 +70,9 @@
             android:id="@+id/recipeDetail_stepsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
 
     </LinearLayout>
 

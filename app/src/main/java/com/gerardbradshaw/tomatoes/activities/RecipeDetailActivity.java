@@ -98,7 +98,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Set the image
     // TODO load image from database
     Glide.with(context)
-        .load(context.getDrawable(R.drawable.vegan_lasagne))
+        .load(context.getDrawable(R.drawable.img_lasagne))
         .into(imageView);
 
     // Set the ingredients
