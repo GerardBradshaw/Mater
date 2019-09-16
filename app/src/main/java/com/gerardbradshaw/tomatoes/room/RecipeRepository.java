@@ -2,6 +2,7 @@ package com.gerardbradshaw.tomatoes.room;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -16,6 +17,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
+import java.io.File;
 import java.util.List;
 
 public class RecipeRepository {
@@ -30,6 +32,11 @@ public class RecipeRepository {
 
   // Cache of LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
+
+  // Internal storage
+  private static final String LOG_TAG = "Repository";
+  private static final String PATH = "secureimages/";
+  private File storage;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -48,8 +55,20 @@ public class RecipeRepository {
     recipeIngredientDao = db.recipeIngredientDao();
     recipeStepDao = db.recipeStepDao();
 
-    // Cache the LiveData
+    // Cache some LiveData
     recipeSummaryList = recipeSummaryDao.getAllRecipes();
+
+    // Determine the path to internal storage and create a File object
+    File internalStorage = application.getFilesDir();
+    storage = new File(internalStorage, PATH);
+
+    // Attempt to create the directory
+    if (!storage.exists()) {
+      if (!storage.mkdirs()) {
+        Log.d(LOG_TAG, "Could not create storage directory: " + storage.getAbsolutePath());
+      }
+    }
+
   }
 
 
