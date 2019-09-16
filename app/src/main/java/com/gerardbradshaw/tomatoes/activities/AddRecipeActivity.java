@@ -53,11 +53,11 @@ public class AddRecipeActivity extends AppCompatActivity {
     viewModel = ViewModelProviders.of(this).get(AddRecipeViewModel.class);
 
     // Get a handle on the views
-    Button addIngredientButton = findViewById(R.id.addRecipeActivity_addIngredientButton);
-    Button addStepButton = findViewById(R.id.addRecipeActivity_addStepButton);
-    Button saveButton = findViewById(R.id.addRecipeActivity_saveButton);
-    titleInput = findViewById(R.id.addRecipeActivity_titleInput);
-    descriptionInput = findViewById(R.id.addRecipeActivity_descriptionInput);
+    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
+    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
+    Button saveButton = findViewById(R.id.addRecipe_saveButton);
+    titleInput = findViewById(R.id.addRecipe_titleInput);
+    descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
 
     // Initialize the ViewHolders
     ingredientViewHolders = new ArrayList<>();
@@ -99,7 +99,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.addRecipeActivity_addIngredientLayout);
+    ViewGroup insertPoint = findViewById(R.id.addRecipe_addIngredientLayout);
 
     // Inflate the view
     LinearLayout addIngredientView =
@@ -128,7 +128,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.addRecipeActivity_addStepLayout);
+    ViewGroup insertPoint = findViewById(R.id.addRecipe_addStepLayout);
 
     // Inflate the view
     LinearLayout addStepView =

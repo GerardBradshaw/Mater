@@ -22,7 +22,7 @@
         android:id="@+id/addRecipeActivity_addStepLayout_stepInput"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/addRecipeActivity_addStepLayout_stepInput_hint"
+        android:hint="@string/addRecipe_addStep_stepInput_hint"
         android:inputType="text" />
 
 </LinearLayout>
