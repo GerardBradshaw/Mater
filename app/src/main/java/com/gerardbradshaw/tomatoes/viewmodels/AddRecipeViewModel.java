@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -44,5 +45,10 @@ public class AddRecipeViewModel extends AndroidViewModel {
   public void insertRecipeHolder(RecipeHolder recipeHolder) {
     repository.insertRecipeFromHolder(recipeHolder);
   }
+
+  public void saveImage(String recipeTitle, Bitmap image) {
+    repository.saveImage(recipeTitle, image);
+  }
+
 
 }

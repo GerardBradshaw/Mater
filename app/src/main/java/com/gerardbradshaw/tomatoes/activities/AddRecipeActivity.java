@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -58,6 +59,10 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   // Logs
   private static final String LOG_TAG = "AddRecipeActivity";
+
+  // Image
+  private String imagePathString;
+  private Bitmap image;
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -125,24 +130,25 @@ public class AddRecipeActivity extends AppCompatActivity {
         data != null) {
 
       // Get the URI of the imageName and add it to the app.
-      Uri uri = data.getData();
-      assert uri != null;
+      // Image
+      Uri imageUri = data.getData();
+      assert imageUri != null;
 
       // Set the view
-      imageName.setText(getFileName(uri));
+      imageName.setText(getFileName(imageUri));
 
       // Save the image uri
-      importImageFromUri(uri);
+      imagePathString = imageUri.toString();
+      //importImageFromUri(imageUri);
 
     } else {
       super.onActivityResult(requestCode, resultCode, data);
     }
   }
 
-  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Button clicked methods - - - - - - - - - - - - - - -
 
   private void importImage() {
-
     // Create the intent to import an imageName
     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 
@@ -153,8 +159,6 @@ public class AddRecipeActivity extends AppCompatActivity {
     intent.setType("image/*");
 
     startActivityForResult(intent, REQUEST_IMAGE_IMPORT);
-
-
   }
 
   private void addIngredientToView() {
@@ -304,6 +308,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Save the recipe to the database
       viewModel.insertRecipeHolder(recipe);
 
+      // Save the image
+      if (image != null) {
+        viewModel.saveImage(recipe.getTitle(), image);
+      }
+
       finish();
 
       // TODO add a ProgressBar
@@ -315,13 +324,17 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
   }
 
-  private void importImageFromUri(@NonNull Uri uri) {
 
+  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
+  private void importImageFromUri(@NonNull Uri uri) {
     try {
       // Use the MediaStore to load the imageName.
       Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
       if (image != null) {
+
+        this.image = image;
         // Tell the presenter to import this imageName.
         // TODO the imageName has been imported as a bitmap.
         //  Add the imageName to the database using the repo.

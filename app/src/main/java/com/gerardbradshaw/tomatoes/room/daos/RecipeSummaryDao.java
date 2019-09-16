@@ -40,6 +40,9 @@ public interface RecipeSummaryDao {
   @Query("select image_directory from recipe_summary_table where recipe_id = :recipeId")
   LiveData<String> getImageDirectory(int recipeId);
 
+  @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
+  LiveData<Integer> getRecipeIdLiveData(String recipeTitle);
+
 
   // - - - - - - - - - - - - - - - Non-LiveData Getters - - - - - - - - - - - - - - -
 
