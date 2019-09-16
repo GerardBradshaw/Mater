@@ -1,10 +1,19 @@
 package com.gerardbradshaw.tomatoes.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +32,10 @@ import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
@@ -33,6 +44,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   // Layout views
   private EditText titleInput;
   private EditText descriptionInput;
+  private TextView imageName;
 
   // Dynamically added view references
   private List<IngredientInputViewHolder> ingredientViewHolders;
@@ -41,8 +53,14 @@ public class AddRecipeActivity extends AppCompatActivity {
   // Data objects
   private AddRecipeViewModel viewModel;
 
+  // Intents
+  private static final int REQUEST_IMAGE_IMPORT = 1;
 
-  // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
+  // Logs
+  private static final String LOG_TAG = "AddRecipeActivity";
+
+
+  // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +71,25 @@ public class AddRecipeActivity extends AppCompatActivity {
     viewModel = ViewModelProviders.of(this).get(AddRecipeViewModel.class);
 
     // Get a handle on the views
+    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
     Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
     Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
     Button saveButton = findViewById(R.id.addRecipe_saveButton);
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
+    imageName = findViewById(R.id.addRecipe_imageNameTextView);
 
     // Initialize the ViewHolders
     ingredientViewHolders = new ArrayList<>();
     stepViewHolders = new ArrayList<>();
+
+    // Set listener for selectImageButton
+    selectImageButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        importImage();
+      }
+    });
 
     // Set listener for addIngredientButton
     addIngredientButton.setOnClickListener(new View.OnClickListener() {
@@ -89,8 +117,45 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   }
 
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+    if (requestCode == REQUEST_IMAGE_IMPORT &&
+        resultCode == RESULT_OK &&
+        data != null) {
+
+      // Get the URI of the imageName and add it to the app.
+      Uri uri = data.getData();
+      assert uri != null;
+
+      // Set the view
+      imageName.setText(getFileName(uri));
+
+      // Save the image uri
+      importImageFromUri(uri);
+
+    } else {
+      super.onActivityResult(requestCode, resultCode, data);
+    }
+  }
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
+  private void importImage() {
+
+    // Create the intent to import an imageName
+    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+
+    // Filter files only to those that can be "opened" and directly accessed as a stream.
+    intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+    // Only show images.
+    intent.setType("image/*");
+
+    startActivityForResult(intent, REQUEST_IMAGE_IMPORT);
+
+
+  }
 
   private void addIngredientToView() {
 
@@ -248,6 +313,50 @@ public class AddRecipeActivity extends AppCompatActivity {
           .makeText(this, "Please complete indicated fields", Toast.LENGTH_SHORT)
           .show();
     }
+  }
+
+  private void importImageFromUri(@NonNull Uri uri) {
+
+    try {
+      // Use the MediaStore to load the imageName.
+      Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+
+      if (image != null) {
+        // Tell the presenter to import this imageName.
+        // TODO the imageName has been imported as a bitmap.
+        //  Add the imageName to the database using the repo.
+        //mPresenter.onImportImage(imageName);
+
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+      Log.e(LOG_TAG, "Error: " + e.getMessage() + "Could not open URI: "
+          + uri.toString());
+    }
+  }
+
+  public String getFileName(@NonNull Uri uri) {
+    String result = null;
+    if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
+      Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+      try {
+        if (cursor != null && cursor.moveToFirst()) {
+          result = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+        }
+      } finally {
+        assert cursor != null;
+        cursor.close();
+      }
+    }
+    if (result == null) {
+      result = uri.getPath();
+      assert result != null;
+      int cut = result.lastIndexOf('/');
+      if (cut != -1) {
+        result = result.substring(cut + 1);
+      }
+    }
+    return result;
   }
 
 }
