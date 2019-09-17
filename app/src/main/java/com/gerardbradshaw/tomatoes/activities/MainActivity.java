@@ -4,7 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -37,7 +38,8 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
 
   // Data objects
-  private RecipeListViewModel viewModel;
+  private RecipeSummaryViewModel viewModel;
+  private ImageViewModel imageViewModel;
 
   // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
@@ -77,7 +79,8 @@ public class MainActivity extends AppCompatActivity
     navigationView.setNavigationItemSelectedListener(this);
 
     // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+    viewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
     recipeListAdapter = new RecipeListAdapter(this, viewModel.getRepository());
@@ -108,7 +111,7 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-    viewModel.observeImageUpdated().observe(this, new Observer<Integer>() {
+    imageViewModel.imageUpdateNotifier().observe(this, new Observer<Integer>() {
       @Override
       public void onChanged(Integer integer) {
         Log.d(LOG_TAG, "I've notice that the data changed!");

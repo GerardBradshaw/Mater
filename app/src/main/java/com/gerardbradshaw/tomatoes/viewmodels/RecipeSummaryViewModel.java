@@ -14,7 +14,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
 
-public class RecipeListViewModel extends AndroidViewModel {
+public class RecipeSummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -23,12 +23,11 @@ public class RecipeListViewModel extends AndroidViewModel {
 
   // LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
-  private LiveData<Integer> observeImageUpdated;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeListViewModel(@NonNull Application application) {
+  public RecipeSummaryViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository
@@ -37,7 +36,6 @@ public class RecipeListViewModel extends AndroidViewModel {
 
     // Set variables from repo
     recipeSummaryList = repository.getAllRecipeSummaries();
-    observeImageUpdated = repository.observeBitmapUpdated();
   }
 
 
@@ -45,14 +43,6 @@ public class RecipeListViewModel extends AndroidViewModel {
 
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
-  }
-
-  public Bitmap getImage(Context context, String recipeId) {
-    return repository.loadBitmap(context, recipeId);
-  }
-
-  public LiveData<Integer> observeImageUpdated() {
-    return observeImageUpdated;
   }
 
   public RecipeRepository getRepository() {

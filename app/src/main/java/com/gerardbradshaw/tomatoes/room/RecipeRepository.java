@@ -138,7 +138,7 @@ public class RecipeRepository {
     return new File(storage, recipeTitle + ".jpg");
   }
 
-  public LiveData<Integer> observeBitmapUpdated() {
+  public LiveData<Integer> bitmapUpdateNotifier() {
     return liveImageChanger;
   }
 

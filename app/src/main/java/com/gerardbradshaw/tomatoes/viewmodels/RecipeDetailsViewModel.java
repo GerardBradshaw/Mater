@@ -12,7 +12,7 @@ import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 
-public class RecipeDetailViewModel extends AndroidViewModel {
+public class RecipeDetailsViewModel extends AndroidViewModel {
 
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
@@ -37,7 +37,7 @@ public class RecipeDetailViewModel extends AndroidViewModel {
    *
    * @param application: The app.
    */
-  public RecipeDetailViewModel(@NonNull Application application) {
+  public RecipeDetailsViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository

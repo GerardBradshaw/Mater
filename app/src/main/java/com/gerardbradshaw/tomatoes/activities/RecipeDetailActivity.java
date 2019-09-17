@@ -23,7 +23,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepViewViewHolder;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private List<StepViewViewHolder> stepViewHolders;
 
   // Data objects
-  private RecipeDetailViewModel viewModel;
+  private RecipeDetailsViewModel viewModel;
 
   // Other global variables
   private int recipeId;
@@ -60,7 +60,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     setSupportActionBar(toolbar);
 
     // Initialize the ViewModel
-    viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel.class);
+    viewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
 
     // Get a handle to the Views
     descriptionView = findViewById(R.id.recipeDetail_summary);
