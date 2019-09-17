@@ -4,10 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
@@ -26,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 
 public class RecipeRepository {
 
@@ -44,7 +44,7 @@ public class RecipeRepository {
   // Internal storage
   private static final String LOG_TAG = "Repository";
   private static final String PATH = "";
-  private File storage;
+  private static File storage;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -111,25 +111,7 @@ public class RecipeRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Other methods - - - - - - - - - - - - - - -
-
-  public boolean saveImage(String recipeTitle, Bitmap image) {
-    // Set the name of the image as the recipeId
-    final String fileName = recipeTitle + ".png";
-    File file = new File(storage, fileName);
-
-    // Save the file to storage. File is overwritten if one already exists for the recipe.
-    try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-      Log.d("GGG", "Loading image");
-      image.compress(Bitmap.CompressFormat.PNG, 30, fileOutputStream);
-      Log.d("GGG", "Image loaded");
-      return true;
-
-    } catch (IOException e) {
-      Log.e(LOG_TAG, "Error during saving of image: " + e.getMessage());
-      return false;
-    }
-  }
+  // - - - - - - - - - - - - - - - Load Images - - - - - - - - - - - - - - -
 
   public Bitmap loadImage(Context context, String recipeTitle) {
     final String filename = recipeTitle + ".png";
@@ -145,8 +127,57 @@ public class RecipeRepository {
 
   }
 
+  public File getImageFile(Context context, String recipeTitle) {
+    return new File(storage, recipeTitle + ".png");
+  }
 
-  // - - - - - - - - - - - - - - - Non-LiveData Wrappers - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
+
+  public void saveImage(String recipeTitle, Bitmap image) {
+    // Set the name of the image as the recipeId
+    final String fileName = recipeTitle + ".png";
+
+    // Start an AsyncTask to save the image
+    new saveImageAsyncTask(fileName).execute(image);
+
+  }
+
+  private static class saveImageAsyncTask extends AsyncTask<Bitmap, Void, Boolean> {
+
+    // Member variables
+    private String fileName;
+    private Boolean success;
+
+    // Constructor
+    saveImageAsyncTask(String fileName) {
+      this.fileName = fileName;
+    }
+
+    @Override
+    protected Boolean doInBackground(Bitmap... bitmaps) {
+      // Get the bitmap and create a file
+      Bitmap image = bitmaps[0];
+      File file = new File(storage, fileName);
+
+      // Save the file to storage. File is overwritten if one already exists for the recipe.
+      try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+        Log.d("GGG", "Loading image");
+        image.compress(Bitmap.CompressFormat.PNG, 30, fileOutputStream);
+        Log.d("GGG", "Image loaded");
+        success = true;
+
+      } catch (IOException e) {
+        Log.e(LOG_TAG, "Error during saving of image: " + e.getMessage());
+        success = false;
+      }
+
+      return success;
+
+    }
+  }
+
+
+  // - - - - - - - - - - - - - - - Insert Recipe from Holder - - - - - - - - - - - - - - -
 
   /**
    * Inserts a recipe to the database from a RecipeHolder.
@@ -163,68 +194,6 @@ public class RecipeRepository {
   }
 
   /**
-   * Gets a recipe from the database.
-   *
-   * @param recipeId, int: The ID of the desired recipe.
-   * @return RecipeHolder: The requested recipe as a RecipeHolder.
-   */
-  public RecipeHolder getRecipeHolder(int recipeId) {
-
-    try {
-      return new
-          getRecipeHolderAsyncTask(
-          recipeSummaryDao, recipeIngredientDao, recipeStepDao, ingredientDao)
-          .execute(recipeId).get();
-
-    } catch (Exception e) {
-      Log.e(LOG_TAG, "Error retrieving recipe: " + e.getMessage());
-      return null;
-    }
-  }
-
-  /**
-   * Wrapper method for the updateRecipeAsyncTask class, which calls the updateRecipeSummary method
-   * for the RecipeSummaryDao.
-   *
-   * @param recipeSummary the RecipeSummary to be updated.
-   */
-  public void updateRecipeSummary(RecipeSummary recipeSummary) {
-    new updateRecipeSummaryAsyncTask(recipeSummaryDao).execute(recipeSummary);
-  }
-
-  public Ingredient getIngredient(int ingredientId) {
-    try {
-      return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
-    } catch (Exception e) {
-      // TODO handle exception
-      return null;
-    }
-
-  }
-
-  // TODO add proper update methods
-
-
-  // - - - - - - - - - - - - - - - AsyncTasks for Non-LiveData methods - - - - - - - - - - - - - - -
-
-  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Ingredient> {
-
-    // Member variables
-    private IngredientDao ingredientDao;
-
-    // Constructor
-    getIngredientAsyncTask(IngredientDao ingredientDao) {
-      this.ingredientDao = ingredientDao;
-    }
-
-    @Override
-    protected Ingredient doInBackground(Integer... recipeIds) {
-      return ingredientDao.getIngredientFromId(recipeIds[0]);
-    }
-  }
-
-
-  /**
    * AsyncTask class for insertRecipeFromHolder.
    */
   private static class insertRecipeFromHolderAsyncTask
@@ -235,7 +204,6 @@ public class RecipeRepository {
     private RecipeIngredientDao recipeIngredientDao;
     private RecipeStepDao recipeStepDao;
     private IngredientDao ingredientDao;
-
 
     // Constructor
     insertRecipeFromHolderAsyncTask(RecipeSummaryDao recipeSummaryDao,
@@ -343,50 +311,17 @@ public class RecipeRepository {
 
   }
 
+
+  // - - - - - - - - - - - - - - - Update Recipe - - - - - - - - - - - - - - -
+
   /**
-   * AsyncTask class for getRecipeHolder.
+   * Wrapper method for the updateRecipeAsyncTask class, which calls the updateRecipeSummary method
+   * for the RecipeSummaryDao.
+   *
+   * @param recipeSummary the RecipeSummary to be updated.
    */
-  private static class getRecipeHolderAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
-
-    // Member variables
-    private int recipeId;
-    private RecipeSummaryDao recipeSummaryDao;
-    private RecipeIngredientDao recipeIngredientDao;
-    private RecipeStepDao recipeStepDao;
-    private IngredientDao ingredientDao;
-
-    // Constructor
-    getRecipeHolderAsyncTask(
-        RecipeSummaryDao recipeSummaryDao,
-        RecipeIngredientDao recipeIngredientDao,
-        RecipeStepDao recipeStepDao,
-        IngredientDao ingredientDao) {
-
-      this.recipeSummaryDao = recipeSummaryDao;
-      this.recipeIngredientDao = recipeIngredientDao;
-      this.recipeStepDao = recipeStepDao;
-      this.ingredientDao = ingredientDao;
-    }
-
-    @Override
-    protected RecipeHolder doInBackground(Integer... integers) {
-
-      // Get the recipe ID
-      int recipeId = integers[0];
-
-      // Create a RecipeHolder for the recipe
-      RecipeHolder recipe = new RecipeHolder();
-
-      // Get the recipe information from the DAOs
-      //LiveData<RecipeSummary> summary = recipeSummaryDao.getRecipeSummary(recipeId);
-      //LiveData<RecipeIngredient> ingredients = recipeIngredientDao.getRecipeIngredients(recipeId);
-      //LiveData<RecipeStep> steps = recipeStepDao.getRecipeSteps(recipeId);
-
-
-
-
-      return null;
-    }
+  public void updateRecipeSummary(RecipeSummary recipeSummary) {
+    new updateRecipeSummaryAsyncTask(recipeSummaryDao).execute(recipeSummary);
   }
 
   /**
@@ -410,6 +345,35 @@ public class RecipeRepository {
     }
   }
 
+  // TODO add all update methods
 
+
+  // - - - - - - - - - - - - - - - Get Ingredient - - - - - - - - - - - - - - -
+
+  public Ingredient getIngredient(int ingredientId) {
+    try {
+      return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
+    } catch (Exception e) {
+      // TODO handle exception
+      return null;
+    }
+
+  }
+
+  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Ingredient> {
+
+    // Member variables
+    private IngredientDao ingredientDao;
+
+    // Constructor
+    getIngredientAsyncTask(IngredientDao ingredientDao) {
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Ingredient doInBackground(Integer... recipeIds) {
+      return ingredientDao.getIngredientFromId(recipeIds[0]);
+    }
+  }
 
 }

@@ -1,8 +1,6 @@
 package com.gerardbradshaw.tomatoes.activities;
 
-import android.app.Application;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
 
 import java.util.List;
 
@@ -89,7 +85,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       //Bitmap image = repository.loadImage(context, title);
 
       Glide.with(context)
-          .load(repository.loadImage(context, title))
+          .load(repository.getImageFile(context, title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
 
