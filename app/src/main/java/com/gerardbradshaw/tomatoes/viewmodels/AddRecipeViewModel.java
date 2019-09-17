@@ -5,13 +5,10 @@ import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
-
-import java.util.List;
 
 public class AddRecipeViewModel extends AndroidViewModel {
 
@@ -49,7 +46,7 @@ public class AddRecipeViewModel extends AndroidViewModel {
   }
 
   public void saveImage(String recipeTitle, Bitmap image) {
-    repository.saveImage(recipeTitle, image);
+    repository.storeBitmap(recipeTitle, image);
   }
 
 

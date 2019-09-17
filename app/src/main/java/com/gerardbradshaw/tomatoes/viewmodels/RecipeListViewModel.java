@@ -37,7 +37,7 @@ public class RecipeListViewModel extends AndroidViewModel {
 
     // Set variables from repo
     recipeSummaryList = repository.getAllRecipeSummaries();
-    observeImageUpdated = repository.observeImageUpdated();
+    observeImageUpdated = repository.observeBitmapUpdated();
   }
 
 
@@ -48,7 +48,7 @@ public class RecipeListViewModel extends AndroidViewModel {
   }
 
   public Bitmap getImage(Context context, String recipeId) {
-    return repository.loadImage(context, recipeId);
+    return repository.loadBitmap(context, recipeId);
   }
 
   public LiveData<Integer> observeImageUpdated() {

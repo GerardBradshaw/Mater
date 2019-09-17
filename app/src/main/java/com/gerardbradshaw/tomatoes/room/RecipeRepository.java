@@ -4,14 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.daos.IngredientDao;
@@ -27,30 +27,27 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // DAOs
   private IngredientDao ingredientDao;
   private RecipeSummaryDao recipeSummaryDao;
   private RecipeIngredientDao recipeIngredientDao;
   private RecipeStepDao recipeStepDao;
 
-  // Cache of LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
   private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
   private static AtomicInteger updateCount = new AtomicInteger(0);
 
-  // Internal storage
   private static final String LOG_TAG = "GGG - Repository";
   private static final String PATH = "";
   private static File storage;
+
+  private Context context;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -69,7 +66,9 @@ public class RecipeRepository {
     recipeIngredientDao = db.recipeIngredientDao();
     recipeStepDao = db.recipeStepDao();
 
-    // Initialize the
+    // Downcast the application and set the context
+    TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
+    context = tomatoesApplication.getApplicationContext();
 
     // Cache some LiveData
     recipeSummaryList = recipeSummaryDao.getAllRecipes();
@@ -121,7 +120,7 @@ public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - Load Images - - - - - - - - - - - - - - -
 
-  public Bitmap loadImage(Context context, String recipeTitle) {
+  public Bitmap loadBitmap(Context context, String recipeTitle) {
     final String filename = recipeTitle + ".jpg";
 
     // Load the file from storage
@@ -135,52 +134,69 @@ public class RecipeRepository {
 
   }
 
-  public File getImageFile(String recipeTitle) {
+  public File getBitmapFile(String recipeTitle) {
     return new File(storage, recipeTitle + ".jpg");
   }
 
-  public LiveData<Integer> observeImageUpdated() {
+  public LiveData<Integer> observeBitmapUpdated() {
     return liveImageChanger;
   }
 
 
   // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
 
-  public void saveImage(String recipeTitle, Bitmap image) {
-    new SaveImageAsyncTask(recipeTitle).execute(image);
+  public void storeBitmap(String recipeTitle, Bitmap image) {
+    new StoreBitmapAsyncTask(recipeTitle, image).execute();
   }
 
-  private class SaveImageAsyncTask extends AsyncTask<Bitmap, Void, Boolean> {
+  public void storeBitmap(String recipeTitle, int resourceId) {
+    new StoreBitmapAsyncTask(recipeTitle, resourceId).execute();
+  }
+
+  private class StoreBitmapAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     // Member variables
-    private String recipeTitle;
     private String fileName;
     private Boolean success;
+    private int resourceId;
+    private Bitmap image;
 
     // Constructor
-    SaveImageAsyncTask(String recipeTitle) {
-      this.recipeTitle = recipeTitle;
+    StoreBitmapAsyncTask(String recipeTitle, Bitmap image) {
       fileName = recipeTitle + ".jpg";
+      this.image = image;
+      resourceId = 0;
+    }
+
+    StoreBitmapAsyncTask(String recipeTitle, int resourceId) {
+      fileName = recipeTitle + ".jpg";
+      this.resourceId = resourceId;
     }
 
     @Override
-    protected Boolean doInBackground(Bitmap... bitmaps) {
+    protected Boolean doInBackground(Void... voids) {
+
+      if (resourceId != 0) {
+        image = BitmapFactory.decodeResource(context.getResources(), resourceId);
+      }
+
       // Get the bitmap and create a file
-      Bitmap image = bitmaps[0];
       File file = new File(storage, fileName);
 
       // Save the file to storage. File is overwritten if one already exists for the recipe.
       try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-        Log.d(LOG_TAG, "Saving image");
+        Log.d(LOG_TAG, "Saving " + fileName);
         image.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-        Log.d(LOG_TAG, "Image saved");
+        Log.d(LOG_TAG, "Saved " + fileName);
         success = true;
 
       } catch (IOException e) {
-        Log.e(LOG_TAG, "Error during saving of image: " + e.getMessage());
+        Log.e(LOG_TAG, "Error while saving " + fileName + ": " + e.getMessage());
         success = false;
       }
+
       return success;
+
     }
 
     @Override

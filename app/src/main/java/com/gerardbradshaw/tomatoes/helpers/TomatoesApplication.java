@@ -3,7 +3,6 @@ package com.gerardbradshaw.tomatoes.helpers;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
@@ -47,12 +46,14 @@ public class TomatoesApplication extends Application {
       repository.insertRecipeFromHolder(curryRecipeHolder);
 
       // Store the lasagne image
-      Bitmap lasagneImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.img_lasagne);
-      repository.saveImage(lasagneRecipeHolder.getTitle(), lasagneImage);
+      int lasagneImageId = this.getResources().getIdentifier(
+          "img_lasagne", "drawable", getPackageName());
+      repository.storeBitmap(lasagneRecipeHolder.getTitle(), lasagneImageId);
 
       // Store the curry image
-      //Bitmap curryImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.img_curry);
-      //repository.saveImage(curryRecipeHolder.getTitle(), curryImage);
+      int curryImageId = this.getResources().getIdentifier(
+          "img_curry", "drawable", getPackageName());
+      repository.storeBitmap(curryRecipeHolder.getTitle(), curryImageId);
 
     }
   }
