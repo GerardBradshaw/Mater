@@ -29,9 +29,9 @@ import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
-import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailsViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<IngredientInputViewHolder> ingredientViewHolders;
   private List<StepInputViewHolder> stepViewHolders;
 
-  private AddRecipeViewModel addRecipeViewModel;
+  private RecipeDetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
@@ -68,7 +68,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
 
     // Initialize the ViewModels
-    addRecipeViewModel = ViewModelProviders.of(this).get(AddRecipeViewModel.class);
+    detailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
@@ -299,7 +299,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.setSteps(steps);
 
       // Save the recipe to the database
-      addRecipeViewModel.insertRecipeHolder(recipe);
+      detailsViewModel.insertRecipeHolder(recipe);
 
       // Save the image
       if (image != null) {

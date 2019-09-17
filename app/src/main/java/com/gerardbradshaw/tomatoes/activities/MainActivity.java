@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
 
   // Data objects
-  private RecipeSummaryViewModel viewModel;
+  private RecipeSummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
 
   // Intent extras
@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity
     navigationView.setNavigationItemSelectedListener(this);
 
     // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
+    summaryViewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this, viewModel.getRepository());
+    recipeListAdapter = new RecipeListAdapter(this, summaryViewModel.getRepository());
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
+    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override
       public void onChanged(List<RecipeSummary> recipeSummaries) {
         recipeListAdapter.setRecipeSummaryList(recipeSummaries);

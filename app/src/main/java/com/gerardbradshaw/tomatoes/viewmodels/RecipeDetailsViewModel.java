@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
+import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
@@ -64,6 +65,10 @@ public class RecipeDetailsViewModel extends AndroidViewModel {
 
   public RecipeRepository getRepository() {
     return repository;
+  }
+
+  public void insertRecipeHolder(RecipeHolder recipeHolder) {
+    repository.insertRecipeFromHolder(recipeHolder);
   }
 
 }
