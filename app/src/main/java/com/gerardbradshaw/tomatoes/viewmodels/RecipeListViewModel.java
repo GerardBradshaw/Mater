@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
+import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
@@ -31,8 +31,11 @@ public class RecipeListViewModel extends AndroidViewModel {
   public RecipeListViewModel(@NonNull Application application) {
     super(application);
 
+    // Downcast the application and set the repository
+    TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
+    repository = tomatoesApplication.getRepository();
+
     // Set variables from repo
-    repository = new RecipeRepository(application);
     recipeSummaryList = repository.getAllRecipeSummaries();
     observeImageUpdated = repository.observeImageUpdated();
   }

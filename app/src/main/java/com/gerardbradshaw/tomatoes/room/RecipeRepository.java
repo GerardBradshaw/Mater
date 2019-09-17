@@ -122,7 +122,7 @@ public class RecipeRepository {
   // - - - - - - - - - - - - - - - Load Images - - - - - - - - - - - - - - -
 
   public Bitmap loadImage(Context context, String recipeTitle) {
-    final String filename = recipeTitle + ".png";
+    final String filename = recipeTitle + ".jpg";
 
     // Load the file from storage
     try (FileInputStream fileInputStream = context.openFileInput(filename)) {
@@ -136,12 +136,13 @@ public class RecipeRepository {
   }
 
   public File getImageFile(String recipeTitle) {
-    return new File(storage, recipeTitle + ".png");
+    return new File(storage, recipeTitle + ".jpg");
   }
 
   public LiveData<Integer> observeImageUpdated() {
     return liveImageChanger;
   }
+
 
   // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
 
@@ -159,7 +160,7 @@ public class RecipeRepository {
     // Constructor
     SaveImageAsyncTask(String recipeTitle) {
       this.recipeTitle = recipeTitle;
-      fileName = recipeTitle + ".png";
+      fileName = recipeTitle + ".jpg";
     }
 
     @Override
@@ -170,9 +171,9 @@ public class RecipeRepository {
 
       // Save the file to storage. File is overwritten if one already exists for the recipe.
       try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-        Log.d(LOG_TAG, "Loading image");
-        image.compress(Bitmap.CompressFormat.PNG, 30, fileOutputStream);
-        Log.d(LOG_TAG, "Image loaded");
+        Log.d(LOG_TAG, "Saving image");
+        image.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+        Log.d(LOG_TAG, "Image saved");
         success = true;
 
       } catch (IOException e) {

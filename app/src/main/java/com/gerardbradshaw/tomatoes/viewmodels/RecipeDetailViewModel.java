@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
@@ -39,8 +40,9 @@ public class RecipeDetailViewModel extends AndroidViewModel {
   public RecipeDetailViewModel(@NonNull Application application) {
     super(application);
 
-    // Get a handle to the repository
-    repository = new RecipeRepository(application);
+    // Downcast the application and set the repository
+    TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
+    repository = tomatoesApplication.getRepository();
   }
 
 

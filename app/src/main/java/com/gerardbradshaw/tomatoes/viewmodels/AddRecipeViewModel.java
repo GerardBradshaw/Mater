@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 
@@ -30,8 +31,9 @@ public class AddRecipeViewModel extends AndroidViewModel {
   public AddRecipeViewModel(@NonNull Application application) {
     super(application);
 
-    // Set variables from repo
-    repository = new RecipeRepository(application);
+    // Downcast the application and set the repository
+    TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
+    repository = tomatoesApplication.getRepository();
   }
 
 

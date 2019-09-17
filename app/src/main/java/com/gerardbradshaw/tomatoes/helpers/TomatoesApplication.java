@@ -3,6 +3,7 @@ package com.gerardbradshaw.tomatoes.helpers;
 import android.app.Application;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
@@ -17,17 +18,19 @@ import java.util.List;
 
 public class TomatoesApplication extends Application {
 
+  private RecipeRepository repository;
+
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
   @Override
   public void onCreate() {
     super.onCreate();
 
+    // Initialize the repository
+    repository = new RecipeRepository(this);
+
     // Initialize shared prefs
     SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
-
-    // Initialize the repository
-    RecipeRepository repository = new RecipeRepository(this);
 
     // Check if the application has been launched before. If not, create some recipes.
     if (sharedPrefHelper.isFirstLaunch()) {
@@ -46,6 +49,10 @@ public class TomatoesApplication extends Application {
       // Store the lasagne image
       Bitmap lasagneImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.img_lasagne);
       repository.saveImage(lasagneRecipeHolder.getTitle(), lasagneImage);
+
+      // Store the curry image
+      //Bitmap curryImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.img_curry);
+      //repository.saveImage(curryRecipeHolder.getTitle(), curryImage);
 
     }
   }
@@ -199,6 +206,10 @@ public class TomatoesApplication extends Application {
 
     return holder;
 
+  }
+
+  public RecipeRepository getRepository() {
+    return repository;
   }
 
 }
