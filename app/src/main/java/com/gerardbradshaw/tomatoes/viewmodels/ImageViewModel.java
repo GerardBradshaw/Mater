@@ -1,6 +1,7 @@
 package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
+import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,10 +17,7 @@ public class ImageViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Repo
   private RecipeRepository repository;
-
-  // LiveData
   private LiveData<Integer> imageUpdateNotifier;
 
 
@@ -37,10 +35,14 @@ public class ImageViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
   public LiveData<Integer> imageUpdateNotifier() {
     return imageUpdateNotifier;
+  }
+
+  public void saveImage(String recipeTitle, Bitmap image) {
+    repository.storeBitmap(recipeTitle, image);
   }
 
   public RecipeRepository getRepository() {

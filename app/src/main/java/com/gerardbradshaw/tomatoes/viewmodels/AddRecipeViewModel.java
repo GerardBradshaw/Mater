@@ -14,17 +14,11 @@ public class AddRecipeViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Repo
   private RecipeRepository repository;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  /**
-   * VM constructor required to initialise functionality.
-   *
-   * @param application: The app.
-   */
   public AddRecipeViewModel(@NonNull Application application) {
     super(application);
 
@@ -34,20 +28,10 @@ public class AddRecipeViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
-  /**
-   * Adds all recipe and ingredient information contained in a RecipeHolder.
-   *
-   * @param recipeHolder, RecipeHolder: The RecipeHolder to insert.
-   */
   public void insertRecipeHolder(RecipeHolder recipeHolder) {
     repository.insertRecipeFromHolder(recipeHolder);
   }
-
-  public void saveImage(String recipeTitle, Bitmap image) {
-    repository.storeBitmap(recipeTitle, image);
-  }
-
 
 }

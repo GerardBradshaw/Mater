@@ -31,6 +31,7 @@ import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.AddRecipeViewModel;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
+import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,20 +47,16 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText descriptionInput;
   private TextView imageName;
 
-  // Dynamically added view references
   private List<IngredientInputViewHolder> ingredientViewHolders;
   private List<StepInputViewHolder> stepViewHolders;
 
-  // Data objects
-  private AddRecipeViewModel viewModel;
+  private AddRecipeViewModel addRecipeViewModel;
+  private ImageViewModel imageViewModel;
 
-  // Intents
   private static final int REQUEST_IMAGE_IMPORT = 1;
 
-  // Logs
   private static final String LOG_TAG = "AddRecipeActivity";
 
-  // Image
   private Bitmap image;
 
 
@@ -70,8 +67,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_recipe);
 
-    // Initialize the ViewModel
-    viewModel = ViewModelProviders.of(this).get(AddRecipeViewModel.class);
+    // Initialize the ViewModels
+    addRecipeViewModel = ViewModelProviders.of(this).get(AddRecipeViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
     Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
@@ -301,11 +299,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.setSteps(steps);
 
       // Save the recipe to the database
-      viewModel.insertRecipeHolder(recipe);
+      addRecipeViewModel.insertRecipeHolder(recipe);
 
       // Save the image
       if (image != null) {
-        viewModel.saveImage(recipe.getTitle(), image);
+        imageViewModel.saveImage(recipe.getTitle(), image);
       }
 
       finish();

@@ -17,17 +17,7 @@ public class RecipeDetailsViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Repo
   private RecipeRepository repository;
-
-  // LiveData
-  private LiveData<String> title;
-  private LiveData<String> description;
-  private LiveData<RecipeIngredient> ingredients;
-  private LiveData<RecipeStep> steps;
-
-  // Other global variables
-
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -46,7 +36,7 @@ public class RecipeDetailsViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
   public LiveData<String> getTitle(int recipeId) {
     return repository.getRecipeTitle(recipeId);
@@ -72,12 +62,8 @@ public class RecipeDetailsViewModel extends AndroidViewModel {
     return repository.getIngredient(ingredientId);
   }
 
-
-  // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
-
-
-
-
-
+  public RecipeRepository getRepository() {
+    return repository;
+  }
 
 }
