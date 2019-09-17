@@ -60,7 +60,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   private static final String LOG_TAG = "AddRecipeActivity";
 
   // Image
-  private String imagePathString;
   private Bitmap image;
 
 
@@ -134,9 +133,6 @@ public class AddRecipeActivity extends AppCompatActivity {
 
       // Set the view
       imageName.setText(getFileName(imageUri));
-
-      // Save the image uri
-      imagePathString = imageUri.toString();
 
       importImageFromUri(imageUri);
 

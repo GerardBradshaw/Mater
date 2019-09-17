@@ -46,6 +46,10 @@ public class RecipeListViewModel extends AndroidViewModel {
     return repository.loadImage(context, recipeId);
   }
 
+  public LiveData<Integer> observeImageUpdated() {
+    return repository.observeImageUpdated();
+  }
+
   public RecipeRepository getRepository() {
     return repository;
   }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -15,6 +16,7 @@ import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
+import java.io.File;
 import java.util.List;
 
 public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeViewHolder> {
@@ -81,14 +83,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
       Uri imageDirectory = Uri.parse(currentRecipeSummary.getImageDirectory());
 
-
-      //Bitmap image = repository.loadImage(context, title);
-
       Glide.with(context)
-          .load(repository.getImageFile(context, title))
+          .load(repository.getImageFile(title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
-
 
     } else {
       holder.recipeTitleView

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
@@ -26,7 +27,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RecipeRepository {
 
@@ -40,6 +44,8 @@ public class RecipeRepository {
 
   // Cache of LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
+  private MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
+  private AtomicInteger updateCount = new AtomicInteger(0);
 
   // Internal storage
   private static final String LOG_TAG = "Repository";
@@ -62,6 +68,8 @@ public class RecipeRepository {
     recipeSummaryDao = db.recipeDao();
     recipeIngredientDao = db.recipeIngredientDao();
     recipeStepDao = db.recipeStepDao();
+
+    // Initialize the
 
     // Cache some LiveData
     recipeSummaryList = recipeSummaryDao.getAllRecipes();
@@ -127,30 +135,31 @@ public class RecipeRepository {
 
   }
 
-  public File getImageFile(Context context, String recipeTitle) {
+  public File getImageFile(String recipeTitle) {
     return new File(storage, recipeTitle + ".png");
+  }
+
+  public LiveData<Integer> observeImageUpdated() {
+    return liveImageChanger;
   }
 
   // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
 
   public void saveImage(String recipeTitle, Bitmap image) {
-    // Set the name of the image as the recipeId
-    final String fileName = recipeTitle + ".png";
-
-    // Start an AsyncTask to save the image
-    new saveImageAsyncTask(fileName).execute(image);
-
+    new SaveImageAsyncTask(recipeTitle).execute(image);
   }
 
-  private static class saveImageAsyncTask extends AsyncTask<Bitmap, Void, Boolean> {
+  private class SaveImageAsyncTask extends AsyncTask<Bitmap, Void, Boolean> {
 
     // Member variables
+    private String recipeTitle;
     private String fileName;
     private Boolean success;
 
     // Constructor
-    saveImageAsyncTask(String fileName) {
-      this.fileName = fileName;
+    SaveImageAsyncTask(String recipeTitle) {
+      this.recipeTitle = recipeTitle;
+      fileName = recipeTitle + ".png";
     }
 
     @Override
@@ -170,8 +179,15 @@ public class RecipeRepository {
         Log.e(LOG_TAG, "Error during saving of image: " + e.getMessage());
         success = false;
       }
-
       return success;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean success) {
+      super.onPostExecute(success);
+
+      // If there are any listeners, this will update them
+      liveImageChanger.setValue(updateCount.getAndIncrement());
 
     }
   }

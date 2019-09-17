@@ -103,6 +103,13 @@ public class MainActivity extends AppCompatActivity
         recipeListAdapter.setRecipeSummaryList(recipeSummaries);
       }
     });
+
+    viewModel.observeImageUpdated().observe(this, new Observer<Integer>() {
+      @Override
+      public void onChanged(Integer integer) {
+        recipeListAdapter.notifyDataSetChanged();
+      }
+    });
   }
 
 
