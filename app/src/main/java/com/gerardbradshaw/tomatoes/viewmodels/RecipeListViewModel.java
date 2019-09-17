@@ -23,6 +23,7 @@ public class RecipeListViewModel extends AndroidViewModel {
 
   // LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
+  private LiveData<Integer> observeImageUpdated;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -33,6 +34,7 @@ public class RecipeListViewModel extends AndroidViewModel {
     // Set variables from repo
     repository = new RecipeRepository(application);
     recipeSummaryList = repository.getAllRecipeSummaries();
+    observeImageUpdated = repository.observeImageUpdated();
   }
 
 
@@ -47,7 +49,7 @@ public class RecipeListViewModel extends AndroidViewModel {
   }
 
   public LiveData<Integer> observeImageUpdated() {
-    return repository.observeImageUpdated();
+    return observeImageUpdated;
   }
 
   public RecipeRepository getRepository() {

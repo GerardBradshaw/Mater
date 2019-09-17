@@ -44,8 +44,8 @@ public class RecipeRepository {
 
   // Cache of LiveData
   private LiveData<List<RecipeSummary>> recipeSummaryList;
-  private MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
-  private AtomicInteger updateCount = new AtomicInteger(0);
+  private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
+  private static AtomicInteger updateCount = new AtomicInteger(0);
 
   // Internal storage
   private static final String LOG_TAG = "GGG - Repository";

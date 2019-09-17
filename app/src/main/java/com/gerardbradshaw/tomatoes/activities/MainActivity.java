@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity
     viewModel.observeImageUpdated().observe(this, new Observer<Integer>() {
       @Override
       public void onChanged(Integer integer) {
-        recipeListAdapter.notifyDataSetChanged();
         Log.d(LOG_TAG, "I've notice that the data changed!");
+        recipeListAdapter.notifyDataSetChanged();
       }
     });
   }
