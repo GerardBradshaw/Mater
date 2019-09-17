@@ -1,6 +1,8 @@
 package com.gerardbradshaw.tomatoes.activities;
 
+import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
 
 import java.util.List;
 
@@ -24,6 +29,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   private List<RecipeSummary> recipeSummaryList; // Cached copy
   private RecipeClickedListener recipeClickedListener;
   private Context context;
+  private RecipeRepository repository;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -33,9 +39,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    *
    * @param context the activity context
    */
-  public RecipeListAdapter(Context context) {
+  public RecipeListAdapter(Context context, RecipeRepository repository) {
     this.context = context;
     inflater = LayoutInflater.from(context);
+
+    this.repository = repository;
   }
 
 
@@ -72,14 +80,19 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
       // Retrieve the data for that position and add the data to the view
       RecipeSummary currentRecipeSummary = recipeSummaryList.get(position);
-      holder.recipeTitleView.setText(currentRecipeSummary.getTitle());
+      String title = currentRecipeSummary.getTitle();
+      holder.recipeTitleView.setText(title);
       holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
       Uri imageDirectory = Uri.parse(currentRecipeSummary.getImageDirectory());
 
+
+      //Bitmap image = repository.loadImage(context, title);
+
       Glide.with(context)
-          .load(imageDirectory)
+          .load(repository.loadImage(context, title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
+
 
     } else {
       holder.recipeTitleView

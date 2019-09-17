@@ -130,7 +130,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         data != null) {
 
       // Get the URI of the imageName and add it to the app.
-      // Image
       Uri imageUri = data.getData();
       assert imageUri != null;
 
@@ -139,7 +138,8 @@ public class AddRecipeActivity extends AppCompatActivity {
 
       // Save the image uri
       imagePathString = imageUri.toString();
-      //importImageFromUri(imageUri);
+
+      importImageFromUri(imageUri);
 
     } else {
       super.onActivityResult(requestCode, resultCode, data);

@@ -1,9 +1,12 @@
 package com.gerardbradshaw.tomatoes.room;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
@@ -19,6 +22,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -39,7 +43,7 @@ public class RecipeRepository {
 
   // Internal storage
   private static final String LOG_TAG = "Repository";
-  private static final String PATH = "images/";
+  private static final String PATH = "";
   private File storage;
 
 
@@ -116,13 +120,29 @@ public class RecipeRepository {
 
     // Save the file to storage. File is overwritten if one already exists for the recipe.
     try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-      image.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+      Log.d("GGG", "Loading image");
+      image.compress(Bitmap.CompressFormat.PNG, 30, fileOutputStream);
+      Log.d("GGG", "Image loaded");
       return true;
 
     } catch (IOException e) {
       Log.e(LOG_TAG, "Error during saving of image: " + e.getMessage());
       return false;
     }
+  }
+
+  public Bitmap loadImage(Context context, String recipeTitle) {
+    final String filename = recipeTitle + ".png";
+
+    // Load the file from storage
+    try (FileInputStream fileInputStream = context.openFileInput(filename)) {
+      return BitmapFactory.decodeStream(fileInputStream);
+
+    } catch (IOException e) {
+      Log.e(LOG_TAG, "Error during load of image: " + e.getMessage());
+      return null;
+    }
+
   }
 
 

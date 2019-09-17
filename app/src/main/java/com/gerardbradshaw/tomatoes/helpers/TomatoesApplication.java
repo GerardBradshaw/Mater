@@ -1,7 +1,10 @@
 package com.gerardbradshaw.tomatoes.helpers;
 
 import android.app.Application;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
@@ -39,6 +42,10 @@ public class TomatoesApplication extends Application {
       // Add the recipes to the database
       repository.insertRecipeFromHolder(lasagneRecipeHolder);
       repository.insertRecipeFromHolder(curryRecipeHolder);
+
+      // Store the lasagne image
+      Bitmap lasagneImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.img_lasagne);
+      repository.saveImage(lasagneRecipeHolder.getTitle(), lasagneImage);
 
     }
   }

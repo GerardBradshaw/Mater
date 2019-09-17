@@ -1,6 +1,9 @@
 package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
+import android.content.Context;
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -39,4 +42,11 @@ public class RecipeListViewModel extends AndroidViewModel {
     return recipeSummaryList;
   }
 
+  public Bitmap getImage(Context context, String recipeId) {
+    return repository.loadImage(context, recipeId);
+  }
+
+  public RecipeRepository getRepository() {
+    return repository;
+  }
 }

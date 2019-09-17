@@ -72,8 +72,11 @@ public class MainActivity extends AppCompatActivity
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
 
+    // Set up the ViewModel and its observer
+    viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this);
+    recipeListAdapter = new RecipeListAdapter(this, viewModel.getRepository());
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
@@ -89,15 +92,10 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-
     // Set up RecyclerView
     recyclerView = findViewById(R.id.main_recyclerView);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-    // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
 
     viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override
