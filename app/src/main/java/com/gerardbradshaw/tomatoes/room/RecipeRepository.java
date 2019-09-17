@@ -48,7 +48,7 @@ public class RecipeRepository {
   private AtomicInteger updateCount = new AtomicInteger(0);
 
   // Internal storage
-  private static final String LOG_TAG = "Repository";
+  private static final String LOG_TAG = "GGG - Repository";
   private static final String PATH = "";
   private static File storage;
 
@@ -170,9 +170,9 @@ public class RecipeRepository {
 
       // Save the file to storage. File is overwritten if one already exists for the recipe.
       try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-        Log.d("GGG", "Loading image");
+        Log.d(LOG_TAG, "Loading image");
         image.compress(Bitmap.CompressFormat.PNG, 30, fileOutputStream);
-        Log.d("GGG", "Image loaded");
+        Log.d(LOG_TAG, "Image loaded");
         success = true;
 
       } catch (IOException e) {
@@ -188,7 +188,7 @@ public class RecipeRepository {
 
       // If there are any listeners, this will update them
       liveImageChanger.setValue(updateCount.getAndIncrement());
-
+      Log.d(LOG_TAG, "Counter is now "+ liveImageChanger.getValue());
     }
   }
 

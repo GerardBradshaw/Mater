@@ -8,6 +8,7 @@ import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.util.Log;
 import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity
 
   // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
+
+  // Logging
+  private static String LOG_TAG = "GGG - Main Activity";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -108,6 +112,7 @@ public class MainActivity extends AppCompatActivity
       @Override
       public void onChanged(Integer integer) {
         recipeListAdapter.notifyDataSetChanged();
+        Log.d(LOG_TAG, "I've notice that the data changed!");
       }
     });
   }

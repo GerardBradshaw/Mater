@@ -2,6 +2,7 @@ package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   private RecipeClickedListener recipeClickedListener;
   private Context context;
   private RecipeRepository repository;
+  private static String LOG_TAG = "GGG - RecipeListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -87,6 +89,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
           .load(repository.getImageFile(title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
+
+      Log.d(LOG_TAG, "I've just updated the views for " + title);
 
     } else {
       holder.recipeTitleView
