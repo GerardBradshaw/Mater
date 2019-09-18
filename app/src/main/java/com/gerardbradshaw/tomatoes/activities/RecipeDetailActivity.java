@@ -39,9 +39,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private ImageView imageView;
   private Toolbar toolbar;
 
-  private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders;
-  private List<StepViewViewHolder> stepViewHolders;
-
+  private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
+  private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
 
   private RecipeDetailsViewModel detailsViewModel;
@@ -49,6 +48,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private RecipeRepository repository;
 
   private int recipeId;
+  private double servings;
   private Context context;
 
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
@@ -62,29 +62,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
 
-    // Get the ID of the recipe that was clicked
+    // Get intent information
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
-
-    // Set the context
     context = this;
 
     // Initialize the VMs
     detailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
-    // Get the title
-    recipeTitle = detailsViewModel.getTitle(recipeId).getValue();
+    // Get the number of servings
+    // TODO add ability to set number of servings
+    servings = 1;
 
     // Set up Toolbar
     toolbar = findViewById(R.id.recipeDetail_toolbar);
     setSupportActionBar(toolbar);
 
-    // Get a handle to the Views and initialize the dynamic View holders
+    // Get a handle to the Views
     imageView = findViewById(R.id.recipeDetail_image);
     descriptionView = findViewById(R.id.recipeDetail_description);
-    stepViewHolders = new ArrayList<>();
-    recipeIngredientViewHolders = new ArrayList<>();
 
     // Set the title
     detailsViewModel.getTitle(recipeId).observe(this, new Observer<String>() {
@@ -150,7 +147,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Create a RecipeIngredientHolder for each ingredient
     for (RecipeIngredient ingredient : recipeIngredients) {
       String name = detailsViewModel.getIngredient(ingredient.getIngredientId()).getName();
-      double amount = ingredient.getAmount();
+      double amount = ingredient.getAmount() * servings;
       String unit = ingredient.getUnits();
       ingredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
     }
