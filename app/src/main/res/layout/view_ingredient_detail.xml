@@ -16,9 +16,21 @@
 
     <!-- Ingredient details -->
     <TextView
-        android:id="@+id/ingredientView_details"
+        android:id="@+id/ingredientView_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="500mL milk" />
+        tools:text="500" />
+
+    <TextView
+        android:id="@+id/ingredientView_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text=" ml " />
+
+    <TextView
+        android:id="@+id/ingredientView_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="frozen brocolli" />
 
 </LinearLayout>
