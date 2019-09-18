@@ -84,7 +84,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       Uri imageDirectory = Uri.parse(currentRecipeSummary.getImageDirectory());
 
       Glide.with(context)
-          .load(repository.getBitmapFile(title))
+          .load(repository.getFile(title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
 

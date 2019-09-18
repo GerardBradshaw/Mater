@@ -9,9 +9,8 @@ import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
-import java.util.List;
+import java.io.File;
 
 public class ImageViewModel extends AndroidViewModel {
 
@@ -47,5 +46,9 @@ public class ImageViewModel extends AndroidViewModel {
 
   public RecipeRepository getRepository() {
     return repository;
+  }
+
+  public File getFile(String recipeTitle) {
+    return repository.getFile(recipeTitle);
   }
 }

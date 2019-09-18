@@ -134,7 +134,7 @@ public class RecipeRepository {
 
   }
 
-  public File getBitmapFile(String recipeTitle) {
+  public File getFile(String recipeTitle) {
     return new File(storage, recipeTitle + ".jpg");
   }
 
