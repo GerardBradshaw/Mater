@@ -94,7 +94,7 @@
                 android:paddingEnd="16dp"
                 android:text="@string/stepsHeader" />
 
-            <!-- Steps -->
+            <!-- Steps Layout -->
             <LinearLayout
                 android:id="@+id/recipeDetail_stepsLayout"
                 android:layout_width="match_parent"

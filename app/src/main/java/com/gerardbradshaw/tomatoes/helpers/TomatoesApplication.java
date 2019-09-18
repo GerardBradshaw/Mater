@@ -172,7 +172,7 @@ public class TomatoesApplication extends Application {
 
     // Define the names of ingredients that contain allergens
     String tofu = "tofu";
-    String curryPaste = "Patak's concentrated Tikka Masala curry paste";
+    String curryPaste = "Patak's concentrated Tikka Masala curry paste i am making this much longer to test whether it will clip if it's quite long. It doesn't clip for the steps, so it's pretty weird...";
     String coconutMilk = "coconut milk";
 
     // Add each ingredient to the list

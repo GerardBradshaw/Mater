@@ -17,6 +17,34 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
 
+  public static Volume getVolumeEnum(String unit) {
+    for (Volume volumeValue : Volume.values()) {
+      if (volumeValue.name().equals(unit)) {
+        return volumeValue;
+      }
+    }
+
+    return null;
+  }
+
+  public static Mass getMassEnum(String unit) {
+    for (Mass massValue : Mass.values()) {
+      if (massValue.name().equals(unit)) {
+        return massValue;
+      }
+    }
+    return null;
+  }
+
+  public static MiscUnits getMiscUnitsEnum(String unit) {
+    for(MiscUnits miscUnitsValue : MiscUnits.values()) {
+      if(miscUnitsValue.name().equals(unit)) {
+        return miscUnitsValue;
+      }
+    }
+    return null;
+  }
+
   public static String formatForDetailView(double amount, Volume unit) {
 
     Volume newUnit;
@@ -95,27 +123,15 @@ public class Units {
 
   public static String formatForDetailView(double amount, String unit) {
 
-    // Check if the String is in Volume
-    for(Volume volumeValue : Volume.values()) {
-      if(volumeValue.name().equals(unit)) {
-        return formatForDetailView(amount, volumeValue);
-      }
-    }
+    if (getVolumeEnum(unit) != null) {
+      return formatForDetailView(amount, getVolumeEnum(unit));
 
-    // Check if the String is in Mass
-    for(Mass massValue : Mass.values()) {
-      if(massValue.name().equals(unit)) {
-        return formatForDetailView(amount, massValue);
-      }
-    }
+    } else if (getMassEnum(unit) != null) {
+      return formatForDetailView(amount, getMassEnum(unit));
 
-    // Check if the String is in MiscValues
-    for(MiscUnits miscUnitsValue : MiscUnits.values()) {
-      if(miscUnitsValue.name().equals(unit)) {
-        return formatForDetailView(amount, miscUnitsValue);
-      }
+    } else if (getMiscUnitsEnum(unit) != null) {
+      return formatForDetailView(amount, getMiscUnitsEnum(unit));
     }
-
     return "Units error";
   }
 
