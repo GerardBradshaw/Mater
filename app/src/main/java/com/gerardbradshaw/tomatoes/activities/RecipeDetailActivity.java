@@ -154,23 +154,24 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     // Add a new View to the layout for each ingredient
     for(RecipeIngredientHolder holder : ingredientHolders) {
-      // Format the amount and set the View String
-      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
-      String viewString = quantity + holder.getName();
-
       // Inflate the view to be inserted
       LinearLayout ingredientView = (LinearLayout) inflater
           .inflate(R.layout.view_ingredient_detail, insertPoint, false);
 
       // Get the children of the View
       RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
-      TextView textView = (TextView) ingredientView.getChildAt(1);
+      TextView quantityView = (TextView) ingredientView.getChildAt(1);
+      TextView nameView = (TextView) ingredientView.getChildAt(2);
+
+      // Format the amount and set the View String
+      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
 
       // Update the views
-      textView.setText(viewString);
+      quantityView.setText(quantity);
+      nameView.setText(holder.getName());
 
       // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, textView));
+      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, quantityView, nameView));
 
       // Get the index of the view
       int index = recipeIngredientViewHolders.size() - 1;

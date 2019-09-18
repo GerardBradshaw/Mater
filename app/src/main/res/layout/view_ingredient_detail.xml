@@ -14,23 +14,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <!-- Ingredient details -->
+    <!-- Amount and unit -->
     <TextView
         android:id="@+id/ingredientView_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="500" />
+        tools:text="500g " />
 
-    <TextView
-        android:id="@+id/ingredientView_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text=" ml " />
-
+    <!-- Name -->
     <TextView
         android:id="@+id/ingredientView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="frozen brocolli" />
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        tools:text="broccoli" />
 
 </LinearLayout>
