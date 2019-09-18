@@ -134,7 +134,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void loadIngredientsIntoView(RecipeIngredient[] recipeIngredients) {
-
     // Clear the ViewHolder references
     recipeIngredientViewHolders.clear();
 
@@ -173,13 +172,49 @@ public class RecipeDetailActivity extends AppCompatActivity {
       int index = recipeIngredientViewHolders.size() - 1;
 
       // Insert the view into the main view
-      insertPoint.addView(ingredientView,index, new ViewGroup.LayoutParams(
+      insertPoint.addView(ingredientView, index, new ViewGroup.LayoutParams(
           ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
   }
 
   private void loadStepsIntoView(RecipeStep[] recipeSteps) {
-    // TODO load steps
+    // Clear the ViewHolder references
+    stepViewHolders.clear();
+
+    for (RecipeStep step : recipeSteps) {
+      String description = step.getDescription();
+      int number = step.getNumber();
+
+      // Instantiate a layout inflater
+      LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+          .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+      // Get the insert point
+      ViewGroup insertPoint = findViewById(R.id.recipeDetail_stepsLayout);
+
+      // Inflate the view
+      LinearLayout stepView = (LinearLayout) inflater
+          .inflate(R.layout.view_step_detail, insertPoint, false);
+
+      // Get the children of the view
+      TextView numberView = (TextView) stepView.getChildAt(0);
+      TextView descriptionView = (TextView) stepView.getChildAt(1);
+
+      // Update the views
+      String numberViewString = number + ". ";
+      numberView.setText(numberViewString);
+      descriptionView.setText(description);
+
+      // Create a step view and update it
+      stepViewHolders.add(new StepViewViewHolder(numberView, descriptionView));
+
+      // Get the index of the view
+      int index = stepViewHolders.size() - 1;
+
+      // Insert the view into the main view
+      insertPoint.addView(stepView, index, new ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
   }
 
 

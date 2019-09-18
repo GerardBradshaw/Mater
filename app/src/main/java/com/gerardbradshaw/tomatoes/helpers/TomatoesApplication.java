@@ -155,7 +155,7 @@ public class TomatoesApplication extends Application {
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
     steps.add("Prepare steam pot on hotplate.");
-    steps.add("Dice the carrots and potatoes and add the and steam pot.");
+    steps.add("Dice the carrots and potatoes and add them to the steam pot.");
     steps.add("Dice the tofu.");
     steps.add("Add tofu, bamboo shoots, water, and curry sauce to a large pot. Simmer on low temperature.");
     steps.add("Steam the broccoli in the microwave per packet directions.");
