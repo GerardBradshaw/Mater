@@ -1,14 +1,9 @@
-package com.gerardbradshaw.tomatoes.entities;
+package com.gerardbradshaw.tomatoes.room.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Entity(tableName = "recipe_summary_table")
 public class RecipeSummary {
@@ -28,13 +23,20 @@ public class RecipeSummary {
   @ColumnInfo(name = "description")
   private String description;
 
+  @NonNull
+  @ColumnInfo(name = "image_directory")
+  private String imageDirectory;
+
 
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
   // Default constructor
-  public RecipeSummary(@NonNull String title, @NonNull String description) {
+  public RecipeSummary(@NonNull String title,
+                       @NonNull String description,
+                       @NonNull String imageDirectory) {
     this.title = title;
     this.description = description;
+    this.imageDirectory = imageDirectory;
   }
 
 
@@ -54,6 +56,11 @@ public class RecipeSummary {
     return description;
   }
 
+  @NonNull
+  public String getImageDirectory() {
+    return imageDirectory;
+  }
+
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
@@ -67,6 +74,10 @@ public class RecipeSummary {
 
   public void setDescription(@NonNull String description) {
     this.description = description;
+  }
+
+  public void setImageDirectory(@NonNull String imageDirectory) {
+    this.imageDirectory = imageDirectory;
   }
 
 }

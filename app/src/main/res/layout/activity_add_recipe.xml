@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.AddRecipeActivity">
+
+    <LinearLayout
+        style="@style/ActivityParentView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Page Header -->
+        <TextView
+            android:id="@+id/addRecipe_headerTextView"
+            style="@style/PageHeaderStyle"
+            android:text="@string/addRecipe_pageHeader" />
+
+        <!-- Title Input -->
+        <EditText
+            android:id="@+id/addRecipe_titleInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/addRecipe_titleInput_hint"
+            android:inputType="textCapWords" />
+
+        <!-- Description Input -->
+        <EditText
+            android:id="@+id/addRecipe_descriptionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/addRecipe_descriptionInput_hint"
+            android:inputType="textCapSentences" />
+
+        <!-- Image Name -->
+        <TextView
+            android:id="@+id/addRecipe_imageNameTextView"
+            style="@style/DescriptionStyle"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/addRecipe_imageNameTextView" />
+
+        <!-- Select Image Button -->
+        <Button
+            android:id="@+id/addRecipe_selectImageButton"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/recipeDetail_selectImageButton" />
+
+        <!-- Ingredients Header -->
+        <TextView
+            android:id="@+id/addRecipe_ingredientsHeaderTextView"
+            style="@style/SectionHeaderStyle"
+            android:text="@string/ingredientsHeader" />
+
+        <!-- Add Ingredient Layout -->
+        <LinearLayout
+            android:id="@+id/addRecipe_addIngredientLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <!-- Add Ingredient Button -->
+        <Button
+            android:id="@+id/addRecipe_addIngredientButton"
+            style="@style/ButtonStyle"
+            android:text="@string/addRecipe_addIngredientButton" />
+
+        <!-- Add Steps Header -->
+        <TextView
+            android:id="@+id/addRecipe_addStepsHeaderTextView"
+            style="@style/SectionHeaderStyle"
+            android:text="@string/stepsHeader" />
+
+        <!-- Add Step Layout -->
+        <LinearLayout
+            android:id="@+id/addRecipe_addStepLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
+        <!-- Add Step Button -->
+        <Button
+            android:id="@+id/addRecipe_addStepButton"
+            style="@style/ButtonStyle"
+            android:text="@string/addRecipe_addStepButton" />
+
+        <!-- Save Recipe Button -->
+        <Button
+            android:id="@+id/addRecipe_saveButton"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_marginTop="24dp"
+            android:text="@string/addRecipe_saveButton" />
+
+    </LinearLayout>
+
+
+
+</ScrollView>

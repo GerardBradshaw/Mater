@@ -1,12 +1,19 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.gerardbradshaw.tomatoes.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
+import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.util.Log;
 import android.view.View;
+
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
@@ -21,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -29,11 +37,19 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
+  // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
-  private RecipeViewModel viewModel;
+
+  // Data objects
+  private RecipeSummaryViewModel summaryViewModel;
+  private ImageViewModel imageViewModel;
+
+  // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
 
+  // Logging
+  private static String LOG_TAG = "GGG - Main Activity";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -43,7 +59,7 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main_drawer);
 
     // Set up toolbar
-    Toolbar toolbar = findViewById(R.id.toolbar);
+    Toolbar toolbar = findViewById(R.id.main_toolbar);
     setSupportActionBar(toolbar);
 
     // Set up FAB
@@ -51,51 +67,64 @@ public class MainActivity extends AppCompatActivity
     fab.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        //TODO set FAB behaviour
+        // Create an intent to open the AddRecipeActivity and start it
+        Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
+        startActivity(intent);
       }
     });
 
     // Set up Drawer
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
-    NavigationView navigationView = findViewById(R.id.nav_view);
+    NavigationView navigationView = findViewById(R.id.main_nav_view);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
 
+    // Set up the ViewModel and its observer
+    summaryViewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this);
+    recipeListAdapter = new RecipeListAdapter(this, summaryViewModel.getRepository());
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
       @Override
-      public void onRecipeClicked(RecipeSummary recipeSummary) {
+      public void onRecipeClicked(RecipeSummary recipeSummary, ImageView imageView) {
 
         // Add the ID of the clicked recipe to the intent
         Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
         intent.putExtra(EXTRA_RECIPE_ID, recipeSummary.getRecipeId());
 
+        // Set up transitions
+        Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            MainActivity.this, imagePair);
+
         // Start the activity
-        startActivity(intent);
+        startActivity(intent, options.toBundle());
       }
     });
 
-
     // Set up RecyclerView
-    recyclerView = findViewById(R.id.mainActivity_recyclerView);
+    recyclerView = findViewById(R.id.main_recyclerView);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-    // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeViewModel.class);
-
-    viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
+    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override
       public void onChanged(List<RecipeSummary> recipeSummaries) {
         recipeListAdapter.setRecipeSummaryList(recipeSummaries);
+      }
+    });
+
+    imageViewModel.imageUpdateNotifier().observe(this, new Observer<Integer>() {
+      @Override
+      public void onChanged(Integer integer) {
+        Log.d(LOG_TAG, "I've notice that the data changed!");
+        recipeListAdapter.notifyDataSetChanged();
       }
     });
   }

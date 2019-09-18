@@ -1,81 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecipeDetailActivity">
+    tools:context=".activities.RecipeDetailActivity">
 
-    <LinearLayout
+    <!-- App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <!-- Image -->
-        <ImageView
-            android:id="@+id/recipeDetailActivity_image"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/recipeDetail_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:adjustViewBounds="true"
-            android:background="@color/colorAccent"
-            android:contentDescription="Photo of finished product"
-            android:transitionName="recipeImageTransition"
-            tools:src="@drawable/vegan_lasagne"/>
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/recipeDetailActivity_title"
-            style="@style/TextAppearance.AppCompat.Headline"
-            android:transitionName="recipeTitleTransition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="16dp"
-            tools:text="Vegan Lasagne"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- Summary -->
-        <TextView
-            android:id="@+id/recipeDetailActivity_summary"
-            android:transitionName="recipeSummaryTransition"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            tools:text="Summary of recipe. It's delicious and nutritious!"/>
+            android:orientation="vertical">
 
-        <!-- Ingredients Header -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Ingredients"
-            android:textStyle="bold" />
+            <!-- Image and description -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp">
 
-        <!-- Ingredients -->
-        <TextView
-            android:id="@+id/recipeDetailActivity_ingredients"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="- Ingredient 1\n- Ingredient 2"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
 
-        <!-- Steps Header -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:text="Method"
-            android:textStyle="bold" />
+                    <!-- Image -->
+                    <ImageView
+                        android:id="@+id/recipeDetail_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/recipeDetail_image_contentDescription"
+                        android:scaleType="centerCrop"
+                        android:transitionName="imageTransition"
+                        tools:src="@drawable/img_lasagne"/>
 
-        <!-- Steps -->
-        <TextView
-            android:id="@+id/recipeDetailActivity_steps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="1. Do a thing.\n2. Do another thing." />
+                    <!-- Description -->
+                    <TextView
+                        android:id="@+id/recipeDetail_description"
+                        style="@style/DescriptionStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:transitionName="recipeSummaryTransition"
+                        tools:text="Summary of recipe. It's delicious and nutritious!"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Ingredients Header -->
+            <TextView
+                style="@style/SectionHeaderStyle"
+                android:paddingTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/ingredientsHeader" />
+
+            <!-- Ingredients Layout -->
+            <LinearLayout
+                android:id="@+id/recipeDetail_ingredientsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+            <!-- Steps Header -->
+            <TextView
+                style="@style/SectionHeaderStyle"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/stepsHeader" />
+
+            <!-- Steps Layout -->
+            <LinearLayout
+                android:id="@+id/recipeDetail_stepsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
 
 
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-        <!-- -->
 
-    </LinearLayout>
-
-</ScrollView>
