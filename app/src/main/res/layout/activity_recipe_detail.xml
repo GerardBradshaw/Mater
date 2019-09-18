@@ -27,36 +27,53 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Image -->
-            <ImageView
-                android:id="@+id/recipeDetail_image"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/recipeDetail_image_contentDescription"
-                android:scaleType="centerCrop"
-                android:transitionName="recipeImageTransition"
-                tools:src="@drawable/img_lasagne"/>
-
-            <!-- Summary -->
-            <TextView
-                android:id="@+id/recipeDetail_summary"
-                style="@style/DescriptionStyle"
+            <!-- Image and description -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:transitionName="recipeSummaryTransition"
-                tools:text="Summary of recipe. It's delicious and nutritious!"/>
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent">
+
+                    <!-- Image -->
+                    <ImageView
+                        android:id="@+id/recipeDetail_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/recipeDetail_image_contentDescription"
+                        android:scaleType="centerCrop"
+                        android:transitionName="recipeImageTransition"
+                        tools:src="@drawable/img_lasagne"/>
+
+                    <!-- Description -->
+                    <TextView
+                        android:id="@+id/recipeDetail_description"
+                        style="@style/DescriptionStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="italic"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:transitionName="recipeSummaryTransition"
+                        tools:text="Summary of recipe. It's delicious and nutritious!"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
             <!-- Ingredients Header -->
             <TextView
                 style="@style/SectionHeaderStyle"
+                android:paddingTop="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:text="@string/ingredientsHeader" />

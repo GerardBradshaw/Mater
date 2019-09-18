@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -79,7 +78,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     // Get a handle to the Views and initialize the dynamic View holders
     imageView = findViewById(R.id.recipeDetail_image);
-    descriptionView = findViewById(R.id.recipeDetail_summary);
+    descriptionView = findViewById(R.id.recipeDetail_description);
     stepViewHolders = new ArrayList<>();
     recipeIngredientViewHolders = new ArrayList<>();
 
