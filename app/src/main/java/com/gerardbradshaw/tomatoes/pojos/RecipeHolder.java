@@ -7,9 +7,9 @@ public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private int id;
   private String title;
   private String description;
+  private String imageDirectory;
   private List<String> steps;
   private List<RecipeIngredientHolder> recipeIngredients;
 
@@ -33,6 +33,10 @@ public class RecipeHolder {
     this.description = description;
   }
 
+  public void setImageDirectory(String imageDirectory) {
+    this.imageDirectory = imageDirectory;
+  }
+
   public void setSteps(List<String> steps) {
     this.steps = steps;
   }
@@ -50,6 +54,10 @@ public class RecipeHolder {
 
   public String getDescription() {
     return description;
+  }
+
+  public String getImageDirectory() {
+    return imageDirectory;
   }
 
   public List<String> getSteps() {

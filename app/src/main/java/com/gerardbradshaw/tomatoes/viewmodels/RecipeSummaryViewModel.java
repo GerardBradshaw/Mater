@@ -1,17 +1,20 @@
 package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
+import android.content.Context;
+import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
+import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
 
-public class RecipeListViewModel extends AndroidViewModel {
+public class RecipeSummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -24,29 +27,25 @@ public class RecipeListViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  /**
-   * VM constructor required to initialise functionality.
-   *
-   * @param application: The app.
-   */
-  public RecipeListViewModel(@NonNull Application application) {
+  public RecipeSummaryViewModel(@NonNull Application application) {
     super(application);
 
+    // Downcast the application and set the repository
+    TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
+    repository = tomatoesApplication.getRepository();
+
     // Set variables from repo
-    repository = new RecipeRepository(application);
     recipeSummaryList = repository.getAllRecipeSummaries();
   }
 
 
   // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
 
-  /**
-   * Gets the Titles and Descriptions of all recipes in the database.
-   *
-   * @return LiveData List of RecipeSummary: the list of recipes
-   */
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 
+  public RecipeRepository getRepository() {
+    return repository;
+  }
 }

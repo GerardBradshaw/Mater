@@ -1,6 +1,8 @@
 package com.gerardbradshaw.tomatoes.activities;
 
 import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
@@ -23,6 +26,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   private List<RecipeSummary> recipeSummaryList; // Cached copy
   private RecipeClickedListener recipeClickedListener;
   private Context context;
+  private RecipeRepository repository;
+  private static String LOG_TAG = "GGG - RecipeListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -32,9 +37,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    *
    * @param context the activity context
    */
-  public RecipeListAdapter(Context context) {
+  public RecipeListAdapter(Context context, RecipeRepository repository) {
     this.context = context;
     inflater = LayoutInflater.from(context);
+
+    this.repository = repository;
   }
 
 
@@ -68,13 +75,20 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   public void onBindViewHolder(@NonNull final RecipeViewHolder holder, final int position) {
 
     if (recipeSummaryList != null) {
+
       // Retrieve the data for that position and add the data to the view
       RecipeSummary currentRecipeSummary = recipeSummaryList.get(position);
-      holder.recipeTitleView.setText(currentRecipeSummary.getTitle());
+      String title = currentRecipeSummary.getTitle();
+      holder.recipeTitleView.setText(title);
       holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
+      Uri imageDirectory = Uri.parse(currentRecipeSummary.getImageDirectory());
+
       Glide.with(context)
-          .load(context.getDrawable(R.drawable.img_lasagne))
+          .load(repository.getFile(title))
+          .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
+
+      Log.d(LOG_TAG, "I've just updated the views for " + title);
 
     } else {
       holder.recipeTitleView

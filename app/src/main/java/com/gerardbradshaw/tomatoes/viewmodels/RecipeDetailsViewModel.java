@@ -6,27 +6,19 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
+import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 
-public class RecipeDetailViewModel extends AndroidViewModel {
+public class RecipeDetailsViewModel extends AndroidViewModel {
 
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Repo
   private RecipeRepository repository;
-
-  // LiveData
-  private LiveData<String> title;
-  private LiveData<String> description;
-  private LiveData<RecipeIngredient> ingredients;
-  private LiveData<RecipeStep> steps;
-
-  // Other global variables
-
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -36,52 +28,33 @@ public class RecipeDetailViewModel extends AndroidViewModel {
    *
    * @param application: The app.
    */
-  public RecipeDetailViewModel(@NonNull Application application) {
+  public RecipeDetailsViewModel(@NonNull Application application) {
     super(application);
 
-    // Get a handle to the repository
-    repository = new RecipeRepository(application);
+    // Downcast the application and set the repository
+    TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
+    repository = tomatoesApplication.getRepository();
   }
 
 
-  // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
-  /**
-   * Gets the title of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData String of the title.
-   */
   public LiveData<String> getTitle(int recipeId) {
     return repository.getRecipeTitle(recipeId);
   }
 
-  /**
-   * Gets the description of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveData String of the description.
-   */
   public LiveData<String> getDescription(int recipeId) {
     return repository.getRecipeDescription(recipeId);
   }
 
-  /**
-   * Gets the ingredients of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveList of RecipeIngredient
-   */
+  public LiveData<String> getImageDirectory(int recipeId) {
+    return repository.getRecipeImageDirectory(recipeId);
+  }
+
   public LiveData<RecipeIngredient[]> getIngredients(int recipeId) {
     return repository.getRecipeIngredients(recipeId);
   }
 
-  /**
-   * Gets the steps of the specified recipe.
-   *
-   * @param recipeId, int: The ID of the recipe.
-   * @return LiveList of RecipeStep
-   */
   public LiveData<RecipeStep[]> getSteps(int recipeId) {
     return repository.getRecipeSteps(recipeId);
   }
@@ -90,12 +63,12 @@ public class RecipeDetailViewModel extends AndroidViewModel {
     return repository.getIngredient(ingredientId);
   }
 
+  public RecipeRepository getRepository() {
+    return repository;
+  }
 
-  // - - - - - - - - - - - - - - - Repo wrapper methods - - - - - - - - - - - - - - -
-
-
-
-
-
+  public void insertRecipeHolder(RecipeHolder recipeHolder) {
+    repository.insertRecipeFromHolder(recipeHolder);
+  }
 
 }

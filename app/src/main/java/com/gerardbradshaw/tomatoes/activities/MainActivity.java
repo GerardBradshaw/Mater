@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeListViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.util.Log;
 import android.view.View;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -36,10 +38,14 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
 
   // Data objects
-  private RecipeListViewModel viewModel;
+  private RecipeSummaryViewModel summaryViewModel;
+  private ImageViewModel imageViewModel;
 
   // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
+
+  // Logging
+  private static String LOG_TAG = "GGG - Main Activity";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -72,8 +78,12 @@ public class MainActivity extends AppCompatActivity
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
 
+    // Set up the ViewModel and its observer
+    summaryViewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this);
+    recipeListAdapter = new RecipeListAdapter(this, summaryViewModel.getRepository());
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
@@ -89,20 +99,23 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-
     // Set up RecyclerView
     recyclerView = findViewById(R.id.main_recyclerView);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-    // Set up the ViewModel and its observer
-    viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
-
-    viewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
+    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override
       public void onChanged(List<RecipeSummary> recipeSummaries) {
         recipeListAdapter.setRecipeSummaryList(recipeSummaries);
+      }
+    });
+
+    imageViewModel.imageUpdateNotifier().observe(this, new Observer<Integer>() {
+      @Override
+      public void onChanged(Integer integer) {
+        Log.d(LOG_TAG, "I've notice that the data changed!");
+        recipeListAdapter.notifyDataSetChanged();
       }
     });
   }
