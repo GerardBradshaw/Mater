@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.helpers.Units;
+import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
@@ -38,14 +39,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private ImageView imageView;
   private Toolbar toolbar;
 
-  private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders;
-  private List<StepViewViewHolder> stepViewHolders;
+  private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
+  private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
+  private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
 
   private RecipeDetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
   private RecipeRepository repository;
 
   private int recipeId;
+  private double servings;
   private Context context;
 
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
@@ -59,29 +62,26 @@ public class RecipeDetailActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
 
-    // Get the ID of the recipe that was clicked
+    // Get intent information
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
-
-    // Set the context
     context = this;
 
     // Initialize the VMs
     detailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
-    // Get the title
-    recipeTitle = detailsViewModel.getTitle(recipeId).getValue();
+    // Get the number of servings
+    // TODO add ability to set number of servings
+    servings = 1;
 
     // Set up Toolbar
     toolbar = findViewById(R.id.recipeDetail_toolbar);
     setSupportActionBar(toolbar);
 
-    // Get a handle to the Views and initialize the dynamic View holders
+    // Get a handle to the Views
     imageView = findViewById(R.id.recipeDetail_image);
-    descriptionView = findViewById(R.id.recipeDetail_summary);
-    stepViewHolders = new ArrayList<>();
-    recipeIngredientViewHolders = new ArrayList<>();
+    descriptionView = findViewById(R.id.recipeDetail_description);
 
     // Set the title
     detailsViewModel.getTitle(recipeId).observe(this, new Observer<String>() {
@@ -134,52 +134,94 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void loadIngredientsIntoView(RecipeIngredient[] recipeIngredients) {
-
     // Clear the ViewHolder references
     recipeIngredientViewHolders.clear();
 
-    for(RecipeIngredient ingredient : recipeIngredients) {
+    // Instantiate a LayoutInflater
+    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-      // Get the details of each ingredient
-      int ingredientId = ingredient.getIngredientId();
+    // Get the insert point
+    ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
 
-      String name = detailsViewModel.getIngredient(ingredientId).getName();
-      String quantity = Units.formatForDetailView(ingredient.getAmount(), ingredient.getUnits());
+    // Create a RecipeIngredientHolder for each ingredient
+    for (RecipeIngredient ingredient : recipeIngredients) {
+      String name = detailsViewModel.getIngredient(ingredient.getIngredientId()).getName();
+      double amount = ingredient.getAmount() * servings;
+      String unit = ingredient.getUnits();
+      ingredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
+    }
 
-      String ingredientDescription = quantity + name;
-
-      // Instantiate a LayoutInflater
-      LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-          .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-      // Get the insert point
-      ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
-
-      // Inflate the view
+    // Add a new View to the layout for each ingredient
+    for(RecipeIngredientHolder holder : ingredientHolders) {
+      // Inflate the view to be inserted
       LinearLayout ingredientView = (LinearLayout) inflater
           .inflate(R.layout.view_ingredient_detail, insertPoint, false);
 
       // Get the children of the View
       RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
-      TextView textView = (TextView) ingredientView.getChildAt(1);
+      TextView quantityView = (TextView) ingredientView.getChildAt(1);
+      TextView nameView = (TextView) ingredientView.getChildAt(2);
+
+      // Format the amount and set the View String
+      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
 
       // Update the views
-      textView.setText(ingredientDescription);
+      quantityView.setText(quantity);
+      nameView.setText(holder.getName());
 
       // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, textView));
+      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, quantityView, nameView));
 
       // Get the index of the view
       int index = recipeIngredientViewHolders.size() - 1;
 
       // Insert the view into the main view
-      insertPoint.addView(ingredientView,index, new ViewGroup.LayoutParams(
+      insertPoint.addView(ingredientView, index, new ViewGroup.LayoutParams(
           ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+      ingredientView.invalidate();
     }
   }
 
   private void loadStepsIntoView(RecipeStep[] recipeSteps) {
-    // TODO load steps
+    // Clear the ViewHolder references
+    stepViewHolders.clear();
+
+    // Instantiate a layout inflater
+    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    // Get the insert point
+    ViewGroup insertPoint = findViewById(R.id.recipeDetail_stepsLayout);
+
+    for (RecipeStep step : recipeSteps) {
+      String description = step.getDescription();
+      int number = step.getNumber();
+
+      // Inflate the view to be inserted
+      LinearLayout stepView = (LinearLayout) inflater
+          .inflate(R.layout.view_step_detail, insertPoint, false);
+
+      // Get the children of the view
+      TextView numberView = (TextView) stepView.getChildAt(0);
+      TextView descriptionView = (TextView) stepView.getChildAt(1);
+
+      // Update the views
+      String numberViewString = number + ". ";
+      numberView.setText(numberViewString);
+      descriptionView.setText(description);
+
+      // Create a step view and update it
+      stepViewHolders.add(new StepViewViewHolder(numberView, descriptionView));
+
+      // Get the index of the view
+      int index = stepViewHolders.size() - 1;
+
+      // Insert the view into the main view
+      insertPoint.addView(stepView, index, new ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+    }
   }
 
 

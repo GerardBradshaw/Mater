@@ -1,5 +1,6 @@
 package com.gerardbradshaw.tomatoes.pojos;
 
+import com.gerardbradshaw.tomatoes.helpers.Units;
 import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
 import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
@@ -14,9 +15,6 @@ public class RecipeIngredientHolder {
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
-
-  public RecipeIngredientHolder() {
-  }
 
   public RecipeIngredientHolder(String name, double amount, Volume unit) {
     this.name = name;
@@ -34,6 +32,19 @@ public class RecipeIngredientHolder {
     this.name = name;
     this.amount = amount;
     this.unit = unit.name();
+  }
+
+  public RecipeIngredientHolder(String name, double amount, String unit) {
+    if (Units.getVolumeEnum(unit) != null || Units.getMassEnum(unit) != null
+        || Units.getMiscUnitsEnum(unit) != null) {
+      this.unit = unit;
+
+    } else {
+      this.unit = MiscUnits.NO_UNIT.name();
+    }
+
+    this.name = name;
+    this.amount = amount;
   }
 
 

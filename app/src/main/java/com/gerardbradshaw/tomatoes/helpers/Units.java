@@ -1,5 +1,7 @@
 package com.gerardbradshaw.tomatoes.helpers;
 
+import android.util.Pair;
+
 import java.util.Locale;
 import java.util.Map;
 
@@ -17,22 +19,54 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
 
-  public static String formatForDetailView(double amount, Volume unit) {
+  public static Volume getVolumeEnum(String unit) {
+    for (Volume volumeValue : Volume.values()) {
+      if (volumeValue.name().equals(unit)) {
+        return volumeValue;
+      }
+    }
 
+    return null;
+  }
+
+  public static Mass getMassEnum(String unit) {
+    for (Mass massValue : Mass.values()) {
+      if (massValue.name().equals(unit)) {
+        return massValue;
+      }
+    }
+    return null;
+  }
+
+  public static MiscUnits getMiscUnitsEnum(String unit) {
+    for(MiscUnits miscUnitsValue : MiscUnits.values()) {
+      if(miscUnitsValue.name().equals(unit)) {
+        return miscUnitsValue;
+      }
+    }
+    return null;
+  }
+
+  public static String formatForDetailView(double amount, Volume unit) {
     Volume newUnit;
 
     if(isMetric) {
       switch (unit) {
         case US_CUPS:
           newUnit = Volume.AU_CUPS;
+          break;
         case FLUID_OUNCES:
           newUnit = Volume.MILLILITRES;
+          break;
         case QUARTS:
           newUnit = Volume.AU_CUPS;
+          break;
         case US_TEASPOONS:
           newUnit = Volume.AU_TEASPOONS;
+          break;
         case US_TABLESPOONS:
           newUnit = Volume.AU_TABLESPOONS;
+          break;
         default:
           newUnit = unit;
       }
@@ -40,12 +74,16 @@ public class Units {
       switch (unit) {
         case MILLILITRES:
           newUnit = Volume.FLUID_OUNCES;
+          break;
         case AU_CUPS:
           newUnit = Volume.US_CUPS;
+          break;
         case AU_TEASPOONS:
           newUnit = Volume.US_TEASPOONS;
+          break;
         case AU_TABLESPOONS:
           newUnit = Volume.US_TABLESPOONS;
+          break;
         default:
           newUnit = unit;
       }
@@ -61,17 +99,22 @@ public class Units {
       switch (unit) {
         case OUNCES:
           newUnit = Mass.GRAMS;
+          break;
         case POUNDS:
           newUnit = Mass.GRAMS;
+          break;
         default:
           newUnit = unit;
       }
+
     } else {
       switch (unit) {
         case GRAMS:
           newUnit = Mass.OUNCES;
+          break;
         case KILOGRAMS:
           newUnit = Mass.POUNDS;
+          break;
         default:
           newUnit = unit;
       }
@@ -80,42 +123,28 @@ public class Units {
   }
 
   public static String formatForDetailView(double amount, MiscUnits unit) {
-
-    String amountString = String.format(Locale.getDefault(), "%.0f", amount);
-
+    String amountString = String.format(Locale.getDefault(), "%.1f", amount);
     switch (unit) {
       case DROPS:
         return amountString + " drops ";
       case PINCH:
         return amountString + " pinch ";
       default:
-        return amountString + " ";
+        return amountString + "x ";
     }
   }
 
   public static String formatForDetailView(double amount, String unit) {
 
-    // Check if the String is in Volume
-    for(Volume volumeValue : Volume.values()) {
-      if(volumeValue.name().equals(unit)) {
-        return formatForDetailView(amount, volumeValue);
-      }
-    }
+    if (getVolumeEnum(unit) != null) {
+      return formatForDetailView(amount, getVolumeEnum(unit));
 
-    // Check if the String is in Mass
-    for(Mass massValue : Mass.values()) {
-      if(massValue.name().equals(unit)) {
-        return formatForDetailView(amount, massValue);
-      }
-    }
+    } else if (getMassEnum(unit) != null) {
+      return formatForDetailView(amount, getMassEnum(unit));
 
-    // Check if the String is in MiscValues
-    for(MiscUnits miscUnitsValue : MiscUnits.values()) {
-      if(miscUnitsValue.name().equals(unit)) {
-        return formatForDetailView(amount, miscUnitsValue);
-      }
+    } else if (getMiscUnitsEnum(unit) != null) {
+      return formatForDetailView(amount, getMiscUnitsEnum(unit));
     }
-
     return "Units error";
   }
 
@@ -140,7 +169,7 @@ public class Units {
 
     switch (to) {
       case MILLILITRES:
-        unit = " mL ";
+        unit = "mL ";
         format = "%.0f";
         break;
       case AU_CUPS:
@@ -156,28 +185,28 @@ public class Units {
         format = "%.2f";
         break;
       case US_CUPS:
-        unit = " US cups ";
+        unit = " cups ";
         format = "%.2f";
         break;
       case FLUID_OUNCES:
-        unit = " flOz ";
+        unit = "flOz ";
         format = "%.2f";
         break;
       case QUARTS:
-        unit = " qt ";
+        unit = "qt ";
         format = "%.2f";
         break;
       case US_TEASPOONS:
-        unit = " US tsp ";
+        unit = " tsp (US) ";
         format = "%.2f";
         break;
       case US_TABLESPOONS:
-        unit = " US tbsp ";
+        unit = " tbsp (US) ";
         format = "%.2f";
         break;
       default:
-        unit = " ";
-        format = "%.0f";
+        unit = "x ";
+        format = "%.1f";
     }
 
     String newAmountString = String.format(Locale.getDefault(), format, newAmount);
@@ -203,24 +232,24 @@ public class Units {
 
     switch (to) {
       case GRAMS:
-        unit = " grams ";
+        unit = "g ";
         format = "%.0f";
         break;
       case KILOGRAMS:
-        unit = " kgs ";
+        unit = "kgs ";
         format = "%.2f";
         break;
       case OUNCES:
-        unit = " oz ";
+        unit = "oz ";
         format = "%.1f";
         break;
       case POUNDS:
-        unit = " lbs ";
+        unit = "lbs ";
         format = "%.2f";
         break;
       default:
-        unit = " ";
-        format = "%.0f";
+        unit = "x ";
+        format = "%.1f";
     }
 
     String newAmountString = String.format(Locale.getDefault(), format, newAmount);

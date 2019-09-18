@@ -9,14 +9,16 @@ public class RecipeIngredientViewViewHolder {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private RadioButton radioButton;
-  private TextView textView;
+  private TextView quantityView;
+  private TextView nameView;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeIngredientViewViewHolder(RadioButton radioButton, TextView textView) {
+  public RecipeIngredientViewViewHolder(RadioButton radioButton, TextView quantityView, TextView nameView) {
     this.radioButton = radioButton;
-    this.textView = textView;
+    this.quantityView = quantityView;
+    this.nameView = nameView;
   }
 
 
@@ -26,8 +28,12 @@ public class RecipeIngredientViewViewHolder {
     return radioButton;
   }
 
-  public TextView getTextView() {
-    return textView;
+  public TextView getQuantityView() {
+    return quantityView;
+  }
+
+  public TextView getNameView() {
+    return nameView;
   }
 
 }

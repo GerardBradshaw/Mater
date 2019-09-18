@@ -11,6 +11,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.util.Log;
 import android.view.View;
+
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -88,14 +92,19 @@ public class MainActivity extends AppCompatActivity
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
       @Override
-      public void onRecipeClicked(RecipeSummary recipeSummary) {
+      public void onRecipeClicked(RecipeSummary recipeSummary, ImageView imageView) {
 
         // Add the ID of the clicked recipe to the intent
         Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
         intent.putExtra(EXTRA_RECIPE_ID, recipeSummary.getRecipeId());
 
+        // Set up transitions
+        Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            MainActivity.this, imagePair);
+
         // Start the activity
-        startActivity(intent);
+        startActivity(intent, options.toBundle());
       }
     });
 

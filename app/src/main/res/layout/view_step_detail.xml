@@ -2,19 +2,20 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     style="@style/AppTheme.NoActionBar"
-    android:theme="@style/AppTheme.NoActionBar"
-    android:orientation="horizontal">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="8dp"
+    android:theme="@style/AppTheme.NoActionBar">
 
     <!-- Step Number -->
     <TextView
         android:id="@+id/stepView_number"
-        android:layout_width="wrap_content"
+        android:layout_width="32sp"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        tools:text="1. " />
+        tools:text="10. " />
 
     <!-- Step -->
     <TextView
