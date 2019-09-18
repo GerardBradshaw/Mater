@@ -102,15 +102,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        // Get the current position
-        int currentPosition = holder.getAdapterPosition();
-
         // Get the RecipeHolder at the current position
         RecipeSummary currentRecipe = recipeSummaryList.get(position);
 
         // Call the onRecipeClicked method (called in MainActivity using an override)
         if (recipeClickedListener != null) {
-          recipeClickedListener.onRecipeClicked(currentRecipe);
+          recipeClickedListener.onRecipeClicked(currentRecipe, holder.recipeImageView);
         }
       }
     });
@@ -153,7 +150,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   }
 
 
-
   // - - - - - - - - - - - - - - - ViewHolder Class - - - - - - - - - - - - - - -
 
   class RecipeViewHolder extends RecyclerView.ViewHolder {
@@ -180,7 +176,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   // - - - - - - - - - - - - - - - RecipeClickedListener Interface - - - - - - - - - - - - - - -
 
   public interface RecipeClickedListener {
-    void onRecipeClicked(RecipeSummary recipeSummary);
+    void onRecipeClicked(RecipeSummary recipeSummary, ImageView imageView);
   }
 
 }

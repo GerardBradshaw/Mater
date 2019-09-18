@@ -52,7 +52,7 @@
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/recipeDetail_image_contentDescription"
                         android:scaleType="centerCrop"
-                        android:transitionName="recipeImageTransition"
+                        android:transitionName="imageTransition"
                         tools:src="@drawable/img_lasagne"/>
 
                     <!-- Description -->

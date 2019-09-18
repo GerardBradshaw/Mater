@@ -19,7 +19,7 @@
             android:layout_height="150dp"
             android:contentDescription="@string/recipeListItem_image_contentDescription"
             android:scaleType="centerCrop"
-            android:transitionName="recipeImageTransition"
+            android:transitionName="imageTransition"
             tools:src="@drawable/img_placeholder_detail_view"/>
         
         <!-- Title -->
