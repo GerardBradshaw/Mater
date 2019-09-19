@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
@@ -49,6 +50,8 @@ public class RecipeRepository {
 
   private Context context;
 
+  private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
+
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -70,7 +73,7 @@ public class RecipeRepository {
     TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
     context = tomatoesApplication.getApplicationContext();
 
-    // Cache some LiveData
+    // Cache LiveData
     recipeSummaryList = recipeSummaryDao.getAllRecipes();
 
     // Determine the path to internal storage and create a File object
@@ -146,6 +149,9 @@ public class RecipeRepository {
   // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
 
   public void storeBitmap(String recipeTitle, Bitmap image) {
+    StoreBitmapAsyncTask task = new StoreBitmapAsyncTask(recipeTitle, image);
+    taskScheduler.addNewTask(task);
+
     new StoreBitmapAsyncTask(recipeTitle, image).execute();
   }
 

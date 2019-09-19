@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes.helpers;
+package com.gerardbradshaw.tomatoes.pojos;
 
 import android.os.AsyncTask;
 

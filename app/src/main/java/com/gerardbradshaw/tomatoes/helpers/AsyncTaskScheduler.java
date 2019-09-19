@@ -2,6 +2,10 @@ package com.gerardbradshaw.tomatoes.helpers;
 
 import android.os.AsyncTask;
 
+import androidx.annotation.Nullable;
+
+import com.gerardbradshaw.tomatoes.pojos.AsyncTaskHolder;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +47,7 @@ public class AsyncTaskScheduler {
     executeNextTask();
   }
 
-  public void executeNextTask() {
+  private void executeNextTask() {
     if (taskList.size() > 0) {
       AsyncTaskHolder taskHolder = taskList.get(0);
       AsyncTask task = taskHolder.getTask();
