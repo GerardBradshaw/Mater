@@ -24,6 +24,9 @@ public interface IngredientDao {
   @Query("select * from ingredient_table where name = :ingredientName limit 1")
   Ingredient getIngredient(String ingredientName);
 
+  @Query("select * from ingredient_table where ingredient_id = :ingredientId")
+  Ingredient getIngredientFromId(int ingredientId);
+
   @Query("select ingredient_id from ingredient_table where name = :ingredientName")
   int getIngredientId(String ingredientName);
 

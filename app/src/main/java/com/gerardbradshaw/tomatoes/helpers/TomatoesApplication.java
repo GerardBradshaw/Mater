@@ -1,20 +1,23 @@
-package com.gerardbradshaw.tomatoes;
+package com.gerardbradshaw.tomatoes.helpers;
 
 import android.app.Application;
-import com.gerardbradshaw.tomatoes.holders.RecipeHolder;
-import com.gerardbradshaw.tomatoes.holders.RecipeIngredientHolder;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
+import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
+import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
+import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TomatoesApplication extends Application {
 
-  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
-
-  private SharedPrefHelper sharedPrefHelper;
   private RecipeRepository repository;
-
 
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
@@ -22,11 +25,11 @@ public class TomatoesApplication extends Application {
   public void onCreate() {
     super.onCreate();
 
-    // Initialize shared prefs
-    sharedPrefHelper = new SharedPrefHelper(this);
-
     // Initialize the repository
     repository = new RecipeRepository(this);
+
+    // Initialize shared prefs
+    SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
 
     // Check if the application has been launched before. If not, create some recipes.
     if (sharedPrefHelper.isFirstLaunch()) {
@@ -42,8 +45,21 @@ public class TomatoesApplication extends Application {
       repository.insertRecipeFromHolder(lasagneRecipeHolder);
       repository.insertRecipeFromHolder(curryRecipeHolder);
 
+      // Store the lasagne image
+      int lasagneImageId = this.getResources().getIdentifier(
+          "img_lasagne", "drawable", getPackageName());
+      repository.storeBitmap(lasagneRecipeHolder.getTitle(), lasagneImageId);
+
+      // Store the curry image
+      int curryImageId = this.getResources().getIdentifier(
+          "img_curry", "drawable", getPackageName());
+      repository.storeBitmap(curryRecipeHolder.getTitle(), curryImageId);
+
     }
   }
+
+
+  // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
   /**
    * Creates a lasagne RecipeHolder.
@@ -53,11 +69,11 @@ public class TomatoesApplication extends Application {
   private RecipeHolder createLasagneRecipe() {
 
     // Create a new RecipeHolder object
-    RecipeHolder holder = new RecipeHolder();
+    RecipeHolder recipe = new RecipeHolder();
 
     // Set the title and description of the recipe
-    holder.setTitle("Vegan Lasagne");
-    holder.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
+    recipe.setTitle("Vegan Lasagne");
+    recipe.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -74,7 +90,7 @@ public class TomatoesApplication extends Application {
     steps.add("Enjoy!");
 
     // Add the steps to the recipe
-    holder.setSteps(steps);
+    recipe.setSteps(steps);
 
     // Create a RecipeIngredientHolder object
     List<RecipeIngredientHolder> ingredients = new ArrayList<>();
@@ -86,43 +102,40 @@ public class TomatoesApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "sweet potato", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "capsicum", 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "capsicum", 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "zucchini", 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "zucchini", 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "frozen spinach", 100d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "frozen spinach", 100d, RecipeIngredientHolder.Unit.GRAMS));
+        "diced tomatoes", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "diced tomatoes", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        beyondBurgers, 4d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        beyondBurgers, 4d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "merlot", 500d, Volume.MILLILITRES));
 
     ingredients.add(new RecipeIngredientHolder(
-        "merlot", 500d, RecipeIngredientHolder.Unit.MILLILITRES));
+        lasagneSheets, 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        lasagneSheets, 1d, RecipeIngredientHolder.Unit.NO_UNIT));
+        "vegan cheese slices", 18d, MiscUnits.NO_UNIT));
 
     ingredients.add(new RecipeIngredientHolder(
-        "vegan cheese slices", 18d, RecipeIngredientHolder.Unit.NO_UNIT));
-
-    ingredients.add(new RecipeIngredientHolder(
-        vegenaise, 100d, RecipeIngredientHolder.Unit.GRAMS));
+        vegenaise, 100d, Mass.GRAMS));
 
     // Add the RecipeIngredients to the Recipe
-    holder.setRecipeIngredients(ingredients);
+    recipe.setRecipeIngredients(ingredients);
 
-    // Return the holder
-    return holder;
+    // Return the recipe
+    return recipe;
 
   }
 
@@ -142,7 +155,7 @@ public class TomatoesApplication extends Application {
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
     steps.add("Prepare steam pot on hotplate.");
-    steps.add("Dice the carrots and potatoes and add the and steam pot.");
+    steps.add("Dice the carrots and potatoes and add them to the steam pot.");
     steps.add("Dice the tofu.");
     steps.add("Add tofu, bamboo shoots, water, and curry sauce to a large pot. Simmer on low temperature.");
     steps.add("Steam the broccoli in the microwave per packet directions.");
@@ -164,28 +177,28 @@ public class TomatoesApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new RecipeIngredientHolder(
-        "rice (dry)", 5d, RecipeIngredientHolder.Unit.METRIC_CUPS));
+        "rice (dry)", 5d, Volume.AU_CUPS));
 
     ingredients.add(new RecipeIngredientHolder(
-        tofu, 454d, RecipeIngredientHolder.Unit.GRAMS));
+        tofu, 454d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "frozen broccoli", 454d, RecipeIngredientHolder.Unit.GRAMS));
+        "frozen broccoli", 454d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "carrots", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "carrots", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "potatoes", 800d, RecipeIngredientHolder.Unit.GRAMS));
+        "potatoes", 800d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        "bamboo shoots", 225d, RecipeIngredientHolder.Unit.GRAMS));
+        "bamboo shoots", 225d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        curryPaste, 566d, RecipeIngredientHolder.Unit.GRAMS));
+        curryPaste, 566d, Mass.GRAMS));
 
     ingredients.add(new RecipeIngredientHolder(
-        coconutMilk, 600d, RecipeIngredientHolder.Unit.MILLILITRES));
+        coconutMilk, 600d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
     holder.setRecipeIngredients(ingredients);
@@ -194,6 +207,10 @@ public class TomatoesApplication extends Application {
 
     return holder;
 
+  }
+
+  public RecipeRepository getRepository() {
+    return repository;
   }
 
 }

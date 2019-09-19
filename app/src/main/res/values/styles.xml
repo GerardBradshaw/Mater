@@ -26,7 +26,12 @@
     <!-- Recipe Title style -->
     <style name="RecipeTitleStyle" parent="TextAppearance.AppCompat.Headline">
         <item name="android:textStyle">bold</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/textColorPrimary</item>
     </style>
 
@@ -45,11 +50,17 @@
         <item name="android:paddingTop">24dp</item>
         <item name="android:paddingBottom">16dp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
-    <!-- Summary style -->
-    <style name="SummaryStyle" >
-        <item name="android:padding">16dp</item>
+    <!-- Description style -->
+    <style name="DescriptionStyle" >
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <!-- Button style -->

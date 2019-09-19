@@ -1,31 +1,51 @@
 <resources>
     <string name="app_name">Tomatoes</string>
 
-    <!-- Navigation drawer -->
+    <!-- Main Activity -->
+    <!-- Nav drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Tomatoes</string>
-    <string name="nav_header_subtitle"></string>
+    <string name="nav_header_subtitle">TODO</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-
+    <!-- Nav menu -->
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <!-- AppBar Menu -->
+    <string name="action_settings">Settings</string>
+    <!-- Content Descriptions -->
     <string name="recipeListItem_image_contentDescription">Recipe Image</string>
-    <string name="addRecipeActivity_pageHeader">Add a new recipe</string>
-    <string name="addRecipeActivity_titleInput_hint">Recipe title...</string>
-    <string name="addRecipeActivity_descriptionInput_hint">Quick description of the dish...</string>
-    <string name="addRecipeActivity_ingredientNameInput_hint">Ingredient name...</string>
-    <string name="addRecipeActivity_ingredientAmountInput_hint">Amount</string>
-    <string name="addRecipeActivity_addStepLayout_stepInput_hint">Describe the step...</string>
-    <string name="addRecipeActivity_addStepLayout_saveButton">Add</string>
-    <string name="addRecipeActivity_addStepsHeaderTextView">Steps</string>
-    <string name="addRecipeActivity_ingredientsHeaderTextView">Ingredients</string>
-    <string name="addRecipeActivity_saveButton">Save Recipe</string>
-    <string name="addRecipeActivity_addIngredientButton">Add</string>
+
+    <!-- Add recipe activity -->
+    <!-- Headers -->
+    <string name="addRecipe_pageHeader">Add a new recipe</string>
+    <!-- Buttons -->
+    <string name="addRecipe_saveButton">Save Recipe</string>
+    <string name="addRecipe_addIngredientButton">Add</string>
+    <string name="addRecipe_addStepButton">Add</string>
+    <!-- EditText hints -->
+    <string name="addRecipe_titleInput_hint">Title…</string>
+    <string name="addRecipe_descriptionInput_hint">Short description…</string>
+    <string name="addRecipe_addIngredient_nameInput_hint">Ingredient name…</string>
+    <string name="addRecipe_addIngredient_amountInput_hint">Amount</string>
+    <string name="addRecipe_addStep_stepInput_hint">Describe the step…</string>
+
+    <!-- General Strings -->
+    <string name="stepsHeader">Steps</string>
+    <string name="ingredientsHeader">Ingredients</string>
+
+    <!-- Recipe Detail Activity -->
+    <!-- Content Descriptions -->
+    <string name="recipeDetail_image_contentDescription">Photo of dish</string>
+    <!-- Messages -->
+    <string name="no_recipes_message">No recipes</string>
+    <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
+    <!-- Buttons -->
+    <string name="recipeDetail_selectImageButton">Select Image</string>
+    <string name="addRecipe_imageNameTextView">No image selected</string>
 
 </resources>

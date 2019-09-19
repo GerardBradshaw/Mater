@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- App colors -->
     <color name="colorPrimary">#f44336</color>
     <color name="colorPrimaryDark">#ba000d</color>
     <color name="colorAccent">#ff7961</color>
@@ -9,5 +10,7 @@
     <color name="textColorSecondary">@android:color/white</color>
     <color name="hintTextColorPrimary">@android:color/darker_gray</color>
 
+    <!-- Other colors -->
+    <color name="opaqueWhite">#BFffffff</color>
 
 </resources>

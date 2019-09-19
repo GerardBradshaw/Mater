@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes.holders;
+package com.gerardbradshaw.tomatoes.pojos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,9 @@ public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private int id;
   private String title;
   private String description;
+  private String imageDirectory;
   private List<String> steps;
   private List<RecipeIngredientHolder> recipeIngredients;
 
@@ -24,38 +24,23 @@ public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
-  /**
-   * Setter method for title.
-   *
-   * @param title, String: The title.
-   */
+
   public void setTitle(String title) {
     this.title = title;
   }
 
-  /**
-   * Setter method for description.
-   *
-   * @param description, String: The description
-   */
   public void setDescription(String description) {
     this.description = description;
   }
 
-  /**
-   * Setter method for steps.
-   *
-   * @param steps List<String>: The steps.
-   */
+  public void setImageDirectory(String imageDirectory) {
+    this.imageDirectory = imageDirectory;
+  }
+
   public void setSteps(List<String> steps) {
     this.steps = steps;
   }
 
-  /**
-   * Setter method for recipeIngredients.
-   *
-   * @param recipeIngredientHolders: The recipeIngredients.
-   */
   public void setRecipeIngredients(List<RecipeIngredientHolder> recipeIngredientHolders) {
     this.recipeIngredients = recipeIngredientHolders;
   }
@@ -63,38 +48,22 @@ public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
-  /**
-   * Getter for title.
-   *
-   * @return String: The title.
-   */
   public String getTitle() {
     return title;
   }
 
-  /**
-   * Getter for description.
-   *
-   * @return String: the description.
-   */
   public String getDescription() {
     return description;
   }
 
-  /**
-   * Getter method for all the steps
-   *
-   * @return List<String>: The steps.
-   */
+  public String getImageDirectory() {
+    return imageDirectory;
+  }
+
   public List<String> getSteps() {
     return steps;
   }
 
-  /**
-   * Getter for recipeIngredients.
-   *
-   * @return List<IngredientHolder>: the recipeIngredients.
-   */
   public List<RecipeIngredientHolder> getRecipeIngredients() {
     return recipeIngredients;
   }
@@ -102,12 +71,6 @@ public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Other step methods - - - - - - - - - - - - - - -
 
-  /**
-   * Gets the specified step.
-   *
-   * @param stepNumber, int: The step number to return.
-   * @return String: The step.
-   */
   public String getStep(int stepNumber) {
 
     // Set the index of the step
@@ -122,21 +85,10 @@ public class RecipeHolder {
     }
   }
 
-  /**
-   * Adds a new step at the end of the list.
-   *
-   * @param step, String: The next step to be added.
-   */
   public void addNewStep(String step) {
     steps.add(step);
   }
 
-  /**
-   * Deletes a step.
-   *
-   * @param stepNumber, int: The step to be deleted.
-   * @return boolean: TRUE if the step number exists and was deleted, FALSE otherwise.
-   */
   public boolean deleteStep(int stepNumber) {
 
     // Set the index in the steps array which will be deleted.
@@ -153,13 +105,6 @@ public class RecipeHolder {
     }
   }
 
-  /**
-   * Replaces the specified step.
-   *
-   * @param stepNumber, int: The step number to be replaced.
-   * @param newStep, String: The new step.
-   * @return boolean: TRUE if the step number exists and was replaced, FALSE otherwise.
-   */
   public boolean replaceStep(int stepNumber, String newStep) {
 
     // Set the index in the steps array which will be replaced.
@@ -179,11 +124,6 @@ public class RecipeHolder {
 
   // - - - - - - - - - - - - - - - Other ingredient methods - - - - - - - - - - - - - - -
 
-  /**
-   * Adds an ingredient to the recipe.
-   *
-   * @param recipeIngredientHolder: The ingredient to be added.
-   */
   public void addIngredient(RecipeIngredientHolder recipeIngredientHolder) {
     recipeIngredients.add(recipeIngredientHolder);
   }

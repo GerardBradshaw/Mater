@@ -3,7 +3,7 @@ package com.gerardbradshaw.tomatoes.viewholders;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class AddStepViewHolder {
+public class StepInputViewHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -13,7 +13,7 @@ public class AddStepViewHolder {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public AddStepViewHolder(TextView number, EditText step) {
+  public StepInputViewHolder(TextView number, EditText step) {
     this.number = number;
     this.step = step;
   }

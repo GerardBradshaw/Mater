@@ -1,7 +1,6 @@
 package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
-import android.content.Context;
 import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
@@ -10,24 +9,20 @@ import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
-import java.util.List;
+import java.io.File;
 
-public class RecipeSummaryViewModel extends AndroidViewModel {
+public class ImageViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Repo
   private RecipeRepository repository;
-
-  // LiveData
-  private LiveData<List<RecipeSummary>> recipeSummaryList;
+  private LiveData<Integer> imageUpdateNotifier;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeSummaryViewModel(@NonNull Application application) {
+  public ImageViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository
@@ -35,17 +30,25 @@ public class RecipeSummaryViewModel extends AndroidViewModel {
     repository = tomatoesApplication.getRepository();
 
     // Set variables from repo
-    recipeSummaryList = repository.getAllRecipeSummaries();
+    imageUpdateNotifier = repository.bitmapUpdateNotifier();
   }
 
 
-  // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
-  public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
-    return recipeSummaryList;
+  public LiveData<Integer> imageUpdateNotifier() {
+    return imageUpdateNotifier;
+  }
+
+  public void saveImage(String recipeTitle, Bitmap image) {
+    repository.storeBitmap(recipeTitle, image);
   }
 
   public RecipeRepository getRepository() {
     return repository;
+  }
+
+  public File getFile(String recipeTitle) {
+    return repository.getFile(recipeTitle);
   }
 }
