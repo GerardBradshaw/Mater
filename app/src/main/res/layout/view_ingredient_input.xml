@@ -11,26 +11,28 @@
 
     <!-- Ingredient Name Input -->
     <EditText
-        android:id="@+id/addIngredientLayout_nameInput"
+        android:id="@+id/ingredientInput_nameInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.6"
         android:hint="@string/addRecipe_addIngredient_nameInput_hint"
+        android:maxLength="50"
         android:inputType="text" />
 
     <!-- Ingredient Amount Input -->
     <EditText
-        android:id="@+id/addIngredientLayout_amountInput"
+        android:id="@+id/ingredientInput_amountInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.2"
         android:hint="@string/addRecipe_addIngredient_amountInput_hint"
+        android:maxLength="4"
         android:inputType="numberDecimal"
         android:textColor="@color/textColorPrimary" />
 
     <!-- Ingredient Units Spinner -->
     <Spinner
-        android:id="@+id/addIngredientLayout_unitSpinner"
+        android:id="@+id/ingredientInput_unitSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0.2" />
