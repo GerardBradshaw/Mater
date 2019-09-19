@@ -6,14 +6,15 @@ public class AsyncTaskHolder {
 
   private AsyncTask task;
   private Object[] params;
-  private Object[] progress;
-  private Object[] result;
 
-  public AsyncTaskHolder(AsyncTask task, Object[] params, Object [] progress, Object[] result) {
+  public AsyncTaskHolder(AsyncTask task, Object[] params) {
     this.task = task;
     this.params = params;
-    this.progress = progress;
-    this.result = result;
+  }
+
+  public AsyncTaskHolder(AsyncTask task) {
+    this.task = task;
+    this.params = null;
   }
 
   public AsyncTask getTask() {
@@ -24,11 +25,4 @@ public class AsyncTaskHolder {
     return params;
   }
 
-  public Object[] getProgress() {
-    return progress;
-  }
-
-  public Object[] getResult() {
-    return result;
-  }
 }

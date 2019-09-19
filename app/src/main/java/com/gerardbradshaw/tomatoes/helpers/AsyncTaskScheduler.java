@@ -14,19 +14,25 @@ public class AsyncTaskScheduler {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private List<AsyncTaskHolder> taskList = new ArrayList<>();
+  private boolean taskRunning;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public AsyncTaskScheduler() {
-
   }
 
 
   // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
 
-  public void addNewTask(AsyncTask task, Object[] params, Object [] progress, Object[] result) {
-    AsyncTaskHolder taskHolder = new AsyncTaskHolder(task, params, progress, result);
+  public void addNewTask(AsyncTask task, Object[] params) {
+    AsyncTaskHolder taskHolder = new AsyncTaskHolder(task, params);
+    taskList.add(taskHolder);
+    executeNextTask();
+  }
+
+  public void addNewTask(AsyncTask task) {
+    AsyncTaskHolder taskHolder = new AsyncTaskHolder(task);
     taskList.add(taskHolder);
     executeNextTask();
   }
@@ -36,8 +42,8 @@ public class AsyncTaskScheduler {
     executeNextTask();
   }
 
-  public void addNewPriorityTask(AsyncTask task, Object[] params, Object [] progress, Object[] result) {
-    AsyncTaskHolder taskHolder = new AsyncTaskHolder(task, params, progress, result);
+  public void addNewPriorityTask(AsyncTask task, Object[] params) {
+    AsyncTaskHolder taskHolder = new AsyncTaskHolder(task, params);
     taskList.add(0, taskHolder);
     executeNextTask();
   }
@@ -48,15 +54,24 @@ public class AsyncTaskScheduler {
   }
 
   private void executeNextTask() {
-    if (taskList.size() > 0) {
+    if (!taskRunning && taskList.size() > 0) {
+      taskRunning = true;
       AsyncTaskHolder taskHolder = taskList.get(0);
       AsyncTask task = taskHolder.getTask();
       Object[] params = taskHolder.getParams();
-      Object[] progress = taskHolder.getProgress();
-      Object[] result = taskHolder.getProgress();
       taskList.remove(0);
-      task.execute(params, progress, result);
+
+      if (params == null) {
+        task.execute();
+      } else {
+        task.execute(params);
+      }
     }
+  }
+
+  public void setTaskFinished() {
+    taskRunning = false;
+    executeNextTask();
   }
 
 }
