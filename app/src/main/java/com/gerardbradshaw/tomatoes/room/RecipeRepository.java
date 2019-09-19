@@ -10,7 +10,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
@@ -49,6 +49,8 @@ public class RecipeRepository {
 
   private Context context;
 
+  private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
+
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -70,7 +72,7 @@ public class RecipeRepository {
     TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
     context = tomatoesApplication.getApplicationContext();
 
-    // Cache some LiveData
+    // Cache LiveData
     recipeSummaryList = recipeSummaryDao.getAllRecipes();
 
     // Determine the path to internal storage and create a File object
@@ -145,12 +147,26 @@ public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
 
-  public void storeBitmap(String recipeTitle, Bitmap image) {
-    new StoreBitmapAsyncTask(recipeTitle, image).execute();
+  public void storeBitmap(final String recipeTitle, final Bitmap image) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new StoreBitmapAsyncTask(recipeTitle, image).execute();
+      }
+    };
+
+    taskScheduler.addNewTask(runnable);
   }
 
-  public void storeBitmap(String recipeTitle, int resourceId) {
-    new StoreBitmapAsyncTask(recipeTitle, resourceId).execute();
+  public void storeBitmap(final String recipeTitle, final int resourceId) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new StoreBitmapAsyncTask(recipeTitle, resourceId).execute();
+      }
+    };
+
+    taskScheduler.addNewTask(runnable);
   }
 
   private class StoreBitmapAsyncTask extends AsyncTask<Void, Void, Boolean> {
@@ -161,7 +177,7 @@ public class RecipeRepository {
     private int resourceId;
     private Bitmap image;
 
-    // Constructor
+    // Constructors
     StoreBitmapAsyncTask(String recipeTitle, Bitmap image) {
       fileName = recipeTitle + ".jpg";
       this.image = image;
@@ -175,7 +191,6 @@ public class RecipeRepository {
 
     @Override
     protected Boolean doInBackground(Void... voids) {
-
       if (resourceId != 0) {
         image = BitmapFactory.decodeResource(context.getResources(), resourceId);
       }
@@ -194,14 +209,14 @@ public class RecipeRepository {
         Log.e(LOG_TAG, "Error while saving " + fileName + ": " + e.getMessage());
         success = false;
       }
-
       return success;
-
     }
 
     @Override
     protected void onPostExecute(Boolean success) {
       super.onPostExecute(success);
+
+      taskScheduler.setTaskFinished();
 
       // If there are any listeners, this will update them
       liveImageChanger.setValue(updateCount.getAndIncrement());
@@ -217,19 +232,23 @@ public class RecipeRepository {
    *
    * @param recipeHolder: the recipe to be inserted.
    */
-  public void insertRecipeFromHolder(RecipeHolder recipeHolder) {
-    new insertRecipeFromHolderAsyncTask(
-        recipeSummaryDao,
-        recipeIngredientDao,
-        recipeStepDao,
-        ingredientDao)
-        .execute(recipeHolder);
+  public void insertRecipeFromHolder(final RecipeHolder recipeHolder) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new InsertRecipeFromHolderAsyncTask(
+            recipeSummaryDao, recipeIngredientDao, recipeStepDao, ingredientDao)
+            .execute(recipeHolder);
+      }
+    };
+
+    taskScheduler.addNewTask(runnable);
   }
 
   /**
    * AsyncTask class for insertRecipeFromHolder.
    */
-  private static class insertRecipeFromHolderAsyncTask
+  private class InsertRecipeFromHolderAsyncTask
       extends AsyncTask<RecipeHolder, Void, Void> {
 
     // Member variables
@@ -239,10 +258,9 @@ public class RecipeRepository {
     private IngredientDao ingredientDao;
 
     // Constructor
-    insertRecipeFromHolderAsyncTask(RecipeSummaryDao recipeSummaryDao,
-                                    RecipeIngredientDao recipeIngredientDao,
-                                    RecipeStepDao recipeStepDao,
-                                    IngredientDao ingredientDao) {
+    InsertRecipeFromHolderAsyncTask(
+        RecipeSummaryDao recipeSummaryDao, RecipeIngredientDao recipeIngredientDao,
+        RecipeStepDao recipeStepDao, IngredientDao ingredientDao) {
 
       this.recipeSummaryDao = recipeSummaryDao;
       this.recipeIngredientDao = recipeIngredientDao;
@@ -252,7 +270,6 @@ public class RecipeRepository {
 
     @Override
     protected Void doInBackground(RecipeHolder... recipeHolders) {
-
       // Get the RecipeHolder object
       RecipeHolder recipe = recipeHolders[0];
 
@@ -269,6 +286,13 @@ public class RecipeRepository {
       addIngredientsToDb(recipeId, recipe.getRecipeIngredients());
 
       return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+
+      taskScheduler.setTaskFinished();
     }
 
     private void addSummaryToDb(String title, String description, String imageDirectory) {

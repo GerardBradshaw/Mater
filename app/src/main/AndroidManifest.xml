@@ -25,7 +25,8 @@
 
         <!-- Add Recipe Activity -->
         <activity
-            android:name=".activities.AddRecipeActivity">
+            android:name=".activities.AddRecipeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <!-- Recipe Detail Activity -->
