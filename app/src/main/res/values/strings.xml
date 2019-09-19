@@ -22,7 +22,7 @@
 
     <!-- Add recipe activity -->
     <!-- Headers -->
-    <string name="addRecipe_pageHeader">Add a new recipe</string>
+    <string name="addRecipe_pageHeader">Add new recipe</string>
     <!-- Buttons -->
     <string name="addRecipe_saveButton">Save Recipe</string>
     <string name="addRecipe_addIngredientButton">Add</string>

@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
@@ -46,9 +47,10 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText titleInput;
   private EditText descriptionInput;
   private TextView imageName;
+  private Toolbar toolbar;
 
-  private List<IngredientInputViewHolder> ingredientViewHolders;
-  private List<StepInputViewHolder> stepViewHolders;
+  private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
+  private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
 
   private RecipeDetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
@@ -79,10 +81,11 @@ public class AddRecipeActivity extends AppCompatActivity {
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     imageName = findViewById(R.id.addRecipe_imageNameTextView);
+    toolbar = findViewById(R.id.addRecipe_toolbar);
 
-    // Initialize the ViewHolders
-    ingredientViewHolders = new ArrayList<>();
-    stepViewHolders = new ArrayList<>();
+    // Set up the Toolbar
+    toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+    setSupportActionBar(toolbar);
 
     // Set listener for selectImageButton
     selectImageButton.setOnClickListener(new View.OnClickListener() {
