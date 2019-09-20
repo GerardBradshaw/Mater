@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "recipe_summary_table")
-public class RecipeSummary {
+public class Summary {
 
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -31,9 +31,9 @@ public class RecipeSummary {
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
   // Default constructor
-  public RecipeSummary(@NonNull String title,
-                       @NonNull String description,
-                       @NonNull String imageDirectory) {
+  public Summary(@NonNull String title,
+                 @NonNull String description,
+                 @NonNull String imageDirectory) {
     this.title = title;
     this.description = description;
     this.imageDirectory = imageDirectory;

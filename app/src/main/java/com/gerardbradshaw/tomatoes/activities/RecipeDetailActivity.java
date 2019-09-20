@@ -21,7 +21,7 @@ import com.gerardbradshaw.tomatoes.helpers.Units;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
@@ -117,10 +117,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the steps
-    detailsViewModel.getSteps(recipeId).observe(this, new Observer<RecipeStep[]>() {
+    detailsViewModel.getSteps(recipeId).observe(this, new Observer<Step[]>() {
       @Override
-      public void onChanged(RecipeStep[] recipeSteps) {
-        loadStepsIntoView(recipeSteps);
+      public void onChanged(Step[] steps) {
+        loadStepsIntoView(steps);
       }
     });
   }
@@ -183,7 +183,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
   }
 
-  private void loadStepsIntoView(RecipeStep[] recipeSteps) {
+  private void loadStepsIntoView(Step[] steps) {
     // Clear the ViewHolder references
     stepViewHolders.clear();
 
@@ -194,7 +194,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Get the insert point
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_stepsLayout);
 
-    for (RecipeStep step : recipeSteps) {
+    for (Step step : steps) {
       String description = step.getDescription();
       int number = step.getNumber();
 

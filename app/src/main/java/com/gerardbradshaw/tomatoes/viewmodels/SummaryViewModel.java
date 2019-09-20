@@ -1,8 +1,6 @@
 package com.gerardbradshaw.tomatoes.viewmodels;
 
 import android.app.Application;
-import android.content.Context;
-import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.entities.Summary;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class SummaryViewModel extends AndroidViewModel {
   private RecipeRepository repository;
 
   // LiveData
-  private LiveData<List<RecipeSummary>> recipeSummaryList;
+  private LiveData<List<Summary>> recipeSummaryList;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -41,7 +39,7 @@ public class SummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
-  public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
+  public LiveData<List<Summary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 

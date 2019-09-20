@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.room.entities.Summary;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
 import com.gerardbradshaw.tomatoes.viewmodels.SummaryViewModel;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.util.Log;
@@ -94,11 +94,11 @@ public class MainActivity extends AppCompatActivity
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
       @Override
-      public void onRecipeClicked(RecipeSummary recipeSummary, ImageView imageView) {
+      public void onRecipeClicked(Summary summary, ImageView imageView) {
 
         // Add the ID of the clicked recipe to the intent
         Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
-        intent.putExtra(EXTRA_RECIPE_ID, recipeSummary.getRecipeId());
+        intent.putExtra(EXTRA_RECIPE_ID, summary.getRecipeId());
 
         // Set up transitions
         Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
@@ -142,10 +142,13 @@ public class MainActivity extends AppCompatActivity
       }
     });
 
-    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
+    // Attach the touch helper to the recyclerView
+    touchHelper.attachToRecyclerView(recyclerView);
+
+    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<Summary>>() {
       @Override
-      public void onChanged(List<RecipeSummary> recipeSummaries) {
-        recipeListAdapter.setRecipeSummaryList(recipeSummaries);
+      public void onChanged(List<Summary> recipeSummaries) {
+        recipeListAdapter.setSummaryList(recipeSummaries);
       }
     });
 

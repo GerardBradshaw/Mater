@@ -14,12 +14,12 @@ import com.gerardbradshaw.tomatoes.room.daos.SummaryDao;
 import com.gerardbradshaw.tomatoes.room.daos.RecipeIngredientDao;
 import com.gerardbradshaw.tomatoes.room.daos.StepDao;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.entities.Summary;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 
 @Database(
-    entities = {RecipeSummary.class, Ingredient.class, RecipeIngredient.class, RecipeStep.class},
+    entities = {Summary.class, Ingredient.class, RecipeIngredient.class, Step.class},
     version = 1,
     exportSchema = false)
 public abstract class TomatoesRoomDatabase extends RoomDatabase {

@@ -8,22 +8,22 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 
 @Dao
 public interface StepDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertStep(RecipeStep recipeStep);
+  void insertStep(Step step);
 
   @Update
-  void updateStep(RecipeStep recipeStep);
+  void updateStep(Step step);
 
   @Delete
-  void deleteStep(RecipeStep recipeStep);
+  void deleteStep(Step step);
 
   @Query("select * from recipe_step_table where recipe_id = :recipeId")
-  LiveData<RecipeStep[]> getAllSteps(int recipeId);
+  LiveData<Step[]> getAllSteps(int recipeId);
 
   @Query("delete from recipe_step_table where recipe_id = :recipeId")
   void deleteSteps(int recipeId);

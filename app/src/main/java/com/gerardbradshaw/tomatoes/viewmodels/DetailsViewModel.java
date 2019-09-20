@@ -11,7 +11,7 @@ import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 
 public class DetailsViewModel extends AndroidViewModel {
 
@@ -55,7 +55,7 @@ public class DetailsViewModel extends AndroidViewModel {
     return repository.getRecipeIngredients(recipeId);
   }
 
-  public LiveData<RecipeStep[]> getSteps(int recipeId) {
+  public LiveData<Step[]> getSteps(int recipeId) {
     return repository.getRecipeSteps(recipeId);
   }
 

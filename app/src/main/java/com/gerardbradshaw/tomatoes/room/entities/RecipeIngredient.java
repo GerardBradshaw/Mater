@@ -11,7 +11,7 @@ import com.gerardbradshaw.tomatoes.helpers.Units;
 @Entity(tableName = "recipe_ingredient_table",
 
     foreignKeys = {
-    @ForeignKey(entity = RecipeSummary.class,
+    @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
         childColumns = "recipe_id"),
 

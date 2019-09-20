@@ -39,6 +39,7 @@ public interface IngredientDao {
   @Query("delete from ingredient_table where ingredient_id = :ingredientId")
   void deleteIngredient(int ingredientId);
 
+
   // - - - - - - - - - - - - - - - Allergen queries - - - - - - - - - - - - - - -
 
   @Query("select containsMilk from ingredient_table where name = :ingredientName")
