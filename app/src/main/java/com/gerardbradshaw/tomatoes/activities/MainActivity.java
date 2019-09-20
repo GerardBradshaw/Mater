@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.activities.adapters.RecipeListAdapter;
 import com.gerardbradshaw.tomatoes.room.entities.Summary;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
 import com.gerardbradshaw.tomatoes.viewmodels.SummaryViewModel;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this, summaryViewModel.getRepository());
+    recipeListAdapter = new RecipeListAdapter(this, imageViewModel);
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {

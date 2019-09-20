@@ -8,7 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ public class ImageViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private RecipeRepository repository;
+  private TomatoesRepository repository;
   private LiveData<Integer> imageUpdateNotifier;
 
 
@@ -44,7 +44,7 @@ public class ImageViewModel extends AndroidViewModel {
     repository.storeBitmap(recipeTitle, image);
   }
 
-  public RecipeRepository getRepository() {
+  public TomatoesRepository getRepository() {
     return repository;
   }
 

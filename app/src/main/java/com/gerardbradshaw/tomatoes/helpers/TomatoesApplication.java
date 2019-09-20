@@ -1,13 +1,10 @@
 package com.gerardbradshaw.tomatoes.helpers;
 
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
 import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
@@ -17,7 +14,7 @@ import java.util.List;
 
 public class TomatoesApplication extends Application {
 
-  private RecipeRepository repository;
+  private TomatoesRepository repository;
 
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
@@ -26,7 +23,7 @@ public class TomatoesApplication extends Application {
     super.onCreate();
 
     // Initialize the repository
-    repository = new RecipeRepository(this);
+    repository = new TomatoesRepository(this);
 
     // Initialize shared prefs
     SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
@@ -209,7 +206,7 @@ public class TomatoesApplication extends Application {
 
   }
 
-  public RecipeRepository getRepository() {
+  public TomatoesRepository getRepository() {
     return repository;
   }
 
