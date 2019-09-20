@@ -33,7 +33,7 @@ public class SummaryViewModel extends AndroidViewModel {
     repository = tomatoesApplication.getRepository();
 
     // Set variables from repo
-    recipeSummaryList = repository.getAllRecipeSummaries();
+    recipeSummaryList = repository.getAllLiveSummaries();
   }
 
 

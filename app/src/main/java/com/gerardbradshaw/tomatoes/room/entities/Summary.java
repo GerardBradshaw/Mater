@@ -5,7 +5,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "recipe_summary_table")
+
+@Entity(
+    tableName = "recipe_summary_table")
 public class Summary {
 
 

@@ -31,16 +31,16 @@ public interface SummaryDao {
   LiveData<List<Summary>> getAllSummaries();
 
   @Query("select title from recipe_summary_table where recipe_id = :recipeId")
-  LiveData<String> getTitle(int recipeId);
+  LiveData<String> getLiveTitle(int recipeId);
 
   @Query("select description from recipe_summary_table where recipe_id = :recipeId")
-  LiveData<String> getDescription(int recipeId);
+  LiveData<String> getLiveDescription(int recipeId);
 
   @Query("select image_directory from recipe_summary_table where recipe_id = :recipeId")
-  LiveData<String> getImageDirectory(int recipeId);
+  LiveData<String> getLiveImageDirectory(int recipeId);
 
   @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
-  LiveData<Integer> getRecipeIdLiveData(String recipeTitle);
+  LiveData<Integer> getLiveRecipeId(String recipeTitle);
 
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -

@@ -91,32 +91,39 @@ public class RecipeRepository {
 
   // - - - - - - - - - - - - - - - LiveData Getters - - - - - - - - - - - - - - -
 
-  public LiveData<List<Summary>> getAllRecipeSummaries() {
+  public LiveData<List<Summary>> getAllLiveSummaries() {
     return recipeSummaryList;
   }
 
-  public LiveData<String> getRecipeTitle(int recipeId) {
-    return summaryDao.getTitle(recipeId);
+  public LiveData<String> getLiveTitle(int recipeId) {
+    return summaryDao.getLiveTitle(recipeId);
   }
 
-  public LiveData<String> getRecipeDescription(int recipeId) {
-    return summaryDao.getDescription(recipeId);
+  public LiveData<String> getLiveDescription(int recipeId) {
+    return summaryDao.getLiveDescription(recipeId);
   }
 
-  public LiveData<String> getRecipeImageDirectory(int recipeId) {
-    return summaryDao.getImageDirectory(recipeId);
+  public LiveData<String> getLiveImageDirectory(int recipeId) {
+    return summaryDao.getLiveImageDirectory(recipeId);
   }
 
-  public LiveData<RecipeIngredient[]> getRecipeIngredients(int recipeId) {
-    return recipeIngredientDao.getRecipeIngredients(recipeId);
+  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
+    return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
   }
 
-  public LiveData<Step[]> getRecipeSteps(int recipeId) {
-    return stepDao.getAllSteps(recipeId);
+  public LiveData<Step[]> getLiveSteps(int recipeId) {
+    return stepDao.getLiveSteps(recipeId);
   }
 
-  public LiveData<Integer> getRecipeId(String recipeTitle) {
-    return summaryDao.getRecipeIdLiveData(recipeTitle);
+  public LiveData<Integer> getLiveRecipeId(String recipeTitle) {
+    return summaryDao.getLiveRecipeId(recipeTitle);
+  }
+
+
+  // - - - - - - - - - - - - - - - Non-LiveData Getters - - - - - - - - - - - - - - -
+
+  public Step[] getSteps(int recipeId) {
+    return stepDao.getSteps(recipeId);
   }
 
 
@@ -413,18 +420,23 @@ public class RecipeRepository {
     }
 
     private void deleteRecipe() {
+
+      Step[] steps = stepDao.getSteps(recipeId);
+      stepDao.deleteStep(steps);
+
+
       // Get the IDs of the ingredients in the recipe
-      int[] ingredientIds = recipeIngredientDao.getIngredientIds(recipeId);
+      //int[] ingredientIds = recipeIngredientDao.getIngredientIds(recipeId);
 
       // Delete the Summary, Steps, and RecipeIngredients
-      summaryDao.deleteSummary(recipeId);
-      stepDao.deleteSteps(recipeId);
-      recipeIngredientDao.deleteRecipeIngredients(recipeId);
+      //stepDao.deleteSteps(recipeId);
+      //recipeIngredientDao.deleteRecipeIngredients(recipeId);
+      //summaryDao.deleteSummary(recipeId);
 
       // Delete the Ingredients
-      for(int i : ingredientIds) {
-        ingredientDao.deleteIngredient(i);
-      }
+      //for(int i : ingredientIds) {
+      //  ingredientDao.deleteIngredient(i);
+      //}
     }
   }
 

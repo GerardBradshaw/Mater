@@ -20,10 +20,13 @@ public interface StepDao {
   void updateStep(Step step);
 
   @Delete
-  void deleteStep(Step step);
+  void deleteStep(Step... steps);
 
   @Query("select * from recipe_step_table where recipe_id = :recipeId")
-  LiveData<Step[]> getAllSteps(int recipeId);
+  LiveData<Step[]> getLiveSteps(int recipeId);
+
+  @Query("select * from recipe_step_table where recipe_id = :recipeId")
+  Step[] getSteps(int recipeId);
 
   @Query("delete from recipe_step_table where recipe_id = :recipeId")
   void deleteSteps(int recipeId);

@@ -83,7 +83,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     descriptionView = findViewById(R.id.recipeDetail_description);
 
     // Set the title
-    detailsViewModel.getTitle(recipeId).observe(this, new Observer<String>() {
+    detailsViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         recipeTitle = s;
@@ -101,7 +101,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the description
-    detailsViewModel.getDescription(recipeId).observe(this, new Observer<String>() {
+    detailsViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         descriptionView.setText(s);
@@ -109,7 +109,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the ingredients
-    detailsViewModel.getIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
+    detailsViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
       @Override
       public void onChanged(RecipeIngredient[] recipeIngredients) {
         loadIngredientsIntoView(recipeIngredients);
@@ -117,7 +117,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the steps
-    detailsViewModel.getSteps(recipeId).observe(this, new Observer<Step[]>() {
+    detailsViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
       @Override
       public void onChanged(Step[] steps) {
         loadStepsIntoView(steps);
