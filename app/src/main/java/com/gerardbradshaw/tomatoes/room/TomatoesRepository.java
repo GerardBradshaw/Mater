@@ -228,6 +228,11 @@ public class TomatoesRepository {
 
   // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
 
+  public Ingredient[] getAllIngredients() {
+    return ingredientDao.getAllIngredients();
+  }
+
+
   public Ingredient getIngredient(int ingredientId) {
     try {
       return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
@@ -254,7 +259,7 @@ public class TomatoesRepository {
     }
   }
 
-  
+
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 
   /**

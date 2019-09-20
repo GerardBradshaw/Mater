@@ -30,7 +30,7 @@ public class IngredientViewModel extends AndroidViewModel {
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
   public Ingredient[] getAllIngredients() {
-    return null; //repository.getAllIngredients();
+    return repository.getAllIngredients();
   }
 
 }
