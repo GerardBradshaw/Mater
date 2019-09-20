@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes.activities;
+package com.gerardbradshaw.tomatoes.activities.adapters;
 
 import android.content.Context;
 import android.net.Uri;

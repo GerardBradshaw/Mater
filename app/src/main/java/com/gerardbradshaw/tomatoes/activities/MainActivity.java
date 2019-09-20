@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.activities.adapters.RecipeListAdapter;
 import com.gerardbradshaw.tomatoes.room.entities.Summary;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
 import com.gerardbradshaw.tomatoes.viewmodels.SummaryViewModel;
