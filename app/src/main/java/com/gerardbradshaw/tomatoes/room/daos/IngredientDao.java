@@ -35,6 +35,9 @@ public interface IngredientDao {
 
   @Query("select * from ingredient_table order by name ASC")
   Ingredient[] getAllIngredients();
+  
+
+  // - - - - - - - - - - - - - - - Allergen queries - - - - - - - - - - - - - - -
 
   @Query("select containsMilk from ingredient_table where name = :ingredientName")
   String getContainsMilk(String ingredientName);

@@ -26,7 +26,7 @@ public interface RecipeSummaryDao {
   void updateRecipe(RecipeSummary recipeSummary);
 
 
-  // - - - - - - - - - - - - - - - LiveData Getters - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_summary_table ORDER BY title ASC")
   LiveData<List<RecipeSummary>> getAllRecipes();
@@ -44,13 +44,16 @@ public interface RecipeSummaryDao {
   LiveData<Integer> getRecipeIdLiveData(String recipeTitle);
 
 
-  // - - - - - - - - - - - - - - - Non-LiveData Getters - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_summary_table LIMIT 1")
   RecipeSummary[] getAnyRecipe();
 
   @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
   int getRecipeId(String recipeTitle);
+
+  @Query("delete from recipe_summary_table where recipe_id = :recipeId")
+  void deleteRecipeStep(int recipeId);
 
 
 }
