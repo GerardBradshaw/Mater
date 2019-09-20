@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 
 @Entity(
-    tableName = "recipe_summary_table")
+    tableName = "summary_table")
 public class Summary {
 
 

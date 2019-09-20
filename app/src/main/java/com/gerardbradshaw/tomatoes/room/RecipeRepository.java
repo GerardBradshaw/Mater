@@ -421,8 +421,11 @@ public class RecipeRepository {
 
     private void deleteRecipe() {
 
-      Step[] steps = stepDao.getSteps(recipeId);
-      stepDao.deleteStep(steps);
+      Summary summary = summaryDao.getSummary(recipeId)[0];
+      summaryDao.deleteSummary(summary);
+
+      //Step[] steps = stepDao.getSteps(recipeId);
+      //stepDao.deleteStep(steps);
 
     }
   }

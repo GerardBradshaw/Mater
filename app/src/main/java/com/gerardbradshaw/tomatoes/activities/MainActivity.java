@@ -137,6 +137,7 @@ public class MainActivity extends AppCompatActivity
         int recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
 
         summaryViewModel.deleteRecipe(recipeToDelete);
+        recipeListAdapter.notifyDataSetChanged();
         // TODO confirmation prompt for the user
 
       }

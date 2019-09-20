@@ -20,7 +20,7 @@ public interface RecipeIngredientDao {
   void updateRecipeIngredient(RecipeIngredient recipeIngredient);
 
   @Delete
-  void deleteRecipeIngredient(RecipeIngredient recipeIngredient);
+  void deleteRecipeIngredient(RecipeIngredient... recipeIngredients);
 
 
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -

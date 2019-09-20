@@ -25,13 +25,13 @@ public interface StepDao {
 
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
-  @Query("select * from recipe_step_table where recipe_id = :recipeId")
+  @Query("select * from step_table where recipe_id = :recipeId")
   LiveData<Step[]> getLiveSteps(int recipeId);
 
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
-  @Query("select * from recipe_step_table where recipe_id = :recipeId")
+  @Query("select * from step_table where recipe_id = :recipeId")
   Step[] getSteps(int recipeId);
 
 }

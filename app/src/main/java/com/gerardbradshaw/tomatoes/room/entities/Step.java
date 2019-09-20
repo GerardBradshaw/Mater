@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
-    tableName = "recipe_step_table",
+    tableName = "step_table",
     foreignKeys = {
     @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",

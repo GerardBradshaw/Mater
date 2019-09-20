@@ -19,7 +19,7 @@ public interface SummaryDao {
   void insertSummary(Summary summary);
 
   @Delete
-  void deleteSummary(Summary summary);
+  void deleteSummary(Summary... summaries);
 
   @Update
   void updateSummary(Summary summary);
@@ -27,30 +27,30 @@ public interface SummaryDao {
 
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
-  @Query("select * from recipe_summary_table ORDER BY title ASC")
+  @Query("select * from summary_table ORDER BY title ASC")
   LiveData<List<Summary>> getAllLiveSummaries();
 
-  @Query("select title from recipe_summary_table where recipe_id = :recipeId")
+  @Query("select title from summary_table where recipe_id = :recipeId")
   LiveData<String> getLiveTitle(int recipeId);
 
-  @Query("select description from recipe_summary_table where recipe_id = :recipeId")
+  @Query("select description from summary_table where recipe_id = :recipeId")
   LiveData<String> getLiveDescription(int recipeId);
 
-  @Query("select image_directory from recipe_summary_table where recipe_id = :recipeId")
+  @Query("select image_directory from summary_table where recipe_id = :recipeId")
   LiveData<String> getLiveImageDirectory(int recipeId);
 
-  @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
+  @Query("select recipe_id from summary_table where title = :recipeTitle")
   LiveData<Integer> getLiveRecipeId(String recipeTitle);
 
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
-  @Query("select * from recipe_summary_table LIMIT 1")
+  @Query("select * from summary_table LIMIT 1")
   Summary[] getAnySummary();
 
-  @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
+  @Query("select recipe_id from summary_table where title = :recipeTitle")
   int getRecipeId(String recipeTitle);
 
-  @Query("select * from recipe_step_table where recipe_id = :recipeId")
+  @Query("select * from summary_table where recipe_id = :recipeId")
   Summary[] getSummary(int recipeId);
 }
