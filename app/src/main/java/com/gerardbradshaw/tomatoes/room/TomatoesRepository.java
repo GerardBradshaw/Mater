@@ -38,27 +38,18 @@ public class TomatoesRepository {
   private SummaryDao summaryDao;
   private RecipeIngredientDao recipeIngredientDao;
   private StepDao stepDao;
-
   private LiveData<List<Summary>> recipeSummaryList;
   private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
   private static AtomicInteger updateCount = new AtomicInteger(0);
-
   private static final String LOG_TAG = "GGG - Repository";
   private static final String PATH = "";
   private static File storage;
-
   private Context context;
-
   private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  /**
-   * Initializes the database
-   *
-   * @param application: Application context wrapper
-   */
   public TomatoesRepository(Application application) {
 
     // Initialize the database and get a handle on the DAOs
@@ -89,7 +80,7 @@ public class TomatoesRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - LiveData Getters - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Summary Data - - - - - - - - - - - - - - -
 
   public LiveData<List<Summary>> getAllLiveSummaries() {
     return recipeSummaryList;
@@ -107,27 +98,30 @@ public class TomatoesRepository {
     return summaryDao.getLiveImageDirectory(recipeId);
   }
 
-  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
-    return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
-  }
-
-  public LiveData<Step[]> getLiveSteps(int recipeId) {
-    return stepDao.getLiveSteps(recipeId);
-  }
-
   public LiveData<Integer> getLiveRecipeId(String recipeTitle) {
     return summaryDao.getLiveRecipeId(recipeTitle);
   }
 
 
-  // - - - - - - - - - - - - - - - Non-LiveData Getters - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - RecipeIngredient Data - - - - - - - - - - - - - - -
+
+  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
+    return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
+  }
+
+
+  // - - - - - - - - - - - - - - - Step Data - - - - - - - - - - - - - - -
+
+  public LiveData<Step[]> getLiveSteps(int recipeId) {
+    return stepDao.getLiveSteps(recipeId);
+  }
 
   public Step[] getSteps(int recipeId) {
     return stepDao.getSteps(recipeId);
   }
 
 
-  // - - - - - - - - - - - - - - - Load Images - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Loading Images - - - - - - - - - - - - - - -
 
   public Bitmap loadBitmap(Context context, String recipeTitle) {
     final String filename = recipeTitle + ".jpg";
@@ -152,7 +146,7 @@ public class TomatoesRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Save Images - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Saving Images - - - - - - - - - - - - - - -
 
   public void storeBitmap(final String recipeTitle, final Bitmap image) {
     Runnable runnable = new Runnable() {
@@ -232,7 +226,36 @@ public class TomatoesRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Insert Recipe from Holder - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
+
+  public Ingredient getIngredient(int ingredientId) {
+    try {
+      return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
+    } catch (Exception e) {
+      // TODO handle exception
+      return null;
+    }
+
+  }
+
+  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Ingredient> {
+
+    // Member variables
+    private IngredientDao ingredientDao;
+
+    // Constructor
+    getIngredientAsyncTask(IngredientDao ingredientDao) {
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Ingredient doInBackground(Integer... recipeIds) {
+      return ingredientDao.getIngredient(recipeIds[0]);
+    }
+  }
+
+  
+  // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 
   /**
    * Inserts a recipe to the database from a RecipeHolder.
@@ -458,37 +481,6 @@ public class TomatoesRepository {
     protected Void doInBackground(Summary... recipeSummaries) {
       dao.updateSummary(recipeSummaries[0]);
       return null;
-    }
-  }
-
-  // TODO add all update methods
-
-
-  // - - - - - - - - - - - - - - - Get Ingredient - - - - - - - - - - - - - - -
-
-  public Ingredient getIngredient(int ingredientId) {
-    try {
-      return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
-    } catch (Exception e) {
-      // TODO handle exception
-      return null;
-    }
-
-  }
-
-  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Ingredient> {
-
-    // Member variables
-    private IngredientDao ingredientDao;
-
-    // Constructor
-    getIngredientAsyncTask(IngredientDao ingredientDao) {
-      this.ingredientDao = ingredientDao;
-    }
-
-    @Override
-    protected Ingredient doInBackground(Integer... recipeIds) {
-      return ingredientDao.getIngredient(recipeIds[0]);
     }
   }
 

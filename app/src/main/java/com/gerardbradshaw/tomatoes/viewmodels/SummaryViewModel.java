@@ -16,11 +16,9 @@ public class SummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Repo
   private TomatoesRepository repository;
 
-  // LiveData
-  private LiveData<List<Summary>> recipeSummaryList;
+  private LiveData<List<Summary>> recipeSummaryList; // Cached copy
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -48,7 +46,7 @@ public class SummaryViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Other repo - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Other repo methods - - - - - - - - - - - - - - -
 
   public void deleteRecipe(int recipeId) {
     repository.deleteRecipe(recipeId);
