@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class RecipeRepository {
+public class TomatoesRepository {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -59,7 +59,7 @@ public class RecipeRepository {
    *
    * @param application: Application context wrapper
    */
-  public RecipeRepository(Application application) {
+  public TomatoesRepository(Application application) {
 
     // Initialize the database and get a handle on the DAOs
     TomatoesRoomDatabase db = TomatoesRoomDatabase.getDatabase(application);

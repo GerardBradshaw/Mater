@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this, summaryViewModel.getRepository());
+    recipeListAdapter = new RecipeListAdapter(this, imageViewModel);
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {

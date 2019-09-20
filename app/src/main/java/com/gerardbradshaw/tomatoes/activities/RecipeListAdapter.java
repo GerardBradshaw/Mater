@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Summary;
+import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
 
 import java.util.List;
 
@@ -26,22 +26,17 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   private List<Summary> summaryList; // Cached copy
   private RecipeClickedListener recipeClickedListener;
   private Context context;
-  private RecipeRepository repository;
+  private ImageViewModel imageViewModel;
   private static String LOG_TAG = "GGG - RecipeListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  /**
-   * Constructor for the adapter.
-   *
-   * @param context the activity context
-   */
-  public RecipeListAdapter(Context context, RecipeRepository repository) {
+  public RecipeListAdapter(Context context, ImageViewModel imageViewModel) {
     this.context = context;
     inflater = LayoutInflater.from(context);
 
-    this.repository = repository;
+    this.imageViewModel = imageViewModel;
   }
 
 
@@ -84,7 +79,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       Uri imageDirectory = Uri.parse(currentSummary.getImageDirectory());
 
       Glide.with(context)
-          .load(repository.getFile(title))
+          .load(imageViewModel.getFile(title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
 

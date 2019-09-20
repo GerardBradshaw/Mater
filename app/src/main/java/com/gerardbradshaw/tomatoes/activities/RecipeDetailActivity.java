@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.helpers.Units;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.Step;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
@@ -44,7 +43,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   private DetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
-  private RecipeRepository repository;
 
   private int recipeId;
   private double servings;

@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Summary;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class SummaryViewModel extends AndroidViewModel {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   // Repo
-  private RecipeRepository repository;
+  private TomatoesRepository repository;
 
   // LiveData
   private LiveData<List<Summary>> recipeSummaryList;
@@ -43,7 +43,7 @@ public class SummaryViewModel extends AndroidViewModel {
     return recipeSummaryList;
   }
 
-  public RecipeRepository getRepository() {
+  public TomatoesRepository getRepository() {
     return repository;
   }
 
