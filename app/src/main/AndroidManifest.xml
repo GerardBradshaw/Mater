@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gerardbradshaw.tomatoes">
+
     <!-- Features -->
     <uses-feature
         android:name="android.hardware.camera2"
@@ -18,21 +19,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activities.ShoppingListActivity"></activity>
+
+        <!-- Shopping List Activity -->
+        <activity
+            android:name=".activities.ShoppingListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <!-- Add Recipe Activity -->
         <activity
             android:name=".activities.AddRecipeActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity> <!-- Recipe Detail Activity -->
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <!-- Recipe Detail Activity -->
         <activity
             android:name=".activities.RecipeDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity> <!-- Main Recipe Selection Activity -->
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <!-- Main Activity -->
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
