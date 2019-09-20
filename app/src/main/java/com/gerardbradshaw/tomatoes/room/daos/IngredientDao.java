@@ -9,6 +9,8 @@ import androidx.room.Update;
 
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 
+import java.util.List;
+
 @Dao
 public interface IngredientDao {
 
@@ -38,7 +40,7 @@ public interface IngredientDao {
   Ingredient getAnyIngredient();
 
   @Query("select * from ingredient_table order by name ASC")
-  Ingredient[] getAllIngredients();
+  List<Ingredient> getAllIngredients();
 
 
   // Allergen queries

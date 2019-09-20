@@ -228,7 +228,7 @@ public class TomatoesRepository {
 
   // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
 
-  public Ingredient[] getAllIngredients() {
+  public List<Ingredient> getAllIngredients() {
     return ingredientDao.getAllIngredients();
   }
 

@@ -9,6 +9,8 @@ import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 
+import java.util.List;
+
 public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
@@ -29,7 +31,7 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
-  public Ingredient[] getAllIngredients() {
+  public List<Ingredient> getAllIngredients() {
     return repository.getAllIngredients();
   }
 

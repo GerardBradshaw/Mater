@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_drawer);
+    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -84,10 +86,6 @@ public class MainActivity extends AppCompatActivity
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
-
-    // Set up the ViewModel and its observer
-    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
-    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
     recipeListAdapter = new RecipeListAdapter(this, imageViewModel);
