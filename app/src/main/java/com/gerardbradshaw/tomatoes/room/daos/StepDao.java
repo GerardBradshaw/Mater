@@ -11,21 +11,21 @@ import androidx.room.Update;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 
 @Dao
-public interface RecipeStepDao {
+public interface StepDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertRecipeStep(RecipeStep recipeStep);
+  void insertStep(RecipeStep recipeStep);
 
   @Update
-  void updateRecipeStep(RecipeStep recipeStep);
+  void updateStep(RecipeStep recipeStep);
 
   @Delete
-  void deleteRecipeStep(RecipeStep recipeStep);
+  void deleteStep(RecipeStep recipeStep);
 
   @Query("select * from recipe_step_table where recipe_id = :recipeId")
-  LiveData<RecipeStep[]> getRecipeSteps(int recipeId);
+  LiveData<RecipeStep[]> getAllSteps(int recipeId);
 
   @Query("delete from recipe_step_table where recipe_id = :recipeId")
-  void deleteRecipeStep(int recipeId);
+  void deleteSteps(int recipeId);
 
 }

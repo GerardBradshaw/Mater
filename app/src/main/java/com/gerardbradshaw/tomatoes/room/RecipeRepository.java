@@ -15,9 +15,9 @@ import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.tomatoes.room.daos.IngredientDao;
-import com.gerardbradshaw.tomatoes.room.daos.RecipeSummaryDao;
+import com.gerardbradshaw.tomatoes.room.daos.SummaryDao;
 import com.gerardbradshaw.tomatoes.room.daos.RecipeIngredientDao;
-import com.gerardbradshaw.tomatoes.room.daos.RecipeStepDao;
+import com.gerardbradshaw.tomatoes.room.daos.StepDao;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
@@ -35,9 +35,9 @@ public class RecipeRepository {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private IngredientDao ingredientDao;
-  private RecipeSummaryDao recipeSummaryDao;
+  private SummaryDao summaryDao;
   private RecipeIngredientDao recipeIngredientDao;
-  private RecipeStepDao recipeStepDao;
+  private StepDao stepDao;
 
   private LiveData<List<RecipeSummary>> recipeSummaryList;
   private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
@@ -64,16 +64,16 @@ public class RecipeRepository {
     // Initialize the database and get a handle on the DAOs
     TomatoesRoomDatabase db = TomatoesRoomDatabase.getDatabase(application);
     ingredientDao = db.ingredientDao();
-    recipeSummaryDao = db.recipeDao();
+    summaryDao = db.recipeDao();
     recipeIngredientDao = db.recipeIngredientDao();
-    recipeStepDao = db.recipeStepDao();
+    stepDao = db.recipeStepDao();
 
     // Downcast the application and set the context
     TomatoesApplication tomatoesApplication = (TomatoesApplication) application;
     context = tomatoesApplication.getApplicationContext();
 
     // Cache LiveData
-    recipeSummaryList = recipeSummaryDao.getAllRecipes();
+    recipeSummaryList = summaryDao.getAllSummaries();
 
     // Determine the path to internal storage and create a File object
     File internalStorage = application.getFilesDir();
@@ -96,15 +96,15 @@ public class RecipeRepository {
   }
 
   public LiveData<String> getRecipeTitle(int recipeId) {
-    return recipeSummaryDao.getTitle(recipeId);
+    return summaryDao.getTitle(recipeId);
   }
 
   public LiveData<String> getRecipeDescription(int recipeId) {
-    return recipeSummaryDao.getDescription(recipeId);
+    return summaryDao.getDescription(recipeId);
   }
 
   public LiveData<String> getRecipeImageDirectory(int recipeId) {
-    return recipeSummaryDao.getImageDirectory(recipeId);
+    return summaryDao.getImageDirectory(recipeId);
   }
 
   public LiveData<RecipeIngredient[]> getRecipeIngredients(int recipeId) {
@@ -112,11 +112,11 @@ public class RecipeRepository {
   }
 
   public LiveData<RecipeStep[]> getRecipeSteps(int recipeId) {
-    return recipeStepDao.getRecipeSteps(recipeId);
+    return stepDao.getAllSteps(recipeId);
   }
 
   public LiveData<Integer> getRecipeId(String recipeTitle) {
-    return recipeSummaryDao.getRecipeIdLiveData(recipeTitle);
+    return summaryDao.getRecipeIdLiveData(recipeTitle);
   }
 
 
@@ -237,7 +237,7 @@ public class RecipeRepository {
       @Override
       public void run() {
         new InsertRecipeFromHolderAsyncTask(
-            recipeSummaryDao, recipeIngredientDao, recipeStepDao, ingredientDao)
+            summaryDao, recipeIngredientDao, stepDao, ingredientDao)
             .execute(recipeHolder);
       }
     };
@@ -249,19 +249,19 @@ public class RecipeRepository {
       extends AsyncTask<RecipeHolder, Void, Void> {
 
     // Member variables
-    private RecipeSummaryDao recipeSummaryDao;
+    private SummaryDao summaryDao;
     private RecipeIngredientDao recipeIngredientDao;
-    private RecipeStepDao recipeStepDao;
+    private StepDao stepDao;
     private IngredientDao ingredientDao;
 
     // Constructor
     InsertRecipeFromHolderAsyncTask(
-        RecipeSummaryDao recipeSummaryDao, RecipeIngredientDao recipeIngredientDao,
-        RecipeStepDao recipeStepDao, IngredientDao ingredientDao) {
+        SummaryDao summaryDao, RecipeIngredientDao recipeIngredientDao,
+        StepDao stepDao, IngredientDao ingredientDao) {
 
-      this.recipeSummaryDao = recipeSummaryDao;
+      this.summaryDao = summaryDao;
       this.recipeIngredientDao = recipeIngredientDao;
-      this.recipeStepDao = recipeStepDao;
+      this.stepDao = stepDao;
       this.ingredientDao = ingredientDao;
     }
 
@@ -274,7 +274,7 @@ public class RecipeRepository {
       addSummaryToDb(recipe.getTitle(), recipe.getDescription(), recipe.getImageDirectory());
 
       // Get the ID of the new recipe
-      int recipeId = recipeSummaryDao.getRecipeId(recipe.getTitle());
+      int recipeId = summaryDao.getRecipeId(recipe.getTitle());
 
       // Add the steps to the database
       addStepsToDb(recipeId, recipe.getSteps());
@@ -309,7 +309,7 @@ public class RecipeRepository {
       RecipeSummary recipeSummary = new RecipeSummary(title, description, imageDirectory);
 
       // Add the title and description to the database.
-      recipeSummaryDao.insertRecipe(recipeSummary);
+      summaryDao.insertSummary(recipeSummary);
 
     }
 
@@ -324,7 +324,7 @@ public class RecipeRepository {
         RecipeStep recipeStep = new RecipeStep(recipeId, stepNumber, steps.get(i));
 
         // Add the RecipeStep to the DAO
-        recipeStepDao.insertRecipeStep(recipeStep);
+        stepDao.insertStep(recipeStep);
       }
     }
 
@@ -373,7 +373,7 @@ public class RecipeRepository {
       @Override
       public void run() {
         new DeleteRecipeAsyncTask(
-            recipeSummaryDao, recipeIngredientDao, recipeStepDao, ingredientDao)
+            summaryDao, recipeIngredientDao, stepDao, ingredientDao)
             .execute(recipeId);
       }
     };
@@ -382,27 +382,29 @@ public class RecipeRepository {
   private class DeleteRecipeAsyncTask extends AsyncTask<Integer, Void, Void> {
 
     // Member variables
-    private RecipeSummaryDao recipeSummaryDao;
+    private SummaryDao summaryDao;
     private RecipeIngredientDao recipeIngredientDao;
-    private RecipeStepDao recipeStepDao;
+    private StepDao stepDao;
     private IngredientDao ingredientDao;
+    private int recipeId;
 
     // Constructor
     DeleteRecipeAsyncTask(
-        RecipeSummaryDao recipeSummaryDao, RecipeIngredientDao recipeIngredientDao,
-        RecipeStepDao recipeStepDao, IngredientDao ingredientDao) {
+        SummaryDao summaryDao, RecipeIngredientDao recipeIngredientDao,
+        StepDao stepDao, IngredientDao ingredientDao) {
 
-      this.recipeSummaryDao = recipeSummaryDao;
+      this.summaryDao = summaryDao;
       this.recipeIngredientDao = recipeIngredientDao;
-      this.recipeStepDao = recipeStepDao;
+      this.stepDao = stepDao;
       this.ingredientDao = ingredientDao;
     }
 
     @Override
     protected Void doInBackground(Integer... integers) {
-
       // Get the ID of the recipe to delete
-      int recipeId = integers[0];
+      recipeId = integers[0];
+
+      deleteRecipe();
 
       return null;
     }
@@ -413,6 +415,13 @@ public class RecipeRepository {
 
       taskScheduler.setTaskFinished();
     }
+
+    private void deleteRecipe() {
+      summaryDao;
+      recipeIngredientDao;
+      stepDao;
+      ingredientDao;
+    }
   }
 
 
@@ -420,28 +429,28 @@ public class RecipeRepository {
 
   /**
    * Wrapper method for the updateRecipeAsyncTask class, which calls the updateRecipeSummary method
-   * for the RecipeSummaryDao.
+   * for the SummaryDao.
    *
    * @param recipeSummary the RecipeSummary to be updated.
    */
   public void updateRecipeSummary(RecipeSummary recipeSummary) {
-    new updateRecipeSummaryAsyncTask(recipeSummaryDao).execute(recipeSummary);
+    new updateRecipeSummaryAsyncTask(summaryDao).execute(recipeSummary);
   }
 
   private static class updateRecipeSummaryAsyncTask
       extends AsyncTask<RecipeSummary, Void, Void> {
 
     // Member variable for the dao
-    private RecipeSummaryDao dao;
+    private SummaryDao dao;
 
     // Constructor
-    updateRecipeSummaryAsyncTask(RecipeSummaryDao dao) {
+    updateRecipeSummaryAsyncTask(SummaryDao dao) {
       this.dao = dao;
     }
 
     @Override
     protected Void doInBackground(RecipeSummary... recipeSummaries) {
-      dao.updateRecipe(recipeSummaries[0]);
+      dao.updateSummary(recipeSummaries[0]);
       return null;
     }
   }

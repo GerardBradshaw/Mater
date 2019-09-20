@@ -14,22 +14,22 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import java.util.List;
 
 @Dao
-public interface RecipeSummaryDao {
+public interface SummaryDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertRecipe(RecipeSummary recipeSummary);
+  void insertSummary(RecipeSummary recipeSummary);
 
   @Delete
-  void deleteRecipe(RecipeSummary recipeSummary);
+  void deleteSummary(RecipeSummary recipeSummary);
 
   @Update
-  void updateRecipe(RecipeSummary recipeSummary);
+  void updateSummary(RecipeSummary recipeSummary);
 
 
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_summary_table ORDER BY title ASC")
-  LiveData<List<RecipeSummary>> getAllRecipes();
+  LiveData<List<RecipeSummary>> getAllSummaries();
 
   @Query("select title from recipe_summary_table where recipe_id = :recipeId")
   LiveData<String> getTitle(int recipeId);
@@ -47,13 +47,13 @@ public interface RecipeSummaryDao {
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_summary_table LIMIT 1")
-  RecipeSummary[] getAnyRecipe();
+  RecipeSummary[] getAnySummary();
 
   @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
   int getRecipeId(String recipeTitle);
 
   @Query("delete from recipe_summary_table where recipe_id = :recipeId")
-  void deleteRecipeStep(int recipeId);
+  void deleteSummary(int recipeId);
 
 
 }
