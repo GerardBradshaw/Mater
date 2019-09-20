@@ -236,8 +236,7 @@ public class RecipeRepository {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new InsertRecipeFromHolderAsyncTask(
-            summaryDao, recipeIngredientDao, stepDao, ingredientDao)
+        new InsertRecipeFromHolderAsyncTask(summaryDao, recipeIngredientDao, stepDao, ingredientDao)
             .execute(recipeHolder);
       }
     };
@@ -372,8 +371,7 @@ public class RecipeRepository {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new DeleteRecipeAsyncTask(
-            summaryDao, recipeIngredientDao, stepDao, ingredientDao)
+        new DeleteRecipeAsyncTask(summaryDao, recipeIngredientDao, stepDao, ingredientDao)
             .execute(recipeId);
       }
     };
@@ -401,26 +399,30 @@ public class RecipeRepository {
 
     @Override
     protected Void doInBackground(Integer... integers) {
-      // Get the ID of the recipe to delete
       recipeId = integers[0];
-
       deleteRecipe();
-
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
-
       taskScheduler.setTaskFinished();
     }
 
     private void deleteRecipe() {
-      summaryDao;
-      recipeIngredientDao;
-      stepDao;
-      ingredientDao;
+      // Get the IDs of the ingredients in the recipe
+      int[] ingredientIds = recipeIngredientDao.getIngredientIds(recipeId);
+
+      // Delete the Ingredients
+      for(int i : ingredientIds) {
+        ingredientDao.deleteIngredient(recipeId);
+      }
+
+      // Delete the Summary, Steps, and RecipeIngredients
+      summaryDao.deleteSummary(recipeId);
+      stepDao.deleteSteps(recipeId);
+      recipeIngredientDao.deleteRecipeIngredients(recipeId);
     }
   }
 

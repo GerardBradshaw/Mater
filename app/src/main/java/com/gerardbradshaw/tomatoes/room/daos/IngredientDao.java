@@ -36,6 +36,8 @@ public interface IngredientDao {
   @Query("select * from ingredient_table order by name ASC")
   Ingredient[] getAllIngredients();
 
+  @Query("delete from ingredient_table where ingredient_id = :ingredientId")
+  void deleteIngredient(int ingredientId);
 
   // - - - - - - - - - - - - - - - Allergen queries - - - - - - - - - - - - - - -
 
