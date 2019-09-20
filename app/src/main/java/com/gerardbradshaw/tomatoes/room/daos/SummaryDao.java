@@ -28,7 +28,7 @@ public interface SummaryDao {
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_summary_table ORDER BY title ASC")
-  LiveData<List<Summary>> getAllSummaries();
+  LiveData<List<Summary>> getAllLiveSummaries();
 
   @Query("select title from recipe_summary_table where recipe_id = :recipeId")
   LiveData<String> getLiveTitle(int recipeId);
@@ -51,8 +51,6 @@ public interface SummaryDao {
   @Query("select recipe_id from recipe_summary_table where title = :recipeTitle")
   int getRecipeId(String recipeTitle);
 
-  @Query("delete from recipe_summary_table where recipe_id = :recipeId")
-  void deleteSummary(int recipeId);
-
-
+  @Query("select * from recipe_step_table where recipe_id = :recipeId")
+  Summary[] getSummary(int recipeId);
 }

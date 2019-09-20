@@ -21,26 +21,27 @@ public interface IngredientDao {
   @Update
   void updateIngredient(Ingredient ingredient);
 
+
+  // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
+
+
   @Query("select * from ingredient_table where name = :ingredientName limit 1")
   Ingredient getIngredient(String ingredientName);
 
   @Query("select * from ingredient_table where ingredient_id = :ingredientId")
-  Ingredient getIngredientFromId(int ingredientId);
+  Ingredient getIngredient(int ingredientId);
 
   @Query("select ingredient_id from ingredient_table where name = :ingredientName")
   int getIngredientId(String ingredientName);
 
   @Query("select * from ingredient_table limit 1")
-  Ingredient[] getAnyIngredient();
+  Ingredient getAnyIngredient();
 
   @Query("select * from ingredient_table order by name ASC")
   Ingredient[] getAllIngredients();
 
-  @Query("delete from ingredient_table where ingredient_id = :ingredientId")
-  void deleteIngredient(int ingredientId);
 
-
-  // - - - - - - - - - - - - - - - Allergen queries - - - - - - - - - - - - - - -
+  // Allergen queries
 
   @Query("select containsMilk from ingredient_table where name = :ingredientName")
   String getContainsMilk(String ingredientName);

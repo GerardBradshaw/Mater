@@ -22,13 +22,16 @@ public interface StepDao {
   @Delete
   void deleteStep(Step... steps);
 
+
+  // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
+
   @Query("select * from recipe_step_table where recipe_id = :recipeId")
   LiveData<Step[]> getLiveSteps(int recipeId);
 
+
+  // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
+
   @Query("select * from recipe_step_table where recipe_id = :recipeId")
   Step[] getSteps(int recipeId);
-
-  @Query("delete from recipe_step_table where recipe_id = :recipeId")
-  void deleteSteps(int recipeId);
 
 }

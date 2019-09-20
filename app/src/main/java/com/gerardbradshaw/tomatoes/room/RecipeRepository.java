@@ -73,7 +73,7 @@ public class RecipeRepository {
     context = tomatoesApplication.getApplicationContext();
 
     // Cache LiveData
-    recipeSummaryList = summaryDao.getAllSummaries();
+    recipeSummaryList = summaryDao.getAllLiveSummaries();
 
     // Determine the path to internal storage and create a File object
     File internalStorage = application.getFilesDir();
@@ -424,19 +424,6 @@ public class RecipeRepository {
       Step[] steps = stepDao.getSteps(recipeId);
       stepDao.deleteStep(steps);
 
-
-      // Get the IDs of the ingredients in the recipe
-      //int[] ingredientIds = recipeIngredientDao.getIngredientIds(recipeId);
-
-      // Delete the Summary, Steps, and RecipeIngredients
-      //stepDao.deleteSteps(recipeId);
-      //recipeIngredientDao.deleteRecipeIngredients(recipeId);
-      //summaryDao.deleteSummary(recipeId);
-
-      // Delete the Ingredients
-      //for(int i : ingredientIds) {
-      //  ingredientDao.deleteIngredient(i);
-      //}
     }
   }
 
@@ -498,7 +485,7 @@ public class RecipeRepository {
 
     @Override
     protected Ingredient doInBackground(Integer... recipeIds) {
-      return ingredientDao.getIngredientFromId(recipeIds[0]);
+      return ingredientDao.getIngredient(recipeIds[0]);
     }
   }
 

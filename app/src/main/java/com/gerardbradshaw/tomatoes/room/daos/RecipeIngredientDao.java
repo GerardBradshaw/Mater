@@ -22,12 +22,18 @@ public interface RecipeIngredientDao {
   @Delete
   void deleteRecipeIngredient(RecipeIngredient recipeIngredient);
 
+
+  // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
+
   @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")
   LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId);
+
+
+  // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select ingredient_id from recipe_ingredient_table where recipe_id = :recipeId")
   int[] getIngredientIds(int recipeId);
 
-  @Query("delete from recipe_ingredient_table where recipe_id = :recipeId")
-  void deleteRecipeIngredients(int recipeId);
+  @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")
+  RecipeIngredient[] getRecipeIngredients(int recipeId);
 }
