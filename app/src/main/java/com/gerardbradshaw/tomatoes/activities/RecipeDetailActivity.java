@@ -36,20 +36,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private TextView descriptionView;
   private ImageView imageView;
   private Toolbar toolbar;
-
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
-
   private DetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
-
   private int recipeId;
   private double servings;
   private Context context;
-
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
-
   private String recipeTitle;
 
 
@@ -58,15 +53,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
+    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get intent information
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
     context = this;
-
-    // Initialize the VMs
-    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
-    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get the number of servings
     // TODO add ability to set number of servings
