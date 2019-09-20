@@ -14,7 +14,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 
 import java.util.List;
 
-public class RecipeSummaryViewModel extends AndroidViewModel {
+public class SummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -27,7 +27,7 @@ public class RecipeSummaryViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeSummaryViewModel(@NonNull Application application) {
+  public SummaryViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository

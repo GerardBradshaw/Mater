@@ -5,13 +5,14 @@ import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.SummaryViewModel;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
 
   // Data objects
-  private RecipeSummaryViewModel summaryViewModel;
+  private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
 
   // Intent extras
@@ -83,7 +85,7 @@ public class MainActivity extends AppCompatActivity
     navigationView.setNavigationItemSelectedListener(this);
 
     // Set up the ViewModel and its observer
-    summaryViewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
+    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
@@ -112,6 +114,27 @@ public class MainActivity extends AppCompatActivity
     recyclerView = findViewById(R.id.main_recyclerView);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    // Set up swipe and drag directions for the cards
+    int swipeDirs = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+
+    // Set up ItemTouchHelper to handle swipes
+    ItemTouchHelper touchHelper = new ItemTouchHelper(
+        new ItemTouchHelper.SimpleCallback(0, swipeDirs) {
+      @Override
+      public boolean onMove(@NonNull RecyclerView recyclerView,
+                            @NonNull RecyclerView.ViewHolder viewHolder,
+                            @NonNull RecyclerView.ViewHolder target) {
+        return false;
+      }
+
+      @Override
+      public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        // TODO prompt the user
+
+
+      }
+    });
 
     summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
       @Override

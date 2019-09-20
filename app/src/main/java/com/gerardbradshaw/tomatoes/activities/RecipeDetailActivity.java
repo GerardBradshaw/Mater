@@ -25,7 +25,7 @@ import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailsViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.DetailsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
 
-  private RecipeDetailsViewModel detailsViewModel;
+  private DetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
   private RecipeRepository repository;
 
@@ -67,7 +67,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     context = this;
 
     // Initialize the VMs
-    detailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
+    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get the number of servings
