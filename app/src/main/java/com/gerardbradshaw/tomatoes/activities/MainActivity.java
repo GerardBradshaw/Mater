@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
     });
 
     // Set up RecyclerView
-    recyclerView = findViewById(R.id.main_recyclerView);
+    recyclerView = findViewById(R.id.main_recycler);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
