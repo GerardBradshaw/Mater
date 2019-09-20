@@ -245,9 +245,6 @@ public class RecipeRepository {
     taskScheduler.addNewTask(runnable);
   }
 
-  /**
-   * AsyncTask class for insertRecipeFromHolder.
-   */
   private class InsertRecipeFromHolderAsyncTask
       extends AsyncTask<RecipeHolder, Void, Void> {
 
@@ -369,6 +366,56 @@ public class RecipeRepository {
   }
 
 
+  // - - - - - - - - - - - - - - - Delete Recipe - - - - - - - - - - - - - - -
+
+  public void deleteRecipe(final int recipeId) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new DeleteRecipeAsyncTask(
+            recipeSummaryDao, recipeIngredientDao, recipeStepDao, ingredientDao)
+            .execute(recipeId);
+      }
+    };
+  }
+
+  private class DeleteRecipeAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+    // Member variables
+    private RecipeSummaryDao recipeSummaryDao;
+    private RecipeIngredientDao recipeIngredientDao;
+    private RecipeStepDao recipeStepDao;
+    private IngredientDao ingredientDao;
+
+    // Constructor
+    DeleteRecipeAsyncTask(
+        RecipeSummaryDao recipeSummaryDao, RecipeIngredientDao recipeIngredientDao,
+        RecipeStepDao recipeStepDao, IngredientDao ingredientDao) {
+
+      this.recipeSummaryDao = recipeSummaryDao;
+      this.recipeIngredientDao = recipeIngredientDao;
+      this.recipeStepDao = recipeStepDao;
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Void doInBackground(Integer... integers) {
+
+      // Get the ID of the recipe to delete
+      int recipeId = integers[0];
+      
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+
+      taskScheduler.setTaskFinished();
+    }
+  }
+
+
   // - - - - - - - - - - - - - - - Update Recipe - - - - - - - - - - - - - - -
 
   /**
@@ -381,9 +428,6 @@ public class RecipeRepository {
     new updateRecipeSummaryAsyncTask(recipeSummaryDao).execute(recipeSummary);
   }
 
-  /**
-   * AsyncTask for updateRecipeSummary.
-   */
   private static class updateRecipeSummaryAsyncTask
       extends AsyncTask<RecipeSummary, Void, Void> {
 
