@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
@@ -31,7 +32,7 @@ import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailsViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.DetailsViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,11 +47,12 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText titleInput;
   private EditText descriptionInput;
   private TextView imageName;
+  private Toolbar toolbar;
 
-  private List<IngredientInputViewHolder> ingredientViewHolders;
-  private List<StepInputViewHolder> stepViewHolders;
+  private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
+  private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
 
-  private RecipeDetailsViewModel detailsViewModel;
+  private DetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
@@ -68,7 +70,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
 
     // Initialize the ViewModels
-    detailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
+    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
@@ -79,10 +81,11 @@ public class AddRecipeActivity extends AppCompatActivity {
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     imageName = findViewById(R.id.addRecipe_imageNameTextView);
+    toolbar = findViewById(R.id.addRecipe_toolbar);
 
-    // Initialize the ViewHolders
-    ingredientViewHolders = new ArrayList<>();
-    stepViewHolders = new ArrayList<>();
+    // Set up the Toolbar
+    toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+    setSupportActionBar(toolbar);
 
     // Set listener for selectImageButton
     selectImageButton.setOnClickListener(new View.OnClickListener() {
