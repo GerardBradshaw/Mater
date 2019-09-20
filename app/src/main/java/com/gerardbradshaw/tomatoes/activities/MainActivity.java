@@ -130,8 +130,14 @@ public class MainActivity extends AppCompatActivity
 
       @Override
       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        // TODO prompt the user
+        // Get the position of the item swiped
+        int position = viewHolder.getAdapterPosition();
 
+        // Determine which recipe was swiped
+        int recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
+
+        summaryViewModel.deleteRecipe(recipeToDelete);
+        // TODO confirmation prompt for the user
 
       }
     });

@@ -141,8 +141,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
     notifyDataSetChanged();
   }
 
-  public RecipeSummary getRecipeSummaryAtPosition(int position) {
-    return recipeSummaryList.get(position);
+  public int getRecipeIdAtPosition(int position) {
+    return recipeSummaryList.get(position).getRecipeId();
   }
 
   public void setRecipeClickedListener(RecipeClickedListener recipeClickedListener) {

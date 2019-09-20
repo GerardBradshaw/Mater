@@ -39,7 +39,7 @@ public class SummaryViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter Methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
   public LiveData<List<RecipeSummary>> getAllRecipeSummaries() {
     return recipeSummaryList;
@@ -47,5 +47,12 @@ public class SummaryViewModel extends AndroidViewModel {
 
   public RecipeRepository getRepository() {
     return repository;
+  }
+
+
+  // - - - - - - - - - - - - - - - Other repo - - - - - - - - - - - - - - -
+
+  public void deleteRecipe(int recipeId) {
+    repository.deleteRecipe(recipeId);
   }
 }
