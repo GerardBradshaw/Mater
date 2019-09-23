@@ -9,11 +9,7 @@ public class SharedPrefHelper {
 
   private SharedPreferences sharedPreferences;
   private static final String sharedPrefFile = "com.gerardbradshaw.mater";
-
-  // Keys for data stored in shared prefs
   private String FIRST_LAUNCH = "launched";
-
-  // Context
   private Context context;
 
 

@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity
     });
 
     // Set up RecyclerView
-    recyclerView = findViewById(R.id.main_recycler);
+    RecyclerView recyclerView = findViewById(R.id.main_recycler);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -169,7 +168,7 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.action_settings) {
-      
+
     }
 
     return super.onOptionsItemSelected(item);
