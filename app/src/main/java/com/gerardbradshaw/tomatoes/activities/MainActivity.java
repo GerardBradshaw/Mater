@@ -40,18 +40,11 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
-
-  // Data objects
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-
-  // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
-
-  // Logging
   private static String LOG_TAG = "GGG - Main Activity";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -162,7 +155,6 @@ public class MainActivity extends AppCompatActivity
   }
 
 
-
   // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
 
   @Override
@@ -174,13 +166,15 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+
+      // TODO open shopping list activity somewhere else!
+
+      Intent intent = new Intent(this, ShoppingListActivity.class);
+      startActivity(intent);
+
       return true;
     }
 

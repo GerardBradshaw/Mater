@@ -1,7 +1,7 @@
 package com.gerardbradshaw.tomatoes.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,7 +10,10 @@ import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.activities.adapters.IngredientListAdapter;
+import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.viewmodels.IngredientViewModel;
+
+import java.util.List;
 
 public class ShoppingListActivity extends AppCompatActivity {
 
@@ -32,9 +35,16 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     // Set up ingredientListAdapter and recyclerView
     ingredientListAdapter = new IngredientListAdapter(this);
-    ingredientListAdapter.setIngredientList(ingredientViewModel.getAllIngredients());
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    // Observe the LiveData
+    ingredientViewModel.getLiveAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+      @Override
+      public void onChanged(List<Ingredient> ingredients) {
+        ingredientListAdapter.setIngredientList(ingredients);
+      }
+    });
 
   }
 }

@@ -63,10 +63,6 @@ public class DetailsViewModel extends AndroidViewModel {
     return repository.getIngredient(ingredientId);
   }
 
-  public TomatoesRepository getRepository() {
-    return repository;
-  }
-
   public void insertRecipeHolder(RecipeHolder recipeHolder) {
     repository.insertRecipeFromHolder(recipeHolder);
   }

@@ -1,5 +1,6 @@
 package com.gerardbradshaw.tomatoes.room.daos;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -40,7 +41,7 @@ public interface IngredientDao {
   Ingredient getAnyIngredient();
 
   @Query("select * from ingredient_table order by name ASC")
-  List<Ingredient> getAllIngredients();
+  LiveData<List<Ingredient>> getLiveAllIngredients();
 
 
   // Allergen queries

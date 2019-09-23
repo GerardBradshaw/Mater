@@ -44,10 +44,6 @@ public class ImageViewModel extends AndroidViewModel {
     repository.storeBitmap(recipeTitle, image);
   }
 
-  public TomatoesRepository getRepository() {
-    return repository;
-  }
-
   public File getFile(String recipeTitle) {
     return repository.getFile(recipeTitle);
   }

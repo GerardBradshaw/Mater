@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
@@ -31,8 +32,8 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
-  public List<Ingredient> getAllIngredients() {
-    return repository.getAllIngredients();
+  public LiveData<List<Ingredient>> getLiveAllIngredients() {
+    return repository.getLiveAllIngredients();
   }
 
 }
