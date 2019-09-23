@@ -169,13 +169,7 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.action_settings) {
-
-      // TODO open shopping list activity somewhere else!
-
-      Intent intent = new Intent(this, ShoppingListActivity.class);
-      startActivity(intent);
-
-      return true;
+      
     }
 
     return super.onOptionsItemSelected(item);
@@ -201,9 +195,14 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.nav_menu_shoppingList) {
+      Intent intent = new Intent(this, ShoppingListActivity.class);
+      startActivity(intent);
 
     } else if (id == R.id.nav_settings) {
+      // TODO settings screen
 
+    } else {
+      return  false;
     }
 
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
