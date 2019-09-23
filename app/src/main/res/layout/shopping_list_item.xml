@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/shoppingListItem_textView"
+    <RadioButton
+        android:id="@+id/shoppingListItem_radioButton"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        tools:text="Banana" />
+        tools:text="Banana"/>
 
 </LinearLayout>

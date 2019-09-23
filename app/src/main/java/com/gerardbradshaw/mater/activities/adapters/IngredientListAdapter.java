@@ -97,7 +97,7 @@ public class IngredientListAdapter
       super(itemView);
 
       // Initialize the views in the adapter
-      textView = itemView.findViewById(R.id.shoppingListItem_textView);
+      textView = itemView.findViewById(R.id.shoppingListItem_radioButton);
       this.adapter = adapter;
     }
   }
