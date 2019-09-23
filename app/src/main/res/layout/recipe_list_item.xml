@@ -17,7 +17,7 @@
             android:id="@+id/recipeListItem_image"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:contentDescription="@string/recipeListItem_image_contentDescription"
+            android:contentDescription="@string/image_contentDescription"
             android:scaleType="centerCrop"
             android:transitionName="imageTransition"
             tools:src="@drawable/img_placeholder_detail_view"/>
