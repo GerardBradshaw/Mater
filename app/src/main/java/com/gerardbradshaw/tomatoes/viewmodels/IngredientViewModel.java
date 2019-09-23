@@ -4,10 +4,13 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
+
+import java.util.List;
 
 public class IngredientViewModel extends AndroidViewModel {
 
@@ -29,8 +32,8 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
-  public Ingredient[] getAllIngredients() {
-    return repository.getAllIngredients();
+  public LiveData<List<Ingredient>> getLiveAllIngredients() {
+    return repository.getLiveAllIngredients();
   }
 
 }

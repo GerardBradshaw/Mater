@@ -40,18 +40,11 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
-
-  // Data objects
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-
-  // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
-
-  // Logging
   private static String LOG_TAG = "GGG - Main Activity";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -60,6 +53,8 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_drawer);
+    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -84,10 +79,6 @@ public class MainActivity extends AppCompatActivity
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
-
-    // Set up the ViewModel and its observer
-    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
-    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up the RecyclerView's adapter
     recipeListAdapter = new RecipeListAdapter(this, imageViewModel);
@@ -164,7 +155,6 @@ public class MainActivity extends AppCompatActivity
   }
 
 
-
   // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
 
   @Override
@@ -176,13 +166,15 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+
+      // TODO open shopping list activity somewhere else!
+
+      Intent intent = new Intent(this, ShoppingListActivity.class);
+      startActivity(intent);
+
       return true;
     }
 

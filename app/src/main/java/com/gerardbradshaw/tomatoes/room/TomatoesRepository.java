@@ -38,7 +38,7 @@ public class TomatoesRepository {
   private SummaryDao summaryDao;
   private RecipeIngredientDao recipeIngredientDao;
   private StepDao stepDao;
-  private LiveData<List<Summary>> recipeSummaryList;
+  private LiveData<List<Summary>> liveRecipeSummaryList;
   private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
   private static AtomicInteger updateCount = new AtomicInteger(0);
   private static final String LOG_TAG = "GGG - Repository";
@@ -64,7 +64,7 @@ public class TomatoesRepository {
     context = tomatoesApplication.getApplicationContext();
 
     // Cache LiveData
-    recipeSummaryList = summaryDao.getAllLiveSummaries();
+    liveRecipeSummaryList = summaryDao.getLiveAllSummaries();
 
     // Determine the path to internal storage and create a File object
     File internalStorage = application.getFilesDir();
@@ -82,8 +82,8 @@ public class TomatoesRepository {
 
   // - - - - - - - - - - - - - - - Summary Data - - - - - - - - - - - - - - -
 
-  public LiveData<List<Summary>> getAllLiveSummaries() {
-    return recipeSummaryList;
+  public LiveData<List<Summary>> getLiveAllSummaries() {
+    return liveRecipeSummaryList;
   }
 
   public LiveData<String> getLiveTitle(int recipeId) {
@@ -228,10 +228,9 @@ public class TomatoesRepository {
 
   // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
 
-  public Ingredient[] getAllIngredients() {
-    return ingredientDao.getAllIngredients();
+  public LiveData<List<Ingredient>> getLiveAllIngredients() {
+    return ingredientDao.getLiveAllIngredients();
   }
-
 
   public Ingredient getIngredient(int ingredientId) {
     try {

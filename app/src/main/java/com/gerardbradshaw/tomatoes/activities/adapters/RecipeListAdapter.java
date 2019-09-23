@@ -46,7 +46,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
    *
    * @param parent the ViewGroup into which the new View will be added after it is bound to an adapter position.
-   * @param viewType the view ty[e pf tje mew Voew/
+   * @param viewType the view type of the new View
    * @return RecipeViewHolder: The inflated view.
    */
   @NonNull
