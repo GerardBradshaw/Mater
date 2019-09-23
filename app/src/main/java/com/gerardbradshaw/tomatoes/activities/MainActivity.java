@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
     // Set up Drawer
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
-    NavigationView navigationView = findViewById(R.id.main_nav_view);
+    NavigationView navigationView = findViewById(R.id.main_navDrawer);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
         this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
     drawer.addDrawerListener(toggle);
@@ -200,17 +200,11 @@ public class MainActivity extends AppCompatActivity
     // Handle navigation view item clicks here.
     int id = item.getItemId();
 
-    if (id == R.id.nav_home) {
+    if (id == R.id.nav_menu_home) {
       // Handle the camera action
-    } else if (id == R.id.nav_gallery) {
+    } else if (id == R.id.nav_menu_shoppingList) {
 
-    } else if (id == R.id.nav_slideshow) {
-
-    } else if (id == R.id.nav_tools) {
-
-    } else if (id == R.id.nav_share) {
-
-    } else if (id == R.id.nav_send) {
+    } else if (id == R.id.nav_settings) {
 
     }
 
