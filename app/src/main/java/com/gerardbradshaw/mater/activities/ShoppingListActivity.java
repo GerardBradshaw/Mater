@@ -1,6 +1,7 @@
 package com.gerardbradshaw.mater.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,7 +16,9 @@ import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShoppingListActivity extends AppCompatActivity {
 
@@ -24,7 +27,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
   private IngredientListAdapter ingredientListAdapter;
   private RecyclerView recyclerView;
-  private List<Ingredient> ingredientList = new ArrayList<>();
+  private List<Pair<String, Boolean>> ingredientStockPairs = new ArrayList<>();
   private SharedPrefHelper sharedPrefHelper;
 
 
@@ -49,8 +52,16 @@ public class ShoppingListActivity extends AppCompatActivity {
     ingredientViewModel.getLiveAllIngredients().observe(this, new Observer<List<Ingredient>>() {
       @Override
       public void onChanged(List<Ingredient> ingredients) {
-        ingredientList = ingredients;
+
+        // Add each ingredient to a list
+        for (Ingredient ingredient : ingredients) {
+          String name = ingredient.getName();
+          boolean inStock = sharedPrefHelper.getBoolean(name, false);
+          ingredientStockPairs.add(new Pair<>(name, inStock));
+        }
+
         ingredientListAdapter.setIngredientList(ingredients);
+
       }
     });
 
@@ -59,12 +70,13 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    // Save ingredient states to shared preferences
-    for (Ingredient ingredient : ingredientList) {
-      // TODO add each ingredient as the key in shared preferences with a boolean for in stock or out of stock
 
+    // Save the stock level to shared preferences
+    for (Pair<String, Boolean> pair : ingredientStockPairs) {
+      String key = pair.first;
+      boolean inStock = pair.second;
+      sharedPrefHelper.putBoolean(key, inStock);
     }
-
 
   }
 }
