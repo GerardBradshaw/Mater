@@ -1,13 +1,10 @@
 package com.gerardbradshaw.tomatoes.helpers;
 
 import android.app.Application;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 import com.gerardbradshaw.tomatoes.helpers.Units.Mass;
 import com.gerardbradshaw.tomatoes.helpers.Units.Volume;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
@@ -17,7 +14,7 @@ import java.util.List;
 
 public class TomatoesApplication extends Application {
 
-  private RecipeRepository repository;
+  private TomatoesRepository repository;
 
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
@@ -26,7 +23,7 @@ public class TomatoesApplication extends Application {
     super.onCreate();
 
     // Initialize the repository
-    repository = new RecipeRepository(this);
+    repository = new TomatoesRepository(this);
 
     // Initialize shared prefs
     SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
@@ -38,12 +35,14 @@ public class TomatoesApplication extends Application {
       sharedPrefHelper.setAsLaunched();
 
       // Create the default recipes
-      RecipeHolder lasagneRecipeHolder = createLasagneRecipe();
-      RecipeHolder curryRecipeHolder = createCurryRecipe();
+      RecipeHolder lasagneRecipeHolder = createLasagneRecipeHolder();
+      RecipeHolder curryRecipeHolder = createCurryRecipeHolder();
+      RecipeHolder satayRecipeHolder = createSatayRecipeHolder();
 
       // Add the recipes to the database
-      repository.insertRecipeFromHolder(lasagneRecipeHolder);
+      repository.insertRecipeFromHolder(satayRecipeHolder);
       repository.insertRecipeFromHolder(curryRecipeHolder);
+      repository.insertRecipeFromHolder(lasagneRecipeHolder);
 
       // Store the lasagne image
       int lasagneImageId = this.getResources().getIdentifier(
@@ -61,12 +60,7 @@ public class TomatoesApplication extends Application {
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  /**
-   * Creates a lasagne RecipeHolder.
-   *
-   * @return RecipeHolder: The lasagne recipe.
-   */
-  private RecipeHolder createLasagneRecipe() {
+  private RecipeHolder createLasagneRecipeHolder() {
 
     // Create a new RecipeHolder object
     RecipeHolder recipe = new RecipeHolder();
@@ -139,12 +133,7 @@ public class TomatoesApplication extends Application {
 
   }
 
-  /**
-   * Creates a curry RecipeHolder.
-   *
-   * @return RecipeHolder: The curry recipe.
-   */
-  private RecipeHolder createCurryRecipe() {
+  private RecipeHolder createCurryRecipeHolder() {
 
     // Create a new RecipeHolder object
     RecipeHolder holder = new RecipeHolder();
@@ -171,7 +160,7 @@ public class TomatoesApplication extends Application {
     List<RecipeIngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
-    String tofu = "tofu";
+    String tofu = "firm tofu";
     String curryPaste = "Patak's concentrated Tikka Masala curry paste";
     String coconutMilk = "coconut milk";
 
@@ -209,7 +198,80 @@ public class TomatoesApplication extends Application {
 
   }
 
-  public RecipeRepository getRepository() {
+  private RecipeHolder createSatayRecipeHolder() {
+
+    // Create a new RecipeHolder object
+    RecipeHolder holder = new RecipeHolder();
+
+    holder.setTitle("Tofu Satay");
+    holder.setDescription("Smooth, nutty, and just the right amount of fantastic.");
+
+    // Create the cooking steps
+    List<String> steps = new ArrayList<>();
+    steps.add("Dice tofu into cubes and fry in saucepan on low temperature. Turn and cook without oil until golden brown.");
+    steps.add("Wash and slice bok-choy into 1/2 inch pieces. Set aside.");
+    steps.add("Boil water in a medium pot and add cook pasta per packet directions. Set aside once finished.");
+    steps.add("Set tofu aside and saute capsicum and broccoli in the saucepan.");
+    steps.add("Add bok-choy to saucepan during final 5 minutes of saute. All vegetables should be hot and crispy.");
+    steps.add("For the sauce, add peanut butter, soy sauce, sesame oil, lime juice, and water to a microwave safe pourer and microwave on high for 3 minutes.");
+    steps.add("Blend sauce with electric mixer until it makes a smooth paste.");
+    steps.add("Add pasta, vegetables, tofu, and sauce to a bowl and serve.");
+    steps.add("Enjoy!");
+
+    // Add the steps to the recipe
+    holder.setSteps(steps);
+
+    // Create the RecipeIngredientsHolder object
+    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+
+    // Define the names of ingredients that contain allergens
+    String tofu = "firm tofu";
+    String pasta = "pasta";
+    String peanutButter = "peanut butter";
+    String soySauce = "soy sauce";
+
+    // Add each ingredient to the list
+    ingredients.add(new RecipeIngredientHolder(
+        tofu, 600d, Mass.GRAMS));
+
+    ingredients.add(new RecipeIngredientHolder(
+        "capsicum", 1d, MiscUnits.NO_UNIT));
+
+    ingredients.add(new RecipeIngredientHolder(
+        "frozen broccoli", 454d, Mass.GRAMS));
+
+    ingredients.add(new RecipeIngredientHolder(
+        "bok-choy", 2d, MiscUnits.NO_UNIT));
+
+    ingredients.add(new RecipeIngredientHolder(
+        pasta, 320d, Mass.GRAMS));
+
+    ingredients.add(new RecipeIngredientHolder(
+        peanutButter, 285d, Mass.GRAMS));
+
+    ingredients.add(new RecipeIngredientHolder(
+        soySauce, 90d, Volume.MILLILITRES));
+
+    ingredients.add(new RecipeIngredientHolder(
+        "sesame oil", 60d, Volume.MILLILITRES));
+
+    ingredients.add(new RecipeIngredientHolder(
+        "lime juice", 120d, Volume.MILLILITRES));
+
+    ingredients.add(new RecipeIngredientHolder(
+        "water", 180d, Volume.MILLILITRES));
+
+    // Add the list to the RecipeHolder
+    holder.setRecipeIngredients(ingredients);
+
+    // Return the holder
+
+    return holder;
+
+  }
+
+
+  public TomatoesRepository getRepository() {
     return repository;
   }
 

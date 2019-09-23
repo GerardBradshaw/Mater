@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.tomatoes.R;
+import com.gerardbradshaw.tomatoes.activities.adapters.RecipeListAdapter;
+import com.gerardbradshaw.tomatoes.room.entities.Summary;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeSummaryViewModel;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.viewmodels.SummaryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,18 +40,11 @@ public class MainActivity extends AppCompatActivity
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Layout views
   private RecyclerView recyclerView;
   private RecipeListAdapter recipeListAdapter;
-
-  // Data objects
-  private RecipeSummaryViewModel summaryViewModel;
+  private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-
-  // Intent extras
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.tomatoes.EXTRA_RECIPE_ID";
-
-  // Logging
   private static String LOG_TAG = "GGG - Main Activity";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -57,6 +53,8 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main_drawer);
+    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -82,21 +80,17 @@ public class MainActivity extends AppCompatActivity
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
 
-    // Set up the ViewModel and its observer
-    summaryViewModel = ViewModelProviders.of(this).get(RecipeSummaryViewModel.class);
-    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
-
     // Set up the RecyclerView's adapter
-    recipeListAdapter = new RecipeListAdapter(this, summaryViewModel.getRepository());
+    recipeListAdapter = new RecipeListAdapter(this, imageViewModel);
 
     // Set onClick functionality
     recipeListAdapter.setRecipeClickedListener(new RecipeListAdapter.RecipeClickedListener() {
       @Override
-      public void onRecipeClicked(RecipeSummary recipeSummary, ImageView imageView) {
+      public void onRecipeClicked(Summary summary, ImageView imageView) {
 
         // Add the ID of the clicked recipe to the intent
         Intent intent = new Intent(MainActivity.this, RecipeDetailActivity.class);
-        intent.putExtra(EXTRA_RECIPE_ID, recipeSummary.getRecipeId());
+        intent.putExtra(EXTRA_RECIPE_ID, summary.getRecipeId());
 
         // Set up transitions
         Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
@@ -109,14 +103,45 @@ public class MainActivity extends AppCompatActivity
     });
 
     // Set up RecyclerView
-    recyclerView = findViewById(R.id.main_recyclerView);
+    recyclerView = findViewById(R.id.main_recycler);
     recyclerView.setAdapter(recipeListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<RecipeSummary>>() {
+    // Set up swipe and drag directions for the cards
+    int swipeDirs = ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+
+    // Set up ItemTouchHelper to handle swipes
+    ItemTouchHelper touchHelper = new ItemTouchHelper(
+        new ItemTouchHelper.SimpleCallback(0, swipeDirs) {
       @Override
-      public void onChanged(List<RecipeSummary> recipeSummaries) {
-        recipeListAdapter.setRecipeSummaryList(recipeSummaries);
+      public boolean onMove(@NonNull RecyclerView recyclerView,
+                            @NonNull RecyclerView.ViewHolder viewHolder,
+                            @NonNull RecyclerView.ViewHolder target) {
+        return false;
+      }
+
+      @Override
+      public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+        // Get the position of the item swiped
+        int position = viewHolder.getAdapterPosition();
+
+        // Determine which recipe was swiped
+        int recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
+
+        summaryViewModel.deleteRecipe(recipeToDelete);
+        recipeListAdapter.notifyDataSetChanged();
+        // TODO confirmation prompt for the user
+
+      }
+    });
+
+    // Attach the touch helper to the recyclerView
+    touchHelper.attachToRecyclerView(recyclerView);
+
+    summaryViewModel.getAllRecipeSummaries().observe(this, new Observer<List<Summary>>() {
+      @Override
+      public void onChanged(List<Summary> recipeSummaries) {
+        recipeListAdapter.setSummaryList(recipeSummaries);
       }
     });
 
@@ -130,7 +155,6 @@ public class MainActivity extends AppCompatActivity
   }
 
 
-
   // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
 
   @Override
@@ -142,13 +166,15 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
     int id = item.getItemId();
 
-    //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
+
+      // TODO open shopping list activity somewhere else!
+
+      Intent intent = new Intent(this, ShoppingListActivity.class);
+      startActivity(intent);
+
       return true;
     }
 

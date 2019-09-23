@@ -7,16 +7,17 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "recipe_step_table",
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(
+    tableName = "step_table",
     foreignKeys = {
-    @ForeignKey(entity = RecipeSummary.class,
+    @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
-        childColumns = "recipe_id")},
-
-    indices = {@Index(value = "recipe_id")}
-
-)
-public class RecipeStep {
+        childColumns = "recipe_id",
+        onDelete = CASCADE)},
+    indices = {@Index(value = "recipe_id")})
+public class Step {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
@@ -37,7 +38,7 @@ public class RecipeStep {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public RecipeStep(int recipeId, int number, @NonNull String description) {
+  public Step(int recipeId, int number, @NonNull String description) {
     this.recipeId = recipeId;
     this.number = number;
     this.description = description;

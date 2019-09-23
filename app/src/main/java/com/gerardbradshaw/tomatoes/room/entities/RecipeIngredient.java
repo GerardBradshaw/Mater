@@ -8,17 +8,19 @@ import androidx.room.PrimaryKey;
 
 import com.gerardbradshaw.tomatoes.helpers.Units;
 
-@Entity(tableName = "recipe_ingredient_table",
+import static androidx.room.ForeignKey.CASCADE;
 
+@Entity(
+    tableName = "recipe_ingredient_table",
     foreignKeys = {
-    @ForeignKey(entity = RecipeSummary.class,
+    @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
-        childColumns = "recipe_id"),
-
+        childColumns = "recipe_id",
+        onDelete = CASCADE),
     @ForeignKey(entity = Ingredient.class,
         parentColumns = "ingredient_id",
-        childColumns = "ingredient_id")},
-
+        childColumns = "ingredient_id",
+        onDelete = CASCADE)},
     indices = {@Index(value = "recipe_id"), @Index(value = "ingredient_id")})
 public class RecipeIngredient {
 

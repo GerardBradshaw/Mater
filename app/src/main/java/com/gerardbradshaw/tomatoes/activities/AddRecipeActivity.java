@@ -32,7 +32,7 @@ import com.gerardbradshaw.tomatoes.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.tomatoes.helpers.Units.MiscUnits;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
-import com.gerardbradshaw.tomatoes.viewmodels.RecipeDetailsViewModel;
+import com.gerardbradshaw.tomatoes.viewmodels.DetailsViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
 
-  private RecipeDetailsViewModel detailsViewModel;
+  private DetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
@@ -70,7 +70,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
 
     // Initialize the ViewModels
-    detailsViewModel = ViewModelProviders.of(this).get(RecipeDetailsViewModel.class);
+    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views

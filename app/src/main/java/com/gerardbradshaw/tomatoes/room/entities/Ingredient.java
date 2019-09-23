@@ -5,7 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "ingredient_table")
+@Entity(
+    tableName = "ingredient_table")
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -

@@ -1,4 +1,4 @@
-package com.gerardbradshaw.tomatoes.activities;
+package com.gerardbradshaw.tomatoes.activities.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.entities.Summary;
+import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
 
 import java.util.List;
 
@@ -23,25 +23,20 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<RecipeSummary> recipeSummaryList; // Cached copy
+  private List<Summary> summaryList; // Cached copy
   private RecipeClickedListener recipeClickedListener;
   private Context context;
-  private RecipeRepository repository;
+  private ImageViewModel imageViewModel;
   private static String LOG_TAG = "GGG - RecipeListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  /**
-   * Constructor for the adapter.
-   *
-   * @param context the activity context
-   */
-  public RecipeListAdapter(Context context, RecipeRepository repository) {
+  public RecipeListAdapter(Context context, ImageViewModel imageViewModel) {
     this.context = context;
     inflater = LayoutInflater.from(context);
 
-    this.repository = repository;
+    this.imageViewModel = imageViewModel;
   }
 
 
@@ -51,7 +46,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
    * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
    *
    * @param parent the ViewGroup into which the new View will be added after it is bound to an adapter position.
-   * @param viewType the view ty[e pf tje mew Voew/
+   * @param viewType the view type of the new View
    * @return RecipeViewHolder: The inflated view.
    */
   @NonNull
@@ -74,17 +69,17 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   @Override
   public void onBindViewHolder(@NonNull final RecipeViewHolder holder, final int position) {
 
-    if (recipeSummaryList != null) {
+    if (summaryList != null) {
 
       // Retrieve the data for that position and add the data to the view
-      RecipeSummary currentRecipeSummary = recipeSummaryList.get(position);
-      String title = currentRecipeSummary.getTitle();
+      Summary currentSummary = summaryList.get(position);
+      String title = currentSummary.getTitle();
       holder.recipeTitleView.setText(title);
-      holder.recipeDescriptionView.setText(currentRecipeSummary.getDescription());
-      Uri imageDirectory = Uri.parse(currentRecipeSummary.getImageDirectory());
+      holder.recipeDescriptionView.setText(currentSummary.getDescription());
+      Uri imageDirectory = Uri.parse(currentSummary.getImageDirectory());
 
       Glide.with(context)
-          .load(repository.getFile(title))
+          .load(imageViewModel.getFile(title))
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
 
@@ -103,7 +98,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
       @Override
       public void onClick(View view) {
         // Get the RecipeHolder at the current position
-        RecipeSummary currentRecipe = recipeSummaryList.get(position);
+        Summary currentRecipe = summaryList.get(position);
 
         // Call the onRecipeClicked method (called in MainActivity using an override)
         if (recipeClickedListener != null) {
@@ -116,7 +111,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
   /**
    * Adapter method to return the number of items to be displayed in the RecyclerView.
-   * This method is called many times, and when it is first called, this.recipeSummaryList has not
+   * This method is called many times, and when it is first called, this.summaryList has not
    * been updated. This means, initially, it will return zero.
    *
    * @return the number of items
@@ -124,8 +119,8 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   @Override
   public int getItemCount() {
 
-    if(recipeSummaryList != null) {
-      return recipeSummaryList.size();
+    if(summaryList != null) {
+      return summaryList.size();
 
     } else {
       return 0;
@@ -136,13 +131,13 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setRecipeSummaryList(List<RecipeSummary> recipeSummaryList) {
-    this.recipeSummaryList = recipeSummaryList;
+  public void setSummaryList(List<Summary> summaryList) {
+    this.summaryList = summaryList;
     notifyDataSetChanged();
   }
 
-  public RecipeSummary getRecipeSummaryAtPosition(int position) {
-    return recipeSummaryList.get(position);
+  public int getRecipeIdAtPosition(int position) {
+    return summaryList.get(position).getRecipeId();
   }
 
   public void setRecipeClickedListener(RecipeClickedListener recipeClickedListener) {
@@ -176,7 +171,7 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
   // - - - - - - - - - - - - - - - RecipeClickedListener Interface - - - - - - - - - - - - - - -
 
   public interface RecipeClickedListener {
-    void onRecipeClicked(RecipeSummary recipeSummary, ImageView imageView);
+    void onRecipeClicked(Summary summary, ImageView imageView);
   }
 
 }
