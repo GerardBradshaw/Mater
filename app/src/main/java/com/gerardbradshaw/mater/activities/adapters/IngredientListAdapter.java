@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +22,7 @@ public class IngredientListAdapter
   private final LayoutInflater inflater;
   private List<Ingredient> ingredientList;
   private static String LOG_TAG = "GGG - IngredientListAdapter";
+  private IngredientClickedListener ingredientClickedListener;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -57,10 +58,24 @@ public class IngredientListAdapter
    * @param position the position of the item within the adapter's data set
    */
   @Override
-  public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
     String currentIngredient = ingredientList.get(position).getName();
-    holder.textView.setText(currentIngredient);
+    holder.radioButton.setText(currentIngredient);
+
+    // Set up onClick listener
+    holder.itemView.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        // Get the Ingredient at the current position
+        Ingredient currentIngredient = ingredientList.get(position);
+
+        // Call the onRecipeClicked method (called in MainActivity using an override)
+        if (ingredientClickedListener != null) {
+          ingredientClickedListener.onIngredientClicked(currentIngredient, holder.radioButton);
+        }
+      }
+    });
 
   }
 
@@ -85,20 +100,27 @@ public class IngredientListAdapter
     notifyDataSetChanged();
   }
 
+  public void setIngredientClickedListener(IngredientClickedListener ingredientClickedListener) {
+    this.ingredientClickedListener = ingredientClickedListener;
+  }
 
   // - - - - - - - - - - - - - - - ViewHolder - - - - - - - - - - - - - - -
 
   class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-    final TextView textView;
+    final RadioButton radioButton;
     final IngredientListAdapter adapter;
 
     public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
-      textView = itemView.findViewById(R.id.shoppingListItem_radioButton);
+      radioButton = itemView.findViewById(R.id.shoppingListItem_radioButton);
       this.adapter = adapter;
     }
+  }
+
+  public interface IngredientClickedListener {
+    void onIngredientClicked(Ingredient ingredient, RadioButton radioButton);
   }
 }
