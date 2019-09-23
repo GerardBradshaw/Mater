@@ -19,9 +19,8 @@ import com.bumptech.glide.Glide;
 import com.gerardbradshaw.tomatoes.R;
 import com.gerardbradshaw.tomatoes.helpers.Units;
 import com.gerardbradshaw.tomatoes.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 import com.gerardbradshaw.tomatoes.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.tomatoes.viewmodels.ImageViewModel;
@@ -37,21 +36,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private TextView descriptionView;
   private ImageView imageView;
   private Toolbar toolbar;
-
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
-
   private DetailsViewModel detailsViewModel;
   private ImageViewModel imageViewModel;
-  private RecipeRepository repository;
-
   private int recipeId;
   private double servings;
   private Context context;
-
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
-
   private String recipeTitle;
 
 
@@ -60,15 +53,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
+    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get intent information
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
     context = this;
-
-    // Initialize the VMs
-    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
-    imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get the number of servings
     // TODO add ability to set number of servings
@@ -83,7 +74,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     descriptionView = findViewById(R.id.recipeDetail_description);
 
     // Set the title
-    detailsViewModel.getTitle(recipeId).observe(this, new Observer<String>() {
+    detailsViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         recipeTitle = s;
@@ -101,7 +92,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the description
-    detailsViewModel.getDescription(recipeId).observe(this, new Observer<String>() {
+    detailsViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         descriptionView.setText(s);
@@ -109,7 +100,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the ingredients
-    detailsViewModel.getIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
+    detailsViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
       @Override
       public void onChanged(RecipeIngredient[] recipeIngredients) {
         loadIngredientsIntoView(recipeIngredients);
@@ -117,10 +108,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the steps
-    detailsViewModel.getSteps(recipeId).observe(this, new Observer<RecipeStep[]>() {
+    detailsViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
       @Override
-      public void onChanged(RecipeStep[] recipeSteps) {
-        loadStepsIntoView(recipeSteps);
+      public void onChanged(Step[] steps) {
+        loadStepsIntoView(steps);
       }
     });
   }
@@ -183,7 +174,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
   }
 
-  private void loadStepsIntoView(RecipeStep[] recipeSteps) {
+  private void loadStepsIntoView(Step[] steps) {
     // Clear the ViewHolder references
     stepViewHolders.clear();
 
@@ -194,7 +185,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Get the insert point
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_stepsLayout);
 
-    for (RecipeStep step : recipeSteps) {
+    for (Step step : steps) {
       String description = step.getDescription();
       int number = step.getNumber();
 

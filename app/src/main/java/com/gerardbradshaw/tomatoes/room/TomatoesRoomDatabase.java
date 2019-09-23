@@ -10,19 +10,16 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.gerardbradshaw.tomatoes.room.daos.IngredientDao;
-import com.gerardbradshaw.tomatoes.room.daos.RecipeSummaryDao;
+import com.gerardbradshaw.tomatoes.room.daos.SummaryDao;
 import com.gerardbradshaw.tomatoes.room.daos.RecipeIngredientDao;
-import com.gerardbradshaw.tomatoes.room.daos.RecipeStepDao;
+import com.gerardbradshaw.tomatoes.room.daos.StepDao;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeSummary;
+import com.gerardbradshaw.tomatoes.room.entities.Summary;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 
 @Database(
-    entities = {RecipeSummary.class, Ingredient.class, RecipeIngredient.class, RecipeStep.class},
+    entities = {Summary.class, Ingredient.class, RecipeIngredient.class, Step.class},
     version = 1,
     exportSchema = false)
 public abstract class TomatoesRoomDatabase extends RoomDatabase {
@@ -30,13 +27,13 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   // Define the DAOs that the database will use to interact with SQL
-  public abstract RecipeSummaryDao recipeDao();
+  public abstract SummaryDao recipeDao();
 
   public abstract IngredientDao ingredientDao();
 
   public abstract RecipeIngredientDao recipeIngredientDao();
 
-  public abstract RecipeStepDao recipeStepDao();
+  public abstract StepDao recipeStepDao();
 
   // Create an instance variable to ensure that the database is a singleton
   private static TomatoesRoomDatabase INSTANCE;
@@ -92,10 +89,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
 
     // - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - -
 
-    final RecipeSummaryDao recipeSummaryDao;
+    final SummaryDao summaryDao;
     final IngredientDao ingredientDao;
     final RecipeIngredientDao recipeIngredientDao;
-    final RecipeStepDao recipeStepDao;
+    final StepDao stepDao;
 
 
     // - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - -
@@ -107,10 +104,10 @@ public abstract class TomatoesRoomDatabase extends RoomDatabase {
      */
     private PopulateDbAsyncTask(TomatoesRoomDatabase database) {
       // Set the DAOs
-      recipeSummaryDao = database.recipeDao();
+      summaryDao = database.recipeDao();
       ingredientDao = database.ingredientDao();
       recipeIngredientDao = database.recipeIngredientDao();
-      recipeStepDao = database.recipeStepDao();
+      stepDao = database.recipeStepDao();
     }
 
 

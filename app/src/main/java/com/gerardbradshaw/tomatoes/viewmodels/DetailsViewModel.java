@@ -8,17 +8,17 @@ import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.tomatoes.helpers.TomatoesApplication;
 import com.gerardbradshaw.tomatoes.pojos.RecipeHolder;
-import com.gerardbradshaw.tomatoes.room.RecipeRepository;
+import com.gerardbradshaw.tomatoes.room.TomatoesRepository;
 import com.gerardbradshaw.tomatoes.room.entities.Ingredient;
 import com.gerardbradshaw.tomatoes.room.entities.RecipeIngredient;
-import com.gerardbradshaw.tomatoes.room.entities.RecipeStep;
+import com.gerardbradshaw.tomatoes.room.entities.Step;
 
 public class DetailsViewModel extends AndroidViewModel {
 
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private RecipeRepository repository;
+  private TomatoesRepository repository;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -39,32 +39,28 @@ public class DetailsViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
-  public LiveData<String> getTitle(int recipeId) {
-    return repository.getRecipeTitle(recipeId);
+  public LiveData<String> getLiveTitle(int recipeId) {
+    return repository.getLiveTitle(recipeId);
   }
 
-  public LiveData<String> getDescription(int recipeId) {
-    return repository.getRecipeDescription(recipeId);
+  public LiveData<String> getLiveDescription(int recipeId) {
+    return repository.getLiveDescription(recipeId);
   }
 
-  public LiveData<String> getImageDirectory(int recipeId) {
-    return repository.getRecipeImageDirectory(recipeId);
+  public LiveData<String> getLiveImageDirectory(int recipeId) {
+    return repository.getLiveImageDirectory(recipeId);
   }
 
-  public LiveData<RecipeIngredient[]> getIngredients(int recipeId) {
-    return repository.getRecipeIngredients(recipeId);
+  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
+    return repository.getLiveRecipeIngredients(recipeId);
   }
 
-  public LiveData<RecipeStep[]> getSteps(int recipeId) {
-    return repository.getRecipeSteps(recipeId);
+  public LiveData<Step[]> getLiveSteps(int recipeId) {
+    return repository.getLiveSteps(recipeId);
   }
 
   public Ingredient getIngredient(int ingredientId) {
     return repository.getIngredient(ingredientId);
-  }
-
-  public RecipeRepository getRepository() {
-    return repository;
   }
 
   public void insertRecipeHolder(RecipeHolder recipeHolder) {
