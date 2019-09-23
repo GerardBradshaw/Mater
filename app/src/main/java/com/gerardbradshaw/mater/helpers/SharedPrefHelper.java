@@ -18,7 +18,7 @@ public class SharedPrefHelper {
    *
    * @param context: The activity context.
    */
-  SharedPrefHelper(Context context) {
+  public SharedPrefHelper(Context context) {
     sharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE);
   }
 
