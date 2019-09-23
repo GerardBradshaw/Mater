@@ -9,7 +9,6 @@
     <string name="nav_header_subtitle">TODO</string>
     <string name="nav_header_desc">Navigation header</string>
     <!-- Nav menu -->
-    <string name="nav_menu_home">Home</string>
     <string name="nav_menu_shoppingList">Shopping List</string>
     <string name="nav_menu_settings">Settings</string>
     <!-- AppBar Menu -->
