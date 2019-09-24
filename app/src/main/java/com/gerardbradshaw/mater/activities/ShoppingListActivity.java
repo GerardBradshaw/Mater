@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.CheckBox;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.adapters.IngredientListAdapter;
@@ -27,7 +28,8 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
   private IngredientListAdapter ingredientListAdapter;
   private RecyclerView recyclerView;
-  private List<Pair<Ingredient, Boolean>> ingredientStockPairs = new ArrayList<>();
+  private Map<String, Boolean> ingredientStockMap = new HashMap<>();
+  private List<Pair<Ingredient, Boolean>> ingredientStockPairList = new ArrayList<>();
   private SharedPrefHelper sharedPrefHelper;
 
 
@@ -40,8 +42,22 @@ public class ShoppingListActivity extends AppCompatActivity {
     ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
     recyclerView = findViewById(R.id.shoppingList_recycler);
 
-    // Set up ingredientListAdapter and recyclerView
+    // Set up ingredientListAdapter
     ingredientListAdapter = new IngredientListAdapter(this);
+
+    ingredientListAdapter.setIngredientClickedListener(new IngredientListAdapter.IngredientClickedListener() {
+      @Override
+      public void onIngredientClicked(Ingredient ingredient, CheckBox checkBox) {
+        // Save the value to shared prefs
+        String name = ingredient.getName();
+        boolean inStock = checkBox.isChecked();
+        ingredientStockMap.put(name, inStock);
+        sharedPrefHelper.putBoolean(name, inStock);
+      }
+    });
+
+
+    // Set up RecyclerView
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -57,10 +73,10 @@ public class ShoppingListActivity extends AppCompatActivity {
         for (Ingredient ingredient : ingredients) {
           String name = ingredient.getName();
           boolean inStock = sharedPrefHelper.getBoolean(name, false);
-          ingredientStockPairs.add(new Pair<>(ingredient, inStock));
+          ingredientStockPairList.add(new Pair<>(ingredient, inStock));
         }
 
-        ingredientListAdapter.setIngredientList(ingredientStockPairs);
+        ingredientListAdapter.setIngredientList(ingredientStockPairList);
 
       }
     });
@@ -72,7 +88,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     super.onPause();
 
     // Save the stock level to shared preferences
-    for (Pair<Ingredient, Boolean> pair : ingredientStockPairs) {
+    for (Pair<Ingredient, Boolean> pair : ingredientStockPairList) {
       String key = pair.first.getName();
       boolean inStock = pair.second;
       sharedPrefHelper.putBoolean(key, inStock);
