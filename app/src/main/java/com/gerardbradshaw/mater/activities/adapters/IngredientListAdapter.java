@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
@@ -20,7 +22,7 @@ public class IngredientListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<Ingredient> ingredientList;
+  private List<Pair<Ingredient, Boolean>> ingredientStockPairs;
   private static String LOG_TAG = "GGG - IngredientListAdapter";
   private IngredientClickedListener ingredientClickedListener;
 
@@ -60,19 +62,22 @@ public class IngredientListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    String currentIngredient = ingredientList.get(position).getName();
-    holder.radioButton.setText(currentIngredient);
+    Ingredient currentIngredient = ingredientStockPairs.get(position).first;
+    boolean currentIngredientInStock = ingredientStockPairs.get(position).second;
+
+    holder.checkBox.setText(currentIngredient.getName());
+    holder.checkBox.setChecked(currentIngredientInStock);
 
     // Set up onClick listener
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         // Get the Ingredient at the current position
-        Ingredient currentIngredient = ingredientList.get(position);
+        Ingredient currentIngredient = ingredientStockPairs.get(position).first;
 
         // Call the onRecipeClicked method (called in MainActivity using an override)
         if (ingredientClickedListener != null) {
-          ingredientClickedListener.onIngredientClicked(currentIngredient, holder.radioButton);
+          ingredientClickedListener.onIngredientClicked(currentIngredient, holder.checkBox);
         }
       }
     });
@@ -88,15 +93,15 @@ public class IngredientListAdapter
    */
   @Override
   public int getItemCount() {
-    if(ingredientList != null) {
-      return ingredientList.size();
+    if(ingredientStockPairs != null) {
+      return ingredientStockPairs.size();
     } else {
       return 0;
     }
   }
 
-  public void setIngredientList(List<Ingredient> ingredientList) {
-    this.ingredientList = ingredientList;
+  public void setIngredientList(List<Pair<Ingredient, Boolean>> ingredientStockPairs) {
+    this.ingredientStockPairs = ingredientStockPairs;
     notifyDataSetChanged();
   }
 
@@ -108,19 +113,19 @@ public class IngredientListAdapter
 
   class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-    final RadioButton radioButton;
+    final CheckBox checkBox;
     final IngredientListAdapter adapter;
 
     public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
-      radioButton = itemView.findViewById(R.id.shoppingListItem_radioButton);
+      checkBox = itemView.findViewById(R.id.shoppingListItem_checkBox);
       this.adapter = adapter;
     }
   }
 
   public interface IngredientClickedListener {
-    void onIngredientClicked(Ingredient ingredient, RadioButton radioButton);
+    void onIngredientClicked(Ingredient ingredient, CheckBox checkBox);
   }
 }

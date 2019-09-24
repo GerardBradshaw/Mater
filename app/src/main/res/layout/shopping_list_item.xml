@@ -6,8 +6,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <RadioButton
-        android:id="@+id/shoppingListItem_radioButton"
+    <CheckBox
+        android:id="@+id/shoppingListItem_checkBox"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         android:layout_width="match_parent"

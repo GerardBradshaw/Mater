@@ -27,7 +27,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
   private IngredientListAdapter ingredientListAdapter;
   private RecyclerView recyclerView;
-  private List<Pair<String, Boolean>> ingredientStockPairs = new ArrayList<>();
+  private List<Pair<Ingredient, Boolean>> ingredientStockPairs = new ArrayList<>();
   private SharedPrefHelper sharedPrefHelper;
 
 
@@ -57,10 +57,10 @@ public class ShoppingListActivity extends AppCompatActivity {
         for (Ingredient ingredient : ingredients) {
           String name = ingredient.getName();
           boolean inStock = sharedPrefHelper.getBoolean(name, false);
-          ingredientStockPairs.add(new Pair<>(name, inStock));
+          ingredientStockPairs.add(new Pair<>(ingredient, inStock));
         }
 
-        ingredientListAdapter.setIngredientList(ingredients);
+        ingredientListAdapter.setIngredientList(ingredientStockPairs);
 
       }
     });
@@ -72,8 +72,8 @@ public class ShoppingListActivity extends AppCompatActivity {
     super.onPause();
 
     // Save the stock level to shared preferences
-    for (Pair<String, Boolean> pair : ingredientStockPairs) {
-      String key = pair.first;
+    for (Pair<Ingredient, Boolean> pair : ingredientStockPairs) {
+      String key = pair.first.getName();
       boolean inStock = pair.second;
       sharedPrefHelper.putBoolean(key, inStock);
     }
