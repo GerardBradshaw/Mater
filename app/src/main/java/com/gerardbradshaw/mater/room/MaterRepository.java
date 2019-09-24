@@ -14,6 +14,7 @@ import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
+import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.daos.IngredientDao;
 import com.gerardbradshaw.mater.room.daos.SummaryDao;
 import com.gerardbradshaw.mater.room.daos.RecipeIngredientDao;
@@ -257,6 +258,18 @@ public class MaterRepository {
       return ingredientDao.getIngredient(recipeIds[0]);
     }
   }
+
+
+  // - - - - - - - - - - - - - - - Ingredient Stock Data - - - - - - - - - - - - - - -
+
+  public List<StockHolder> getStockLevels() {
+    return null;
+  }
+
+  public List<StockHolder> getStockLevels(int recipeId) {
+    return null;
+  }
+
 
 
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
