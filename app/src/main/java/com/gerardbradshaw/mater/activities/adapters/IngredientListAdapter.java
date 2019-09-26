@@ -1,6 +1,8 @@
 package com.gerardbradshaw.mater.activities.adapters;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +73,27 @@ public class IngredientListAdapter
       holder.stockInput.setText(Integer.toString(stockLevel));
     }
 
-    // TODO Set up onTextChanged listener
+    holder.stockInput.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+        // Get the new input and save it to the current ingredient
+        int stockLevel = Integer.parseInt(editable.toString());
+        ingredientList.get(position).setStockLevel(stockLevel);
+
+        if (stockChangedListener != null) {
+          stockChangedListener.onStockLevelChanged(ingredientList.get(position));
+        }
+
+      }
+    });
 
   }
 
