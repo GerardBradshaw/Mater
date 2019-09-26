@@ -3,6 +3,7 @@ package com.gerardbradshaw.mater.room.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
@@ -25,6 +26,9 @@ public class Summary {
   @ColumnInfo(name = "description")
   private String description;
 
+  @ColumnInfo(name = "servings")
+  private int servings;
+
   @NonNull
   @ColumnInfo(name = "image_directory")
   private String imageDirectory;
@@ -39,8 +43,20 @@ public class Summary {
     this.title = title;
     this.description = description;
     this.imageDirectory = imageDirectory;
+    this.servings = 1;
   }
 
+  // Custom constructor (will eventually replace default constructor)
+  @Ignore
+  public Summary(@NonNull String title,
+                 @NonNull String description,
+                 @NonNull String imageDirectory,
+                 int servings) {
+    this.title = title;
+    this.description = description;
+    this.imageDirectory = imageDirectory;
+    this.servings = servings;
+  }
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
@@ -56,6 +72,10 @@ public class Summary {
   @NonNull
   public String getDescription() {
     return description;
+  }
+
+  public int getServings() {
+    return servings;
   }
 
   @NonNull
@@ -76,6 +96,10 @@ public class Summary {
 
   public void setDescription(@NonNull String description) {
     this.description = description;
+  }
+
+  public void setServings(int servings) {
+    this.servings = servings;
   }
 
   public void setImageDirectory(@NonNull String imageDirectory) {
