@@ -55,6 +55,8 @@ public class Ingredient {
   public Ingredient(@NonNull String name) {
     this.name = name;
 
+    stockLevel = 0;
+
     // Set all allergens as not present
     String CONTAINS_NONE = ContainsAllergen.CONTAINS_NONE.name();
     containsMilk = CONTAINS_NONE;
