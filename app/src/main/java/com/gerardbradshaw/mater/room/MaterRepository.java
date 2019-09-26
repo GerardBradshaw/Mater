@@ -97,6 +97,10 @@ public class MaterRepository {
     return summaryDao.getLiveDescription(recipeId);
   }
 
+  public LiveData<Integer> getLiveServings(int recipeId) {
+    return summaryDao.getLiveServings(recipeId);
+  }
+
   public LiveData<String> getLiveImageDirectory(int recipeId) {
     return summaryDao.getLiveImageDirectory(recipeId);
   }
