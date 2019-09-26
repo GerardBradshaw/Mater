@@ -66,7 +66,10 @@ public class IngredientListAdapter
     Ingredient currentIngredient = ingredientList.get(position);
     int stockLevel = currentIngredient.getStockLevel();
     holder.textView.setText(currentIngredient.getName());
-    holder.stockInput.setText(currentIngredient.getStockLevel());
+
+    if (stockLevel != 0) {
+      holder.stockInput.setText(Integer.toString(stockLevel));
+    }
 
     // TODO Set up onTextChanged listener
 
