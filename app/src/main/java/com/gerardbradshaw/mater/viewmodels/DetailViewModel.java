@@ -13,7 +13,7 @@ import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.room.entities.Step;
 
-public class DetailsViewModel extends AndroidViewModel {
+public class DetailViewModel extends AndroidViewModel {
 
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
@@ -28,7 +28,7 @@ public class DetailsViewModel extends AndroidViewModel {
    *
    * @param application: The app.
    */
-  public DetailsViewModel(@NonNull Application application) {
+  public DetailViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository
@@ -57,10 +57,6 @@ public class DetailsViewModel extends AndroidViewModel {
 
   public LiveData<Step[]> getLiveSteps(int recipeId) {
     return repository.getLiveSteps(recipeId);
-  }
-
-  public Ingredient getIngredient(int ingredientId) {
-    return repository.getIngredient(ingredientId);
   }
 
   public void insertRecipeHolder(RecipeHolder recipeHolder) {

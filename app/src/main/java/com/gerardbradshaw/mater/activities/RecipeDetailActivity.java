@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.main.MainActivity;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
@@ -24,7 +26,8 @@ import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
-import com.gerardbradshaw.mater.viewmodels.DetailsViewModel;
+import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
+import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +41,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private Toolbar toolbar;
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
-  private DetailsViewModel detailsViewModel;
+  private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+  private DetailViewModel detailViewModel;
   private ImageViewModel imageViewModel;
+  private IngredientViewModel ingredientViewModel;
   private int recipeId;
   private double servings;
   private Context context;
@@ -53,15 +57,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
-    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+    ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
 
     // Get intent information
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
     context = this;
 
-    // Get the number of servings
     // TODO add ability to set number of servings
     servings = 1;
 
@@ -74,7 +78,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     descriptionView = findViewById(R.id.recipeDetail_description);
 
     // Set the title
-    detailsViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
+    detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         recipeTitle = s;
@@ -92,7 +96,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the description
-    detailsViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
+    detailViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         descriptionView.setText(s);
@@ -100,7 +104,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the ingredients
-    detailsViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
+    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
       @Override
       public void onChanged(RecipeIngredient[] recipeIngredients) {
         loadIngredientsIntoView(recipeIngredients);
@@ -108,7 +112,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the steps
-    detailsViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
+    detailViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
       @Override
       public void onChanged(Step[] steps) {
         loadStepsIntoView(steps);
@@ -135,21 +139,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
 
     // Create a RecipeIngredientHolder for each ingredient
-    for (RecipeIngredient ingredient : recipeIngredients) {
-      String name = detailsViewModel.getIngredient(ingredient.getIngredientId()).getName();
-      double amount = ingredient.getAmount() * servings;
-      String unit = ingredient.getUnits();
-      ingredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
+    for (RecipeIngredient r : recipeIngredients) {
+      String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
+      double amount = r.getAmount() * servings;
+      String unit = r.getUnits();
+      recipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
     }
 
     // Add a new View to the layout for each ingredient
-    for(RecipeIngredientHolder holder : ingredientHolders) {
+    for(RecipeIngredientHolder holder : recipeIngredientHolders) {
       // Inflate the view to be inserted
       LinearLayout ingredientView = (LinearLayout) inflater
-          .inflate(R.layout.view_ingredient_detail, insertPoint, false);
+          .inflate(R.layout.ingredient_detail, insertPoint, false);
 
       // Get the children of the View
-      RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
+      CheckBox checkBox = (CheckBox) ingredientView.getChildAt(0);
       TextView quantityView = (TextView) ingredientView.getChildAt(1);
       TextView nameView = (TextView) ingredientView.getChildAt(2);
 
@@ -161,7 +165,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       nameView.setText(holder.getName());
 
       // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, quantityView, nameView));
+      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(checkBox, quantityView, nameView));
 
       // Get the index of the view
       int index = recipeIngredientViewHolders.size() - 1;
@@ -191,7 +195,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
       // Inflate the view to be inserted
       LinearLayout stepView = (LinearLayout) inflater
-          .inflate(R.layout.view_step_detail, insertPoint, false);
+          .inflate(R.layout.step_detail, insertPoint, false);
 
       // Get the children of the view
       TextView numberView = (TextView) stepView.getChildAt(0);
@@ -213,6 +217,5 @@ public class RecipeDetailActivity extends AppCompatActivity {
           ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
   }
-
 
 }

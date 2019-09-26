@@ -1,37 +1,37 @@
-package com.gerardbradshaw.mater.activities.adapters;
+package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientListAdapter
-    extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
+public class ShoppingListAdapter
+    extends RecyclerView.Adapter<ShoppingListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
   private List<Ingredient> ingredientList = new ArrayList<>();
-  private static String LOG_TAG = "GGG - IngredientListAdapter";
-  private IngredientClickedListener ingredientClickedListener;
+  private static String LOG_TAG = "GGG - ShoppingListAdapter";
+  private StockChangedListener stockChangedListener;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientListAdapter(Context context) {
+  public ShoppingListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
   }
 
@@ -66,9 +66,35 @@ public class IngredientListAdapter
 
     Ingredient currentIngredient = ingredientList.get(position);
     int stockLevel = currentIngredient.getStockLevel();
-    holder.checkBox.setText(currentIngredient.getName());
+    holder.textView.setText(currentIngredient.getName());
 
-    // TODO Set up onTextChanged listener
+    if (stockLevel != 0) {
+      holder.stockInput.setText(Integer.toString(stockLevel));
+    } else {
+      holder.stockInput.setText("");
+    }
+
+    holder.stockInput.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+        // Get the new input and save it to the current ingredient
+        int stockLevel = Integer.parseInt(editable.toString());
+        ingredientList.get(position).setStockLevel(stockLevel);
+
+        if (stockChangedListener != null) {
+          stockChangedListener.onStockLevelChanged(position, ingredientList.get(position));
+        }
+
+      }
+    });
 
   }
 
@@ -93,27 +119,30 @@ public class IngredientListAdapter
     notifyDataSetChanged();
   }
 
-  public void setIngredientClickedListener(IngredientClickedListener ingredientClickedListener) {
-    this.ingredientClickedListener = ingredientClickedListener;
+  public void setStockChangedListener(StockChangedListener stockChangedListener) {
+    this.stockChangedListener = stockChangedListener;
   }
+
 
   // - - - - - - - - - - - - - - - ViewHolder - - - - - - - - - - - - - - -
 
   class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-    final CheckBox checkBox;
-    final IngredientListAdapter adapter;
+    final EditText stockInput;
+    final TextView textView;
+    final ShoppingListAdapter adapter;
 
-    public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, ShoppingListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
-      checkBox = itemView.findViewById(R.id.shoppingListItem_checkBox);
+      stockInput = itemView.findViewById(R.id.shoppingListItem_stockInput);
+      textView = itemView.findViewById(R.id.shoppingListItem_textView);
       this.adapter = adapter;
     }
   }
 
-  public interface IngredientClickedListener {
-    void onIngredientClicked(StockHolder stockHolder);
+  public interface StockChangedListener {
+    void onStockLevelChanged(int position, Ingredient ingredient);
   }
 }

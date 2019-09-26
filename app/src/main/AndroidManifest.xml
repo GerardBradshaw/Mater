@@ -22,7 +22,7 @@
 
         <!-- Shopping List Activity -->
         <activity
-            android:name="com.gerardbradshaw.mater.activities.ShoppingListActivity"
+            android:name="com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Add Recipe Activity -->
@@ -37,7 +37,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name="com.gerardbradshaw.mater.activities.MainActivity"
+            android:name="com.gerardbradshaw.mater.activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
