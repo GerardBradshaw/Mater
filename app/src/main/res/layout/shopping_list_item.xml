@@ -8,7 +8,7 @@
     android:orientation="horizontal">
 
     <EditText
-        android:id="@+id/shoppingListItem_stockCount"
+        android:id="@+id/shoppingListItem_stockInput"
         android:layout_width="60sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

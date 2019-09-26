@@ -4,11 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
@@ -66,7 +65,8 @@ public class IngredientListAdapter
 
     Ingredient currentIngredient = ingredientList.get(position);
     int stockLevel = currentIngredient.getStockLevel();
-    holder.checkBox.setText(currentIngredient.getName());
+    holder.textView.setText(currentIngredient.getName());
+    holder.stockInput.setText(currentIngredient.getStockLevel());
 
     // TODO Set up onTextChanged listener
 
@@ -101,14 +101,16 @@ public class IngredientListAdapter
 
   class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-    final CheckBox checkBox;
+    final EditText stockInput;
+    final TextView textView;
     final IngredientListAdapter adapter;
 
     public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
-      checkBox = itemView.findViewById(R.id.shoppingListItem_checkBox);
+      stockInput = itemView.findViewById(R.id.shoppingListItem_stockInput);
+      textView = itemView.findViewById(R.id.shoppingListItem_textView);
       this.adapter = adapter;
     }
   }
