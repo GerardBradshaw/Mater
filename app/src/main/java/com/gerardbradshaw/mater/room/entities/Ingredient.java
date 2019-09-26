@@ -19,6 +19,9 @@ public class Ingredient {
   @ColumnInfo(name = "name")
   private String name;
 
+  @ColumnInfo(name = "stockLevel")
+  private int stockLevel;
+
   @ColumnInfo(name = "containsMilk")
   private String containsMilk;
 
@@ -69,7 +72,6 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
-
   public int getIngredientId() {
     return ingredientId;
   }
@@ -77,6 +79,10 @@ public class Ingredient {
   @NonNull
   public String getName() {
     return name;
+  }
+
+  public int getStockLevel() {
+    return stockLevel;
   }
 
   public String getContainsMilk() {
@@ -118,13 +124,16 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
-
   public void setIngredientId(int ingredientId) {
     this.ingredientId = ingredientId;
   }
 
   public void setName(@NonNull String name) {
     this.name = name;
+  }
+
+  public void setStockLevel(int stockLevel) {
+    this.stockLevel = stockLevel;
   }
 
   public void setContainsMilk(String containsMilk) {
