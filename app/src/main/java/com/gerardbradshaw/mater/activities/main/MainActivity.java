@@ -1,10 +1,12 @@
-package com.gerardbradshaw.mater.activities;
+package com.gerardbradshaw.mater.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.adapters.RecipeListAdapter;
+import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.RecipeDetailActivity;
+import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;

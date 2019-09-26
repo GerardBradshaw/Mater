@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.activities.adapters;
+package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import android.content.Context;
 import android.text.Editable;
@@ -13,26 +13,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientListAdapter
-    extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
+public class ShoppingListAdapter
+    extends RecyclerView.Adapter<ShoppingListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
   private List<Ingredient> ingredientList = new ArrayList<>();
-  private static String LOG_TAG = "GGG - IngredientListAdapter";
+  private static String LOG_TAG = "GGG - ShoppingListAdapter";
   private StockChangedListener stockChangedListener;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientListAdapter(Context context) {
+  public ShoppingListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
   }
 
@@ -131,9 +130,9 @@ public class IngredientListAdapter
 
     final EditText stockInput;
     final TextView textView;
-    final IngredientListAdapter adapter;
+    final ShoppingListAdapter adapter;
 
-    public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, ShoppingListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter

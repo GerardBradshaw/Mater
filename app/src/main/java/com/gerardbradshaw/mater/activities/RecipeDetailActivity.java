@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.main.MainActivity;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;

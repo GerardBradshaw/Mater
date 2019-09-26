@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.activities.adapters;
+package com.gerardbradshaw.mater.activities.main;
 
 import android.content.Context;
 import android.net.Uri;
