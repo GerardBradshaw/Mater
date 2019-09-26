@@ -47,6 +47,10 @@ public class DetailViewModel extends AndroidViewModel {
     return repository.getLiveDescription(recipeId);
   }
 
+  public LiveData<Integer> getLiveServings(int recipeId) {
+    return repository.getLiveServings(recipeId);
+  }
+
   public LiveData<String> getLiveImageDirectory(int recipeId) {
     return repository.getLiveImageDirectory(recipeId);
   }
