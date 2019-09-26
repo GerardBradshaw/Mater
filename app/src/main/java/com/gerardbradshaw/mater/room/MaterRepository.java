@@ -347,7 +347,11 @@ public class MaterRepository {
       RecipeHolder recipe = recipeHolders[0];
 
       // Add the info to the database
-      addSummaryToDb(recipe.getTitle(), recipe.getDescription(), recipe.getImageDirectory());
+      addSummaryToDb(
+          recipe.getTitle(),
+          recipe.getDescription(),
+          recipe.getImageDirectory(),
+          recipe.getServings());
 
       // Get the ID of the new recipe
       int recipeId = summaryDao.getRecipeId(recipe.getTitle());
@@ -368,21 +372,24 @@ public class MaterRepository {
       taskScheduler.setTaskFinished();
     }
 
-    private void addSummaryToDb(String title, String description, String imageDirectory) {
+    private void addSummaryToDb(String title, String description, String imageDirectory, int servings) {
 
       // Change the input if anything is null
-      if(title == null) {
+      if (title == null) {
         title = "Not set";
       }
-      if(description == null) {
+      if (description == null) {
         description = "Not set";
       }
-      if(imageDirectory == null) {
+      if (imageDirectory == null) {
         imageDirectory = "";
+      }
+      if (servings == 0) {
+        servings = 1;
       }
 
       // Create a Summary from the input
-      Summary summary = new Summary(title, description, imageDirectory);
+      Summary summary = new Summary(title, description, imageDirectory, servings);
 
       // Add the title and description to the database.
       summaryDao.insertSummary(summary);
@@ -437,7 +444,6 @@ public class MaterRepository {
 
       }
     }
-
 
   }
 
