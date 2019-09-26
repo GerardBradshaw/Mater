@@ -45,9 +45,9 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     ingredientListAdapter.setStockChangedListener(new IngredientListAdapter.StockChangedListener() {
       @Override
-      public void onStockLevelChanged(Ingredient ingredient) {
+      public void onStockLevelChanged(int position, Ingredient ingredient) {
         // Get the new ingredient level and save it to the activity
-        // TODO
+        ingredientList.add(position, ingredient);
       }
     });
 

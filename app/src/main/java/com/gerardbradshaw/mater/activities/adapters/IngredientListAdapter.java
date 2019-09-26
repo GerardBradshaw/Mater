@@ -71,6 +71,8 @@ public class IngredientListAdapter
 
     if (stockLevel != 0) {
       holder.stockInput.setText(Integer.toString(stockLevel));
+    } else {
+      holder.stockInput.setText("");
     }
 
     holder.stockInput.addTextChangedListener(new TextWatcher() {
@@ -89,7 +91,7 @@ public class IngredientListAdapter
         ingredientList.get(position).setStockLevel(stockLevel);
 
         if (stockChangedListener != null) {
-          stockChangedListener.onStockLevelChanged(ingredientList.get(position));
+          stockChangedListener.onStockLevelChanged(position, ingredientList.get(position));
         }
 
       }
@@ -142,6 +144,6 @@ public class IngredientListAdapter
   }
 
   public interface StockChangedListener {
-    void onStockLevelChanged(Ingredient ingredient);
+    void onStockLevelChanged(int position, Ingredient ingredient);
   }
 }
