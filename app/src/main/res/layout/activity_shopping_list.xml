@@ -30,10 +30,31 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp"
+        android:orientation="horizontal">
+
         <TextView
-            android:text="// TODO update"
+            android:id="@+id/shoppingList_stockCountHeader"
+            android:layout_width="60sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:textStyle="bold"
+            android:text="In Stock"
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/shoppingList_textViewHeader"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:textStyle="bold"
+            android:text="Ingredient"/>
+    </LinearLayout>
 
         <!-- RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView

@@ -4,14 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/border_background"
     android:orientation="horizontal">
 
-    <CheckBox
-        android:id="@+id/shoppingListItem_checkBox"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
+    <EditText
+        android:id="@+id/shoppingListItem_stockCount"
+        android:layout_width="60sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="3"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/shoppingListItem_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp"
         tools:text="Banana"/>
 
 </LinearLayout>
