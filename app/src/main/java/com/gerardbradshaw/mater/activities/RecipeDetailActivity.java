@@ -38,6 +38,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   private TextView descriptionView;
   private ImageView imageView;
+  private TextView servingsView;
   private Toolbar toolbar;
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
@@ -76,6 +77,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Get a handle to the Views
     imageView = findViewById(R.id.recipeDetail_image);
     descriptionView = findViewById(R.id.recipeDetail_description);
+    servingsView = findViewById(R.id.recipeDetail_servings);
 
     // Set the title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
@@ -100,6 +102,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
       @Override
       public void onChanged(String s) {
         descriptionView.setText(s);
+      }
+    });
+
+    detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
+      @Override
+      public void onChanged(Integer i) {
+        String servings = "x" + i;
+        servingsView.setText(servings);
       }
     });
 
