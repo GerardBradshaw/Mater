@@ -24,7 +24,7 @@ public class IngredientListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<StockHolder> stockHolders = new ArrayList<>();
+  private List<Ingredient> ingredientList = new ArrayList<>();
   private static String LOG_TAG = "GGG - IngredientListAdapter";
   private IngredientClickedListener ingredientClickedListener;
 
@@ -64,30 +64,11 @@ public class IngredientListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    Ingredient currentIngredient = stockHolders.get(position).getIngredient();
+    Ingredient currentIngredient = ingredientList.get(position);
+    int stockLevel = currentIngredient.getStockLevel();
     holder.checkBox.setText(currentIngredient.getName());
 
-    boolean currentIngredientInStock = stockHolders.get(position).isInStock();
-    holder.checkBox.setChecked(currentIngredientInStock);
-
-    // Set up onClick listener
-    holder.itemView.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-
-        // Get the Ingredient and InStock at the current position
-        Ingredient currentIngredient = stockHolders.get(position).getIngredient();
-
-        // Save the new state to stockHolders
-        stockHolders.get(position).setInStock(holder.checkBox.isChecked());
-        notifyItemChanged(position);
-
-        // Call the onRecipeClicked method (called in MainActivity using an override)
-        if (ingredientClickedListener != null) {
-          ingredientClickedListener.onIngredientClicked(stockHolders.get(position));
-        }
-      }
-    });
+    // TODO Set up onTextChanged listener
 
   }
 
@@ -100,15 +81,15 @@ public class IngredientListAdapter
    */
   @Override
   public int getItemCount() {
-    if(stockHolders != null) {
-      return stockHolders.size();
+    if(ingredientList != null) {
+      return ingredientList.size();
     } else {
       return 0;
     }
   }
 
-  public void setIngredientStockList(List<StockHolder> stockHolders) {
-    this.stockHolders = stockHolders;
+  public void setIngredientStockList(List<Ingredient> ingredientList) {
+    this.ingredientList = ingredientList;
     notifyDataSetChanged();
   }
 

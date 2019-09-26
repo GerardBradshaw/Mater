@@ -228,7 +228,7 @@ public class MaterRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Loading Ingredients - - - - - - - - - - - - - - -
 
   public LiveData<List<Ingredient>> getLiveAllIngredients() {
     return ingredientDao.getLiveAllIngredients();
@@ -260,6 +260,43 @@ public class MaterRepository {
     }
   }
 
+
+  // - - - - - - - - - - - - - - - Saving Ingredients - - - - - - - - - - - - - - -
+
+  public void addIngredient(final Ingredient... ingredients) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new InsertIngredientAsyncTask(ingredientDao).execute(ingredients);
+      }
+    };
+    taskScheduler.addNewTask(runnable);
+  }
+
+  public void addIngredient(final List<Ingredient> ingredients) {
+    Ingredient[] ingredientArray = (Ingredient[]) ingredients.toArray();
+    addIngredient(ingredientArray);
+  }
+
+  private class InsertIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
+
+    private IngredientDao ingredientDao;
+
+    InsertIngredientAsyncTask(IngredientDao ingredientDao) {
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Void doInBackground(Ingredient... ingredients) {
+      for (Ingredient i : ingredients) {
+        ingredientDao.insertIngredient(i);
+      }
+      return null;
+    }
+
+  }
+
+
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 
   /**
@@ -275,7 +312,6 @@ public class MaterRepository {
             .execute(recipeHolder);
       }
     };
-
     taskScheduler.addNewTask(runnable);
   }
 

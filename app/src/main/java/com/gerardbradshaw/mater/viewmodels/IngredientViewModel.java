@@ -36,4 +36,12 @@ public class IngredientViewModel extends AndroidViewModel {
     return repository.getLiveAllIngredients();
   }
 
+  public void addIngredient(Ingredient... ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
+  public void addIngredient(List<Ingredient> ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
 }
