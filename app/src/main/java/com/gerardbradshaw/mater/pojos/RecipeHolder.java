@@ -9,16 +9,16 @@ public class RecipeHolder {
 
   private String title;
   private String description;
+  private int servings;
   private String imageDirectory;
-  private List<String> steps;
-  private List<RecipeIngredientHolder> recipeIngredients;
+  private List<String> steps = new ArrayList<>();
+  private List<RecipeIngredientHolder> recipeIngredients = new ArrayList<>();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
+  // Empty constructor
   public RecipeHolder() {
-    recipeIngredients = new ArrayList<>();
-    steps = new ArrayList<>();
   }
 
 
@@ -31,6 +31,10 @@ public class RecipeHolder {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public void setServings(int servings) {
+    this.servings = servings;
   }
 
   public void setImageDirectory(String imageDirectory) {
@@ -54,6 +58,10 @@ public class RecipeHolder {
 
   public String getDescription() {
     return description;
+  }
+
+  public int getServings() {
+    return servings;
   }
 
   public String getImageDirectory() {
