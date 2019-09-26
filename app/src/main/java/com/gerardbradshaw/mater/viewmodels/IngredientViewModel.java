@@ -44,4 +44,8 @@ public class IngredientViewModel extends AndroidViewModel {
     repository.addIngredient(ingredients);
   }
 
+  public Ingredient getIngredient(int ingredientId) {
+    return repository.getIngredient(ingredientId);
+  }
+
 }
