@@ -10,7 +10,7 @@ import com.gerardbradshaw.mater.room.MaterRepository;
 
 import java.util.List;
 
-public class IngredientStockViewModel extends AndroidViewModel {
+public class StockViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -19,7 +19,7 @@ public class IngredientStockViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientStockViewModel(Application application) {
+  public StockViewModel(Application application) {
     super(application);
 
     // Downcast the application and set the repository
