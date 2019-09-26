@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
+import com.gerardbradshaw.mater.helpers.SharedPrefHelper;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.pojos.StockHolder;
@@ -258,19 +259,6 @@ public class MaterRepository {
       return ingredientDao.getIngredient(recipeIds[0]);
     }
   }
-
-
-  // - - - - - - - - - - - - - - - Ingredient Stock Data - - - - - - - - - - - - - - -
-
-  public List<StockHolder> getStockLevels() {
-    return null;
-  }
-
-  public List<StockHolder> getStockLevels(int recipeId) {
-    return null;
-  }
-
-
 
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 

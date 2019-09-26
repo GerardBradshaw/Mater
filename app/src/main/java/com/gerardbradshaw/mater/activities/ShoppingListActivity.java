@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.adapters.IngredientListAdapter;
 import com.gerardbradshaw.mater.helpers.SharedPrefHelper;
+import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 
@@ -28,9 +29,8 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
   private IngredientListAdapter ingredientListAdapter;
   private RecyclerView recyclerView;
-  private Map<String, Boolean> ingredientStockMap = new HashMap<>();
-  private List<Pair<Ingredient, Boolean>> ingredientStockPairList = new ArrayList<>();
   private SharedPrefHelper sharedPrefHelper;
+  private List<StockHolder> stockHolders;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -47,15 +47,10 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     ingredientListAdapter.setIngredientClickedListener(new IngredientListAdapter.IngredientClickedListener() {
       @Override
-      public void onIngredientClicked(Ingredient ingredient, CheckBox checkBox) {
-        // Save the value to shared prefs
-        String name = ingredient.getName();
-        boolean inStock = checkBox.isChecked();
-        ingredientStockMap.put(name, inStock);
-        sharedPrefHelper.putBoolean(name, inStock);
+      public void onIngredientClicked(StockHolder stockHolder) {
+        // TODO save the checkbox status to a member variable
       }
     });
-
 
     // Set up RecyclerView
     recyclerView.setAdapter(ingredientListAdapter);
@@ -68,16 +63,15 @@ public class ShoppingListActivity extends AppCompatActivity {
     ingredientViewModel.getLiveAllIngredients().observe(this, new Observer<List<Ingredient>>() {
       @Override
       public void onChanged(List<Ingredient> ingredients) {
-
-        // Add each ingredient to a list
+        // Add each ingredient to the list
         for (Ingredient ingredient : ingredients) {
-          String name = ingredient.getName();
-          boolean inStock = sharedPrefHelper.getBoolean(name, false);
-          ingredientStockPairList.add(new Pair<>(ingredient, inStock));
+          boolean inStock = sharedPrefHelper.getBoolean(ingredient.getName(), false);
+          StockHolder stockHolder = new StockHolder(ingredient, inStock);
+          stockHolders.add(stockHolder);
         }
 
-        ingredientListAdapter.setIngredientList(ingredientStockPairList);
-
+        // Update the adapter
+        ingredientListAdapter.setIngredientStockList(stockHolders);
       }
     });
 
@@ -86,13 +80,6 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-
-    // Save the stock level to shared preferences
-    for (Pair<Ingredient, Boolean> pair : ingredientStockPairList) {
-      String key = pair.first.getName();
-      boolean inStock = pair.second;
-      sharedPrefHelper.putBoolean(key, inStock);
-    }
-
+    // TODO Save stock levels to database
   }
 }

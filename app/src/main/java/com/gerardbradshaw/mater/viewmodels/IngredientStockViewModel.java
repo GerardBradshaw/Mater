@@ -30,13 +30,7 @@ public class IngredientStockViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
 
-  public List<StockHolder> getStockLevels() {
-    return repository.getStockLevels();
-  }
-
-  public List<StockHolder> getStockLevels(int recipeId) {
-    return repository.getStockLevels(recipeId);
-  }
+  
 
 
 }

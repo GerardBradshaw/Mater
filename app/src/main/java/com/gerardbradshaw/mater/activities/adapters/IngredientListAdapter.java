@@ -12,8 +12,10 @@ import androidx.core.util.Pair;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientListAdapter
@@ -22,7 +24,7 @@ public class IngredientListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<Pair<Ingredient, Boolean>> ingredientStockPairs;
+  private List<StockHolder> stockHolders = new ArrayList<>();
   private static String LOG_TAG = "GGG - IngredientListAdapter";
   private IngredientClickedListener ingredientClickedListener;
 
@@ -62,22 +64,27 @@ public class IngredientListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    Ingredient currentIngredient = ingredientStockPairs.get(position).first;
-    boolean currentIngredientInStock = ingredientStockPairs.get(position).second;
-
+    Ingredient currentIngredient = stockHolders.get(position).getIngredient();
     holder.checkBox.setText(currentIngredient.getName());
+
+    boolean currentIngredientInStock = stockHolders.get(position).isInStock();
     holder.checkBox.setChecked(currentIngredientInStock);
 
     // Set up onClick listener
     holder.itemView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        // Get the Ingredient at the current position
-        Ingredient currentIngredient = ingredientStockPairs.get(position).first;
+
+        // Get the Ingredient and InStock at the current position
+        Ingredient currentIngredient = stockHolders.get(position).getIngredient();
+
+        // Save the new state to stockHolders
+        stockHolders.get(position).setInStock(holder.checkBox.isChecked());
+        notifyItemChanged(position);
 
         // Call the onRecipeClicked method (called in MainActivity using an override)
         if (ingredientClickedListener != null) {
-          ingredientClickedListener.onIngredientClicked(currentIngredient, holder.checkBox);
+          ingredientClickedListener.onIngredientClicked(stockHolders.get(position));
         }
       }
     });
@@ -93,15 +100,15 @@ public class IngredientListAdapter
    */
   @Override
   public int getItemCount() {
-    if(ingredientStockPairs != null) {
-      return ingredientStockPairs.size();
+    if(stockHolders != null) {
+      return stockHolders.size();
     } else {
       return 0;
     }
   }
 
-  public void setIngredientList(List<Pair<Ingredient, Boolean>> ingredientStockPairs) {
-    this.ingredientStockPairs = ingredientStockPairs;
+  public void setIngredientStockList(List<StockHolder> stockHolders) {
+    this.stockHolders = stockHolders;
     notifyDataSetChanged();
   }
 
@@ -126,6 +133,6 @@ public class IngredientListAdapter
   }
 
   public interface IngredientClickedListener {
-    void onIngredientClicked(Ingredient ingredient, CheckBox checkBox);
+    void onIngredientClicked(StockHolder stockHolder);
   }
 }
