@@ -29,9 +29,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
   private IngredientListAdapter ingredientListAdapter;
   private RecyclerView recyclerView;
-  private SharedPrefHelper sharedPrefHelper;
-  private List<StockHolder> stockHolders;
-
+  private List<Ingredient> ingredientList = new ArrayList<>();
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -48,7 +46,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     ingredientListAdapter.setIngredientClickedListener(new IngredientListAdapter.IngredientClickedListener() {
       @Override
       public void onIngredientClicked(StockHolder stockHolder) {
-        // TODO save the checkbox status to a member variable
+        // TODO save the checkbox status somewhere
       }
     });
 
@@ -56,22 +54,12 @@ public class ShoppingListActivity extends AppCompatActivity {
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    // Set up SharedPrefHelper
-    sharedPrefHelper = new SharedPrefHelper(this);
-
     // Observe the LiveData
     ingredientViewModel.getLiveAllIngredients().observe(this, new Observer<List<Ingredient>>() {
       @Override
       public void onChanged(List<Ingredient> ingredients) {
-        // Add each ingredient to the list
-        for (Ingredient ingredient : ingredients) {
-          boolean inStock = sharedPrefHelper.getBoolean(ingredient.getName(), false);
-          StockHolder stockHolder = new StockHolder(ingredient, inStock);
-          stockHolders.add(stockHolder);
-        }
-
-        // Update the adapter
-        ingredientListAdapter.setIngredientStockList(stockHolders);
+        ingredientList = ingredients;
+        ingredientListAdapter.setIngredientStockList(ingredientList);
       }
     });
 
