@@ -273,6 +273,11 @@ public class MaterRepository {
     taskScheduler.addNewTask(runnable);
   }
 
+  public void addIngredient(final List<Ingredient> ingredients) {
+    Ingredient[] ingredientArray = (Ingredient[]) ingredients.toArray();
+    addIngredient(ingredientArray);
+  }
+
   private class InsertIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
 
     private IngredientDao ingredientDao;

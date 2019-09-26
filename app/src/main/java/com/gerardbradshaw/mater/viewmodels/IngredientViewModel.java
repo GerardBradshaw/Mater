@@ -40,4 +40,8 @@ public class IngredientViewModel extends AndroidViewModel {
     repository.addIngredient(ingredients);
   }
 
+  public void addIngredient(List<Ingredient> ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
 }

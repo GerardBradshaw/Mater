@@ -68,6 +68,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
+    ingredientViewModel.addIngredient(ingredientList);
     // TODO Save stock levels to database
   }
 }
