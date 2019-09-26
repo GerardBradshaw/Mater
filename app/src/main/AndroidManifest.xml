@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.gerardbradshaw.tomatoes">
+    package="com.gerardbradshaw.mater">
 
     <!-- Features -->
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="false" />
+        android:required="false" /> <!-- Permissions -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <!-- Permissions -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-    <!-- Application & Activities -->
     <application
-        android:name=".helpers.TomatoesApplication"
+        android:name="com.gerardbradshaw.mater.helpers.MaterApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
@@ -23,29 +20,30 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- Shopping List Activity -->
+        <activity
+            android:name="com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
         <!-- Add Recipe Activity -->
         <activity
-            android:name=".activities.AddRecipeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name="com.gerardbradshaw.mater.activities.AddRecipeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Recipe Detail Activity -->
         <activity
-            android:name=".activities.RecipeDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:name="com.gerardbradshaw.mater.activities.RecipeDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
-        <!-- Main Recipe Selection Activity -->
+        <!-- Main Activity -->
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.gerardbradshaw.mater.activities.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
