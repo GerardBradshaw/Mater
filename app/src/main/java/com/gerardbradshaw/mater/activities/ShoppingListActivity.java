@@ -43,10 +43,10 @@ public class ShoppingListActivity extends AppCompatActivity {
     // Set up ingredientListAdapter
     ingredientListAdapter = new IngredientListAdapter(this);
 
-    ingredientListAdapter.setIngredientClickedListener(new IngredientListAdapter.IngredientClickedListener() {
+    ingredientListAdapter.setStockChangedListener(new IngredientListAdapter.StockChangedListener() {
       @Override
-      public void onIngredientClicked(StockHolder stockHolder) {
-        // TODO save the checkbox status somewhere
+      public void onStockLevelChanged(Ingredient ingredient) {
+        // TODO save the change
       }
     });
 

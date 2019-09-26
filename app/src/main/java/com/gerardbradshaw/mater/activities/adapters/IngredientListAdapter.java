@@ -25,7 +25,7 @@ public class IngredientListAdapter
   private final LayoutInflater inflater;
   private List<Ingredient> ingredientList = new ArrayList<>();
   private static String LOG_TAG = "GGG - IngredientListAdapter";
-  private IngredientClickedListener ingredientClickedListener;
+  private StockChangedListener stockChangedListener;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -96,9 +96,10 @@ public class IngredientListAdapter
     notifyDataSetChanged();
   }
 
-  public void setIngredientClickedListener(IngredientClickedListener ingredientClickedListener) {
-    this.ingredientClickedListener = ingredientClickedListener;
+  public void setStockChangedListener(StockChangedListener stockChangedListener) {
+    this.stockChangedListener = stockChangedListener;
   }
+
 
   // - - - - - - - - - - - - - - - ViewHolder - - - - - - - - - - - - - - -
 
@@ -118,7 +119,7 @@ public class IngredientListAdapter
     }
   }
 
-  public interface IngredientClickedListener {
-    void onIngredientClicked(StockHolder stockHolder);
+  public interface StockChangedListener {
+    void onStockLevelChanged(Ingredient ingredient);
   }
 }
