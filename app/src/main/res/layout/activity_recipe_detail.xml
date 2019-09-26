@@ -76,7 +76,16 @@
                 android:paddingTop="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
+                android:paddingBottom="0dp"
                 android:text="@string/ingredientsHeader" />
+
+            <TextView
+                android:text="@string/recipeDetail_ingredientHeaderSubtitle"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="9dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <!-- Ingredients Layout -->
             <LinearLayout

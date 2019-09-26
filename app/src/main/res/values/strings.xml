@@ -42,5 +42,6 @@
     <!-- Buttons -->
     <string name="recipeDetail_selectImageButton">Select Image</string>
     <string name="addRecipe_imageNameTextView">No image selected</string>
+    <string name="recipeDetail_ingredientHeaderSubtitle">Tick an ingredient to add it to your shopping list!</string>
 
 </resources>

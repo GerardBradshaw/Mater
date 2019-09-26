@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -138,10 +139,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
 
     // Create a RecipeIngredientHolder for each ingredient
-    for (RecipeIngredient recipeIngredient : recipeIngredients) {
-      String name = ingredientViewModel.getIngredient(recipeIngredient.getIngredientId()).getName();
-      double amount = recipeIngredient.getAmount() * servings;
-      String unit = recipeIngredient.getUnits();
+    for (RecipeIngredient r : recipeIngredients) {
+      String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
+      double amount = r.getAmount() * servings;
+      String unit = r.getUnits();
       recipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
     }
 
@@ -152,7 +153,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
           .inflate(R.layout.ingredient_detail, insertPoint, false);
 
       // Get the children of the View
-      RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
+      CheckBox checkBox = (CheckBox) ingredientView.getChildAt(0);
       TextView quantityView = (TextView) ingredientView.getChildAt(1);
       TextView nameView = (TextView) ingredientView.getChildAt(2);
 
@@ -164,7 +165,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       nameView.setText(holder.getName());
 
       // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, quantityView, nameView));
+      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(checkBox, quantityView, nameView));
 
       // Get the index of the view
       int index = recipeIngredientViewHolders.size() - 1;
@@ -216,6 +217,5 @@ public class RecipeDetailActivity extends AppCompatActivity {
           ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
   }
-
 
 }

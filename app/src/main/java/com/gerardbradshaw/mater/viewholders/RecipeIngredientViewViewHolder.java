@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.viewholders;
 
+import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -7,15 +8,15 @@ public class RecipeIngredientViewViewHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private RadioButton radioButton;
+  private CheckBox checkBox;
   private TextView quantityView;
   private TextView nameView;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeIngredientViewViewHolder(RadioButton radioButton, TextView quantityView, TextView nameView) {
-    this.radioButton = radioButton;
+  public RecipeIngredientViewViewHolder(CheckBox checkBox, TextView quantityView, TextView nameView) {
+    this.checkBox = checkBox;
     this.quantityView = quantityView;
     this.nameView = nameView;
   }
@@ -23,8 +24,8 @@ public class RecipeIngredientViewViewHolder {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
-  public RadioButton getRadioButton() {
-    return radioButton;
+  public CheckBox getRadioButton() {
+    return checkBox;
   }
 
   public TextView getQuantityView() {
