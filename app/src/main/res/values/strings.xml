@@ -1,24 +1,25 @@
 <resources>
-    <string name="app_name">Tomatoes</string>
+    <string name="app_name">Mater</string>
 
     <!-- Main Activity -->
     <!-- Nav drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Tomatoes</string>
+    <string name="nav_header_title">Mater</string>
     <string name="nav_header_subtitle">TODO</string>
     <string name="nav_header_desc">Navigation header</string>
     <!-- Nav menu -->
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="nav_menu_shoppingList">Shopping List</string>
+    <string name="nav_menu_settings">Settings</string>
     <!-- AppBar Menu -->
     <string name="action_settings">Settings</string>
-    <!-- Content Descriptions -->
-    <string name="recipeListItem_image_contentDescription">Recipe Image</string>
+    <!-- Alert Dialogs -->
+    <string name="dialog_confirm_delete">Permanently delete</string>
+
+    <!-- General Strings -->
+    <string name="stepsHeader">Steps</string>
+    <string name="ingredientsHeader">Ingredients</string>
+    <string name="image_contentDescription">Recipe Image</string>
 
     <!-- Add recipe activity -->
     <!-- Headers -->
@@ -34,18 +35,19 @@
     <string name="addRecipe_addIngredient_amountInput_hint">Amount</string>
     <string name="addRecipe_addStep_stepInput_hint">Describe the step…</string>
 
-    <!-- General Strings -->
-    <string name="stepsHeader">Steps</string>
-    <string name="ingredientsHeader">Ingredients</string>
-
     <!-- Recipe Detail Activity -->
     <!-- Content Descriptions -->
     <string name="recipeDetail_image_contentDescription">Photo of dish</string>
     <!-- Messages -->
     <string name="no_recipes_message">No recipes</string>
     <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
+    <string name="no_ingredients_message">No ingredients set!</string>
     <!-- Buttons -->
     <string name="recipeDetail_selectImageButton">Select Image</string>
     <string name="addRecipe_imageNameTextView">No image selected</string>
+    <string name="recipeDetail_ingredientHeaderSubtitle">Tick an ingredient to add it to your shopping list!</string>
+    <!-- AppBar Menu -->
+    <string name="action_edit">Edit recipe</string>
+    <string name="action_servings">Servings</string>
 
 </resources>

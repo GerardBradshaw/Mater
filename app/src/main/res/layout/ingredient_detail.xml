@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.NoActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:theme="@style/AppTheme.NoActionBar">
+
+    <!-- In stock button -->
+    <CheckBox
+        android:id="@+id/ingredientView_checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <!-- Amount and unit -->
+    <TextView
+        android:id="@+id/ingredientView_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="500g " />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/ingredientView_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        tools:text="broccoli" />
+
+</LinearLayout>
