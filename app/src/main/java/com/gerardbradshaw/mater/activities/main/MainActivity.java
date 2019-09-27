@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity
       public void onClick(View view) {
         // Create an intent to open the AddRecipeActivity and start it
         Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-        startActivity(intent);
+        ActivityOptionsCompat options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+        startActivity(intent, options.toBundle());
       }
     });
 
