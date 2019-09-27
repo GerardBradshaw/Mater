@@ -39,25 +39,30 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member Variables - - - - - - - - - - - - - - -
 
+  private DetailViewModel detailViewModel;
+  private ImageViewModel imageViewModel;
+  private IngredientViewModel ingredientViewModel;
+
   private TextView descriptionView;
   private ImageView imageView;
   private TextView servingsView;
   private Toolbar toolbar;
+
   private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
-  private DetailViewModel detailViewModel;
-  private ImageViewModel imageViewModel;
-  private IngredientViewModel ingredientViewModel;
+
+  private Context context;
+  private String recipeTitle;
   private int recipeId;
   private double servings;
-  private Context context;
+
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
-  private String recipeTitle;
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
 
 
   // - - - - - - - - - - - - - - - Activity Methods - - - - - - - - - - - - - - -
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -133,6 +138,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
       }
     });
   }
+
+
+  // - - - - - - - - - - - - - - - Helper Methods - - - - - - - - - - - - - - -
 
   private void loadImageIntoView() {
     Glide.with(context)
@@ -230,6 +238,19 @@ public class RecipeDetailActivity extends AppCompatActivity {
       insertPoint.addView(stepView, index, new ViewGroup.LayoutParams(
           ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
+  }
+
+  private void updateServings() {
+    // TODO Display dialog for the user to enter the number of servings
+
+    // Save the amount to the class
+    this.servings = 1;
+
+    // TODO Update the ingredients view
+
+    // Update the card view
+    String servingsString = "x" + servings;
+    servingsView.setText(servingsString);
   }
 
 
