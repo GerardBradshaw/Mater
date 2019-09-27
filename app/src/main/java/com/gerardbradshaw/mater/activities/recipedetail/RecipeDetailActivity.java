@@ -5,6 +5,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -85,9 +87,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     toolbar = findViewById(R.id.recipeDetail_toolbar);
     setSupportActionBar(toolbar);
 
-    // Set up RecyclerView for ingredients
-    ingredientListAdapter = new IngredientListAdapter(this);
-
     // Set the title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
@@ -121,6 +120,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
         servingsView.setText(servings);
       }
     });
+
+    // Set up RecyclerView for ingredients
+    ingredientListAdapter = new IngredientListAdapter(this);
+    RecyclerView recyclerView = findViewById(R.id.recipeDetail_recyclerView);
+    recyclerView.setAdapter(ingredientListAdapter);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Set the ingredients
     detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
