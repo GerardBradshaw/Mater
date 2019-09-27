@@ -45,7 +45,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member Variables - - - - - - - - - - - - - - -
 
-  private DetailViewModel detailViewModel;
   private ImageViewModel imageViewModel;
   private IngredientViewModel ingredientViewModel;
 
@@ -77,9 +76,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
-    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
     ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
+    DetailViewModel detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
     // Get a handle to the Views and set up Toolbar
     imageView = findViewById(R.id.recipeDetail_image);
@@ -173,46 +172,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
       final RecipeIngredientHolder finalHolder = new RecipeIngredientHolder(name, amount, unit);
       defaultRecipeIngredientHolders.add(finalHolder);
       customRecipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
-    }
-  }
-
-  private void loadIngredientsIntoView() {
-    recipeIngredientViewHolders.clear();
-
-    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-    ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
-
-    // Add a new View to the layout for each ingredient
-    for(RecipeIngredientHolder holder : customRecipeIngredientHolders) {
-      // Inflate the view to be inserted
-      LinearLayout ingredientView = (LinearLayout) inflater
-          .inflate(R.layout.ingredient_detail, insertPoint, false);
-
-      // Get the children of the View
-      CheckBox checkBox = (CheckBox) ingredientView.getChildAt(0);
-      TextView quantityView = (TextView) ingredientView.getChildAt(1);
-      TextView nameView = (TextView) ingredientView.getChildAt(2);
-
-      // Format the amount and set the View String
-      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
-
-      // Update the views
-      quantityView.setText(quantity);
-      nameView.setText(holder.getName());
-
-      // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewHolder(checkBox, quantityView, nameView));
-
-      // Get the index of the view
-      int index = recipeIngredientViewHolders.size() - 1;
-
-      // Insert the view into the main view
-      insertPoint.addView(ingredientView, index, new ViewGroup.LayoutParams(
-          ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-      ingredientView.invalidate();
     }
   }
 
