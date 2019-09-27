@@ -3,6 +3,7 @@ package com.gerardbradshaw.mater.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.viewholders.IngredientInputViewHolder;
@@ -43,23 +45,20 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Layout views
+  private DetailViewModel detailViewModel;
+  private ImageViewModel imageViewModel;
+
   private EditText titleInput;
   private EditText descriptionInput;
   private TextView imageName;
   private Toolbar toolbar;
+  private Bitmap image;
 
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
 
-  private DetailViewModel detailViewModel;
-  private ImageViewModel imageViewModel;
-
   private static final int REQUEST_IMAGE_IMPORT = 1;
-
   private static final String LOG_TAG = "AddRecipeActivity";
-
-  private Bitmap image;
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -68,8 +67,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_recipe);
-
-    // Initialize the ViewModels
     detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
@@ -82,6 +79,13 @@ public class AddRecipeActivity extends AppCompatActivity {
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     imageName = findViewById(R.id.addRecipe_imageNameTextView);
     toolbar = findViewById(R.id.addRecipe_toolbar);
+
+    // Pre-fill data if loading from existing recipe
+    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
+    if (recipeId != 0) {
+      toolbar.setTitle("Edit recipe");
+      loadExistingRecipe(recipeId);
+    }
 
     // Set up the Toolbar
     toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
@@ -118,7 +122,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         saveRecipeToRepository();
       }
     });
-
   }
 
   @Override
@@ -322,6 +325,34 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
+  private void loadExistingRecipe(int recipeId) {
+    // Set title
+    detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
+      @Override
+      public void onChanged(String s) {
+        titleInput.setText(s);
+      }
+    });
+
+    // TODO set image name
+
+    // Set description
+    detailViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
+      @Override
+      public void onChanged(String s) {
+        descriptionInput.setText(s);
+      }
+    });
+
+    // Set servings
+    detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
+      @Override
+      public void onChanged(Integer i) {
+        // TODO set servings
+      }
+    });
+  }
 
   private void importImageFromUri(@NonNull Uri uri) {
     try {
