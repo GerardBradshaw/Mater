@@ -9,6 +9,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -226,6 +228,27 @@ public class RecipeDetailActivity extends AppCompatActivity {
       insertPoint.addView(stepView, index, new ViewGroup.LayoutParams(
           ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
+  }
+
+
+  // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.recipe_detail, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    if (id == R.id.action_settings) {
+
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 
 }
