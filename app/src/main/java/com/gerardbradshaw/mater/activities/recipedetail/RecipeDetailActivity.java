@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.activities.recipedetail;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityOptionsCompat;
@@ -9,13 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -52,7 +56,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   private List<RecipeIngredientViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+  private List<RecipeIngredientHolder> customRecipeIngredientHolders = new ArrayList<>();
+  private final List<RecipeIngredientHolder> defaultRecipeIngredientHolders = new ArrayList<>();
 
   private Context context;
   private String recipeTitle;
@@ -134,7 +139,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       @Override
       public void onChanged(List<RecipeIngredient> recipeIngredientList) {
         createRecipeIngredientHolders(recipeIngredientList);
-        ingredientListAdapter.setSummaryList(recipeIngredientHolders);
+        ingredientListAdapter.setRecipeIngredientList(customRecipeIngredientHolders);
         //loadIngredientsIntoView();
       }
     });
@@ -159,24 +164,29 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void createRecipeIngredientHolders(List<RecipeIngredient> recipeIngredientList) {
-    recipeIngredientViewHolders.clear();
+    defaultRecipeIngredientHolders.clear();
+    customRecipeIngredientHolders.clear();
 
     for (RecipeIngredient r : recipeIngredientList) {
       String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
       double amount = r.getAmount();
       String unit = r.getUnits();
-      recipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
+      final RecipeIngredientHolder finalHolder = new RecipeIngredientHolder(name, amount, unit);
+      defaultRecipeIngredientHolders.add(finalHolder);
+      customRecipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
     }
   }
 
   private void loadIngredientsIntoView() {
+    recipeIngredientViewHolders.clear();
+
     LayoutInflater inflater = (LayoutInflater) getApplicationContext()
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
 
     // Add a new View to the layout for each ingredient
-    for(RecipeIngredientHolder holder : recipeIngredientHolders) {
+    for(RecipeIngredientHolder holder : customRecipeIngredientHolders) {
       // Inflate the view to be inserted
       LinearLayout ingredientView = (LinearLayout) inflater
           .inflate(R.layout.ingredient_detail, insertPoint, false);
@@ -248,22 +258,49 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void updateServings() {
-    // TODO Display dialog for the user to enter the number of servings
 
-    // Save the amount to the class
-    this.customServings = 1;
-    double servingsMultiplier = customServings / defaultServings;
+    // Set up dialog for user confirmation
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+    final EditText input = new EditText(this);
+    input.setInputType(InputType.TYPE_CLASS_NUMBER);
+    input.setHint(Integer.toString(defaultServings));
+    alertBuilder.setTitle("Customize number of servings");
+    alertBuilder.setView(input);
 
-    // Update holders
-    for (RecipeIngredientHolder holder : recipeIngredientHolders) {
-      holder.setAmount(holder.getAmount() * servingsMultiplier);
-    }
+    alertBuilder.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
 
-    ingredientListAdapter.notifyDataSetChanged();
+        customServings = Integer.parseInt(input.getText().toString());
+        double servingsMultiplier = customServings / defaultServings;
 
-    // Update the card view
-    String servingsString = "x" + customServings;
-    servingsView.setText(servingsString);
+        // Reset the customRecipeIngredientHolder
+        customRecipeIngredientHolders.clear();
+
+        // Update recipeIngredientHolders
+        for (RecipeIngredientHolder holder : defaultRecipeIngredientHolders) {
+          RecipeIngredientHolder customHolder = new RecipeIngredientHolder(
+              holder.getName(), holder.getAmount() * servingsMultiplier, holder.getUnit());
+          customRecipeIngredientHolders.add(customHolder);
+        }
+
+        ingredientListAdapter.notifyDataSetChanged();
+
+        // Update the card view
+        String servingsString = "x" + customServings;
+        servingsView.setText(servingsString);
+      }
+    });
+
+    alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        // Do nothing
+      }
+    });
+
+    alertBuilder.show();
+
   }
 
 

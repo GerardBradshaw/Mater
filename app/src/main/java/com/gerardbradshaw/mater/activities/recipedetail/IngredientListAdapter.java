@@ -103,7 +103,7 @@ public class IngredientListAdapter
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setSummaryList(List<RecipeIngredientHolder> recipeIngredientHolders) {
+  public void setRecipeIngredientList(List<RecipeIngredientHolder> recipeIngredientHolders) {
     this.recipeIngredientHolders = recipeIngredientHolders;
     notifyDataSetChanged();
   }
