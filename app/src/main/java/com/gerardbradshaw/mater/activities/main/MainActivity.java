@@ -97,11 +97,13 @@ public class MainActivity extends AppCompatActivity
 
         // Set up transitions
         Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-            MainActivity.this, imagePair);
+        ActivityOptionsCompat optionsImageTransition =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, imagePair);
+        ActivityOptionsCompat optionsActivityTransition =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
 
         // Start the activity
-        startActivity(intent, options.toBundle());
+        startActivity(intent, optionsActivityTransition.toBundle());
       }
     });
 
