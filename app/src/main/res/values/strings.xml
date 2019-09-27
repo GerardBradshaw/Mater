@@ -34,6 +34,8 @@
     <string name="addRecipe_addIngredient_nameInput_hint">Ingredient name…</string>
     <string name="addRecipe_addIngredient_amountInput_hint">Amount</string>
     <string name="addRecipe_addStep_stepInput_hint">Describe the step…</string>
+    <!-- Alert Dialogs -->
+    <string name="discard_changes">Discard changes?</string>
 
     <!-- Recipe Detail Activity -->
     <!-- Content Descriptions -->

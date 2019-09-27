@@ -2,11 +2,13 @@ package com.gerardbradshaw.mater.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -52,6 +54,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText descriptionInput;
   private TextView imageName;
   private Toolbar toolbar;
+  private Button cancelButton;
   private Bitmap image;
 
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
@@ -80,16 +83,18 @@ public class AddRecipeActivity extends AppCompatActivity {
     imageName = findViewById(R.id.addRecipe_imageNameTextView);
     toolbar = findViewById(R.id.addRecipe_toolbar);
 
+    // Set up the Toolbar
+    toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+    setSupportActionBar(toolbar);
+
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
     if (recipeId != 0) {
       toolbar.setTitle("Edit recipe");
+      cancelButton = findViewById(R.id.addRecipe_cancel);
+      cancelButton.setVisibility(View.VISIBLE);
       loadExistingRecipe(recipeId);
     }
-
-    // Set up the Toolbar
-    toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
-    setSupportActionBar(toolbar);
 
     // Set listener for selectImageButton
     selectImageButton.setOnClickListener(new View.OnClickListener() {
@@ -327,6 +332,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
   private void loadExistingRecipe(int recipeId) {
+
     // Set title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
@@ -350,6 +356,32 @@ public class AddRecipeActivity extends AppCompatActivity {
       @Override
       public void onChanged(Integer i) {
         // TODO set servings
+      }
+    });
+
+    // Set listener for cancel button
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        // Set up dialog for user confirmation
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AddRecipeActivity.this);
+        alertBuilder.setMessage(getString(R.string.discard_changes));
+
+        alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            finish();
+          }
+        });
+
+        alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialogInterface, int i) {
+            // Do nothing
+          }
+        });
+
+        alertBuilder.show();
       }
     });
   }
