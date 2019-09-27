@@ -4,6 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_servings"
+        android:orderInCategory="10"
+        android:title="@string/action_servings"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_edit"
         android:orderInCategory="100"
         android:title="@string/action_edit"

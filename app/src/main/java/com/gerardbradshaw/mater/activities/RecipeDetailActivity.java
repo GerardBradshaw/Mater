@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,7 +25,7 @@ import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewViewHolder;
+import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
@@ -48,7 +47,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private TextView servingsView;
   private Toolbar toolbar;
 
-  private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
+  private List<RecipeIngredientViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
 
@@ -126,7 +125,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
       @Override
       public void onChanged(RecipeIngredient[] recipeIngredients) {
-        loadIngredientsIntoView(recipeIngredients);
+        createRecipeIngredientHolders(recipeIngredients);
+        loadIngredientsIntoView();
       }
     });
 
@@ -149,24 +149,22 @@ public class RecipeDetailActivity extends AppCompatActivity {
         .into(imageView);
   }
 
-  private void loadIngredientsIntoView(RecipeIngredient[] recipeIngredients) {
-    // Clear the ViewHolder references
+  private void createRecipeIngredientHolders(RecipeIngredient[] recipeIngredients) {
     recipeIngredientViewHolders.clear();
 
-    // Instantiate a LayoutInflater
-    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-    // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
-
-    // Create a RecipeIngredientHolder for each ingredient
     for (RecipeIngredient r : recipeIngredients) {
       String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
       double amount = r.getAmount() * servings;
       String unit = r.getUnits();
       recipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
     }
+  }
+
+  private void loadIngredientsIntoView() {
+    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
 
     // Add a new View to the layout for each ingredient
     for(RecipeIngredientHolder holder : recipeIngredientHolders) {
@@ -187,7 +185,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       nameView.setText(holder.getName());
 
       // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(checkBox, quantityView, nameView));
+      recipeIngredientViewHolders.add(new RecipeIngredientViewHolder(checkBox, quantityView, nameView));
 
       // Get the index of the view
       int index = recipeIngredientViewHolders.size() - 1;
@@ -246,7 +244,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Save the amount to the class
     this.servings = 1;
 
-    // TODO Update the ingredients view
+    // Update holders
+    for (RecipeIngredientHolder holder : recipeIngredientHolders) {
+      holder.setAmount(holder.getAmount() * servings);
+    }
+
+    // TODO Update list
 
     // Update the card view
     String servingsString = "x" + servings;
@@ -274,6 +277,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
       ActivityOptionsCompat options =
           ActivityOptionsCompat.makeSceneTransitionAnimation(RecipeDetailActivity.this);
       startActivity(intent, options.toBundle());
+    } else if (id == R.id.action_servings) {
+      updateServings();
     }
 
     return super.onOptionsItemSelected(item);
