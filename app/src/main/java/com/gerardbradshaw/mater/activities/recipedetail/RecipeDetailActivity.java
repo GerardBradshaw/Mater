@@ -57,7 +57,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private Context context;
   private String recipeTitle;
   private int recipeId;
-  private double servings = 1;
+  private int customServings = 1;
+  private int defaultServings;
 
   private IngredientListAdapter ingredientListAdapter;
 
@@ -116,8 +117,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
       @Override
       public void onChanged(Integer i) {
-        String servings = "x" + i;
-        servingsView.setText(servings);
+        defaultServings = i;
+        String servingsString = "x" + i;
+        servingsView.setText(servingsString);
       }
     });
 
@@ -161,7 +163,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
     for (RecipeIngredient r : recipeIngredientList) {
       String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
-      double amount = r.getAmount() * servings;
+      double amount = r.getAmount();
       String unit = r.getUnits();
       recipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
     }
@@ -249,17 +251,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // TODO Display dialog for the user to enter the number of servings
 
     // Save the amount to the class
-    this.servings = 1;
+    this.customServings = 1;
+    double servingsMultiplier = customServings / defaultServings;
 
     // Update holders
     for (RecipeIngredientHolder holder : recipeIngredientHolders) {
-      holder.setAmount(holder.getAmount() * servings);
+      holder.setAmount(holder.getAmount() * servingsMultiplier);
     }
 
-    // TODO Update list
+    ingredientListAdapter.notifyDataSetChanged();
 
     // Update the card view
-    String servingsString = "x" + servings;
+    String servingsString = "x" + customServings;
     servingsView.setText(servingsString);
   }
 
