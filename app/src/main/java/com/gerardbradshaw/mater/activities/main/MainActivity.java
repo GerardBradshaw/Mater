@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.activities.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
@@ -127,16 +129,7 @@ public class MainActivity extends AppCompatActivity
 
       @Override
       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        // Get the position of the item swiped
-        int position = viewHolder.getAdapterPosition();
-
-        // Determine which recipe was swiped
-        int recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
-
-        summaryViewModel.deleteRecipe(recipeToDelete);
-        recipeListAdapter.notifyDataSetChanged();
-        // TODO confirmation prompt for the user
-
+        deleteRecipe(viewHolder.getAdapterPosition());
       }
     });
 
@@ -157,6 +150,36 @@ public class MainActivity extends AppCompatActivity
         recipeListAdapter.notifyDataSetChanged();
       }
     });
+  }
+
+
+  // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
+
+  private void deleteRecipe(final int position) {
+    final Summary recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
+    String alertMessage =
+        getString(R.string.dialog_confirm_delete) + " \"" + recipeToDelete.getTitle() + "\"?";
+
+    // Set up dialog for user confirmation
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+    alertBuilder.setMessage(alertMessage);
+
+    alertBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        summaryViewModel.deleteRecipe(recipeToDelete.getRecipeId());
+        recipeListAdapter.notifyDataSetChanged();
+      }
+    });
+
+    alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        recipeListAdapter.notifyItemChanged(position);
+      }
+    });
+
+    alertBuilder.show();
   }
 
 
