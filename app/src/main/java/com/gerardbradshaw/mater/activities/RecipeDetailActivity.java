@@ -2,6 +2,7 @@ package com.gerardbradshaw.mater.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -53,6 +54,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private Context context;
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
   private String recipeTitle;
+  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
 
 
   // - - - - - - - - - - - - - - - Activity Methods - - - - - - - - - - - - - - -
@@ -244,8 +246,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
 
-    if (id == R.id.action_settings) {
-
+    if (id == R.id.action_edit) {
+      // Create an intent to open the AddRecipeActivity and start it
+      Intent intent = new Intent(RecipeDetailActivity.this, AddRecipeActivity.class);
+      intent.putExtra(EXTRA_RECIPE_ID, recipeId);
+      ActivityOptionsCompat options =
+          ActivityOptionsCompat.makeSceneTransitionAnimation(RecipeDetailActivity.this);
+      startActivity(intent, options.toBundle());
     }
 
     return super.onOptionsItemSelected(item);
