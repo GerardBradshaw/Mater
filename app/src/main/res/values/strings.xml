@@ -49,5 +49,6 @@
     <!-- AppBar Menu -->
     <string name="action_edit">Edit recipe</string>
     <string name="action_servings">Servings</string>
+    <string name="addRecipe_cancelButton">Cancel</string>
 
 </resources>

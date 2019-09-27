@@ -115,6 +115,15 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/addRecipe_saveButton" />
 
+            <!-- Cancel Button -->
+            <Button
+                android:id="@+id/addRecipe_cancel"
+                style="@style/ButtonStyle"
+                android:layout_width="match_parent"
+                android:text="@string/addRecipe_cancelButton"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
         </LinearLayout>
 
 
