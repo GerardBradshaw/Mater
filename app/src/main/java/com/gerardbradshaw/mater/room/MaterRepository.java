@@ -12,8 +12,10 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
+import com.gerardbradshaw.mater.helpers.SharedPrefHelper;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
+import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.daos.IngredientDao;
 import com.gerardbradshaw.mater.room.daos.SummaryDao;
 import com.gerardbradshaw.mater.room.daos.RecipeIngredientDao;
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -94,6 +97,10 @@ public class MaterRepository {
     return summaryDao.getLiveDescription(recipeId);
   }
 
+  public LiveData<Integer> getLiveServings(int recipeId) {
+    return summaryDao.getLiveServings(recipeId);
+  }
+
   public LiveData<String> getLiveImageDirectory(int recipeId) {
     return summaryDao.getLiveImageDirectory(recipeId);
   }
@@ -105,7 +112,7 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - RecipeIngredient Data - - - - - - - - - - - - - - -
 
-  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
+  public LiveData<List<RecipeIngredient>> getLiveRecipeIngredients(int recipeId) {
     return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
   }
 
@@ -226,7 +233,7 @@ public class MaterRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Loading Ingredients - - - - - - - - - - - - - - -
 
   public LiveData<List<Ingredient>> getLiveAllIngredients() {
     return ingredientDao.getLiveAllIngredients();
@@ -259,6 +266,43 @@ public class MaterRepository {
   }
 
 
+  // - - - - - - - - - - - - - - - Saving Ingredients - - - - - - - - - - - - - - -
+
+  public void addIngredient(final Ingredient... ingredients) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new InsertIngredientAsyncTask(ingredientDao).execute(ingredients);
+      }
+    };
+    taskScheduler.addNewTask(runnable);
+  }
+
+  public void addIngredient(final List<Ingredient> ingredients) {
+    Ingredient[] ingredientArray = new Ingredient[ingredients.size()];
+    ingredientArray = ingredients.toArray(ingredientArray);
+    addIngredient(ingredientArray);
+  }
+
+  private class InsertIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
+
+    private IngredientDao ingredientDao;
+
+    InsertIngredientAsyncTask(IngredientDao ingredientDao) {
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Void doInBackground(Ingredient... ingredients) {
+      for (Ingredient i : ingredients) {
+        ingredientDao.insertIngredient(i);
+      }
+      return null;
+    }
+
+  }
+
+
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 
   /**
@@ -274,7 +318,6 @@ public class MaterRepository {
             .execute(recipeHolder);
       }
     };
-
     taskScheduler.addNewTask(runnable);
   }
 
@@ -304,7 +347,11 @@ public class MaterRepository {
       RecipeHolder recipe = recipeHolders[0];
 
       // Add the info to the database
-      addSummaryToDb(recipe.getTitle(), recipe.getDescription(), recipe.getImageDirectory());
+      addSummaryToDb(
+          recipe.getTitle(),
+          recipe.getDescription(),
+          recipe.getImageDirectory(),
+          recipe.getServings());
 
       // Get the ID of the new recipe
       int recipeId = summaryDao.getRecipeId(recipe.getTitle());
@@ -325,21 +372,24 @@ public class MaterRepository {
       taskScheduler.setTaskFinished();
     }
 
-    private void addSummaryToDb(String title, String description, String imageDirectory) {
+    private void addSummaryToDb(String title, String description, String imageDirectory, int servings) {
 
       // Change the input if anything is null
-      if(title == null) {
+      if (title == null) {
         title = "Not set";
       }
-      if(description == null) {
+      if (description == null) {
         description = "Not set";
       }
-      if(imageDirectory == null) {
+      if (imageDirectory == null) {
         imageDirectory = "";
+      }
+      if (servings == 0) {
+        servings = 1;
       }
 
       // Create a Summary from the input
-      Summary summary = new Summary(title, description, imageDirectory);
+      Summary summary = new Summary(title, description, imageDirectory, servings);
 
       // Add the title and description to the database.
       summaryDao.insertSummary(summary);
@@ -394,7 +444,6 @@ public class MaterRepository {
 
       }
     }
-
 
   }
 

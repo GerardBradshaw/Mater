@@ -32,7 +32,7 @@ import com.gerardbradshaw.mater.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
-import com.gerardbradshaw.mater.viewmodels.DetailsViewModel;
+import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
 
-  private DetailsViewModel detailsViewModel;
+  private DetailViewModel detailViewModel;
   private ImageViewModel imageViewModel;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
@@ -70,7 +70,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
 
     // Initialize the ViewModels
-    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
@@ -168,7 +168,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Inflate the view
     LinearLayout addIngredientView =
-        (LinearLayout) inflater.inflate(R.layout.view_ingredient_input, insertPoint, false);
+        (LinearLayout) inflater.inflate(R.layout.ingredient_input, insertPoint, false);
 
     // Get the children of the View
     EditText nameInput = (EditText) addIngredientView.getChildAt(0);
@@ -197,7 +197,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Inflate the view
     LinearLayout addStepView =
-        (LinearLayout) inflater.inflate(R.layout.view_step_input, insertPoint, false);
+        (LinearLayout) inflater.inflate(R.layout.step_input, insertPoint, false);
 
     // Get the children of the View
     TextView number = (TextView) addStepView.getChildAt(0);
@@ -302,7 +302,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.setSteps(steps);
 
       // Save the recipe to the database
-      detailsViewModel.insertRecipeHolder(recipe);
+      detailViewModel.insertRecipeHolder(recipe);
 
       // Save the image
       if (image != null) {

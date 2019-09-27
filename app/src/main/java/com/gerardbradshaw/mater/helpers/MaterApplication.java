@@ -68,6 +68,7 @@ public class MaterApplication extends Application {
     // Set the title and description of the recipe
     recipe.setTitle("Vegan Lasagne");
     recipe.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
+    recipe.setServings(8);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -140,6 +141,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tikka Masala Curry");
     holder.setDescription("Tired of hot curries? Try this bad boy; not too spicy, not too weak.");
+    holder.setServings(20);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -205,6 +207,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tofu Satay");
     holder.setDescription("Smooth, nutty, and just the right amount of fantastic.");
+    holder.setServings(12);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();

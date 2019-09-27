@@ -10,8 +10,6 @@ public class SharedPrefHelper {
   private SharedPreferences sharedPreferences;
   private static final String sharedPrefFile = "com.gerardbradshaw.mater";
   private String FIRST_LAUNCH = "launched";
-  private Context context;
-
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -20,14 +18,8 @@ public class SharedPrefHelper {
    *
    * @param context: The activity context.
    */
-  SharedPrefHelper(Context context) {
-
-    // Initialize the SharedPreference
+  public SharedPrefHelper(Context context) {
     sharedPreferences = context.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE);
-
-    // Set the context
-    this.context = context;
-
   }
 
 
@@ -51,15 +43,42 @@ public class SharedPrefHelper {
    * Sets the state of FIRST_LAUNCH to false, which means the application has been launched > once.
    */
   public void setAsLaunched() {
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putBoolean(FIRST_LAUNCH, false);
+    editor.apply();
+  }
 
-    // Create an editor to take care of file operations
-    SharedPreferences.Editor preferenceEditor = sharedPreferences.edit();
+  public void putInt(String key, int number) {
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putInt(key, number);
+    editor.apply();
+  }
 
-    // Save to the editor
-    preferenceEditor.putBoolean(FIRST_LAUNCH, false);
+  public int getInt(String key, int defaultValue) {
+    return sharedPreferences.getInt(key, defaultValue);
+  }
 
-    // Apply the edit
-    preferenceEditor.apply();
+  public void putString(String key, String string) {
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putString(key, string);
+    editor.apply();
+  }
 
+  public String getString(String key, String defaultValue) {
+    return sharedPreferences.getString(key, defaultValue);
+  }
+
+  public void putBoolean(String key, boolean bool) {
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putBoolean(key, bool);
+    editor.apply();
+  }
+
+  public boolean getBoolean(String key, boolean defaultValue) {
+    return sharedPreferences.getBoolean(key, defaultValue);
+  }
+
+  public boolean contains(String key) {
+    return sharedPreferences.contains(key);
   }
 }

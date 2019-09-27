@@ -9,8 +9,8 @@
     android:theme="@style/AppTheme.NoActionBar">
 
     <!-- In stock button -->
-    <RadioButton
-        android:id="@+id/ingredientView_radioButton"
+    <CheckBox
+        android:id="@+id/ingredientView_checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

@@ -1,10 +1,12 @@
-package com.gerardbradshaw.mater.activities;
+package com.gerardbradshaw.mater.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.adapters.RecipeListAdapter;
+import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
@@ -66,7 +68,9 @@ public class MainActivity extends AppCompatActivity
       public void onClick(View view) {
         // Create an intent to open the AddRecipeActivity and start it
         Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-        startActivity(intent);
+        ActivityOptionsCompat options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+        startActivity(intent, options.toBundle());
       }
     });
 
@@ -93,11 +97,13 @@ public class MainActivity extends AppCompatActivity
 
         // Set up transitions
         Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-            MainActivity.this, imagePair);
+        ActivityOptionsCompat optionsImageTransition =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, imagePair);
+        ActivityOptionsCompat optionsActivityTransition =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
 
         // Start the activity
-        startActivity(intent, options.toBundle());
+        startActivity(intent, optionsActivityTransition.toBundle());
       }
     });
 

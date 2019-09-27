@@ -17,7 +17,6 @@ public class SummaryViewModel extends AndroidViewModel {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private MaterRepository repository;
-
   private LiveData<List<Summary>> recipeSummaryList; // Cached copy
 
 
@@ -39,10 +38,6 @@ public class SummaryViewModel extends AndroidViewModel {
 
   public LiveData<List<Summary>> getAllRecipeSummaries() {
     return recipeSummaryList;
-  }
-
-  public MaterRepository getRepository() {
-    return repository;
   }
 
 

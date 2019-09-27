@@ -4,13 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/background_border"
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/shoppingListItem_stockInput"
+        android:layout_width="60sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:hint="0"
+        android:inputType="number"
+        android:maxLength="3"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/shoppingListItem_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        tools:text="Banana" />
+        android:layout_gravity="center_vertical"
+        android:padding="8dp"
+        tools:text="Banana"/>
 
 </LinearLayout>

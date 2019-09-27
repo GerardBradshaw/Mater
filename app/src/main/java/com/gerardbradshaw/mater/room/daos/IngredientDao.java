@@ -24,9 +24,13 @@ public interface IngredientDao {
   @Update
   void updateIngredient(Ingredient ingredient);
 
+  // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
+
+  @Query("select * from ingredient_table order by name ASC")
+  LiveData<List<Ingredient>> getLiveAllIngredients();
+
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
-
 
   @Query("select * from ingredient_table where name = :ingredientName limit 1")
   Ingredient getIngredient(String ingredientName);
@@ -39,9 +43,6 @@ public interface IngredientDao {
 
   @Query("select * from ingredient_table limit 1")
   Ingredient getAnyIngredient();
-
-  @Query("select * from ingredient_table order by name ASC")
-  LiveData<List<Ingredient>> getLiveAllIngredients();
 
 
   // Allergen queries

@@ -1,30 +1,38 @@
-package com.gerardbradshaw.mater.activities;
+package com.gerardbradshaw.mater.activities.recipedetail;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.main.MainActivity;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewViewHolder;
+import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
-import com.gerardbradshaw.mater.viewmodels.DetailsViewModel;
+import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
+import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,48 +41,55 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member Variables - - - - - - - - - - - - - - -
 
+  private DetailViewModel detailViewModel;
+  private ImageViewModel imageViewModel;
+  private IngredientViewModel ingredientViewModel;
+
   private TextView descriptionView;
   private ImageView imageView;
+  private TextView servingsView;
   private Toolbar toolbar;
-  private List<RecipeIngredientViewViewHolder> recipeIngredientViewHolders = new ArrayList<>();
+
+  private List<RecipeIngredientViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredientHolder> ingredientHolders = new ArrayList<>();
-  private DetailsViewModel detailsViewModel;
-  private ImageViewModel imageViewModel;
-  private int recipeId;
-  private double servings;
+  private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+
   private Context context;
-  private static String LOG_TAG = "GGG - RecipeDetailActivity";
   private String recipeTitle;
+  private int recipeId;
+  private int customServings = 1;
+  private int defaultServings;
+
+  private IngredientListAdapter ingredientListAdapter;
+
+  private static String LOG_TAG = "GGG - RecipeDetailActivity";
+  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
 
 
   // - - - - - - - - - - - - - - - Activity Methods - - - - - - - - - - - - - - -
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
-    detailsViewModel = ViewModelProviders.of(this).get(DetailsViewModel.class);
+    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+    ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
 
     // Get intent information
     Intent receivedIntent = getIntent();
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
     context = this;
 
-    // Get the number of servings
-    // TODO add ability to set number of servings
-    servings = 1;
-
-    // Set up Toolbar
-    toolbar = findViewById(R.id.recipeDetail_toolbar);
-    setSupportActionBar(toolbar);
-
     // Get a handle to the Views
     imageView = findViewById(R.id.recipeDetail_image);
     descriptionView = findViewById(R.id.recipeDetail_description);
+    servingsView = findViewById(R.id.recipeDetail_servings);
+    toolbar = findViewById(R.id.recipeDetail_toolbar);
+    setSupportActionBar(toolbar);
 
     // Set the title
-    detailsViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
+    detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         recipeTitle = s;
@@ -92,29 +107,49 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the description
-    detailsViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
+    detailViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
         descriptionView.setText(s);
       }
     });
 
-    // Set the ingredients
-    detailsViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
+    detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
       @Override
-      public void onChanged(RecipeIngredient[] recipeIngredients) {
-        loadIngredientsIntoView(recipeIngredients);
+      public void onChanged(Integer i) {
+        defaultServings = i;
+        String servingsString = "x" + i;
+        servingsView.setText(servingsString);
+      }
+    });
+
+    // Set up RecyclerView for ingredients
+    ingredientListAdapter = new IngredientListAdapter(this);
+    RecyclerView recyclerView = findViewById(R.id.recipeDetail_recyclerView);
+    recyclerView.setAdapter(ingredientListAdapter);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    // Set the ingredients
+    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
+      @Override
+      public void onChanged(List<RecipeIngredient> recipeIngredientList) {
+        createRecipeIngredientHolders(recipeIngredientList);
+        ingredientListAdapter.setSummaryList(recipeIngredientHolders);
+        //loadIngredientsIntoView();
       }
     });
 
     // Set the steps
-    detailsViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
+    detailViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
       @Override
       public void onChanged(Step[] steps) {
         loadStepsIntoView(steps);
       }
     });
   }
+
+
+  // - - - - - - - - - - - - - - - Helper Methods - - - - - - - - - - - - - - -
 
   private void loadImageIntoView() {
     Glide.with(context)
@@ -123,33 +158,31 @@ public class RecipeDetailActivity extends AppCompatActivity {
         .into(imageView);
   }
 
-  private void loadIngredientsIntoView(RecipeIngredient[] recipeIngredients) {
-    // Clear the ViewHolder references
+  private void createRecipeIngredientHolders(List<RecipeIngredient> recipeIngredientList) {
     recipeIngredientViewHolders.clear();
 
-    // Instantiate a LayoutInflater
+    for (RecipeIngredient r : recipeIngredientList) {
+      String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
+      double amount = r.getAmount();
+      String unit = r.getUnits();
+      recipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
+    }
+  }
+
+  private void loadIngredientsIntoView() {
     LayoutInflater inflater = (LayoutInflater) getApplicationContext()
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    // Get the insert point
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_ingredientsLayout);
 
-    // Create a RecipeIngredientHolder for each ingredient
-    for (RecipeIngredient ingredient : recipeIngredients) {
-      String name = detailsViewModel.getIngredient(ingredient.getIngredientId()).getName();
-      double amount = ingredient.getAmount() * servings;
-      String unit = ingredient.getUnits();
-      ingredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
-    }
-
     // Add a new View to the layout for each ingredient
-    for(RecipeIngredientHolder holder : ingredientHolders) {
+    for(RecipeIngredientHolder holder : recipeIngredientHolders) {
       // Inflate the view to be inserted
       LinearLayout ingredientView = (LinearLayout) inflater
-          .inflate(R.layout.view_ingredient_detail, insertPoint, false);
+          .inflate(R.layout.ingredient_detail, insertPoint, false);
 
       // Get the children of the View
-      RadioButton radioButton = (RadioButton) ingredientView.getChildAt(0);
+      CheckBox checkBox = (CheckBox) ingredientView.getChildAt(0);
       TextView quantityView = (TextView) ingredientView.getChildAt(1);
       TextView nameView = (TextView) ingredientView.getChildAt(2);
 
@@ -161,7 +194,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       nameView.setText(holder.getName());
 
       // Create an ingredient view and update it
-      recipeIngredientViewHolders.add(new RecipeIngredientViewViewHolder(radioButton, quantityView, nameView));
+      recipeIngredientViewHolders.add(new RecipeIngredientViewHolder(checkBox, quantityView, nameView));
 
       // Get the index of the view
       int index = recipeIngredientViewHolders.size() - 1;
@@ -191,7 +224,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
       // Inflate the view to be inserted
       LinearLayout stepView = (LinearLayout) inflater
-          .inflate(R.layout.view_step_detail, insertPoint, false);
+          .inflate(R.layout.step_detail, insertPoint, false);
 
       // Get the children of the view
       TextView numberView = (TextView) stepView.getChildAt(0);
@@ -214,5 +247,51 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
   }
 
+  private void updateServings() {
+    // TODO Display dialog for the user to enter the number of servings
+
+    // Save the amount to the class
+    this.customServings = 1;
+    double servingsMultiplier = customServings / defaultServings;
+
+    // Update holders
+    for (RecipeIngredientHolder holder : recipeIngredientHolders) {
+      holder.setAmount(holder.getAmount() * servingsMultiplier);
+    }
+
+    ingredientListAdapter.notifyDataSetChanged();
+
+    // Update the card view
+    String servingsString = "x" + customServings;
+    servingsView.setText(servingsString);
+  }
+
+
+  // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.recipe_detail, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    if (id == R.id.action_edit) {
+      Intent intent = new Intent(RecipeDetailActivity.this, AddRecipeActivity.class);
+      intent.putExtra(EXTRA_RECIPE_ID, recipeId);
+      ActivityOptionsCompat options =
+          ActivityOptionsCompat.makeSceneTransitionAnimation(RecipeDetailActivity.this);
+      startActivity(intent, options.toBundle());
+
+    } else if (id == R.id.action_servings) {
+      updateServings();
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
 
 }
