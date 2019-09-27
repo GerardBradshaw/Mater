@@ -33,7 +33,7 @@
 
         <!-- Recipe Detail Activity -->
         <activity
-            android:name="com.gerardbradshaw.mater.activities.RecipeDetailActivity"
+            android:name="com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Main Activity -->

@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.activities;
+package com.gerardbradshaw.mater.activities.recipedetail;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.main.MainActivity;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
@@ -271,12 +272,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     if (id == R.id.action_edit) {
-      // Create an intent to open the AddRecipeActivity and start it
       Intent intent = new Intent(RecipeDetailActivity.this, AddRecipeActivity.class);
       intent.putExtra(EXTRA_RECIPE_ID, recipeId);
       ActivityOptionsCompat options =
           ActivityOptionsCompat.makeSceneTransitionAnimation(RecipeDetailActivity.this);
       startActivity(intent, options.toBundle());
+
     } else if (id == R.id.action_servings) {
       updateServings();
     }
