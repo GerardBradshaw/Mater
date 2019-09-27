@@ -81,19 +81,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
     ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
 
-    // Get intent information
-    Intent receivedIntent = getIntent();
-    recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
-    context = this;
-
-    // Get a handle to the Views
+    // Get a handle to the Views and set up Toolbar
     imageView = findViewById(R.id.recipeDetail_image);
     descriptionView = findViewById(R.id.recipeDetail_description);
     servingsView = findViewById(R.id.recipeDetail_servings);
     toolbar = findViewById(R.id.recipeDetail_toolbar);
     setSupportActionBar(toolbar);
 
-    // Set the title
+    // Get intent info
+    recipeId = getIntent().getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
+    context = this;
+
+    // Observe title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
@@ -103,7 +102,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       }
     });
 
-    // Load the image
+    // Observe image location
     imageViewModel.imageUpdateNotifier().observe(this, new Observer<Integer>() {
       @Override
       public void onChanged(Integer integer) {
@@ -111,7 +110,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       }
     });
 
-    // Set the description
+    // Observe description
     detailViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
       @Override
       public void onChanged(String s) {
@@ -119,6 +118,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       }
     });
 
+    // Observe servings
     detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
       @Override
       public void onChanged(Integer i) {
@@ -134,17 +134,16 @@ public class RecipeDetailActivity extends AppCompatActivity {
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    // Set the ingredients
+    // Observe ingredients
     detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
       @Override
       public void onChanged(List<RecipeIngredient> recipeIngredientList) {
         createRecipeIngredientHolders(recipeIngredientList);
         ingredientListAdapter.setRecipeIngredientList(customRecipeIngredientHolders);
-        //loadIngredientsIntoView();
       }
     });
 
-    // Set the steps
+    // Observe steps
     detailViewModel.getLiveSteps(recipeId).observe(this, new Observer<Step[]>() {
       @Override
       public void onChanged(Step[] steps) {
@@ -300,7 +299,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     alertBuilder.show();
-
   }
 
 
@@ -318,6 +316,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     if (id == R.id.action_edit) {
+      // Launch AddRecipeActivity which will load the information for this recipe
       Intent intent = new Intent(RecipeDetailActivity.this, AddRecipeActivity.class);
       intent.putExtra(EXTRA_RECIPE_ID, recipeId);
       ActivityOptionsCompat options =
