@@ -1,18 +1,46 @@
 package com.gerardbradshaw.mater.activities.recipedetail;
 
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.main.RecipeListAdapter;
+import com.gerardbradshaw.mater.helpers.Units;
+import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
+import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
+import com.gerardbradshaw.mater.room.entities.Summary;
 
-public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
+import java.util.List;
+
+public class IngredientListAdapter
+    extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
+
+  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
+
+  private final LayoutInflater inflater;
+  private List<RecipeIngredientHolder> recipeIngredientHolders; // Cached copy
+  private Context context;
+  private static String LOG_TAG = "GGG - IngredientListAdapter";
+
+
+  // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
+
+  public IngredientListAdapter(Context context) {
+    this.context = context;
+    inflater = LayoutInflater.from(context);
+  }
+
+
+  // - - - - - - - - - - - - - - - Adapter methods - - - - - - - - - - - - - - -
 
   /**
    * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
@@ -24,7 +52,8 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
   @NonNull
   @Override
   public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return null;
+    View itemView = inflater.inflate(R.layout.ingredient_detail, parent, false);
+    return new IngredientViewHolder(itemView, this);
   }
 
   /**
@@ -32,11 +61,25 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
    * listeners. This method updates the contents of the itemView to reflect the item at the given
    * position.
    *
-   * @param holder the ViewHolder which should be updated to represent the contents of the item at the given position in the data set
+   * @param viewHolder the ViewHolder which should be updated to represent the contents of the item at the given position in the data set
    * @param position the position of the item within the adapter's data set
    */
   @Override
-  public void onBindViewHolder(@NonNull IngredientViewHolder holder, int position) {
+  public void onBindViewHolder(@NonNull IngredientViewHolder viewHolder, int position) {
+    if (recipeIngredientHolders != null) {
+      viewHolder.checkBox.setVisibility(View.VISIBLE);
+
+      RecipeIngredientHolder holder = recipeIngredientHolders.get(position);
+      String name = holder.getName();
+      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
+
+      viewHolder.name.setText(name);
+      viewHolder.quantity.setText(quantity);
+
+    } else {
+      viewHolder.name.setText(context.getResources().getString(R.string.no_ingredients_message));
+      viewHolder.checkBox.setVisibility(View.GONE);
+    }
 
   }
 
@@ -49,7 +92,24 @@ public class IngredientListAdapter extends RecyclerView.Adapter<IngredientListAd
    */
   @Override
   public int getItemCount() {
-    return 0;
+    if(recipeIngredientHolders != null) {
+      return recipeIngredientHolders.size();
+
+    } else {
+      return 0;
+    }
+  }
+
+
+  // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
+
+  public void setSummaryList(List<RecipeIngredientHolder> recipeIngredientHolders) {
+    this.recipeIngredientHolders = recipeIngredientHolders;
+    notifyDataSetChanged();
+  }
+
+  public RecipeIngredientHolder getRecipeIngredientHolderIdAtPosition(int position) {
+    return recipeIngredientHolders.get(position);
   }
 
 
