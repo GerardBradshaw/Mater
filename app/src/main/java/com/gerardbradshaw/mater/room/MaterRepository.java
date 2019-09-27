@@ -112,7 +112,7 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - RecipeIngredient Data - - - - - - - - - - - - - - -
 
-  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
+  public LiveData<List<RecipeIngredient>> getLiveRecipeIngredients(int recipeId) {
     return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
   }
 

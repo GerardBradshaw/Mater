@@ -55,7 +55,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private Context context;
   private String recipeTitle;
   private int recipeId;
-  private double servings;
+  private double servings = 1;
+
+  private IngredientListAdapter ingredientListAdapter;
 
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
@@ -76,17 +78,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
     recipeId = receivedIntent.getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
     context = this;
 
-    // TODO add ability to set number of servings
-    servings = 1;
-
-    // Set up Toolbar
-    toolbar = findViewById(R.id.recipeDetail_toolbar);
-    setSupportActionBar(toolbar);
-
     // Get a handle to the Views
     imageView = findViewById(R.id.recipeDetail_image);
     descriptionView = findViewById(R.id.recipeDetail_description);
     servingsView = findViewById(R.id.recipeDetail_servings);
+    toolbar = findViewById(R.id.recipeDetail_toolbar);
+    setSupportActionBar(toolbar);
+
+    // Set up RecyclerView for ingredients
+    ingredientListAdapter = new IngredientListAdapter(this);
 
     // Set the title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
@@ -123,11 +123,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set the ingredients
-    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<RecipeIngredient[]>() {
+    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
       @Override
-      public void onChanged(RecipeIngredient[] recipeIngredients) {
-        createRecipeIngredientHolders(recipeIngredients);
-        loadIngredientsIntoView();
+      public void onChanged(List<RecipeIngredient> recipeIngredientList) {
+        createRecipeIngredientHolders(recipeIngredientList);
+        ingredientListAdapter.setSummaryList(recipeIngredientHolders);
+        //loadIngredientsIntoView();
       }
     });
 
@@ -150,10 +151,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         .into(imageView);
   }
 
-  private void createRecipeIngredientHolders(RecipeIngredient[] recipeIngredients) {
+  private void createRecipeIngredientHolders(List<RecipeIngredient> recipeIngredientList) {
     recipeIngredientViewHolders.clear();
 
-    for (RecipeIngredient r : recipeIngredients) {
+    for (RecipeIngredient r : recipeIngredientList) {
       String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
       double amount = r.getAmount() * servings;
       String unit = r.getUnits();
