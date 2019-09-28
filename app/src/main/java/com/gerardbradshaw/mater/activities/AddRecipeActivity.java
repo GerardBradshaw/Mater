@@ -52,9 +52,9 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   private EditText titleInput;
   private EditText descriptionInput;
+  private EditText servingsInput;
   private TextView imageName;
   private Toolbar toolbar;
-  private Button cancelButton;
   private Bitmap image;
 
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
@@ -78,8 +78,10 @@ public class AddRecipeActivity extends AppCompatActivity {
     Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
     Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
     Button saveButton = findViewById(R.id.addRecipe_saveButton);
+    Button cancelButton = findViewById(R.id.addRecipe_cancel);
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
+    servingsInput = findViewById(R.id.addRecipe_servingsInput);
     imageName = findViewById(R.id.addRecipe_imageNameTextView);
     toolbar = findViewById(R.id.addRecipe_toolbar);
 
@@ -91,8 +93,6 @@ public class AddRecipeActivity extends AppCompatActivity {
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
     if (recipeId != 0) {
       toolbar.setTitle("Edit recipe");
-      cancelButton = findViewById(R.id.addRecipe_cancel);
-      cancelButton.setVisibility(View.VISIBLE);
       loadExistingRecipe(recipeId);
     }
 
@@ -125,6 +125,14 @@ public class AddRecipeActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         saveRecipeToRepository();
+      }
+    });
+
+    // Set up cancel button
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        showCancelDialog();
       }
     });
   }
@@ -306,6 +314,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Add everything to the recipe
       recipe.setTitle(titleInput.getText().toString());
       recipe.setDescription(descriptionInput.getText().toString());
+      recipe.setImageDirectory(imageName.getText().toString());
       recipe.setRecipeIngredients(ingredients);
       recipe.setSteps(steps);
 
@@ -328,6 +337,28 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
   }
 
+  private void showCancelDialog() {
+    // Set up dialog for user confirmation
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AddRecipeActivity.this);
+    alertBuilder.setMessage(getString(R.string.discard_changes));
+
+    alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        finish();
+      }
+    });
+
+    alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        // Do nothing
+      }
+    });
+
+    alertBuilder.show();
+  }
+
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
@@ -341,7 +372,13 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
-    // TODO set image name
+    // Set servings
+    detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
+      @Override
+      public void onChanged(Integer i) {
+        servingsInput.setText(Integer.toString(i));
+      }
+    });
 
     // Set description
     detailViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
@@ -351,37 +388,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
-    // Set servings
-    detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
+    // Set image name
+    detailViewModel.getLiveImageDirectory(recipeId).observe(this, new Observer<String>() {
       @Override
-      public void onChanged(Integer i) {
-        // TODO set servings
-      }
-    });
-
-    // Set listener for cancel button
-    cancelButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        // Set up dialog for user confirmation
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AddRecipeActivity.this);
-        alertBuilder.setMessage(getString(R.string.discard_changes));
-
-        alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            finish();
-          }
-        });
-
-        alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialogInterface, int i) {
-            // Do nothing
-          }
-        });
-
-        alertBuilder.show();
+      public void onChanged(String s) {
+        imageName.setText(s);
       }
     });
   }
@@ -407,7 +418,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
   }
 
-  public String getFileName(@NonNull Uri uri) {
+  private String getFileName(@NonNull Uri uri) {
     String result = null;
     if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
       Cursor cursor = getContentResolver().query(uri, null, null, null, null);

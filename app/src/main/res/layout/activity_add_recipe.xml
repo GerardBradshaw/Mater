@@ -141,9 +141,7 @@
                 android:id="@+id/addRecipe_cancel"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
-                android:text="@string/addRecipe_cancelButton"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:text="@string/addRecipe_cancelButton" />
 
         </LinearLayout>
     </ScrollView>
