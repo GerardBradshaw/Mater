@@ -22,25 +22,46 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Content -->
+    <!-- Content Parent -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Content -->
         <LinearLayout
             style="@style/ActivityParentView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Title Input -->
-            <EditText
-                android:id="@+id/addRecipe_titleInput"
+            <!-- Title and Servings-->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/addRecipe_titleInput_hint"
-                android:inputType="textCapWords" />
+                android:layout_height="wrap_content" >
+
+                <!-- Title Input -->
+                <EditText
+                    android:id="@+id/addRecipe_titleInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/addRecipe_titleInput_hint"
+                    android:inputType="textCapWords"
+                    app:layout_constraintEnd_toStartOf="@id/addRecipe_servingsInput"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!-- Servings -->
+                <EditText
+                    android:id="@+id/addRecipe_servingsInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:hint="@string/addRecipe_servingsInput_hint"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Description Input -->
             <EditText
@@ -125,10 +146,5 @@
                 tools:visibility="visible" />
 
         </LinearLayout>
-
-
-
     </ScrollView>
-
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
