@@ -37,5 +37,5 @@ public interface RecipeIngredientDao {
   int[] getIngredientIds(int recipeId);
 
   @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")
-  RecipeIngredient[] getRecipeIngredients(int recipeId);
+  List<RecipeIngredient> getRecipeIngredients(int recipeId);
 }

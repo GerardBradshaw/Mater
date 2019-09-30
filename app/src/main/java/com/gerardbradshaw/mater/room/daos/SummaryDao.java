@@ -55,5 +55,5 @@ public interface SummaryDao {
   int getRecipeId(String recipeTitle);
 
   @Query("select * from summary_table where recipe_id = :recipeId")
-  Summary[] getSummary(int recipeId);
+  Summary getSummary(int recipeId);
 }
