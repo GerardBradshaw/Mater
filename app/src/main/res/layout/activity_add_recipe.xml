@@ -22,133 +22,154 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Content Parent -->
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- Content -->
-        <LinearLayout
-            style="@style/ActivityParentView"
+        <!-- Content Parent -->
+        <ScrollView
+            android:id="@+id/addRecipe_contentScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <!-- Title and Servings-->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <!-- Content -->
+            <LinearLayout
+                style="@style/ActivityParentView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <!-- Title Input -->
+                <!-- Title and Servings-->
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <!-- Title Input -->
+                    <EditText
+                        android:id="@+id/addRecipe_titleInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/addRecipe_titleInput_hint"
+                        android:inputType="textCapWords"
+                        app:layout_constraintEnd_toStartOf="@id/addRecipe_servingsInput"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <!-- Servings -->
+                    <EditText
+                        android:id="@+id/addRecipe_servingsInput"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:hint="@string/addRecipe_servingsInput_hint"
+                        android:inputType="number"
+                        android:maxLength="3"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Description Input -->
                 <EditText
-                    android:id="@+id/addRecipe_titleInput"
-                    android:layout_width="0dp"
+                    android:id="@+id/addRecipe_descriptionInput"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/addRecipe_titleInput_hint"
-                    android:inputType="textCapWords"
-                    app:layout_constraintEnd_toStartOf="@id/addRecipe_servingsInput"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:hint="@string/addRecipe_descriptionInput_hint"
+                    android:inputType="textCapSentences" />
 
-                <!-- Servings -->
-                <EditText
-                    android:id="@+id/addRecipe_servingsInput"
+                <!-- Image Name -->
+                <TextView
+                    android:id="@+id/addRecipe_imageNameTextView"
+                    style="@style/DescriptionStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:hint="@string/addRecipe_servingsInput_hint"
-                    android:inputType="number"
-                    android:maxLength="3"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_gravity="center"
+                    android:text="@string/addRecipe_imageNameTextView" />
 
-            <!-- Description Input -->
-            <EditText
-                android:id="@+id/addRecipe_descriptionInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/addRecipe_descriptionInput_hint"
-                android:inputType="textCapSentences" />
+                <!-- Select Image Button -->
+                <Button
+                    android:id="@+id/addRecipe_selectImageButton"
+                    style="@style/ButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/recipeDetail_selectImageButton" />
 
-            <!-- Image Name -->
-            <TextView
-                android:id="@+id/addRecipe_imageNameTextView"
-                style="@style/DescriptionStyle"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/addRecipe_imageNameTextView" />
+                <!-- Ingredients Header -->
+                <TextView
+                    android:id="@+id/addRecipe_ingredientsHeaderTextView"
+                    style="@style/SectionHeaderStyle"
+                    android:text="@string/ingredientsHeader" />
 
-            <!-- Select Image Button -->
-            <Button
-                android:id="@+id/addRecipe_selectImageButton"
-                style="@style/ButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/recipeDetail_selectImageButton" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/addRecipe_ingredientRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
 
-            <!-- Ingredients Header -->
-            <TextView
-                android:id="@+id/addRecipe_ingredientsHeaderTextView"
-                style="@style/SectionHeaderStyle"
-                android:text="@string/ingredientsHeader" />
+                <!-- Add Ingredient Layout -->
+                <LinearLayout
+                    android:id="@+id/addRecipe_addIngredientLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/addRecipe_ingredientRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                <!-- Add Ingredient Button -->
+                <Button
+                    android:id="@+id/addRecipe_addIngredientButton"
+                    style="@style/ButtonStyle"
+                    android:text="@string/addRecipe_addIngredientButton" />
 
-            <!-- Add Ingredient Layout -->
-            <LinearLayout
-                android:id="@+id/addRecipe_addIngredientLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                <!-- Add Steps Header -->
+                <TextView
+                    android:id="@+id/addRecipe_addStepsHeaderTextView"
+                    style="@style/SectionHeaderStyle"
+                    android:text="@string/stepsHeader" />
+
+                <!-- Add Step Layout -->
+                <LinearLayout
+                    android:id="@+id/addRecipe_addStepLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                </LinearLayout>
+
+                <!-- Add Step Button -->
+                <Button
+                    android:id="@+id/addRecipe_addStepButton"
+                    style="@style/ButtonStyle"
+                    android:text="@string/addRecipe_addStepButton" />
+
+                <!-- Save Recipe Button -->
+                <Button
+                    android:id="@+id/addRecipe_saveButton"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/addRecipe_saveButton" />
+
+                <!-- Cancel Button -->
+                <Button
+                    android:id="@+id/addRecipe_cancel"
+                    style="@style/ButtonStyle"
+                    android:layout_width="match_parent"
+                    android:text="@string/addRecipe_cancelButton" />
+
             </LinearLayout>
+        </ScrollView>
 
-            <!-- Add Ingredient Button -->
-            <Button
-                android:id="@+id/addRecipe_addIngredientButton"
-                style="@style/ButtonStyle"
-                android:text="@string/addRecipe_addIngredientButton" />
+        <!-- Loading ProgressBar -->
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-            <!-- Add Steps Header -->
-            <TextView
-                android:id="@+id/addRecipe_addStepsHeaderTextView"
-                style="@style/SectionHeaderStyle"
-                android:text="@string/stepsHeader" />
+        </ProgressBar>
 
-            <!-- Add Step Layout -->
-            <LinearLayout
-                android:id="@+id/addRecipe_addStepLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-            </LinearLayout>
 
-            <!-- Add Step Button -->
-            <Button
-                android:id="@+id/addRecipe_addStepButton"
-                style="@style/ButtonStyle"
-                android:text="@string/addRecipe_addStepButton" />
+    </FrameLayout>
 
-            <!-- Save Recipe Button -->
-            <Button
-                android:id="@+id/addRecipe_saveButton"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_marginTop="24dp"
-                android:text="@string/addRecipe_saveButton" />
 
-            <!-- Cancel Button -->
-            <Button
-                android:id="@+id/addRecipe_cancel"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:text="@string/addRecipe_cancelButton" />
-
-        </LinearLayout>
-    </ScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
