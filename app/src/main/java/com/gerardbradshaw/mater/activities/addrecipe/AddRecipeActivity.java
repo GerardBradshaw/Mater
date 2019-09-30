@@ -57,7 +57,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText titleInput;
   private EditText descriptionInput;
   private EditText servingsInput;
-  private TextView imageName;
+  private TextView imageNameView;
   private Toolbar toolbar;
   private Bitmap image;
 
@@ -86,7 +86,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     servingsInput = findViewById(R.id.addRecipe_servingsInput);
-    imageName = findViewById(R.id.addRecipe_imageNameTextView);
+    imageNameView = findViewById(R.id.addRecipe_imageNameTextView);
     toolbar = findViewById(R.id.addRecipe_toolbar);
 
     // Set up the Toolbar
@@ -166,7 +166,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       assert imageUri != null;
 
       // Set the view
-      imageName.setText(getFileName(imageUri));
+      imageNameView.setText(getFileName(imageUri));
 
       importImageFromUri(imageUri);
 
@@ -336,7 +336,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Add everything to the recipe
       recipe.setTitle(titleInput.getText().toString());
       recipe.setDescription(descriptionInput.getText().toString());
-      recipe.setImageDirectory(imageName.getText().toString());
+      recipe.setImageDirectory(imageNameView.getText().toString());
       recipe.setRecipeIngredients(ingredients);
       recipe.setSteps(steps);
 
@@ -387,48 +387,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void loadExistingRecipe(int recipeId) {
 
     // Start AsyncTask to load RecipeHolder for recipe
-
-
-    // Set title
-    detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
-      @Override
-      public void onChanged(String s) {
-        titleInput.setText(s);
-      }
-    });
-
-    // Set servings
-    detailViewModel.getLiveServings(recipeId).observe(this, new Observer<Integer>() {
-      @Override
-      public void onChanged(Integer i) {
-        servingsInput.setText(Integer.toString(i));
-      }
-    });
-
-    // Set description
-    detailViewModel.getLiveDescription(recipeId).observe(this, new Observer<String>() {
-      @Override
-      public void onChanged(String s) {
-        descriptionInput.setText(s);
-      }
-    });
-
-    // Set image name
-    detailViewModel.getLiveImageDirectory(recipeId).observe(this, new Observer<String>() {
-      @Override
-      public void onChanged(String s) {
-        imageName.setText(s);
-      }
-    });
-
-    // Set the ingredients
-    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
-      @Override
-      public void onChanged(List<RecipeIngredient> recipeIngredients) {
-        AddRecipeActivity.this.recipeIngredients = recipeIngredients;
-        addIngredientsToRecycler();
-      }
-    });
+    new LoadRecipeAsyncTask(titleInput, servingsInput, descriptionInput,
+        imageNameView, ingredientListAdapter, recipeIngredientHolders).execute();
 
   }
 
