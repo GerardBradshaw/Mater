@@ -95,9 +95,11 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Set up Ingredient RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
+    ingredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
     RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    addIngredientToRecycler();
 
     // Set listener for selectImageButton
     Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
@@ -188,8 +190,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     startActivityForResult(intent, REQUEST_IMAGE_IMPORT);
   }
 
-  private void addIngredientsToRecycler() {
-    //ingredientListAdapter.setRecipeIngredientList(recipeIngredients);
+  private void addIngredientToRecycler() {
+    recipeIngredientHolders.add(new RecipeIngredientHolder());
+    ingredientListAdapter.notifyDataSetChanged();
   }
 
   private void addIngredientToView() {

@@ -48,6 +48,9 @@ public class RecipeIngredientHolder {
     this.amount = amount;
   }
 
+  public RecipeIngredientHolder() {
+  }
+
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
