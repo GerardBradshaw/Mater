@@ -94,6 +94,12 @@
                 style="@style/SectionHeaderStyle"
                 android:text="@string/ingredientsHeader" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addRecipe_ingredientRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
             <!-- Add Ingredient Layout -->
             <LinearLayout
                 android:id="@+id/addRecipe_addIngredientLayout"
