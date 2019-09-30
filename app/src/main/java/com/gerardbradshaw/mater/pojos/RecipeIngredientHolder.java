@@ -49,6 +49,9 @@ public class RecipeIngredientHolder {
   }
 
   public RecipeIngredientHolder() {
+    name = "";
+    amount = 0;
+    unit = "";
   }
 
 

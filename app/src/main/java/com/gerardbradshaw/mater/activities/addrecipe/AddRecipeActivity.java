@@ -63,9 +63,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
   private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
-  private List<AddIngredientItemHolder> addIngredientItemHolders = new ArrayList<>();
 
   private AddIngredientListAdapter ingredientListAdapter;
 
@@ -388,7 +386,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Start AsyncTask to load RecipeHolder for recipe
     new LoadRecipeAsyncTask(titleInput, servingsInput, descriptionInput,
-        imageNameView, ingredientListAdapter, recipeIngredientHolders).execute();
+        imageNameView, ingredientListAdapter, recipeIngredientHolders).execute(recipeId);
 
   }
 
