@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,9 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.main.MainActivity;
-import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.room.entities.Step;

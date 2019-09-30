@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.activities;
+package com.gerardbradshaw.mater.activities.addrecipe;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,7 +92,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
     if (recipeId != 0) {
-      toolbar.setTitle("Edit recipe");
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
       loadExistingRecipe(recipeId);
     }
 

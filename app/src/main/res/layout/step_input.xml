@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".activities.AddRecipeActivity">
+    tools:context=".activities.addrecipe.AddRecipeActivity">
 
     <!-- Step Number TextView -->
     <TextView
