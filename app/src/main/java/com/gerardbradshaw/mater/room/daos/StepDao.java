@@ -10,6 +10,8 @@ import androidx.room.Update;
 
 import com.gerardbradshaw.mater.room.entities.Step;
 
+import java.util.List;
+
 @Dao
 public interface StepDao {
 
@@ -32,6 +34,6 @@ public interface StepDao {
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from step_table where recipe_id = :recipeId")
-  Step[] getSteps(int recipeId);
+  List<Step> getSteps(int recipeId);
 
 }

@@ -4,6 +4,7 @@ import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 public class RecipeIngredientHolder {
 
@@ -45,6 +46,12 @@ public class RecipeIngredientHolder {
 
     this.name = name;
     this.amount = amount;
+  }
+
+  public RecipeIngredientHolder() {
+    name = "";
+    amount = 0;
+    unit = "";
   }
 
 

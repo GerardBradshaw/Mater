@@ -1,15 +1,18 @@
-package com.gerardbradshaw.mater.activities;
+package com.gerardbradshaw.mater.activities.addrecipe;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -20,15 +23,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -43,23 +49,25 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  // Layout views
-  private EditText titleInput;
-  private EditText descriptionInput;
-  private TextView imageName;
-  private Toolbar toolbar;
-
-  private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
-  private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
-
   private DetailViewModel detailViewModel;
   private ImageViewModel imageViewModel;
 
-  private static final int REQUEST_IMAGE_IMPORT = 1;
-
-  private static final String LOG_TAG = "AddRecipeActivity";
-
+  private ProgressBar progressBar;
+  private ScrollView contentScrollView;
+  private EditText titleInput;
+  private EditText descriptionInput;
+  private EditText servingsInput;
+  private TextView imageNameView;
+  private Toolbar toolbar;
   private Bitmap image;
+
+  private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
+  private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+
+  private AddIngredientListAdapter ingredientListAdapter;
+
+  private static final int REQUEST_IMAGE_IMPORT = 1;
+  private static final String LOG_TAG = "AddRecipeActivity";
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -68,26 +76,32 @@ public class AddRecipeActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_add_recipe);
-
-    // Initialize the ViewModels
     detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
-    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
-    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
-    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
-    Button saveButton = findViewById(R.id.addRecipe_saveButton);
+    progressBar = findViewById(R.id.addRecipe_progressBar);
+    contentScrollView = findViewById(R.id.addRecipe_contentScrollView);
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
-    imageName = findViewById(R.id.addRecipe_imageNameTextView);
+    servingsInput = findViewById(R.id.addRecipe_servingsInput);
+    imageNameView = findViewById(R.id.addRecipe_imageNameTextView);
     toolbar = findViewById(R.id.addRecipe_toolbar);
 
     // Set up the Toolbar
     toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
     setSupportActionBar(toolbar);
 
+    // Set up Ingredient RecyclerView
+    ingredientListAdapter = new AddIngredientListAdapter(this);
+    ingredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
+    RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
+    recyclerView.setAdapter(ingredientListAdapter);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    addIngredientToRecycler();
+
     // Set listener for selectImageButton
+    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
     selectImageButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -96,14 +110,16 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Set listener for addIngredientButton
+    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
     addIngredientButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        addIngredientToView();
+        addIngredientToRecycler();
       }
     });
 
     // Set listener for addStepButton
+    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
     addStepButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -112,6 +128,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Set listener for saveButton
+    Button saveButton = findViewById(R.id.addRecipe_saveButton);
     saveButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -119,6 +136,21 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
+    // Set up cancel button
+    Button cancelButton = findViewById(R.id.addRecipe_cancel);
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        showCancelDialog();
+      }
+    });
+
+    // Pre-fill data if loading from existing recipe
+    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
+    if (recipeId != 0) {
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      loadExistingRecipe(recipeId);
+    }
   }
 
   @Override
@@ -133,7 +165,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       assert imageUri != null;
 
       // Set the view
-      imageName.setText(getFileName(imageUri));
+      imageNameView.setText(getFileName(imageUri));
 
       importImageFromUri(imageUri);
 
@@ -157,33 +189,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     startActivityForResult(intent, REQUEST_IMAGE_IMPORT);
   }
 
-  private void addIngredientToView() {
-
-    // Instantiate a LayoutInflater
-    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-    // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.addRecipe_addIngredientLayout);
-
-    // Inflate the view
-    LinearLayout addIngredientView =
-        (LinearLayout) inflater.inflate(R.layout.ingredient_input, insertPoint, false);
-
-    // Get the children of the View
-    EditText nameInput = (EditText) addIngredientView.getChildAt(0);
-    EditText amountInput = (EditText) addIngredientView.getChildAt(1);
-    Spinner unitsSpinner = (Spinner) addIngredientView.getChildAt(2);
-
-    // Save the new views to the list
-    ingredientViewHolders.add(new IngredientInputViewHolder(nameInput, amountInput, unitsSpinner));
-
-    // Get the index of the view
-    int index = ingredientViewHolders.size() - 1;
-
-    // Insert the view into main view
-    insertPoint.addView(addIngredientView,index, new ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+  private void addIngredientToRecycler() {
+    recipeIngredientHolders.add(new RecipeIngredientHolder());
+    ingredientListAdapter.notifyDataSetChanged();
   }
 
   private void addStepToView() {
@@ -247,15 +255,15 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Check the ingredients
-    for(IngredientInputViewHolder holder : ingredientViewHolders) {
+    for(RecipeIngredientHolder holder : recipeIngredientHolders) {
 
-      if(holder.getNameInput().getText().toString().isEmpty()) {
-        holder.getNameInput().setHintTextColor(hintColor);
+      if(holder.getName().isEmpty()) {
+        // TODO make the name red (setHintTextColor(hintColor))
         allFieldsOk = false;
       }
 
-      if(holder.getAmountInput().getText().toString().isEmpty()) {
-        holder.getAmountInput().setHintTextColor(hintColor);
+      if(holder.getAmount() == 0) {
+        // TODO make the hint red
         allFieldsOk = false;
       }
 
@@ -281,13 +289,13 @@ public class AddRecipeActivity extends AppCompatActivity {
       List<String> steps = new ArrayList<>();
 
       // Get the ingredients info from each ViewHolder and add them to the list
-      for(IngredientInputViewHolder holder : ingredientViewHolders) {
+      for(RecipeIngredientHolder holder : recipeIngredientHolders) {
         ingredients.add(new RecipeIngredientHolder(
-            holder.getNameInput().getText().toString(),
-            Double.parseDouble(holder.getAmountInput().getText().toString()),
+            holder.getName(),
+            holder.getAmount(),
             MiscUnits.NO_UNIT));
 
-        // TODO implement spinner functionality and retrieval
+        // TODO implement spinner
       }
 
       // Get the steps from each ViewHolder and add them to the list
@@ -298,6 +306,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Add everything to the recipe
       recipe.setTitle(titleInput.getText().toString());
       recipe.setDescription(descriptionInput.getText().toString());
+      recipe.setImageDirectory(imageNameView.getText().toString());
       recipe.setRecipeIngredients(ingredients);
       recipe.setSteps(steps);
 
@@ -320,8 +329,38 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
   }
 
+  private void showCancelDialog() {
+    // Set up dialog for user confirmation
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AddRecipeActivity.this);
+    alertBuilder.setMessage(getString(R.string.discard_changes));
+
+    alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        finish();
+      }
+    });
+
+    alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        // Do nothing
+      }
+    });
+
+    alertBuilder.show();
+  }
+
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
+  private void loadExistingRecipe(int recipeId) {
+
+    // Start AsyncTask to load RecipeHolder for recipe
+    new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput, descriptionInput,
+        imageNameView, ingredientListAdapter, recipeIngredientHolders).execute(recipeId);
+
+  }
 
   private void importImageFromUri(@NonNull Uri uri) {
     try {
@@ -344,7 +383,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
   }
 
-  public String getFileName(@NonNull Uri uri) {
+  private String getFileName(@NonNull Uri uri) {
     String result = null;
     if (Objects.requireNonNull(uri.getScheme()).equals("content")) {
       Cursor cursor = getContentResolver().query(uri, null, null, null, null);
@@ -366,6 +405,75 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     }
     return result;
+  }
+
+
+  // - - - - - - - - - - - - - - - Load Recipe AsyncTask - - - - - - - - - - - - - - -
+
+  private class LoadRecipeAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
+
+    // Member variables
+    private ProgressBar progressBar;
+    private ScrollView contentScrollView;
+    private EditText titleInput;
+    private EditText servingsInput;
+    private EditText descriptionInput;
+    private TextView imageNameView;
+    private AddIngredientListAdapter addIngredientListAdapter;
+    private List<RecipeIngredientHolder> recipeIngredientHolders;
+
+
+    // Constructor
+    LoadRecipeAsyncTask(ProgressBar progressBar,
+                        ScrollView contentScrollView,
+                        EditText titleInput,
+                        EditText servingsInput,
+                        EditText descriptionInput,
+                        TextView imageNameView,
+                        AddIngredientListAdapter addIngredientListAdapter,
+                        List<RecipeIngredientHolder> recipeIngredientHolders) {
+      this.progressBar = progressBar;
+      this.contentScrollView = contentScrollView;
+      this.titleInput = titleInput;
+      this.servingsInput = servingsInput;
+      this.descriptionInput = descriptionInput;
+      this.imageNameView = imageNameView;
+      this.addIngredientListAdapter = addIngredientListAdapter;
+      this.recipeIngredientHolders = recipeIngredientHolders;
+    }
+
+    // AsyncTask methods
+
+
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      contentScrollView.setVisibility(View.GONE);
+      progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected RecipeHolder doInBackground(Integer... integers) {
+      int recipeId = integers[0];
+
+      return detailViewModel.getRecipeHolder(recipeId);
+    }
+
+    @Override
+    protected void onPostExecute(RecipeHolder recipeHolder) {
+      super.onPostExecute(recipeHolder);
+
+      titleInput.setText(recipeHolder.getTitle());
+      servingsInput.setText(Integer.toString(recipeHolder.getServings()));
+      descriptionInput.setText(recipeHolder.getDescription());
+      imageNameView.setText(recipeHolder.getImageDirectory());
+      recipeIngredientHolders = recipeHolder.getRecipeIngredients();
+      addIngredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
+
+      progressBar.setVisibility(View.GONE);
+      contentScrollView.setVisibility(View.VISIBLE);
+
+    }
   }
 
 }

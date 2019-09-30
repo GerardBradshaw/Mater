@@ -65,13 +65,13 @@ public class ShoppingListAdapter
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
     Ingredient currentIngredient = ingredientList.get(position);
-    int stockLevel = currentIngredient.getStockLevel();
+    final int stockLevel = currentIngredient.getStockLevel();
     holder.textView.setText(currentIngredient.getName());
 
     if (stockLevel != 0) {
       holder.stockInput.setText(Integer.toString(stockLevel));
     } else {
-      holder.stockInput.setText("");
+      holder.stockInput.setText(null);
     }
 
     holder.stockInput.addTextChangedListener(new TextWatcher() {
@@ -86,7 +86,13 @@ public class ShoppingListAdapter
       @Override
       public void afterTextChanged(Editable editable) {
         // Get the new input and save it to the current ingredient
-        int stockLevel = Integer.parseInt(editable.toString());
+        int stockLevel = 0;
+        String input = editable.toString();
+
+        if (!input.equals("")) {
+          stockLevel = Integer.parseInt(input);
+        }
+
         ingredientList.get(position).setStockLevel(stockLevel);
 
         if (stockChangedListener != null) {

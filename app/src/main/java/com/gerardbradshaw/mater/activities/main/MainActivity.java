@@ -1,11 +1,12 @@
 package com.gerardbradshaw.mater.activities.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.AddRecipeActivity;
-import com.gerardbradshaw.mater.activities.RecipeDetailActivity;
+import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.view.GravityCompat;
@@ -68,7 +70,9 @@ public class MainActivity extends AppCompatActivity
       public void onClick(View view) {
         // Create an intent to open the AddRecipeActivity and start it
         Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
-        startActivity(intent);
+        ActivityOptionsCompat options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
+        startActivity(intent, options.toBundle());
       }
     });
 
@@ -95,11 +99,13 @@ public class MainActivity extends AppCompatActivity
 
         // Set up transitions
         Pair<View, String> imagePair = Pair.create((View) imageView, "imageTransition");
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-            MainActivity.this, imagePair);
+        ActivityOptionsCompat optionsImageTransition =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, imagePair);
+        ActivityOptionsCompat optionsActivityTransition =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this);
 
         // Start the activity
-        startActivity(intent, options.toBundle());
+        startActivity(intent, optionsActivityTransition.toBundle());
       }
     });
 
@@ -123,16 +129,7 @@ public class MainActivity extends AppCompatActivity
 
       @Override
       public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        // Get the position of the item swiped
-        int position = viewHolder.getAdapterPosition();
-
-        // Determine which recipe was swiped
-        int recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
-
-        summaryViewModel.deleteRecipe(recipeToDelete);
-        recipeListAdapter.notifyDataSetChanged();
-        // TODO confirmation prompt for the user
-
+        deleteRecipe(viewHolder.getAdapterPosition());
       }
     });
 
@@ -153,6 +150,36 @@ public class MainActivity extends AppCompatActivity
         recipeListAdapter.notifyDataSetChanged();
       }
     });
+  }
+
+
+  // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
+
+  private void deleteRecipe(final int position) {
+    final Summary recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
+    String alertMessage =
+        getString(R.string.dialog_confirm_delete) + " \"" + recipeToDelete.getTitle() + "\"?";
+
+    // Set up dialog for user confirmation
+    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+    alertBuilder.setMessage(alertMessage);
+
+    alertBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        summaryViewModel.deleteRecipe(recipeToDelete.getRecipeId());
+        recipeListAdapter.notifyDataSetChanged();
+      }
+    });
+
+    alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int i) {
+        recipeListAdapter.notifyItemChanged(position);
+      }
+    });
+
+    alertBuilder.show();
   }
 
 

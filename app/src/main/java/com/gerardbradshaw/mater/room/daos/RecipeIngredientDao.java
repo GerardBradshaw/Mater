@@ -10,6 +10,8 @@ import androidx.room.Update;
 
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 
+import java.util.List;
+
 @Dao
 public interface RecipeIngredientDao {
 
@@ -26,7 +28,7 @@ public interface RecipeIngredientDao {
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")
-  LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId);
+  LiveData<List<RecipeIngredient>> getLiveRecipeIngredients(int recipeId);
 
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
@@ -35,5 +37,5 @@ public interface RecipeIngredientDao {
   int[] getIngredientIds(int recipeId);
 
   @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")
-  RecipeIngredient[] getRecipeIngredients(int recipeId);
+  List<RecipeIngredient> getRecipeIngredients(int recipeId);
 }

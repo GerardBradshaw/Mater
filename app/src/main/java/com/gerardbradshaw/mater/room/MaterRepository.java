@@ -112,7 +112,7 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - RecipeIngredient Data - - - - - - - - - - - - - - -
 
-  public LiveData<RecipeIngredient[]> getLiveRecipeIngredients(int recipeId) {
+  public LiveData<List<RecipeIngredient>> getLiveRecipeIngredients(int recipeId) {
     return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
   }
 
@@ -123,7 +123,7 @@ public class MaterRepository {
     return stepDao.getLiveSteps(recipeId);
   }
 
-  public Step[] getSteps(int recipeId) {
+  public List<Step> getSteps(int recipeId) {
     return stepDao.getSteps(recipeId);
   }
 
@@ -448,6 +448,49 @@ public class MaterRepository {
   }
 
 
+  // - - - - - - - - - - - - - - - Get Recipe - - - - - - - - - - - - - - -
+
+  /**
+   * Returns a RecipeHolder containing all information for the requested RecipeID. Do not call on UI
+   * thread.
+   * @param recipeId, int
+   * @return RecipeHolder
+   */
+  public RecipeHolder getRecipeHolder(int recipeId) {
+
+    RecipeHolder holder = new RecipeHolder();
+
+    // Set the summary information
+    Summary summary = summaryDao.getSummary(recipeId);
+    holder.setTitle(summary.getTitle());
+    holder.setDescription(summary.getDescription());
+    holder.setImageDirectory(summary.getImageDirectory());
+    holder.setServings(summary.getServings());
+
+    // Set the step information
+    List<Step> steps = stepDao.getSteps(recipeId);
+    List<String> stepStrings = new ArrayList<>();
+    for (Step step : steps) {
+      stepStrings.add(step.getDescription());
+    }
+    holder.setSteps(stepStrings);
+
+    // Set the ingredient information
+    List<RecipeIngredient> recipeIngredients = recipeIngredientDao.getRecipeIngredients(recipeId);
+    List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+    for (RecipeIngredient recipeIngredient : recipeIngredients) {
+      String name = ingredientDao.getIngredient(recipeIngredient.getIngredientId()).getName();
+      double amount = recipeIngredient.getAmount();
+      String unit = recipeIngredient.getUnits();
+      RecipeIngredientHolder recipeIngredientHolder = new RecipeIngredientHolder(name, amount, unit);
+      recipeIngredientHolders.add(recipeIngredientHolder);
+    }
+    holder.setRecipeIngredients(recipeIngredientHolders);
+
+    return holder;
+  }
+
+
   // - - - - - - - - - - - - - - - Delete Recipe - - - - - - - - - - - - - - -
 
   public void deleteRecipe(final int recipeId) {
@@ -497,7 +540,7 @@ public class MaterRepository {
 
     private void deleteRecipe() {
 
-      Summary summary = summaryDao.getSummary(recipeId)[0];
+      Summary summary = summaryDao.getSummary(recipeId);
       summaryDao.deleteSummary(summary);
 
       //Step[] steps = stepDao.getSteps(recipeId);
