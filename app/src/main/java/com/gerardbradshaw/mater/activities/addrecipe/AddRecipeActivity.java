@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
@@ -382,7 +383,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   private void loadExistingRecipe(int recipeId) {
 
-    // TODO Load cached version of recipe to be displayed
+    // Start AsyncTask to load RecipeHolder for recipe
 
 
     // Set title
@@ -472,5 +473,57 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
     return result;
   }
+
+
+  // - - - - - - - - - - - - - - - Load Recipe AsyncTask - - - - - - - - - - - - - - -
+
+  private class LoadRecipeAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
+
+    // Member variables
+    private EditText titleInput;
+    private EditText servingsInput;
+    private EditText descriptionInput;
+    private TextView imageNameView;
+    private AddIngredientListAdapter addIngredientListAdapter;
+    private List<RecipeIngredientHolder> recipeIngredientHolders;
+
+
+    // Constructor
+    LoadRecipeAsyncTask(EditText titleInput,
+                        EditText servingsInput,
+                        EditText descriptionInput,
+                        TextView imageNameView,
+                        AddIngredientListAdapter addIngredientListAdapter,
+                        List<RecipeIngredientHolder> recipeIngredientHolders) {
+      this.titleInput = titleInput;
+      this.servingsInput = servingsInput;
+      this.descriptionInput = descriptionInput;
+      this.imageNameView = imageNameView;
+      this.addIngredientListAdapter = addIngredientListAdapter;
+      this.recipeIngredientHolders = recipeIngredientHolders;
+    }
+
+    // AsyncTask methods
+    @Override
+    protected RecipeHolder doInBackground(Integer... integers) {
+      int recipeId = integers[0];
+
+      return detailViewModel.getRecipeHolder(recipeId);
+    }
+
+    @Override
+    protected void onPostExecute(RecipeHolder recipeHolder) {
+      super.onPostExecute(recipeHolder);
+
+      titleInput.setText(recipeHolder.getTitle());
+      servingsInput.setText(Integer.toString(recipeHolder.getServings()));
+      descriptionInput.setText(recipeHolder.getDescription());
+      imageNameView.setText(recipeHolder.getImageDirectory());
+      recipeIngredientHolders = recipeHolder.getRecipeIngredients();
+      addIngredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
+
+    }
+  }
+
 
 }

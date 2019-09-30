@@ -69,4 +69,8 @@ public class DetailViewModel extends AndroidViewModel {
     repository.insertRecipeFromHolder(recipeHolder);
   }
 
+  public RecipeHolder getRecipeHolder(int recipeId) {
+    return repository.getRecipeHolder(recipeId);
+  }
+
 }
