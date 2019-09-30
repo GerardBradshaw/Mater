@@ -32,6 +32,7 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
+import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
@@ -59,6 +60,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
+  private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
   private static final String LOG_TAG = "AddRecipeActivity";
@@ -173,14 +175,12 @@ public class AddRecipeActivity extends AppCompatActivity {
     startActivityForResult(intent, REQUEST_IMAGE_IMPORT);
   }
 
-  private void addIngredientToRecycler() {
+  private void addIngredientsToRecycler() {
     /*
     TODO
     1. Add an item to the local list of items to display in the RecyclerView
     2. Notify the adapter that the list has changed
      */
-
-
 
   }
 
@@ -406,6 +406,16 @@ public class AddRecipeActivity extends AppCompatActivity {
         imageName.setText(s);
       }
     });
+
+    // Set the ingredients
+    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
+      @Override
+      public void onChanged(List<RecipeIngredient> recipeIngredients) {
+        AddRecipeActivity.this.recipeIngredients = recipeIngredients;
+        addIngredientsToRecycler();
+      }
+    });
+
   }
 
   private void importImageFromUri(@NonNull Uri uri) {
