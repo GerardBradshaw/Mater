@@ -17,11 +17,11 @@ import static androidx.room.ForeignKey.CASCADE;
         parentColumns = "recipe_id",
         childColumns = "recipe_id",
         onDelete = CASCADE),
-    @ForeignKey(entity = Ingredient.class,
-        parentColumns = "ingredient_id",
-        childColumns = "ingredient_id",
+    @ForeignKey(entity = Item.class,
+        parentColumns = "item_id",
+        childColumns = "item_id",
         onDelete = CASCADE)},
-    indices = {@Index(value = "recipe_id"), @Index(value = "ingredient_id")})
+    indices = {@Index(value = "recipe_id"), @Index(value = "item_id")})
 public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -33,8 +33,8 @@ public class RecipeIngredient {
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
 
-  @ColumnInfo(name = "ingredient_id")
-  private int ingredientId;
+  @ColumnInfo(name = "item_id")
+  private int itemId;
 
   @ColumnInfo(name = "amount")
   private double amount;
@@ -45,9 +45,9 @@ public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public RecipeIngredient(int recipeId, int ingredientId, double amount, String units) {
+  public RecipeIngredient(int recipeId, int itemId, double amount, String units) {
     this.recipeId = recipeId;
-    this.ingredientId = ingredientId;
+    this.itemId = itemId;
     this.amount = amount;
     this.units = units;
   }
@@ -63,8 +63,8 @@ public class RecipeIngredient {
     return recipeId;
   }
 
-  public int getIngredientId() {
-    return ingredientId;
+  public int getItemId() {
+    return itemId;
   }
 
   public double getAmount() {
@@ -87,8 +87,8 @@ public class RecipeIngredient {
     this.recipeId = recipeId;
   }
 
-  public void setIngredientId(int ingredientId) {
-    this.ingredientId = ingredientId;
+  public void setItemId(int itemId) {
+    this.itemId = itemId;
   }
 
   public void setAmount(double amount) {

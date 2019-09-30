@@ -92,7 +92,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
     setSupportActionBar(toolbar);
 
-    // Set up Ingredient RecyclerView
+    // Set up Item RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
     ingredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
     RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);

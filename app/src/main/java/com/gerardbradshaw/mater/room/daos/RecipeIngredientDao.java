@@ -33,7 +33,7 @@ public interface RecipeIngredientDao {
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
-  @Query("select ingredient_id from recipe_ingredient_table where recipe_id = :recipeId")
+  @Query("select item_id from recipe_ingredient_table where recipe_id = :recipeId")
   int[] getIngredientIds(int recipeId);
 
   @Query("select * from recipe_ingredient_table where recipe_id = :recipeId")

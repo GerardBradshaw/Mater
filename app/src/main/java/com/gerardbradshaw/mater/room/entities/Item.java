@@ -6,53 +6,53 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(
-    tableName = "ingredient_table")
-public class Ingredient {
+    tableName = "item_table")
+public class Item {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "ingredient_id")
+  @ColumnInfo(name = "item_id")
   private int ingredientId;
 
   @NonNull
   @ColumnInfo(name = "name")
   private String name;
 
-  @ColumnInfo(name = "stockLevel")
+  @ColumnInfo(name = "stock_level")
   private int stockLevel;
 
-  @ColumnInfo(name = "containsMilk")
+  @ColumnInfo(name = "contains_milk")
   private String containsMilk;
 
-  @ColumnInfo(name = "containsEgg")
+  @ColumnInfo(name = "contains_egg")
   private String containsEgg;
 
-  @ColumnInfo(name = "containsFish")
+  @ColumnInfo(name = "contains_fish")
   private String containsFish;
 
-  @ColumnInfo(name = "containsCrustacean")
+  @ColumnInfo(name = "contains_crustacean")
   private String containsCrustacean;
 
-  @ColumnInfo(name = "containsTreeNuts")
+  @ColumnInfo(name = "contains_tree_nuts")
   private String containsTreeNuts;
 
-  @ColumnInfo(name = "containsPeanuts")
+  @ColumnInfo(name = "contains_peanuts")
   private String containsPeanuts;
 
-  @ColumnInfo(name = "containsWheat")
+  @ColumnInfo(name = "contains_wheat")
   private String containsWheat;
 
-  @ColumnInfo(name = "containsSoy")
+  @ColumnInfo(name = "contains_soy")
   private String containsSoy;
 
-  @ColumnInfo(name = "containsFodmap")
+  @ColumnInfo(name = "contains_fodmap")
   private String containsFodmap;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public Ingredient(@NonNull String name) {
+  public Item(@NonNull String name) {
     this.name = name;
 
     stockLevel = 0;

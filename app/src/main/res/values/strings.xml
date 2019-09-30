@@ -45,11 +45,11 @@
     <!-- Messages -->
     <string name="no_recipes_message">No recipes</string>
     <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
-    <string name="no_ingredients_message">No ingredients set!</string>
+    <string name="no_ingredients_message">No items set!</string>
     <!-- Buttons -->
     <string name="recipeDetail_selectImageButton">Select Image</string>
     <string name="addRecipe_imageNameTextView">No image selected</string>
-    <string name="recipeDetail_ingredientHeaderSubtitle">Tick an ingredient to add it to your shopping list!</string>
+    <string name="recipeDetail_ingredientHeaderSubtitle">Tick an item to add it to your shopping list!</string>
     <!-- AppBar Menu -->
     <string name="action_edit">Edit recipe</string>
     <string name="action_servings">Servings</string>

@@ -9,17 +9,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.gerardbradshaw.mater.room.daos.IngredientDao;
+import com.gerardbradshaw.mater.room.daos.ItemDao;
 import com.gerardbradshaw.mater.room.daos.SummaryDao;
 import com.gerardbradshaw.mater.room.daos.RecipeIngredientDao;
 import com.gerardbradshaw.mater.room.daos.StepDao;
-import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.room.entities.Step;
 
 @Database(
-    entities = {Summary.class, Ingredient.class, RecipeIngredient.class, Step.class},
+    entities = {Summary.class, Item.class, RecipeIngredient.class, Step.class},
     version = 1,
     exportSchema = false)
 public abstract class MaterRoomDatabase extends RoomDatabase {
@@ -29,7 +29,7 @@ public abstract class MaterRoomDatabase extends RoomDatabase {
   // Define the DAOs that the database will use to interact with SQL
   public abstract SummaryDao recipeDao();
 
-  public abstract IngredientDao ingredientDao();
+  public abstract ItemDao ingredientDao();
 
   public abstract RecipeIngredientDao recipeIngredientDao();
 
@@ -90,7 +90,7 @@ public abstract class MaterRoomDatabase extends RoomDatabase {
     // - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - -
 
     final SummaryDao summaryDao;
-    final IngredientDao ingredientDao;
+    final ItemDao itemDao;
     final RecipeIngredientDao recipeIngredientDao;
     final StepDao stepDao;
 
@@ -105,7 +105,7 @@ public abstract class MaterRoomDatabase extends RoomDatabase {
     private PopulateDbAsyncTask(MaterRoomDatabase database) {
       // Set the DAOs
       summaryDao = database.recipeDao();
-      ingredientDao = database.ingredientDao();
+      itemDao = database.ingredientDao();
       recipeIngredientDao = database.recipeIngredientDao();
       stepDao = database.recipeStepDao();
     }

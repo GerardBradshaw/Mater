@@ -164,7 +164,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     customRecipeIngredientHolders.clear();
 
     for (RecipeIngredient r : recipeIngredientList) {
-      String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
+      String name = ingredientViewModel.getIngredient(r.getItemId()).getName();
       double amount = r.getAmount();
       String unit = r.getUnits();
       final RecipeIngredientHolder finalHolder = new RecipeIngredientHolder(name, amount, unit);

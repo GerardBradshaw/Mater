@@ -4,7 +4,6 @@ import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
-import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 public class RecipeIngredientHolder {
 

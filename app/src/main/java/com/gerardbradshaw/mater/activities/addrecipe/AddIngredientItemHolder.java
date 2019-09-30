@@ -1,21 +1,21 @@
 package com.gerardbradshaw.mater.activities.addrecipe;
 
-import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 
 public class AddIngredientItemHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private Ingredient ingredient;
+  private Item item;
   private RecipeIngredient recipeIngredient;
 
 
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
 
-  public AddIngredientItemHolder(Ingredient ingredient, RecipeIngredient recipeIngredient) {
-    this.ingredient = ingredient;
+  public AddIngredientItemHolder(Item item, RecipeIngredient recipeIngredient) {
+    this.item = item;
     this.recipeIngredient = recipeIngredient;
   }
 
@@ -25,8 +25,8 @@ public class AddIngredientItemHolder {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
-  public Ingredient getIngredient() {
-    return ingredient;
+  public Item getItem() {
+    return item;
   }
 
   public RecipeIngredient getRecipeIngredient() {
@@ -36,8 +36,8 @@ public class AddIngredientItemHolder {
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
-  public void setIngredient(Ingredient ingredient) {
-    this.ingredient = ingredient;
+  public void setItem(Item item) {
+    this.item = item;
   }
 
   public void setRecipeIngredient(RecipeIngredient recipeIngredient) {

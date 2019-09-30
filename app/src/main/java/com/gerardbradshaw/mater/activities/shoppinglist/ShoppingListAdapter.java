@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.room.entities.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class ShoppingListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<Ingredient> ingredientList = new ArrayList<>();
+  private List<Item> itemList = new ArrayList<>();
   private static String LOG_TAG = "GGG - ShoppingListAdapter";
   private StockChangedListener stockChangedListener;
 
@@ -64,9 +64,9 @@ public class ShoppingListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    Ingredient currentIngredient = ingredientList.get(position);
-    final int stockLevel = currentIngredient.getStockLevel();
-    holder.textView.setText(currentIngredient.getName());
+    Item currentItem = itemList.get(position);
+    final int stockLevel = currentItem.getStockLevel();
+    holder.textView.setText(currentItem.getName());
 
     if (stockLevel != 0) {
       holder.stockInput.setText(Integer.toString(stockLevel));
@@ -93,10 +93,10 @@ public class ShoppingListAdapter
           stockLevel = Integer.parseInt(input);
         }
 
-        ingredientList.get(position).setStockLevel(stockLevel);
+        itemList.get(position).setStockLevel(stockLevel);
 
         if (stockChangedListener != null) {
-          stockChangedListener.onStockLevelChanged(position, ingredientList.get(position));
+          stockChangedListener.onStockLevelChanged(position, itemList.get(position));
         }
 
       }
@@ -113,15 +113,15 @@ public class ShoppingListAdapter
    */
   @Override
   public int getItemCount() {
-    if(ingredientList != null) {
-      return ingredientList.size();
+    if(itemList != null) {
+      return itemList.size();
     } else {
       return 0;
     }
   }
 
-  public void setIngredientStockList(List<Ingredient> ingredientList) {
-    this.ingredientList = ingredientList;
+  public void setIngredientStockList(List<Item> itemList) {
+    this.itemList = itemList;
     notifyDataSetChanged();
   }
 
@@ -149,6 +149,6 @@ public class ShoppingListAdapter
   }
 
   public interface StockChangedListener {
-    void onStockLevelChanged(int position, Ingredient ingredient);
+    void onStockLevelChanged(int position, Item item);
   }
 }
