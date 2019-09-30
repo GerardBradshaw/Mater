@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -26,7 +25,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -37,8 +35,6 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
-import com.gerardbradshaw.mater.viewholders.IngredientInputViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -65,7 +61,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   private Toolbar toolbar;
   private Bitmap image;
 
-  private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
 
@@ -260,15 +255,15 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Check the ingredients
-    for(IngredientInputViewHolder holder : ingredientViewHolders) {
+    for(RecipeIngredientHolder holder : recipeIngredientHolders) {
 
-      if(holder.getNameInput().getText().toString().isEmpty()) {
-        holder.getNameInput().setHintTextColor(hintColor);
+      if(holder.getName().isEmpty()) {
+        // TODO make the name red (setHintTextColor(hintColor))
         allFieldsOk = false;
       }
 
-      if(holder.getAmountInput().getText().toString().isEmpty()) {
-        holder.getAmountInput().setHintTextColor(hintColor);
+      if(holder.getAmount() == 0) {
+        // TODO make the hint red
         allFieldsOk = false;
       }
 
@@ -294,13 +289,13 @@ public class AddRecipeActivity extends AppCompatActivity {
       List<String> steps = new ArrayList<>();
 
       // Get the ingredients info from each ViewHolder and add them to the list
-      for(IngredientInputViewHolder holder : ingredientViewHolders) {
+      for(RecipeIngredientHolder holder : recipeIngredientHolders) {
         ingredients.add(new RecipeIngredientHolder(
-            holder.getNameInput().getText().toString(),
-            Double.parseDouble(holder.getAmountInput().getText().toString()),
+            holder.getName(),
+            holder.getAmount(),
             MiscUnits.NO_UNIT));
 
-        // TODO implement spinner functionality and retrieval
+        // TODO implement spinner
       }
 
       // Get the steps from each ViewHolder and add them to the list
