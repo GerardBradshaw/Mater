@@ -27,6 +27,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
@@ -61,6 +63,9 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<IngredientInputViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+  private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+
+  private AddIngredientListAdapter ingredientListAdapter;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
   private static final String LOG_TAG = "AddRecipeActivity";
@@ -76,11 +81,6 @@ public class AddRecipeActivity extends AppCompatActivity {
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
-    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
-    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
-    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
-    Button saveButton = findViewById(R.id.addRecipe_saveButton);
-    Button cancelButton = findViewById(R.id.addRecipe_cancel);
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     servingsInput = findViewById(R.id.addRecipe_servingsInput);
@@ -91,14 +91,14 @@ public class AddRecipeActivity extends AppCompatActivity {
     toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
     setSupportActionBar(toolbar);
 
-    // Pre-fill data if loading from existing recipe
-    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
-    if (recipeId != 0) {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
-      loadExistingRecipe(recipeId);
-    }
+    // Set up Ingredient RecyclerView
+    ingredientListAdapter = new AddIngredientListAdapter(this);
+    RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
+    recyclerView.setAdapter(ingredientListAdapter);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Set listener for selectImageButton
+    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
     selectImageButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -107,6 +107,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Set listener for addIngredientButton
+    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
     addIngredientButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -115,6 +116,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Set listener for addStepButton
+    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
     addStepButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -123,6 +125,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Set listener for saveButton
+    Button saveButton = findViewById(R.id.addRecipe_saveButton);
     saveButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -131,12 +134,20 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Set up cancel button
+    Button cancelButton = findViewById(R.id.addRecipe_cancel);
     cancelButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         showCancelDialog();
       }
     });
+
+    // Pre-fill data if loading from existing recipe
+    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
+    if (recipeId != 0) {
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      loadExistingRecipe(recipeId);
+    }
   }
 
   @Override
@@ -176,12 +187,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   }
 
   private void addIngredientsToRecycler() {
-    /*
-    TODO
-    1. Add an item to the local list of items to display in the RecyclerView
-    2. Notify the adapter that the list has changed
-     */
-
+    ingredientListAdapter.setRecipeIngredientList(recipeIngredients);
   }
 
   private void addIngredientToView() {
