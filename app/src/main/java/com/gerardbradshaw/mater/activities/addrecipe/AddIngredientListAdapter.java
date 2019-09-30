@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -63,12 +65,20 @@ public class AddIngredientListAdapter
   @Override
   public void onBindViewHolder(@NonNull NewIngredientViewHolder viewHolder, int position) {
     if (recipeIngredientHolders != null) {
-      // TODO set the data
 
-    } else {
-      // TODO anything if there's no ingredients?
+      RecipeIngredientHolder holder = recipeIngredientHolders.get(position);
+      String name = holder.getName();
+      double amount = holder.getAmount();
+      String unit = holder.getUnit();
+
+      if (!name.isEmpty()) {
+        viewHolder.name.setText(name);
+
+        if (!(Double.isNaN(amount) || amount == 0)) {
+          viewHolder.amount.setText(Double.toString(amount));
+        }
+      }
     }
-
   }
 
   /**
@@ -106,7 +116,9 @@ public class AddIngredientListAdapter
   class NewIngredientViewHolder extends RecyclerView.ViewHolder {
 
     // Member variables
-    // TODO views as member variables
+    private EditText name;
+    private EditText amount;
+    private Spinner units;
     final AddIngredientListAdapter adapter;
 
     // Constructor
@@ -114,11 +126,10 @@ public class AddIngredientListAdapter
       super(itemView);
 
       // Initialize the views and adapter.
-      // TODO initialize views
+      name = itemView.findViewById(R.id.ingredientInput_nameInput);
+      amount = itemView.findViewById(R.id.ingredientInput_amountInput);
+      units = itemView.findViewById(R.id.ingredientInput_unitSpinner);
       this.adapter = adapter;
     }
   }
-
-
-
 }

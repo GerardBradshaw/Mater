@@ -173,6 +173,17 @@ public class AddRecipeActivity extends AppCompatActivity {
     startActivityForResult(intent, REQUEST_IMAGE_IMPORT);
   }
 
+  private void addIngredientToRecycler() {
+    /*
+    TODO
+    1. Add an item to the local list of items to display in the RecyclerView
+    2. Notify the adapter that the list has changed
+     */
+
+
+
+  }
+
   private void addIngredientToView() {
 
     // Instantiate a LayoutInflater
