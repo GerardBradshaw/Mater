@@ -24,6 +24,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private DetailViewModel detailViewModel;
   private ImageViewModel imageViewModel;
 
+  private ProgressBar progressBar;
+  private ScrollView contentScrollView;
   private EditText titleInput;
   private EditText descriptionInput;
   private EditText servingsInput;
@@ -81,6 +85,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
     // Get a handle on the views
+    progressBar = findViewById(R.id.addRecipe_progressBar);
+    contentScrollView = findViewById(R.id.addRecipe_contentScrollView);
     titleInput = findViewById(R.id.addRecipe_titleInput);
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     servingsInput = findViewById(R.id.addRecipe_servingsInput);
@@ -385,7 +391,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void loadExistingRecipe(int recipeId) {
 
     // Start AsyncTask to load RecipeHolder for recipe
-    new LoadRecipeAsyncTask(titleInput, servingsInput, descriptionInput,
+    new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput, descriptionInput,
         imageNameView, ingredientListAdapter, recipeIngredientHolders).execute(recipeId);
 
   }
@@ -441,6 +447,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private class LoadRecipeAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
 
     // Member variables
+    private ProgressBar progressBar;
+    private ScrollView contentScrollView;
     private EditText titleInput;
     private EditText servingsInput;
     private EditText descriptionInput;
@@ -450,12 +458,16 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 
     // Constructor
-    LoadRecipeAsyncTask(EditText titleInput,
+    LoadRecipeAsyncTask(ProgressBar progressBar,
+                        ScrollView contentScrollView,
+                        EditText titleInput,
                         EditText servingsInput,
                         EditText descriptionInput,
                         TextView imageNameView,
                         AddIngredientListAdapter addIngredientListAdapter,
                         List<RecipeIngredientHolder> recipeIngredientHolders) {
+      this.progressBar = progressBar;
+      this.contentScrollView = contentScrollView;
       this.titleInput = titleInput;
       this.servingsInput = servingsInput;
       this.descriptionInput = descriptionInput;
@@ -465,6 +477,15 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // AsyncTask methods
+
+
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      contentScrollView.setVisibility(View.GONE);
+      progressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected RecipeHolder doInBackground(Integer... integers) {
       int recipeId = integers[0];
@@ -482,6 +503,9 @@ public class AddRecipeActivity extends AppCompatActivity {
       imageNameView.setText(recipeHolder.getImageDirectory());
       recipeIngredientHolders = recipeHolder.getRecipeIngredients();
       addIngredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
+
+      progressBar.setVisibility(View.GONE);
+      contentScrollView.setVisibility(View.VISIBLE);
 
     }
   }
