@@ -119,7 +119,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     addIngredientButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        addIngredientToView();
+        addIngredientToRecycler();
       }
     });
 
@@ -197,35 +197,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void addIngredientToRecycler() {
     recipeIngredientHolders.add(new RecipeIngredientHolder());
     ingredientListAdapter.notifyDataSetChanged();
-  }
-
-  private void addIngredientToView() {
-
-    // Instantiate a LayoutInflater
-    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-    // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.addRecipe_addIngredientLayout);
-
-    // Inflate the view
-    LinearLayout addIngredientView =
-        (LinearLayout) inflater.inflate(R.layout.ingredient_input, insertPoint, false);
-
-    // Get the children of the View
-    EditText nameInput = (EditText) addIngredientView.getChildAt(0);
-    EditText amountInput = (EditText) addIngredientView.getChildAt(1);
-    Spinner unitsSpinner = (Spinner) addIngredientView.getChildAt(2);
-
-    // Save the new views to the list
-    ingredientViewHolders.add(new IngredientInputViewHolder(nameInput, amountInput, unitsSpinner));
-
-    // Get the index of the view
-    int index = ingredientViewHolders.size() - 1;
-
-    // Insert the view into main view
-    insertPoint.addView(addIngredientView,index, new ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
   }
 
   private void addStepToView() {
@@ -509,6 +480,5 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     }
   }
-
 
 }
