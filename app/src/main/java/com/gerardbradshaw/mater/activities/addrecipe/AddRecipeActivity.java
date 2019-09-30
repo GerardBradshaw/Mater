@@ -64,6 +64,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
   private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
   private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+  private List<AddIngredientItemHolder> addIngredientItemHolders = new ArrayList<>();
 
   private AddIngredientListAdapter ingredientListAdapter;
 
@@ -187,7 +188,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   }
 
   private void addIngredientsToRecycler() {
-    ingredientListAdapter.setRecipeIngredientList(recipeIngredients);
+    //ingredientListAdapter.setRecipeIngredientList(recipeIngredients);
   }
 
   private void addIngredientToView() {
@@ -380,6 +381,9 @@ public class AddRecipeActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
   private void loadExistingRecipe(int recipeId) {
+
+    // TODO Load cached version of recipe to be displayed
+
 
     // Set title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {

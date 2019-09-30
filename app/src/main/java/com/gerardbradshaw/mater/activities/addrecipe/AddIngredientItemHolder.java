@@ -43,5 +43,5 @@ public class AddIngredientItemHolder {
   public void setRecipeIngredient(RecipeIngredient recipeIngredient) {
     this.recipeIngredient = recipeIngredient;
   }
-  
+
 }
