@@ -33,8 +33,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -62,7 +62,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private Bitmap image;
 
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredientHolder> recipeIngredientHolders = new ArrayList<>();
+  private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
   private AddIngredientListAdapter ingredientListAdapter;
 
@@ -92,9 +92,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
     setSupportActionBar(toolbar);
 
-    // Set up Ingredient RecyclerView
+    // Set up Item RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
-    ingredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
+    ingredientListAdapter.setData(ingredientHolders);
     RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -190,7 +190,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   }
 
   private void addIngredientToRecycler() {
-    recipeIngredientHolders.add(new RecipeIngredientHolder());
+    ingredientHolders.add(new IngredientHolder());
     ingredientListAdapter.notifyDataSetChanged();
   }
 
@@ -255,7 +255,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Check the ingredients
-    for(RecipeIngredientHolder holder : recipeIngredientHolders) {
+    for(IngredientHolder holder : ingredientHolders) {
 
       if(holder.getName().isEmpty()) {
         // TODO make the name red (setHintTextColor(hintColor))
@@ -285,12 +285,12 @@ public class AddRecipeActivity extends AppCompatActivity {
       RecipeHolder recipe = new RecipeHolder();
 
       // Set up lists for steps and ingredients
-      List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+      List<IngredientHolder> ingredients = new ArrayList<>();
       List<String> steps = new ArrayList<>();
 
       // Get the ingredients info from each ViewHolder and add them to the list
-      for(RecipeIngredientHolder holder : recipeIngredientHolders) {
-        ingredients.add(new RecipeIngredientHolder(
+      for(IngredientHolder holder : ingredientHolders) {
+        ingredients.add(new IngredientHolder(
             holder.getName(),
             holder.getAmount(),
             MiscUnits.NO_UNIT));
@@ -307,7 +307,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       recipe.setTitle(titleInput.getText().toString());
       recipe.setDescription(descriptionInput.getText().toString());
       recipe.setImageDirectory(imageNameView.getText().toString());
-      recipe.setRecipeIngredients(ingredients);
+      recipe.setIngredientHolders(ingredients);
       recipe.setSteps(steps);
 
       // Save the recipe to the database
@@ -358,7 +358,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Start AsyncTask to load RecipeHolder for recipe
     new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput, descriptionInput,
-        imageNameView, ingredientListAdapter, recipeIngredientHolders).execute(recipeId);
+        imageNameView, ingredientListAdapter, ingredientHolders).execute(recipeId);
 
   }
 
@@ -420,7 +420,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     private EditText descriptionInput;
     private TextView imageNameView;
     private AddIngredientListAdapter addIngredientListAdapter;
-    private List<RecipeIngredientHolder> recipeIngredientHolders;
+    private List<IngredientHolder> ingredientHolders;
 
 
     // Constructor
@@ -431,7 +431,7 @@ public class AddRecipeActivity extends AppCompatActivity {
                         EditText descriptionInput,
                         TextView imageNameView,
                         AddIngredientListAdapter addIngredientListAdapter,
-                        List<RecipeIngredientHolder> recipeIngredientHolders) {
+                        List<IngredientHolder> ingredientHolders) {
       this.progressBar = progressBar;
       this.contentScrollView = contentScrollView;
       this.titleInput = titleInput;
@@ -439,7 +439,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       this.descriptionInput = descriptionInput;
       this.imageNameView = imageNameView;
       this.addIngredientListAdapter = addIngredientListAdapter;
-      this.recipeIngredientHolders = recipeIngredientHolders;
+      this.ingredientHolders = ingredientHolders;
     }
 
     // AsyncTask methods
@@ -467,8 +467,8 @@ public class AddRecipeActivity extends AppCompatActivity {
       servingsInput.setText(Integer.toString(recipeHolder.getServings()));
       descriptionInput.setText(recipeHolder.getDescription());
       imageNameView.setText(recipeHolder.getImageDirectory());
-      recipeIngredientHolders = recipeHolder.getRecipeIngredients();
-      addIngredientListAdapter.setRecipeIngredientList(recipeIngredientHolders);
+      ingredientHolders = recipeHolder.getIngredientHolders();
+      addIngredientListAdapter.setData(ingredientHolders);
 
       progressBar.setVisibility(View.GONE);
       contentScrollView.setVisibility(View.VISIBLE);

@@ -1,23 +1,23 @@
 package com.gerardbradshaw.mater.pojos;
 
-import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.room.entities.Item;
 
 public class StockHolder {
 
-  private Ingredient ingredient;
+  private Item item;
   private boolean inStock;
 
-  public StockHolder(Ingredient ingredient, boolean inStock) {
-    this.ingredient = ingredient;
+  public StockHolder(Item item, boolean inStock) {
+    this.item = item;
     this.inStock = inStock;
   }
 
-  public Ingredient getIngredient() {
-    return ingredient;
+  public Item getItem() {
+    return item;
   }
 
-  public void setIngredient(Ingredient ingredient) {
-    this.ingredient = ingredient;
+  public void setItem(Item item) {
+    this.item = item;
   }
 
   public boolean isInStock() {

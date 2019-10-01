@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"/>
 
-                <!-- Add Ingredient Layout -->
+                <!-- Add Item Layout -->
                 <LinearLayout
                     android:id="@+id/addRecipe_addIngredientLayout"
                     android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                     android:orientation="vertical">
                 </LinearLayout>
 
-                <!-- Add Ingredient Button -->
+                <!-- Add Item Button -->
                 <Button
                     android:id="@+id/addRecipe_addIngredientButton"
                     style="@style/ButtonStyle"

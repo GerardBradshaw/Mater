@@ -12,7 +12,7 @@ public class RecipeHolder {
   private int servings;
   private String imageDirectory;
   private List<String> steps = new ArrayList<>();
-  private List<RecipeIngredientHolder> recipeIngredients = new ArrayList<>();
+  private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -45,8 +45,8 @@ public class RecipeHolder {
     this.steps = steps;
   }
 
-  public void setRecipeIngredients(List<RecipeIngredientHolder> recipeIngredientHolders) {
-    this.recipeIngredients = recipeIngredientHolders;
+  public void setIngredientHolders(List<IngredientHolder> ingredientHolders) {
+    this.ingredientHolders = ingredientHolders;
   }
 
 
@@ -72,8 +72,8 @@ public class RecipeHolder {
     return steps;
   }
 
-  public List<RecipeIngredientHolder> getRecipeIngredients() {
-    return recipeIngredients;
+  public List<IngredientHolder> getIngredientHolders() {
+    return ingredientHolders;
   }
 
 }

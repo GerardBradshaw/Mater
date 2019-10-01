@@ -4,7 +4,7 @@ import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class RecipeIngredientViewHolder {
+public class IngredientViewHolder {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -15,7 +15,7 @@ public class RecipeIngredientViewHolder {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public RecipeIngredientViewHolder(CheckBox checkBox, TextView quantityView, TextView nameView) {
+  public IngredientViewHolder(CheckBox checkBox, TextView quantityView, TextView nameView) {
     this.checkBox = checkBox;
     this.quantityView = quantityView;
     this.nameView = nameView;
