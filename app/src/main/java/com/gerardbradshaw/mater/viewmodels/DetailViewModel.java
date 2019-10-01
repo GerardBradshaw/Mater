@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.room.MaterRepository;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Step;
 
 import java.util.List;
@@ -56,8 +56,8 @@ public class DetailViewModel extends AndroidViewModel {
     return repository.getLiveImageDirectory(recipeId);
   }
 
-  public LiveData<List<RecipeIngredient>> getLiveRecipeIngredients(int recipeId) {
-    return repository.getLiveRecipeIngredients(recipeId);
+  public LiveData<List<Ingredient>> getLiveIngredients(int recipeId) {
+    return repository.getLiveIngredients(recipeId);
   }
 
   public LiveData<Step[]> getLiveSteps(int recipeId) {

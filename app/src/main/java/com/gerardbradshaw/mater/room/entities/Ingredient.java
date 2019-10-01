@@ -11,7 +11,7 @@ import com.gerardbradshaw.mater.helpers.Units;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
-    tableName = "recipe_ingredient_table",
+    tableName = "ingredient_table",
     foreignKeys = {
     @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
@@ -22,13 +22,13 @@ import static androidx.room.ForeignKey.CASCADE;
         childColumns = "item_id",
         onDelete = CASCADE)},
     indices = {@Index(value = "recipe_id"), @Index(value = "item_id")})
-public class RecipeIngredient {
+public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
 
   @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "recipe_ingredient_id")
-  private int recipeIngredientId;
+  @ColumnInfo(name = "ingredient_id")
+  private int ingredientId;
 
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
@@ -45,7 +45,7 @@ public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public RecipeIngredient(int recipeId, int itemId, double amount, String units) {
+  public Ingredient(int recipeId, int itemId, double amount, String units) {
     this.recipeId = recipeId;
     this.itemId = itemId;
     this.amount = amount;
@@ -55,8 +55,8 @@ public class RecipeIngredient {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
-  public int getRecipeIngredientId() {
-    return recipeIngredientId;
+  public int getIngredientId() {
+    return ingredientId;
   }
 
   public int getRecipeId() {
@@ -79,8 +79,8 @@ public class RecipeIngredient {
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
 
-  public void setRecipeIngredientId(int recipeIngredientId) {
-    this.recipeIngredientId = recipeIngredientId;
+  public void setIngredientId(int ingredientId) {
+    this.ingredientId = ingredientId;
   }
 
   public void setRecipeId(int recipeId) {

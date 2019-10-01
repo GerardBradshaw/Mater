@@ -16,33 +16,33 @@ import java.util.List;
 public interface ItemDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insertIngredient(Item item);
+  void insertItem(Item item);
 
   @Delete
-  void deleteIngredient(Item... item);
+  void deleteItem(Item... item);
 
   @Update
-  void updateIngredient(Item item);
+  void updateItem(Item item);
 
   // - - - - - - - - - - - - - - - LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from item_table order by name ASC")
-  LiveData<List<Item>> getLiveAllIngredients();
+  LiveData<List<Item>> getLiveAllItems();
 
 
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from item_table where name = :ingredientName limit 1")
-  Item getIngredient(String ingredientName);
+  Item getItem(String ingredientName);
 
-  @Query("select * from item_table where item_id = :ingredientId")
-  Item getIngredient(int ingredientId);
+  @Query("select * from item_table where item_id = :itemId")
+  Item getItem(int itemId);
 
   @Query("select item_id from item_table where name = :ingredientName")
-  int getIngredientId(String ingredientName);
+  int getItemId(String ingredientName);
 
   @Query("select * from item_table limit 1")
-  Item getAnyIngredient();
+  Item getAnyItem();
 
 
   // Allergen queries

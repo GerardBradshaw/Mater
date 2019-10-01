@@ -27,10 +27,10 @@ import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.main.MainActivity;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
+import com.gerardbradshaw.mater.pojos.IngredientHolder;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewHolder;
+import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
@@ -51,10 +51,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private TextView servingsView;
   private Toolbar toolbar;
 
-  private List<RecipeIngredientViewHolder> recipeIngredientViewHolders = new ArrayList<>();
+  private List<IngredientViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredientHolder> customRecipeIngredientHolders = new ArrayList<>();
-  private final List<RecipeIngredientHolder> defaultRecipeIngredientHolders = new ArrayList<>();
+  private List<IngredientHolder> customIngredientHolders = new ArrayList<>();
+  private final List<IngredientHolder> defaultIngredientHolders = new ArrayList<>();
 
   private Context context;
   private String recipeTitle;
@@ -132,11 +132,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Observe ingredients
-    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
+    detailViewModel.getLiveIngredients(recipeId).observe(this, new Observer<List<Ingredient>>() {
       @Override
-      public void onChanged(List<RecipeIngredient> recipeIngredientList) {
-        createRecipeIngredientHolders(recipeIngredientList);
-        ingredientListAdapter.setRecipeIngredientList(customRecipeIngredientHolders);
+      public void onChanged(List<Ingredient> ingredientList) {
+        createIngredientHolders(ingredientList);
+        ingredientListAdapter.setIngredientList(customIngredientHolders);
       }
     });
 
@@ -159,17 +159,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
         .into(imageView);
   }
 
-  private void createRecipeIngredientHolders(List<RecipeIngredient> recipeIngredientList) {
-    defaultRecipeIngredientHolders.clear();
-    customRecipeIngredientHolders.clear();
+  private void createIngredientHolders(List<Ingredient> ingredientList) {
+    defaultIngredientHolders.clear();
+    customIngredientHolders.clear();
 
-    for (RecipeIngredient r : recipeIngredientList) {
+    for (Ingredient r : ingredientList) {
       String name = ingredientViewModel.getIngredient(r.getItemId()).getName();
       double amount = r.getAmount();
       String unit = r.getUnits();
-      final RecipeIngredientHolder finalHolder = new RecipeIngredientHolder(name, amount, unit);
-      defaultRecipeIngredientHolders.add(finalHolder);
-      customRecipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
+      final IngredientHolder finalHolder = new IngredientHolder(name, amount, unit);
+      defaultIngredientHolders.add(finalHolder);
+      customIngredientHolders.add(new IngredientHolder(name, amount, unit));
     }
   }
 
@@ -230,14 +230,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
         customServings = Integer.parseInt(input.getText().toString());
         double servingsMultiplier = customServings / defaultServings;
 
-        // Reset the customRecipeIngredientHolder
-        customRecipeIngredientHolders.clear();
+        // Reset customIngredientHolders
+        customIngredientHolders.clear();
 
-        // Update recipeIngredientHolders
-        for (RecipeIngredientHolder holder : defaultRecipeIngredientHolders) {
-          RecipeIngredientHolder customHolder = new RecipeIngredientHolder(
+        // Update defaultIngredientHolders
+        for (IngredientHolder holder : defaultIngredientHolders) {
+          IngredientHolder customHolder = new IngredientHolder(
               holder.getName(), holder.getAmount() * servingsMultiplier, holder.getUnit());
-          customRecipeIngredientHolders.add(customHolder);
+          customIngredientHolders.add(customHolder);
         }
 
         ingredientListAdapter.notifyDataSetChanged();

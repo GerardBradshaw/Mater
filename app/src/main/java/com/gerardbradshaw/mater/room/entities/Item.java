@@ -13,7 +13,7 @@ public class Item {
 
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "item_id")
-  private int ingredientId;
+  private int itemId;
 
   @NonNull
   @ColumnInfo(name = "name")
@@ -74,8 +74,8 @@ public class Item {
 
   // - - - - - - - - - - - - - - - Getters - - - - - - - - - - - - - - -
 
-  public int getIngredientId() {
-    return ingredientId;
+  public int getItemId() {
+    return itemId;
   }
 
   @NonNull
@@ -126,8 +126,8 @@ public class Item {
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
-  public void setIngredientId(int ingredientId) {
-    this.ingredientId = ingredientId;
+  public void setItemId(int itemId) {
+    this.itemId = itemId;
   }
 
   public void setName(@NonNull String name) {
