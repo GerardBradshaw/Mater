@@ -99,7 +99,22 @@ public class AddIngredientListAdapter
         }
       });
 
+      viewHolder.amount.addTextChangedListener(new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+          if (amountEditedListener != null) {
+            amountEditedListener.onAmountEdited(Double.parseDouble(editable.toString()));
+          }
+        }
+      });
     }
   }
 
