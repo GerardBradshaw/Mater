@@ -89,7 +89,6 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Set up Toolbar
     Toolbar toolbar = findViewById(R.id.addRecipe_toolbar);
-    setSupportActionBar(toolbar);
 
     // Set up Item RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
@@ -102,11 +101,13 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
     if (recipeId != 0) {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader_edit));
+      setSupportActionBar(toolbar);
       loadExistingRecipe(recipeId);
 
     } else {
       toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      setSupportActionBar(toolbar);
     }
 
     // Listen for edited names
