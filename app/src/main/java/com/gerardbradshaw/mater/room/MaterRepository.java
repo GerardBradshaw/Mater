@@ -408,7 +408,6 @@ public class MaterRepository {
     private void addStepsToDb(int recipeId, List<String> steps) {
 
       for(int i = 0; i < steps.size(); i++) {
-
         // Define the step number
         int stepNumber = i + 1;
 
@@ -423,7 +422,6 @@ public class MaterRepository {
     private void addIngredientsToDb(int recipeId, List<IngredientHolder> ingredients) {
 
       for(int i = 0; i < ingredients.size(); i++) {
-
         // Get the name, amount, and units of the ingredient from the array
         String name = ingredients.get(i).getName();
         double amount = ingredients.get(i).getAmount();
@@ -450,10 +448,8 @@ public class MaterRepository {
 
         // Add the Ingredient to the DAO
         ingredientDao.insertIngredient(ingredient);
-
       }
     }
-
   }
 
 
