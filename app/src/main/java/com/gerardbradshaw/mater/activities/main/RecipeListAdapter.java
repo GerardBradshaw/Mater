@@ -83,8 +83,6 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
           .placeholder(context.getDrawable(R.drawable.img_placeholder_main))
           .into(holder.recipeImageView);
 
-      Log.d(LOG_TAG, "I've just updated the views for " + title);
-
     } else {
       holder.recipeTitleView
           .setText(context.getResources().getString(R.string.no_recipes_message));

@@ -111,7 +111,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Listen for edited names
-    ingredientListAdapter.setNameEditedListener(new AddIngredientListAdapter.NameEditedListener() {
+    ingredientListAdapter.setNameEditedListener(
+        new AddIngredientListAdapter.NameEditedListener() {
       @Override
       public void onNameEdited(int position, String newName) {
         ingredientHolders.get(position).setName(newName);
@@ -119,7 +120,8 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
 
     // Listen for edited amounts
-    ingredientListAdapter.setAmountEditedListener(new AddIngredientListAdapter.AmountEditedListener() {
+    ingredientListAdapter.setAmountEditedListener(
+        new AddIngredientListAdapter.AmountEditedListener() {
       @Override
       public void onAmountEdited(int position, double amount) {
         ingredientHolders.get(position).setAmount(amount);
@@ -279,11 +281,13 @@ public class AddRecipeActivity extends AppCompatActivity {
       if(holder.getName().isEmpty()) {
         // TODO make the name red (setHintTextColor(hintColor))
         allFieldsOk = false;
+        Log.d(LOG_TAG, "Cannot save because of an ingredient name");
       }
 
       if(holder.getAmount() == 0) {
         // TODO make the hint red
         allFieldsOk = false;
+        Log.d(LOG_TAG, "Cannot save because of an ingredient amount");
       }
 
       // TODO add checker for spinner
@@ -294,6 +298,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       if(holder.getStep().getText().toString().isEmpty()) {
         holder.getStep().setHintTextColor(hintColor);
         allFieldsOk = false;
+        Log.d(LOG_TAG, "Cannot save because of the steps");
       }
     }
 

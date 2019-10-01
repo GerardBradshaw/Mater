@@ -39,12 +39,17 @@ public class MaterRepository {
   private SummaryDao summaryDao;
   private IngredientDao ingredientDao;
   private StepDao stepDao;
+
   private LiveData<List<Summary>> liveRecipeSummaryList;
+
   private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
   private static AtomicInteger updateCount = new AtomicInteger(0);
+
   private static final String LOG_TAG = "GGG - Repository";
   private static final String PATH = "";
+
   private static File storage;
+
   private Context context;
   private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
 
@@ -237,9 +242,9 @@ public class MaterRepository {
     return itemDao.getLiveAllItems();
   }
 
-  public Item getIngredient(int ingredientId) {
+  public Item getItem(final int itemId) {
     try {
-      return new getIngredientAsyncTask(itemDao).execute(ingredientId).get();
+      return new GetItemAsyncTask(itemDao).execute(itemId).get();
     } catch (Exception e) {
       // TODO handle exception
       return null;
@@ -247,13 +252,13 @@ public class MaterRepository {
 
   }
 
-  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Item> {
+  private class GetItemAsyncTask extends AsyncTask<Integer, Void, Item> {
 
     // Member variables
     private ItemDao itemDao;
 
     // Constructor
-    getIngredientAsyncTask(ItemDao itemDao) {
+    GetItemAsyncTask(ItemDao itemDao) {
       this.itemDao = itemDao;
     }
 
@@ -266,27 +271,27 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - Saving Ingredients - - - - - - - - - - - - - - -
 
-  public void addIngredient(final Item... items) {
+  public void addItem(final Item... items) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new InsertIngredientAsyncTask(itemDao).execute(items);
+        new InsertItemAsyncTask(itemDao).execute(items);
       }
     };
     taskScheduler.addNewTask(runnable);
   }
 
-  public void addIngredient(final List<Item> items) {
+  public void addItem(final List<Item> items) {
     Item[] itemArray = new Item[items.size()];
     itemArray = items.toArray(itemArray);
-    addIngredient(itemArray);
+    addItem(itemArray);
   }
 
-  private class InsertIngredientAsyncTask extends AsyncTask<Item, Void, Void> {
+  private class InsertItemAsyncTask extends AsyncTask<Item, Void, Void> {
 
     private ItemDao itemDao;
 
-    InsertIngredientAsyncTask(ItemDao itemDao) {
+    InsertItemAsyncTask(ItemDao itemDao) {
       this.itemDao = itemDao;
     }
 
@@ -297,7 +302,6 @@ public class MaterRepository {
       }
       return null;
     }
-
   }
 
 

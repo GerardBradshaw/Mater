@@ -37,15 +37,15 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
   public void addIngredient(Item... items) {
-    repository.addIngredient(items);
+    repository.addItem(items);
   }
 
   public void addIngredient(List<Item> items) {
-    repository.addIngredient(items);
+    repository.addItem(items);
   }
 
   public Item getIngredient(int ingredientId) {
-    return repository.getIngredient(ingredientId);
+    return repository.getItem(ingredientId);
   }
 
 }
