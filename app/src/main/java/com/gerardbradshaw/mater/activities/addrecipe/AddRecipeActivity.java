@@ -93,7 +93,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Set up Toolbar
     Toolbar toolbar = findViewById(R.id.addRecipe_toolbar);
 
-    // Set up Item RecyclerView
+    // Set up Ingredient RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
     ingredientListAdapter.setData(ingredientHolders);
     RecyclerView ingredientRecyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
@@ -107,7 +107,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     RecyclerView stepRecyclerView = findViewById(R.id.addRecipe_stepRecyclerView);
     stepRecyclerView.setAdapter(stepListAdapter);
     stepRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    // addStepToRecycler();
+    //addStepToRecycler();
 
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
@@ -121,7 +121,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       setSupportActionBar(toolbar);
     }
 
-    // Listen for edited names
+    // Listen for edited ingredient names
     ingredientListAdapter.setNameEditedListener(
         new AddIngredientListAdapter.NameEditedListener() {
       @Override
@@ -130,12 +130,19 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
-    // Listen for edited amounts
+    // Listen for edited ingredient amounts
     ingredientListAdapter.setAmountEditedListener(
         new AddIngredientListAdapter.AmountEditedListener() {
       @Override
       public void onAmountEdited(int position, double amount) {
         ingredientHolders.get(position).setAmount(amount);
+      }
+    });
+
+    stepListAdapter.setStepEditedListener(new AddStepListAdapter.StepEditedListener() {
+      @Override
+      public void onDescriptionEdited(int position, String newDescription) {
+        stepHolders.get(position).setDescription(newDescription);
       }
     });
 
