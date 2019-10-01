@@ -36,6 +36,7 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
+import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -62,9 +63,11 @@ public class AddRecipeActivity extends AppCompatActivity {
   private Bitmap image;
 
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
+  private List<Step> stepHolders = new ArrayList<>();
   private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
   private AddIngredientListAdapter ingredientListAdapter;
+  private AddStepListAdapter stepListAdapter;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
   private static final String LOG_TAG = "AddRecipeActivity";
@@ -93,10 +96,18 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Set up Item RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
     ingredientListAdapter.setData(ingredientHolders);
-    RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
-    recyclerView.setAdapter(ingredientListAdapter);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    RecyclerView ingredientRecyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
+    ingredientRecyclerView.setAdapter(ingredientListAdapter);
+    ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     addIngredientToRecycler();
+
+    // Set up Step RecyclerView
+    stepListAdapter = new AddStepListAdapter(this);
+    stepListAdapter.setData(stepHolders);
+    RecyclerView stepRecyclerView = findViewById(R.id.addRecipe_stepRecyclerView);
+    stepRecyclerView.setAdapter(stepListAdapter);
+    stepRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    // addStepToRecycler();
 
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);

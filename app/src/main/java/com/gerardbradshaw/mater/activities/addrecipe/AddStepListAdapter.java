@@ -23,7 +23,6 @@ public class AddStepListAdapter
 
   private final LayoutInflater inflater;
   private List<Step> steps; // Cached copy
-  private Context context;
   private static String LOG_TAG = "GGG - AddStepListAdapter";
 
   private StepEditedListener stepEditedListener;
@@ -32,7 +31,6 @@ public class AddStepListAdapter
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public AddStepListAdapter(Context context) {
-    this.context = context;
     inflater = LayoutInflater.from(context);
   }
 

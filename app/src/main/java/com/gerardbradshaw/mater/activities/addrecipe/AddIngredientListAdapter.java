@@ -26,7 +26,6 @@ public class AddIngredientListAdapter
 
   private final LayoutInflater inflater;
   private List<IngredientHolder> ingredientHolders; // Cached copy
-  private Context context;
   private static String LOG_TAG = "GGG - AddIngredientListAdapter";
 
   private NameEditedListener nameEditedListener;
@@ -36,7 +35,6 @@ public class AddIngredientListAdapter
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public AddIngredientListAdapter(Context context) {
-    this.context = context;
     inflater = LayoutInflater.from(context);
   }
 
