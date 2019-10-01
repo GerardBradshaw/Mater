@@ -58,7 +58,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   private EditText descriptionInput;
   private EditText servingsInput;
   private TextView imageNameView;
-  private Toolbar toolbar;
   private Bitmap image;
 
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
@@ -86,10 +85,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     servingsInput = findViewById(R.id.addRecipe_servingsInput);
     imageNameView = findViewById(R.id.addRecipe_imageNameTextView);
-    toolbar = findViewById(R.id.addRecipe_toolbar);
 
-    // Set up the Toolbar
-    toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+    // Set up Toolbar
+    Toolbar toolbar = findViewById(R.id.addRecipe_toolbar);
     setSupportActionBar(toolbar);
 
     // Set up Item RecyclerView
@@ -99,6 +97,18 @@ public class AddRecipeActivity extends AppCompatActivity {
     recyclerView.setAdapter(ingredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     addIngredientToRecycler();
+
+    // Pre-fill data if loading from existing recipe
+    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
+    if (recipeId != 0) {
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      loadExistingRecipe(recipeId);
+
+    } else {
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+    }
+
+    // TODO set up listener for editing of adapter fields
 
     // Set listener for selectImageButton
     Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
@@ -144,13 +154,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         showCancelDialog();
       }
     });
-
-    // Pre-fill data if loading from existing recipe
-    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
-    if (recipeId != 0) {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
-      loadExistingRecipe(recipeId);
-    }
   }
 
   @Override
