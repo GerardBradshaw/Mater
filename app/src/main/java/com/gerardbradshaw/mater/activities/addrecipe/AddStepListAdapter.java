@@ -22,7 +22,7 @@ public class AddStepListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<Step> steps; // Cached copy
+  private List<String> steps; // Cached copy
   private static String LOG_TAG = "GGG - AddStepListAdapter";
 
   private StepEditedListener stepEditedListener;
@@ -63,11 +63,10 @@ public class AddStepListAdapter
   public void onBindViewHolder(@NonNull final NewStepViewHolder viewHolder, int position) {
     if (steps != null) {
 
-      Step step = steps.get(position);
-      final String description = step.getDescription();
+      String currentStep = steps.get(position);
 
-      if (!description.isEmpty()) {
-        viewHolder.description.setText(description);
+      if (!currentStep.isEmpty()) {
+        viewHolder.description.setText(currentStep);
 
       } else {
         viewHolder.description.setText(null);
@@ -114,12 +113,12 @@ public class AddStepListAdapter
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setData(List<Step> steps) {
+  public void setData(List<String> steps) {
     this.steps = steps;
     notifyDataSetChanged();
   }
 
-  public Step getStepAtPosition(int position) {
+  public String getStepAtPosition(int position) {
     return steps.get(position);
   }
 

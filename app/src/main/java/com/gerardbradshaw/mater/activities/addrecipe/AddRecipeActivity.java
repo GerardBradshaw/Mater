@@ -63,7 +63,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private Bitmap image;
 
   private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
-  private List<Step> stepHolders = new ArrayList<>();
+  private List<String> stepHolders = new ArrayList<>();
   private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
   private AddIngredientListAdapter ingredientListAdapter;
@@ -107,7 +107,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     RecyclerView stepRecyclerView = findViewById(R.id.addRecipe_stepRecyclerView);
     stepRecyclerView.setAdapter(stepListAdapter);
     stepRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    //addStepToRecycler();
+    addStepToRecycler();
 
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
@@ -142,7 +142,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     stepListAdapter.setStepEditedListener(new AddStepListAdapter.StepEditedListener() {
       @Override
       public void onDescriptionEdited(int position, String newDescription) {
-        stepHolders.get(position).setDescription(newDescription);
+        stepHolders.set(position, newDescription);
       }
     });
 
@@ -169,7 +169,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     addStepButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        addStepToView();
+        addStepToRecycler();
       }
     });
 
@@ -231,6 +231,11 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void addIngredientToRecycler() {
     ingredientHolders.add(new IngredientHolder());
     ingredientListAdapter.notifyDataSetChanged();
+  }
+
+  private void addStepToRecycler() {
+    stepHolders.add("");
+    stepListAdapter.notifyDataSetChanged();
   }
 
   private void addStepToView() {
