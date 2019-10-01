@@ -118,6 +118,14 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
+    // Listen for edited amounts
+    ingredientListAdapter.setAmountEditedListener(new AddIngredientListAdapter.AmountEditedListener() {
+      @Override
+      public void onAmountEdited(int position, double amount) {
+        ingredientHolders.get(position).setAmount(amount);
+      }
+    });
+
     // Set listener for selectImageButton
     Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
     selectImageButton.setOnClickListener(new View.OnClickListener() {
