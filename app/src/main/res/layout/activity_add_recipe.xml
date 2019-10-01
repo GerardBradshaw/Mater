@@ -28,7 +28,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Content Parent -->
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/addRecipe_contentScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -155,7 +155,7 @@
                     android:text="@string/addRecipe_cancelButton" />
 
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <!-- Loading ProgressBar -->
         <ProgressBar

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -53,7 +54,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private ImageViewModel imageViewModel;
 
   private ProgressBar progressBar;
-  private ScrollView contentScrollView;
+  private NestedScrollView contentScrollView;
   private EditText titleInput;
   private EditText descriptionInput;
   private EditText servingsInput;
@@ -108,7 +109,13 @@ public class AddRecipeActivity extends AppCompatActivity {
       toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
     }
 
-    // TODO set up listener for editing of adapter fields
+    // Listen for edited names
+    ingredientListAdapter.setNameEditedListener(new AddIngredientListAdapter.NameEditedListener() {
+      @Override
+      public void onNameEdited(int position, String newName) {
+        ingredientHolders.get(position).setName(newName);
+      }
+    });
 
     // Set listener for selectImageButton
     Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
@@ -417,7 +424,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Member variables
     private ProgressBar progressBar;
-    private ScrollView contentScrollView;
+    private NestedScrollView contentScrollView;
     private EditText titleInput;
     private EditText servingsInput;
     private EditText descriptionInput;
@@ -428,7 +435,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Constructor
     LoadRecipeAsyncTask(ProgressBar progressBar,
-                        ScrollView contentScrollView,
+                        NestedScrollView contentScrollView,
                         EditText titleInput,
                         EditText servingsInput,
                         EditText descriptionInput,
@@ -466,15 +473,17 @@ public class AddRecipeActivity extends AppCompatActivity {
     protected void onPostExecute(RecipeHolder recipeHolder) {
       super.onPostExecute(recipeHolder);
 
+      // Update UI
       titleInput.setText(recipeHolder.getTitle());
       servingsInput.setText(Integer.toString(recipeHolder.getServings()));
       descriptionInput.setText(recipeHolder.getDescription());
       imageNameView.setText(recipeHolder.getImageDirectory());
-      ingredientHolders = recipeHolder.getIngredientHolders();
-      addIngredientListAdapter.setData(ingredientHolders);
-
+      addIngredientListAdapter.setData(recipeHolder.getIngredientHolders());
       progressBar.setVisibility(View.GONE);
       contentScrollView.setVisibility(View.VISIBLE);
+
+      // Update Activity variables
+      AddRecipeActivity.this.ingredientHolders = recipeHolder.getIngredientHolders();
 
     }
   }

@@ -66,7 +66,7 @@ public class AddIngredientListAdapter
    * @param position the position of the item within the adapter's data set
    */
   @Override
-  public void onBindViewHolder(@NonNull NewIngredientViewHolder viewHolder, int position) {
+  public void onBindViewHolder(@NonNull final NewIngredientViewHolder viewHolder, int position) {
     if (ingredientHolders != null) {
 
       IngredientHolder holder = ingredientHolders.get(position);
@@ -80,6 +80,10 @@ public class AddIngredientListAdapter
         if (!(Double.isNaN(amount) || amount == 0)) {
           viewHolder.amount.setText(Double.toString(amount));
         }
+
+      } else {
+        viewHolder.name.setText(null);
+        viewHolder.amount.setText(null);
       }
 
       viewHolder.name.addTextChangedListener(new TextWatcher() {
@@ -94,7 +98,7 @@ public class AddIngredientListAdapter
         @Override
         public void afterTextChanged(Editable editable) {
           if (nameEditedListener != null) {
-            nameEditedListener.onNameEdited(editable.toString());
+            nameEditedListener.onNameEdited(viewHolder.getAdapterPosition(), editable.toString());
           }
         }
       });
@@ -111,7 +115,8 @@ public class AddIngredientListAdapter
         @Override
         public void afterTextChanged(Editable editable) {
           if (amountEditedListener != null) {
-            amountEditedListener.onAmountEdited(Double.parseDouble(editable.toString()));
+            amountEditedListener.onAmountEdited(viewHolder.getAdapterPosition(),
+                Double.parseDouble(editable.toString()));
           }
         }
       });
@@ -147,6 +152,14 @@ public class AddIngredientListAdapter
     return ingredientHolders.get(position);
   }
 
+  public void setNameEditedListener(NameEditedListener nameEditedListener) {
+    this.nameEditedListener = nameEditedListener;
+  }
+
+  public void setAmountEditedListener(AmountEditedListener amountEditedListener) {
+    this.amountEditedListener = amountEditedListener;
+  }
+
 
   // - - - - - - - - - - - - - - - ViewHolder Class - - - - - - - - - - - - - - -
 
@@ -174,11 +187,11 @@ public class AddIngredientListAdapter
   // - - - - - - - - - - - - - - - IngredientModifiedListener Interface - - - - - - - - - - - - - - -
 
   public interface NameEditedListener {
-    void onNameEdited(String name);
+    void onNameEdited(int position, String newName);
   }
 
   public interface AmountEditedListener {
-    void onAmountEdited(double amount);
+    void onAmountEdited(int position, double amount);
   }
 
 }
