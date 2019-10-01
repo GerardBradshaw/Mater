@@ -393,7 +393,14 @@ public class MaterRepository {
       // Create a Summary from the input
       Summary summary = new Summary(title, description, imageDirectory, servings);
 
-      // Add the title and description to the database.
+      // Determine if the recipe has already been added before (ID = 0)
+      int recipeId = summaryDao.getRecipeId(title);
+
+      if (recipeId != 0) {
+        summary.setRecipeId(recipeId);
+      }
+
+      // Add summary to database
       summaryDao.insertSummary(summary);
 
     }

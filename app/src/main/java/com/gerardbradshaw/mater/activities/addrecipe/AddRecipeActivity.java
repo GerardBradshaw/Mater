@@ -258,34 +258,46 @@ public class AddRecipeActivity extends AppCompatActivity {
   }
 
   private void saveRecipeToRepository() {
-
     // Create setup fields
     boolean allFieldsOk = true;
     int hintColor = getResources().getColor(R.color.colorPrimary);
 
-    // Check the title
-    if(titleInput.getText().toString().isEmpty()) {
+    // Check title
+    if (titleInput.getText().toString().isEmpty()) {
+      showToast("Please add a title.");
       titleInput.setHintTextColor(hintColor);
       allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because of title");
     }
 
-    // Check the description
+    // Check servings
+    if (servingsInput.getText().toString().isEmpty()) {
+      showToast("Please add the number of servings.");
+      servingsInput.setHintTextColor(hintColor);
+      allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because of servings");
+    }
+
+    // Check description
     if(descriptionInput.getText().toString().isEmpty()) {
+      showToast("Please add a description.");
       descriptionInput.setHintTextColor(hintColor);
       allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because of description");
+
     }
 
-    // Check the ingredients
+    // Check ingredients
     for(IngredientHolder holder : ingredientHolders) {
 
       if(holder.getName().isEmpty()) {
-        // TODO make the name red (setHintTextColor(hintColor))
+        showToast("Please add names for each ingredient.");
         allFieldsOk = false;
         Log.d(LOG_TAG, "Cannot save because of an ingredient name");
       }
 
       if(holder.getAmount() == 0) {
-        // TODO make the hint red
+        showToast("Please add amounts for each ingredient.");
         allFieldsOk = false;
         Log.d(LOG_TAG, "Cannot save because of an ingredient amount");
       }
@@ -294,11 +306,19 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     // Check the steps
-    for(StepInputViewHolder holder : stepViewHolders) {
-      if(holder.getStep().getText().toString().isEmpty()) {
-        holder.getStep().setHintTextColor(hintColor);
-        allFieldsOk = false;
-        Log.d(LOG_TAG, "Cannot save because of the steps");
+    if (stepViewHolders.isEmpty()
+        || (stepViewHolders.get(0).getStep().getText().toString().isEmpty()
+        && stepViewHolders.size() == 1)) {
+      showToast("Please add at least 1 step");
+      allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because there are no steps");
+
+    } else {
+      for (int i = 0; i < stepViewHolders.size(); i++) {
+        if (stepViewHolders.get(i).getStep().getText().toString().isEmpty()) {
+          stepViewHolders.remove(i);
+          Log.d(LOG_TAG, "Blank step removed");
+        }
       }
     }
 
@@ -309,17 +329,15 @@ public class AddRecipeActivity extends AppCompatActivity {
       RecipeHolder recipe = new RecipeHolder();
 
       // Set up lists for steps and ingredients
-      List<IngredientHolder> ingredients = new ArrayList<>();
       List<String> steps = new ArrayList<>();
 
-      // Get the ingredients info from each ViewHolder and add them to the list
+      // Clean up each IngredientHolder in the Activity
       for(IngredientHolder holder : ingredientHolders) {
-        ingredients.add(new IngredientHolder(
-            holder.getName(),
-            holder.getAmount(),
-            MiscUnits.NO_UNIT));
+        // TODO implement retrieval from spinner
 
-        // TODO implement spinner
+        if (holder.getUnit().isEmpty()) {
+          holder.setUnit(MiscUnits.NO_UNIT.name());
+        }
       }
 
       // Get the steps from each ViewHolder and add them to the list
@@ -330,8 +348,9 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Add everything to the recipe
       recipe.setTitle(titleInput.getText().toString());
       recipe.setDescription(descriptionInput.getText().toString());
+      recipe.setServings(Integer.parseInt(servingsInput.getText().toString()));
       recipe.setImageDirectory(imageNameView.getText().toString());
-      recipe.setIngredientHolders(ingredients);
+      recipe.setIngredientHolders(ingredientHolders);
       recipe.setSteps(steps);
 
       // Save the recipe to the database
@@ -429,6 +448,10 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     }
     return result;
+  }
+
+  private void showToast(String message) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
   }
 
 
