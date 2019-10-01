@@ -15,6 +15,7 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.room.entities.Step;
 
 import java.util.List;
+import java.util.Locale;
 
 public class AddStepListAdapter
     extends RecyclerView.Adapter<AddStepListAdapter.NewStepViewHolder> {
@@ -72,7 +73,8 @@ public class AddStepListAdapter
         viewHolder.description.setText(null);
       }
 
-      viewHolder.number.setText(position + 1);
+      String numberString = (position + 1) + ". ";
+      viewHolder.number.setText(numberString);
 
       viewHolder.description.addTextChangedListener(new TextWatcher() {
         @Override
