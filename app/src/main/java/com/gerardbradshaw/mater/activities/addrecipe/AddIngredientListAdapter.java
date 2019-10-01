@@ -1,10 +1,13 @@
 package com.gerardbradshaw.mater.activities.addrecipe;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
+import com.gerardbradshaw.mater.room.entities.Summary;
 
 import java.util.List;
 
@@ -24,6 +28,9 @@ public class AddIngredientListAdapter
   private List<IngredientHolder> ingredientHolders; // Cached copy
   private Context context;
   private static String LOG_TAG = "GGG - AddIngredientListAdapter";
+
+  private NameEditedListener nameEditedListener;
+  private AmountEditedListener amountEditedListener;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -63,7 +70,7 @@ public class AddIngredientListAdapter
     if (ingredientHolders != null) {
 
       IngredientHolder holder = ingredientHolders.get(position);
-      String name = holder.getName();
+      final String name = holder.getName();
       double amount = holder.getAmount();
       String unit = holder.getUnit();
 
@@ -74,6 +81,25 @@ public class AddIngredientListAdapter
           viewHolder.amount.setText(Double.toString(amount));
         }
       }
+
+      viewHolder.name.addTextChangedListener(new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+          if (nameEditedListener != null) {
+            nameEditedListener.onNameEdited(editable.toString());
+          }
+        }
+      });
+
+
     }
   }
 
@@ -128,4 +154,16 @@ public class AddIngredientListAdapter
       this.adapter = adapter;
     }
   }
+
+
+  // - - - - - - - - - - - - - - - IngredientModifiedListener Interface - - - - - - - - - - - - - - -
+
+  public interface NameEditedListener {
+    void onNameEdited(String name);
+  }
+
+  public interface AmountEditedListener {
+    void onAmountEdited(double amount);
+  }
+
 }
