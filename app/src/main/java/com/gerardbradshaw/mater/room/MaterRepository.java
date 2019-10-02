@@ -236,9 +236,13 @@ public class MaterRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Loading Ingredients - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Loading Items - - - - - - - - - - - - - - -
 
-  public LiveData<List<Item>> getLiveAllIngredients() {
+  public List<Item> getAllItems() {
+    return itemDao.getAllItems();
+  }
+
+  public LiveData<List<Item>> getLiveAllItems() {
     return itemDao.getLiveAllItems();
   }
 

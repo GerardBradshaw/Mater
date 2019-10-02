@@ -12,7 +12,7 @@ import com.gerardbradshaw.mater.room.entities.Item;
 
 import java.util.List;
 
-public class IngredientViewModel extends AndroidViewModel {
+public class ItemViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -21,7 +21,7 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientViewModel(@NonNull Application application) {
+  public ItemViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository
@@ -32,20 +32,24 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
-  public LiveData<List<Item>> getLiveAllIngredients() {
-    return repository.getLiveAllIngredients();
+  public LiveData<List<Item>> getLiveAllItems() {
+    return repository.getLiveAllItems();
   }
 
-  public void addIngredient(Item... items) {
+  public List<Item> getAllItems() {
+    return repository.getAllItems();
+  }
+
+  public void addItem(Item... items) {
     repository.addItem(items);
   }
 
-  public void addIngredient(List<Item> items) {
+  public void addItem(List<Item> items) {
     repository.addItem(items);
   }
 
-  public Item getIngredient(int ingredientId) {
-    return repository.getItem(ingredientId);
+  public Item getItem(int itemId) {
+    return repository.getItem(itemId);
   }
 
 }
