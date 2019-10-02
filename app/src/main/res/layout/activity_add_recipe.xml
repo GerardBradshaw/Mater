@@ -41,40 +41,46 @@
                 android:orientation="vertical">
 
                 <!-- Title and Servings-->
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
                     <!-- Title Input -->
                     <EditText
                         android:id="@+id/addRecipe_titleInput"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/addRecipe_titleInput_hint"
                         android:inputType="textCapWords"
-                        app:layout_constraintEnd_toStartOf="@id/addRecipe_servingsInput"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:maxLength="30"
+                        android:layout_weight="70"/>
 
                     <!-- Servings -->
                     <EditText
                         android:id="@+id/addRecipe_servingsInput"
-                        android:layout_width="wrap_content"
+                        android:layout_width="36sp"
                         android:layout_height="match_parent"
                         android:hint="@string/addRecipe_servingsInput_hint"
+                        android:layout_weight="0"
                         android:inputType="number"
-                        android:maxLength="3"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:maxLength="3"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text=" servings" />
+                </LinearLayout>
 
                 <!-- Description Input -->
                 <EditText
                     android:id="@+id/addRecipe_descriptionInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:maxLength="300"
                     android:hint="@string/addRecipe_descriptionInput_hint"
-                    android:inputType="textCapSentences" />
+                    android:inputType="textCapSentences|textMultiLine" />
 
                 <!-- Image Name -->
                 <TextView
