@@ -1,8 +1,6 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.widget.NestedScrollView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +41,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     progressBar = findViewById(R.id.shoppingList_progressBar);
     contentView = findViewById(R.id.shoppingList_contentLinearLayout);
 
-    // Set views
+    // Set up UI
     progressBar.setVisibility(View.VISIBLE);
     contentView.setVisibility(View.GONE);
 
@@ -51,9 +49,8 @@ public class ShoppingListActivity extends AppCompatActivity {
     itemListAdapter = new ItemListAdapter(this);
     itemListAdapter.setStockChangedListener(new ItemListAdapter.StockChangedListener() {
       @Override
-      public void onStockLevelChanged(int position, Item item) {
-        // Get the new item level and save it to the activity
-        itemList.add(position, item);
+      public void onStockLevelChanged(int position, int newStockLevel) {
+        itemList.get(position).setStockLevel(newStockLevel);
       }
     });
 
@@ -68,7 +65,8 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    itemViewModel.addItem(itemList);
+    // TODO save items to database preserving recipe associations
+    //itemViewModel.addItem(itemList);
   }
 
 

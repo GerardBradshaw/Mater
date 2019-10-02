@@ -85,20 +85,15 @@ public class ItemListAdapter
 
       @Override
       public void afterTextChanged(Editable editable) {
-        // Get the new input and save it to the current ingredient
-        int stockLevel = 0;
-        String input = editable.toString();
+        int newStockLevel = 0;
 
-        if (!input.equals("")) {
-          stockLevel = Integer.parseInt(input);
+        if (!editable.toString().isEmpty()) {
+          newStockLevel = Integer.parseInt(editable.toString());
         }
-
-        itemList.get(position).setStockLevel(stockLevel);
 
         if (stockChangedListener != null) {
-          stockChangedListener.onStockLevelChanged(position, itemList.get(position));
+          stockChangedListener.onStockLevelChanged(position, newStockLevel);
         }
-
       }
     });
 
@@ -149,6 +144,6 @@ public class ItemListAdapter
   }
 
   public interface StockChangedListener {
-    void onStockLevelChanged(int position, Item item);
+    void onStockLevelChanged(int position, int newStockLevel);
   }
 }
