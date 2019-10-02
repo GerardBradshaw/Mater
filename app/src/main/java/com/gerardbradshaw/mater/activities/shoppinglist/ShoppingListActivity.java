@@ -63,15 +63,6 @@ public class ShoppingListActivity extends AppCompatActivity {
     recyclerView.setAdapter(itemListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-    // Observe the LiveData
-    itemViewModel.getLiveAllItems().observe(this, new Observer<List<Item>>() {
-      @Override
-      public void onChanged(List<Item> items) {
-        itemList = items;
-        itemListAdapter.setData(itemList);
-      }
-    });
-
   }
 
   @Override
