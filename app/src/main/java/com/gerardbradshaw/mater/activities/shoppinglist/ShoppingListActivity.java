@@ -65,8 +65,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    // TODO save items to database preserving recipe associations
-    //itemViewModel.addItem(itemList);
+    itemViewModel.updateItem(itemList);
   }
 
 

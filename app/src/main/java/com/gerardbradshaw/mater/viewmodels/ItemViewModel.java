@@ -30,15 +30,18 @@ public class ItemViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
-
-  public LiveData<List<Item>> getLiveAllItems() {
-    return repository.getLiveAllItems();
-  }
+  // - - - - - - - - - - - - - - - Get Items - - - - - - - - - - - - - - -
 
   public List<Item> getAllItems() {
     return repository.getAllItems();
   }
+
+  public Item getItem(int itemId) {
+    return repository.getItem(itemId);
+  }
+
+
+  // - - - - - - - - - - - - - - - Add Items - - - - - - - - - - - - - - -
 
   public void addItem(Item... items) {
     repository.addItem(items);
@@ -48,8 +51,15 @@ public class ItemViewModel extends AndroidViewModel {
     repository.addItem(items);
   }
 
-  public Item getItem(int itemId) {
-    return repository.getItem(itemId);
+
+  // - - - - - - - - - - - - - - - Update Items - - - - - - - - - - - - - - -
+
+  public void updateItem(Item... items) {
+    repository.updateItem(items);
+  }
+
+  public void updateItem(List<Item> items) {
+    repository.updateItem(items);
   }
 
 }
