@@ -13,5 +13,8 @@
     <!-- Other colors -->
     <color name="opaqueWhite">#BFffffff</color>
     <color name="transparent">#00ffffff</color>
+    <color name="opaqueAccent">#1Aff7961</color>
+    <color name="opaquePrimary">#BFf44336</color>
+    <color name="white">@android:color/white</color>
 
 </resources>
