@@ -1,6 +1,7 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,25 +15,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.room.entities.Item;
+import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingListAdapter
-    extends RecyclerView.Adapter<ShoppingListAdapter.IngredientViewHolder> {
+public class ItemListAdapter
+    extends RecyclerView.Adapter<ItemListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
   private List<Item> itemList = new ArrayList<>();
-  private static String LOG_TAG = "GGG - ShoppingListAdapter";
+  private static String LOG_TAG = "GGG - ItemListAdapter";
   private StockChangedListener stockChangedListener;
+  private Context context;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public ShoppingListAdapter(Context context) {
+  public ItemListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
+    this.context = context;
   }
 
 
@@ -64,6 +68,12 @@ public class ShoppingListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
+    if(position %2 == 1) {
+      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.opaqueAccent));
+    } else {
+      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
+    }
+
     Item currentItem = itemList.get(position);
     final int stockLevel = currentItem.getStockLevel();
     holder.textView.setText(currentItem.getName());
@@ -85,20 +95,15 @@ public class ShoppingListAdapter
 
       @Override
       public void afterTextChanged(Editable editable) {
-        // Get the new input and save it to the current ingredient
-        int stockLevel = 0;
-        String input = editable.toString();
+        int newStockLevel = 0;
 
-        if (!input.equals("")) {
-          stockLevel = Integer.parseInt(input);
+        if (!editable.toString().isEmpty()) {
+          newStockLevel = Integer.parseInt(editable.toString());
         }
-
-        itemList.get(position).setStockLevel(stockLevel);
 
         if (stockChangedListener != null) {
-          stockChangedListener.onStockLevelChanged(position, itemList.get(position));
+          stockChangedListener.onStockLevelChanged(position, newStockLevel);
         }
-
       }
     });
 
@@ -120,7 +125,7 @@ public class ShoppingListAdapter
     }
   }
 
-  public void setIngredientStockList(List<Item> itemList) {
+  public void setData(List<Item> itemList) {
     this.itemList = itemList;
     notifyDataSetChanged();
   }
@@ -136,9 +141,9 @@ public class ShoppingListAdapter
 
     final EditText stockInput;
     final TextView textView;
-    final ShoppingListAdapter adapter;
+    final ItemListAdapter adapter;
 
-    public IngredientViewHolder(@NonNull View itemView, ShoppingListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, ItemListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
@@ -149,6 +154,6 @@ public class ShoppingListAdapter
   }
 
   public interface StockChangedListener {
-    void onStockLevelChanged(int position, Item item);
+    void onStockLevelChanged(int position, int newStockLevel);
   }
 }

@@ -79,21 +79,35 @@
                             app:layout_constraintTop_toBottomOf="@id/recipeDetail_image"
                             tools:text="Summary of recipe. It's delicious and nutritious!"/>
 
-                        <!-- Servings -->
-                        <TextView
-                            android:id="@+id/recipeDetail_servings"
+                        <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_margin="16dp"
                             android:background="@drawable/background_rounded_opaque_white"
+                            android:orientation="horizontal"
                             android:paddingLeft="8dp"
                             android:paddingTop="4dp"
                             android:paddingRight="8dp"
                             android:paddingBottom="4dp"
-                            android:textColor="@color/textColorPrimary"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="x18"/>
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_utensils"
+                                android:tint="@color/textColorPrimary"/>
+
+                            <!-- Servings -->
+                            <TextView
+                                android:id="@+id/recipeDetail_servings"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:textColor="@color/textColorPrimary"
+                                tools:text="x18"/>
+
+                        </LinearLayout>
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>

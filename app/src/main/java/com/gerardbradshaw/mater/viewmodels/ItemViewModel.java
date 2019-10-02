@@ -12,7 +12,7 @@ import com.gerardbradshaw.mater.room.entities.Item;
 
 import java.util.List;
 
-public class IngredientViewModel extends AndroidViewModel {
+public class ItemViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -21,7 +21,7 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientViewModel(@NonNull Application application) {
+  public ItemViewModel(@NonNull Application application) {
     super(application);
 
     // Downcast the application and set the repository
@@ -30,22 +30,36 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Get Items - - - - - - - - - - - - - - -
 
-  public LiveData<List<Item>> getLiveAllIngredients() {
-    return repository.getLiveAllIngredients();
+  public List<Item> getAllItems() {
+    return repository.getAllItems();
   }
 
-  public void addIngredient(Item... items) {
+  public Item getItem(int itemId) {
+    return repository.getItem(itemId);
+  }
+
+
+  // - - - - - - - - - - - - - - - Add Items - - - - - - - - - - - - - - -
+
+  public void addItem(Item... items) {
     repository.addItem(items);
   }
 
-  public void addIngredient(List<Item> items) {
+  public void addItem(List<Item> items) {
     repository.addItem(items);
   }
 
-  public Item getIngredient(int ingredientId) {
-    return repository.getItem(ingredientId);
+
+  // - - - - - - - - - - - - - - - Update Items - - - - - - - - - - - - - - -
+
+  public void updateItem(Item... items) {
+    repository.updateItem(items);
+  }
+
+  public void updateItem(List<Item> items) {
+    repository.updateItem(items);
   }
 
 }

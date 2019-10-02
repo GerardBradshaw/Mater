@@ -236,9 +236,13 @@ public class MaterRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Loading Ingredients - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Loading Items - - - - - - - - - - - - - - -
 
-  public LiveData<List<Item>> getLiveAllIngredients() {
+  public List<Item> getAllItems() {
+    return itemDao.getAllItems();
+  }
+
+  public LiveData<List<Item>> getLiveAllItems() {
     return itemDao.getLiveAllItems();
   }
 
@@ -269,7 +273,7 @@ public class MaterRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Saving Ingredients - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Saving New Items - - - - - - - - - - - - - - -
 
   public void addItem(final Item... items) {
     Runnable runnable = new Runnable() {
@@ -302,8 +306,54 @@ public class MaterRepository {
       }
       return null;
     }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+      taskScheduler.setTaskFinished();
+    }
   }
 
+
+  // - - - - - - - - - - - - - - - Updating Items - - - - - - - - - - - - - - -
+
+  public void updateItem(final Item... items) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new UpdateItemAsyncTask(itemDao).execute(items);
+      }
+    };
+  }
+
+  public void updateItem(final List<Item> items) {
+    Item[] itemArray = new Item[items.size()];
+    itemArray = items.toArray(itemArray);
+    updateItem(itemArray);
+  }
+
+  private class UpdateItemAsyncTask extends AsyncTask<Item, Void, Void> {
+
+    private ItemDao itemDao;
+
+    UpdateItemAsyncTask(ItemDao itemDao) {
+      this.itemDao = itemDao;
+    }
+
+    @Override
+    protected Void doInBackground(Item... items) {
+      for (Item i : items) {
+        itemDao.updateItem(i);
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+      taskScheduler.setTaskFinished();
+    }
+  }
 
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 
