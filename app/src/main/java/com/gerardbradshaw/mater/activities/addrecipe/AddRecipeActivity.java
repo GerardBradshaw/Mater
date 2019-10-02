@@ -62,7 +62,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   private TextView imageNameView;
   private Bitmap image;
 
-  private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
   private List<String> stepHolders = new ArrayList<>();
   private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
@@ -236,48 +235,6 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void addStepToRecycler() {
     stepHolders.add("");
     stepListAdapter.notifyDataSetChanged();
-  }
-
-  private void addStepToView() {
-
-    // Instantiate a LayoutInflater
-    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-    // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.addRecipe_addStepLayout);
-
-    // Inflate the view
-    LinearLayout addStepView =
-        (LinearLayout) inflater.inflate(R.layout.step_input, insertPoint, false);
-
-    // Get the children of the View
-    TextView number = (TextView) addStepView.getChildAt(0);
-    EditText step = (EditText) addStepView.getChildAt(1);
-
-    // Get the numberOfSteps of the view and the index
-    int numberOfSteps = stepViewHolders.size();
-    String numberOfStepsString;
-
-    if(numberOfSteps < 1) {
-      numberOfStepsString = "1. ";
-
-    } else {
-      int stepNumber = numberOfSteps + 1;
-      numberOfStepsString = stepNumber + ". ";
-    }
-
-    // Set the text of the step number
-    number.setText(numberOfStepsString);
-
-    // Save the new EditText to the list
-    stepViewHolders.add(new StepInputViewHolder(number, step));
-
-    // Insert the view into the main view
-    insertPoint.addView(addStepView, numberOfSteps, new ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-
   }
 
   private void saveRecipeToRepository() {
