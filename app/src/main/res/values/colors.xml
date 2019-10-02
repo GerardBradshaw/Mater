@@ -12,5 +12,6 @@
 
     <!-- Other colors -->
     <color name="opaqueWhite">#BFffffff</color>
+    <color name="transparent">#00ffffff</color>
 
 </resources>
