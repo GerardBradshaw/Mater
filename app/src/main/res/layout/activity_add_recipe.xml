@@ -170,12 +170,9 @@
             android:id="@+id/addRecipe_progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_gravity="center"
             android:visibility="gone"
-            tools:visibility="visible">
-
-        </ProgressBar>
+            tools:visibility="visible" />
 
 
     </FrameLayout>
