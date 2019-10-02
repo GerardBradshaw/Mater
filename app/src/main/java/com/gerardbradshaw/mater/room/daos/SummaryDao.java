@@ -36,6 +36,9 @@ public interface SummaryDao {
   @Query("select description from summary_table where recipe_id = :recipeId")
   LiveData<String> getLiveDescription(int recipeId);
 
+  @Query("select servings from summary_table where recipe_id = :recipeId")
+  LiveData<Integer> getLiveServings(int recipeId);
+
   @Query("select image_directory from summary_table where recipe_id = :recipeId")
   LiveData<String> getLiveImageDirectory(int recipeId);
 
@@ -52,5 +55,5 @@ public interface SummaryDao {
   int getRecipeId(String recipeTitle);
 
   @Query("select * from summary_table where recipe_id = :recipeId")
-  Summary[] getSummary(int recipeId);
+  Summary getSummary(int recipeId);
 }

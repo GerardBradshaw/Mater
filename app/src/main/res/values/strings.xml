@@ -13,6 +13,8 @@
     <string name="nav_menu_settings">Settings</string>
     <!-- AppBar Menu -->
     <string name="action_settings">Settings</string>
+    <!-- Alert Dialogs -->
+    <string name="dialog_confirm_delete">Permanently delete</string>
 
     <!-- General Strings -->
     <string name="stepsHeader">Steps</string>
@@ -22,6 +24,7 @@
     <!-- Add recipe activity -->
     <!-- Headers -->
     <string name="addRecipe_pageHeader">Add new recipe</string>
+    <string name="addRecipe_pageHeader_edit">Edit recipe</string>
     <!-- Buttons -->
     <string name="addRecipe_saveButton">Save Recipe</string>
     <string name="addRecipe_addIngredientButton">Add</string>
@@ -32,6 +35,9 @@
     <string name="addRecipe_addIngredient_nameInput_hint">Ingredient name…</string>
     <string name="addRecipe_addIngredient_amountInput_hint">Amount</string>
     <string name="addRecipe_addStep_stepInput_hint">Describe the step…</string>
+    <string name="addRecipe_servingsInput_hint">0</string>
+    <!-- Alert Dialogs -->
+    <string name="discard_changes">Discard changes?</string>
 
     <!-- Recipe Detail Activity -->
     <!-- Content Descriptions -->
@@ -39,8 +45,14 @@
     <!-- Messages -->
     <string name="no_recipes_message">No recipes</string>
     <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
+    <string name="no_ingredients_message">No items set!</string>
     <!-- Buttons -->
     <string name="recipeDetail_selectImageButton">Select Image</string>
     <string name="addRecipe_imageNameTextView">No image selected</string>
+    <string name="recipeDetail_ingredientHeaderSubtitle">Tick an item to add it to your shopping list!</string>
+    <!-- AppBar Menu -->
+    <string name="action_edit">Edit recipe</string>
+    <string name="action_servings">Servings</string>
+    <string name="addRecipe_cancelButton">Cancel</string>
 
 </resources>

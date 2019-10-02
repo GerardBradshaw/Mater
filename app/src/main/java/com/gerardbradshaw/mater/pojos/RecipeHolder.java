@@ -9,16 +9,16 @@ public class RecipeHolder {
 
   private String title;
   private String description;
+  private int servings;
   private String imageDirectory;
-  private List<String> steps;
-  private List<RecipeIngredientHolder> recipeIngredients;
+  private List<String> steps = new ArrayList<>();
+  private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
+  // Empty constructor
   public RecipeHolder() {
-    recipeIngredients = new ArrayList<>();
-    steps = new ArrayList<>();
   }
 
 
@@ -33,6 +33,10 @@ public class RecipeHolder {
     this.description = description;
   }
 
+  public void setServings(int servings) {
+    this.servings = servings;
+  }
+
   public void setImageDirectory(String imageDirectory) {
     this.imageDirectory = imageDirectory;
   }
@@ -41,8 +45,8 @@ public class RecipeHolder {
     this.steps = steps;
   }
 
-  public void setRecipeIngredients(List<RecipeIngredientHolder> recipeIngredientHolders) {
-    this.recipeIngredients = recipeIngredientHolders;
+  public void setIngredientHolders(List<IngredientHolder> ingredientHolders) {
+    this.ingredientHolders = ingredientHolders;
   }
 
 
@@ -56,6 +60,10 @@ public class RecipeHolder {
     return description;
   }
 
+  public int getServings() {
+    return servings;
+  }
+
   public String getImageDirectory() {
     return imageDirectory;
   }
@@ -64,68 +72,8 @@ public class RecipeHolder {
     return steps;
   }
 
-  public List<RecipeIngredientHolder> getRecipeIngredients() {
-    return recipeIngredients;
-  }
-
-
-  // - - - - - - - - - - - - - - - Other step methods - - - - - - - - - - - - - - -
-
-  public String getStep(int stepNumber) {
-
-    // Set the index of the step
-    int stepsIndex = stepNumber - 1;
-
-    // Return the step if it exists
-    if (steps.size() < stepNumber) {
-      return steps.get(stepsIndex);
-
-    } else {
-      return "";
-    }
-  }
-
-  public void addNewStep(String step) {
-    steps.add(step);
-  }
-
-  public boolean deleteStep(int stepNumber) {
-
-    // Set the index in the steps array which will be deleted.
-    int stepsIndex = stepNumber - 1;
-
-    // Delete the step if it exists and return true.
-    if (steps.size() < stepNumber) {
-      steps.remove(stepsIndex);
-      return true;
-
-    // Otherwise do nothing and return false.
-    } else {
-      return false;
-    }
-  }
-
-  public boolean replaceStep(int stepNumber, String newStep) {
-
-    // Set the index in the steps array which will be replaced.
-    int stepsIndex = stepNumber - 1;
-
-    // Replace the step if it exists
-    if (steps.size() < stepNumber) {
-      steps.set(stepsIndex, newStep);
-      return true;
-
-    // Otherwise do nothing and return false.
-    } else {
-      return false;
-    }
-  }
-
-
-  // - - - - - - - - - - - - - - - Other ingredient methods - - - - - - - - - - - - - - -
-
-  public void addIngredient(RecipeIngredientHolder recipeIngredientHolder) {
-    recipeIngredients.add(recipeIngredientHolder);
+  public List<IngredientHolder> getIngredientHolders() {
+    return ingredientHolders;
   }
 
 }

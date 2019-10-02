@@ -2,8 +2,8 @@ package com.gerardbradshaw.mater.helpers;
 
 import android.app.Application;
 
+import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.MaterRepository;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
@@ -68,6 +68,7 @@ public class MaterApplication extends Application {
     // Set the title and description of the recipe
     recipe.setTitle("Vegan Lasagne");
     recipe.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
+    recipe.setServings(8);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -86,8 +87,8 @@ public class MaterApplication extends Application {
     // Add the steps to the recipe
     recipe.setSteps(steps);
 
-    // Create a RecipeIngredientHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create a IngredientHolder object
+    List<IngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String beyondBurgers = "Beyond burgers";
@@ -95,38 +96,38 @@ public class MaterApplication extends Application {
     String vegenaise = "Vegenaise";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "sweet potato", 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "capsicum", 1d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "zucchini", 1d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "frozen spinach", 100d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "diced mater", 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         beyondBurgers, 4d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "merlot", 500d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         lasagneSheets, 1d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "vegan cheese slices", 18d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         vegenaise, 100d, Mass.GRAMS));
 
-    // Add the RecipeIngredients to the Recipe
-    recipe.setRecipeIngredients(ingredients);
+    // Add the Ingredients to the Recipe
+    recipe.setIngredientHolders(ingredients);
 
     // Return the recipe
     return recipe;
@@ -140,6 +141,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tikka Masala Curry");
     holder.setDescription("Tired of hot curries? Try this bad boy; not too spicy, not too weak.");
+    holder.setServings(20);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -156,8 +158,8 @@ public class MaterApplication extends Application {
     // Add the steps to the recipe
     holder.setSteps(steps);
 
-    // Create the RecipeIngredientsHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create the IngredientsHolder object
+    List<IngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String tofu = "firm tofu";
@@ -165,32 +167,32 @@ public class MaterApplication extends Application {
     String coconutMilk = "coconut milk";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "rice (dry)", 5d, Volume.AU_CUPS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         tofu, 454d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "frozen broccoli", 454d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "carrots", 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "potatoes", 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "bamboo shoots", 225d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         curryPaste, 566d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         coconutMilk, 600d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
-    holder.setRecipeIngredients(ingredients);
+    holder.setIngredientHolders(ingredients);
 
     // Return the holder
 
@@ -205,6 +207,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tofu Satay");
     holder.setDescription("Smooth, nutty, and just the right amount of fantastic.");
+    holder.setServings(12);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -221,8 +224,8 @@ public class MaterApplication extends Application {
     // Add the steps to the recipe
     holder.setSteps(steps);
 
-    // Create the RecipeIngredientsHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create the IngredientHolder object
+    List<IngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String tofu = "firm tofu";
@@ -231,38 +234,38 @@ public class MaterApplication extends Application {
     String soySauce = "soy sauce";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         tofu, 600d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "capsicum", 1d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "frozen broccoli", 454d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "bok-choy", 2d, MiscUnits.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         pasta, 320d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         peanutButter, 285d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         soySauce, 90d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "sesame oil", 60d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "lime juice", 120d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
+    ingredients.add(new IngredientHolder(
         "water", 180d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
-    holder.setRecipeIngredients(ingredients);
+    holder.setIngredientHolders(ingredients);
 
     // Return the holder
 

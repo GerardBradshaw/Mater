@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gerardbradshaw.mater">
 
@@ -27,12 +28,12 @@
 
         <!-- Add Recipe Activity -->
         <activity
-            android:name="com.gerardbradshaw.mater.activities.AddRecipeActivity"
+            android:name="com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Recipe Detail Activity -->
         <activity
-            android:name="com.gerardbradshaw.mater.activities.RecipeDetailActivity"
+            android:name="com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Main Activity -->

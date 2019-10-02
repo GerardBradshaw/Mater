@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_servings"
+        android:orderInCategory="10"
+        android:title="@string/action_servings"
+        android:icon="@drawable/ic_utensils"
+        android:iconTint="@color/textColorSecondary"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_edit"
+        android:orderInCategory="100"
+        android:title="@string/action_edit"
+        android:icon="@drawable/ic_edit"
+        android:iconTint="@color/textColorSecondary"
+        app:showAsAction="ifRoom" />
+
+</menu>
