@@ -12,16 +12,13 @@
     <!-- Step Number -->
     <TextView
         android:id="@+id/stepView_number"
-        android:layout_width="32sp"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
+        style="@style/StepNumberStyle"
         tools:text="10. " />
 
     <!-- Step -->
     <TextView
         android:id="@+id/stepView_step"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/StepDescriptionStyle"
         tools:text="Add things to the dish and cook them." />
 
 </LinearLayout>

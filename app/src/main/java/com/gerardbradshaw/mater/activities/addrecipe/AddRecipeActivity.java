@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
@@ -35,6 +36,7 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
+import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -53,21 +55,21 @@ public class AddRecipeActivity extends AppCompatActivity {
   private ImageViewModel imageViewModel;
 
   private ProgressBar progressBar;
-  private ScrollView contentScrollView;
+  private NestedScrollView contentScrollView;
   private EditText titleInput;
   private EditText descriptionInput;
   private EditText servingsInput;
   private TextView imageNameView;
-  private Toolbar toolbar;
   private Bitmap image;
 
-  private List<StepInputViewHolder> stepViewHolders = new ArrayList<>();
+  private List<String> stepHolders = new ArrayList<>();
   private List<IngredientHolder> ingredientHolders = new ArrayList<>();
 
   private AddIngredientListAdapter ingredientListAdapter;
+  private AddStepListAdapter stepListAdapter;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
-  private static final String LOG_TAG = "AddRecipeActivity";
+  private static final String LOG_TAG = "GGG - AddRecipeActivity";
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -86,19 +88,62 @@ public class AddRecipeActivity extends AppCompatActivity {
     descriptionInput = findViewById(R.id.addRecipe_descriptionInput);
     servingsInput = findViewById(R.id.addRecipe_servingsInput);
     imageNameView = findViewById(R.id.addRecipe_imageNameTextView);
-    toolbar = findViewById(R.id.addRecipe_toolbar);
 
-    // Set up the Toolbar
-    toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
-    setSupportActionBar(toolbar);
+    // Set up Toolbar
+    Toolbar toolbar = findViewById(R.id.addRecipe_toolbar);
 
-    // Set up Item RecyclerView
+    // Set up Ingredient RecyclerView
     ingredientListAdapter = new AddIngredientListAdapter(this);
     ingredientListAdapter.setData(ingredientHolders);
-    RecyclerView recyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
-    recyclerView.setAdapter(ingredientListAdapter);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    RecyclerView ingredientRecyclerView = findViewById(R.id.addRecipe_ingredientRecyclerView);
+    ingredientRecyclerView.setAdapter(ingredientListAdapter);
+    ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     addIngredientToRecycler();
+
+    // Set up Step RecyclerView
+    stepListAdapter = new AddStepListAdapter(this);
+    stepListAdapter.setData(stepHolders);
+    RecyclerView stepRecyclerView = findViewById(R.id.addRecipe_stepRecyclerView);
+    stepRecyclerView.setAdapter(stepListAdapter);
+    stepRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    addStepToRecycler();
+
+    // Pre-fill data if loading from existing recipe
+    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
+    if (recipeId != 0) {
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader_edit));
+      setSupportActionBar(toolbar);
+      loadExistingRecipe(recipeId);
+
+    } else {
+      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      setSupportActionBar(toolbar);
+    }
+
+    // Listen for edited ingredient names
+    ingredientListAdapter.setNameEditedListener(
+        new AddIngredientListAdapter.NameEditedListener() {
+      @Override
+      public void onNameEdited(int position, String newName) {
+        ingredientHolders.get(position).setName(newName);
+      }
+    });
+
+    // Listen for edited ingredient amounts
+    ingredientListAdapter.setAmountEditedListener(
+        new AddIngredientListAdapter.AmountEditedListener() {
+      @Override
+      public void onAmountEdited(int position, double amount) {
+        ingredientHolders.get(position).setAmount(amount);
+      }
+    });
+
+    stepListAdapter.setStepEditedListener(new AddStepListAdapter.StepEditedListener() {
+      @Override
+      public void onDescriptionEdited(int position, String newDescription) {
+        stepHolders.set(position, newDescription);
+      }
+    });
 
     // Set listener for selectImageButton
     Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
@@ -123,7 +168,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     addStepButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        addStepToView();
+        addStepToRecycler();
       }
     });
 
@@ -144,13 +189,6 @@ public class AddRecipeActivity extends AppCompatActivity {
         showCancelDialog();
       }
     });
-
-    // Pre-fill data if loading from existing recipe
-    int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
-    if (recipeId != 0) {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
-      loadExistingRecipe(recipeId);
-    }
   }
 
   @Override
@@ -194,87 +232,74 @@ public class AddRecipeActivity extends AppCompatActivity {
     ingredientListAdapter.notifyDataSetChanged();
   }
 
-  private void addStepToView() {
-
-    // Instantiate a LayoutInflater
-    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-    // Get the insert point
-    ViewGroup insertPoint = findViewById(R.id.addRecipe_addStepLayout);
-
-    // Inflate the view
-    LinearLayout addStepView =
-        (LinearLayout) inflater.inflate(R.layout.step_input, insertPoint, false);
-
-    // Get the children of the View
-    TextView number = (TextView) addStepView.getChildAt(0);
-    EditText step = (EditText) addStepView.getChildAt(1);
-
-    // Get the numberOfSteps of the view and the index
-    int numberOfSteps = stepViewHolders.size();
-    String numberOfStepsString;
-
-    if(numberOfSteps < 1) {
-      numberOfStepsString = "1. ";
-
-    } else {
-      int stepNumber = numberOfSteps + 1;
-      numberOfStepsString = stepNumber + ". ";
-    }
-
-    // Set the text of the step number
-    number.setText(numberOfStepsString);
-
-    // Save the new EditText to the list
-    stepViewHolders.add(new StepInputViewHolder(number, step));
-
-    // Insert the view into the main view
-    insertPoint.addView(addStepView, numberOfSteps, new ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-
+  private void addStepToRecycler() {
+    stepHolders.add("");
+    stepListAdapter.notifyDataSetChanged();
   }
 
   private void saveRecipeToRepository() {
-
     // Create setup fields
     boolean allFieldsOk = true;
     int hintColor = getResources().getColor(R.color.colorPrimary);
 
-    // Check the title
-    if(titleInput.getText().toString().isEmpty()) {
+    // Check title
+    if (titleInput.getText().toString().isEmpty()) {
+      showToast("Please add a title.");
       titleInput.setHintTextColor(hintColor);
       allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because of title");
     }
 
-    // Check the description
+    // Check servings
+    if (servingsInput.getText().toString().isEmpty()) {
+      showToast("Please add the number of servings.");
+      servingsInput.setHintTextColor(hintColor);
+      allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because of servings");
+    }
+
+    // Check description
     if(descriptionInput.getText().toString().isEmpty()) {
+      showToast("Please add a description.");
       descriptionInput.setHintTextColor(hintColor);
       allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because of description");
+
     }
 
-    // Check the ingredients
+    // Check ingredients
     for(IngredientHolder holder : ingredientHolders) {
 
       if(holder.getName().isEmpty()) {
-        // TODO make the name red (setHintTextColor(hintColor))
+        showToast("Please add names for each ingredient.");
         allFieldsOk = false;
+        Log.d(LOG_TAG, "Cannot save because of an ingredient name");
       }
 
       if(holder.getAmount() == 0) {
-        // TODO make the hint red
+        showToast("Please add amounts for each ingredient.");
         allFieldsOk = false;
+        Log.d(LOG_TAG, "Cannot save because of an ingredient amount");
       }
 
       // TODO add checker for spinner
     }
 
     // Check the steps
-    for(StepInputViewHolder holder : stepViewHolders) {
-      if(holder.getStep().getText().toString().isEmpty()) {
-        holder.getStep().setHintTextColor(hintColor);
-        allFieldsOk = false;
+    if (stepHolders.isEmpty()
+        || (stepHolders.get(0).isEmpty() && stepHolders.size() == 1)) {
+      showToast("Please add at least 1 step");
+      allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because there are no steps");
+
+    } else {
+
+      for (int i = 0; i < stepHolders.size(); i++) {
+        if (stepHolders.get(i).isEmpty()) {
+          stepHolders.remove(i);
+          i--;
+          Log.d(LOG_TAG, "Blank step removed");
+        }
       }
     }
 
@@ -284,31 +309,22 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Create a RecipeHolder object
       RecipeHolder recipe = new RecipeHolder();
 
-      // Set up lists for steps and ingredients
-      List<IngredientHolder> ingredients = new ArrayList<>();
-      List<String> steps = new ArrayList<>();
-
-      // Get the ingredients info from each ViewHolder and add them to the list
+      // Clean up each IngredientHolder in the Activity
       for(IngredientHolder holder : ingredientHolders) {
-        ingredients.add(new IngredientHolder(
-            holder.getName(),
-            holder.getAmount(),
-            MiscUnits.NO_UNIT));
+        // TODO implement retrieval from spinner
 
-        // TODO implement spinner
-      }
-
-      // Get the steps from each ViewHolder and add them to the list
-      for(StepInputViewHolder holder : stepViewHolders) {
-        steps.add(holder.getStep().getText().toString());
+        if (holder.getUnit().isEmpty()) {
+          holder.setUnit(MiscUnits.NO_UNIT.name());
+        }
       }
 
       // Add everything to the recipe
       recipe.setTitle(titleInput.getText().toString());
       recipe.setDescription(descriptionInput.getText().toString());
+      recipe.setServings(Integer.parseInt(servingsInput.getText().toString()));
       recipe.setImageDirectory(imageNameView.getText().toString());
-      recipe.setIngredientHolders(ingredients);
-      recipe.setSteps(steps);
+      recipe.setIngredientHolders(ingredientHolders);
+      recipe.setSteps(stepHolders);
 
       // Save the recipe to the database
       detailViewModel.insertRecipeHolder(recipe);
@@ -318,14 +334,8 @@ public class AddRecipeActivity extends AppCompatActivity {
         imageViewModel.saveImage(recipe.getTitle(), image);
       }
 
+      // End the activity
       finish();
-
-      // TODO add a ProgressBar
-
-    } else {
-      Toast
-          .makeText(this, "Please complete indicated fields", Toast.LENGTH_SHORT)
-          .show();
     }
   }
 
@@ -358,7 +368,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Start AsyncTask to load RecipeHolder for recipe
     new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput, descriptionInput,
-        imageNameView, ingredientListAdapter, ingredientHolders).execute(recipeId);
+        imageNameView, ingredientListAdapter, stepListAdapter).execute(recipeId);
 
   }
 
@@ -407,6 +417,10 @@ public class AddRecipeActivity extends AppCompatActivity {
     return result;
   }
 
+  private void showToast(String message) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+  }
+
 
   // - - - - - - - - - - - - - - - Load Recipe AsyncTask - - - - - - - - - - - - - - -
 
@@ -414,24 +428,24 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     // Member variables
     private ProgressBar progressBar;
-    private ScrollView contentScrollView;
+    private NestedScrollView contentScrollView;
     private EditText titleInput;
     private EditText servingsInput;
     private EditText descriptionInput;
     private TextView imageNameView;
     private AddIngredientListAdapter addIngredientListAdapter;
-    private List<IngredientHolder> ingredientHolders;
+    private AddStepListAdapter addStepListAdapter;
 
 
     // Constructor
     LoadRecipeAsyncTask(ProgressBar progressBar,
-                        ScrollView contentScrollView,
+                        NestedScrollView contentScrollView,
                         EditText titleInput,
                         EditText servingsInput,
                         EditText descriptionInput,
                         TextView imageNameView,
                         AddIngredientListAdapter addIngredientListAdapter,
-                        List<IngredientHolder> ingredientHolders) {
+                        AddStepListAdapter addStepListAdapter) {
       this.progressBar = progressBar;
       this.contentScrollView = contentScrollView;
       this.titleInput = titleInput;
@@ -439,12 +453,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       this.descriptionInput = descriptionInput;
       this.imageNameView = imageNameView;
       this.addIngredientListAdapter = addIngredientListAdapter;
-      this.ingredientHolders = ingredientHolders;
+      this.addStepListAdapter = addStepListAdapter;
     }
 
+
     // AsyncTask methods
-
-
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
@@ -463,17 +476,21 @@ public class AddRecipeActivity extends AppCompatActivity {
     protected void onPostExecute(RecipeHolder recipeHolder) {
       super.onPostExecute(recipeHolder);
 
+      // Update Views
       titleInput.setText(recipeHolder.getTitle());
       servingsInput.setText(Integer.toString(recipeHolder.getServings()));
       descriptionInput.setText(recipeHolder.getDescription());
       imageNameView.setText(recipeHolder.getImageDirectory());
-      ingredientHolders = recipeHolder.getIngredientHolders();
-      addIngredientListAdapter.setData(ingredientHolders);
+      addIngredientListAdapter.setData(recipeHolder.getIngredientHolders());
+      addStepListAdapter.setData(recipeHolder.getSteps());
 
+      // Update Activity variables
+      AddRecipeActivity.this.ingredientHolders = recipeHolder.getIngredientHolders();
+      AddRecipeActivity.this.stepHolders = recipeHolder.getSteps();
+
+      // Update UI
       progressBar.setVisibility(View.GONE);
       contentScrollView.setVisibility(View.VISIBLE);
-
     }
   }
-
 }

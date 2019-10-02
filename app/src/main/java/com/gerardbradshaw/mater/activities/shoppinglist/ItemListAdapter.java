@@ -18,20 +18,20 @@ import com.gerardbradshaw.mater.room.entities.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShoppingListAdapter
-    extends RecyclerView.Adapter<ShoppingListAdapter.IngredientViewHolder> {
+public class ItemListAdapter
+    extends RecyclerView.Adapter<ItemListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
   private List<Item> itemList = new ArrayList<>();
-  private static String LOG_TAG = "GGG - ShoppingListAdapter";
+  private static String LOG_TAG = "GGG - ItemListAdapter";
   private StockChangedListener stockChangedListener;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public ShoppingListAdapter(Context context) {
+  public ItemListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
   }
 
@@ -85,20 +85,15 @@ public class ShoppingListAdapter
 
       @Override
       public void afterTextChanged(Editable editable) {
-        // Get the new input and save it to the current ingredient
-        int stockLevel = 0;
-        String input = editable.toString();
+        int newStockLevel = 0;
 
-        if (!input.equals("")) {
-          stockLevel = Integer.parseInt(input);
+        if (!editable.toString().isEmpty()) {
+          newStockLevel = Integer.parseInt(editable.toString());
         }
-
-        itemList.get(position).setStockLevel(stockLevel);
 
         if (stockChangedListener != null) {
-          stockChangedListener.onStockLevelChanged(position, itemList.get(position));
+          stockChangedListener.onStockLevelChanged(position, newStockLevel);
         }
-
       }
     });
 
@@ -120,7 +115,7 @@ public class ShoppingListAdapter
     }
   }
 
-  public void setIngredientStockList(List<Item> itemList) {
+  public void setData(List<Item> itemList) {
     this.itemList = itemList;
     notifyDataSetChanged();
   }
@@ -136,9 +131,9 @@ public class ShoppingListAdapter
 
     final EditText stockInput;
     final TextView textView;
-    final ShoppingListAdapter adapter;
+    final ItemListAdapter adapter;
 
-    public IngredientViewHolder(@NonNull View itemView, ShoppingListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, ItemListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
@@ -149,6 +144,6 @@ public class ShoppingListAdapter
   }
 
   public interface StockChangedListener {
-    void onStockLevelChanged(int position, Item item);
+    void onStockLevelChanged(int position, int newStockLevel);
   }
 }

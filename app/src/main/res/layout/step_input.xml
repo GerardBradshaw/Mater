@@ -19,10 +19,11 @@
 
     <!-- Step Input -->
     <EditText
-        android:id="@+id/stepInput_step"
+        android:id="@+id/stepInput_description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/addRecipe_addStep_stepInput_hint"
-        android:inputType="text" />
+        android:inputType="textMultiLine"
+        android:maxLength="160"/>
 
 </LinearLayout>

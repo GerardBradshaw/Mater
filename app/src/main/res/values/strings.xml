@@ -35,7 +35,7 @@
     <string name="addRecipe_addIngredient_nameInput_hint">Ingredient name…</string>
     <string name="addRecipe_addIngredient_amountInput_hint">Amount</string>
     <string name="addRecipe_addStep_stepInput_hint">Describe the step…</string>
-    <string name="addRecipe_servingsInput_hint">Servings…</string>
+    <string name="addRecipe_servingsInput_hint">0</string>
     <!-- Alert Dialogs -->
     <string name="discard_changes">Discard changes?</string>
 
