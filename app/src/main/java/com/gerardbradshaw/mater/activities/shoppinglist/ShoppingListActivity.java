@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.gerardbradshaw.mater.R;
@@ -22,6 +23,9 @@ import java.util.List;
 public class ShoppingListActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
+
+  private ProgressBar progressBar;
+  private LinearLayout contentView;
 
   private ItemViewModel itemViewModel;
   private ItemListAdapter itemListAdapter;
@@ -36,10 +40,15 @@ public class ShoppingListActivity extends AppCompatActivity {
     setContentView(R.layout.activity_shopping_list);
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
     recyclerView = findViewById(R.id.shoppingList_recycler);
+    progressBar = findViewById(R.id.shoppingList_progressBar);
+    contentView = findViewById(R.id.shoppingList_contentLinearLayout);
+
+    // Set views
+    progressBar.setVisibility(View.VISIBLE);
+    contentView.setVisibility(View.GONE);
 
     // Set up itemListAdapter
     itemListAdapter = new ItemListAdapter(this);
-
     itemListAdapter.setStockChangedListener(new ItemListAdapter.StockChangedListener() {
       @Override
       public void onStockLevelChanged(int position, Item item) {
@@ -48,7 +57,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       }
     });
 
-    //new LoadItemsAsyncTask()
+    new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
 
     // Set up RecyclerView
     recyclerView.setAdapter(itemListAdapter);
@@ -79,16 +88,16 @@ public class ShoppingListActivity extends AppCompatActivity {
     // Member variables
     private List<Item> itemList;
     private ProgressBar progressBar;
-    private NestedScrollView contentScrollView;
+    private LinearLayout contentView;
     private ItemListAdapter itemListAdapter;
 
 
     // Constructor
     LoadItemsAsyncTask(ProgressBar progressBar,
-                       NestedScrollView contentScrollView,
+                       LinearLayout contentView,
                        ItemListAdapter itemListAdapter) {
       this.progressBar = progressBar;
-      this.contentScrollView = contentScrollView;
+      this.contentView = contentView;
       this.itemListAdapter = itemListAdapter;
     }
 
@@ -109,7 +118,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
       // Update UI
       progressBar.setVisibility(View.GONE);
-      contentScrollView.setVisibility(View.VISIBLE);
+      contentView.setVisibility(View.VISIBLE);
 
       // Save data to Activity
       ShoppingListActivity.this.itemList = itemList;
