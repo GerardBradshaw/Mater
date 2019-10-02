@@ -436,6 +436,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     private AddIngredientListAdapter addIngredientListAdapter;
     private AddStepListAdapter addStepListAdapter;
 
+
     // Constructor
     LoadRecipeAsyncTask(ProgressBar progressBar,
                         NestedScrollView contentScrollView,
@@ -455,9 +456,8 @@ public class AddRecipeActivity extends AppCompatActivity {
       this.addStepListAdapter = addStepListAdapter;
     }
 
+
     // AsyncTask methods
-
-
     @Override
     protected void onPreExecute() {
       super.onPreExecute();

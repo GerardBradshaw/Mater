@@ -1,12 +1,16 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.room.entities.Item;
@@ -20,7 +24,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private ItemViewModel itemViewModel;
-  private ShoppingListAdapter shoppingListAdapter;
+  private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
   private List<Item> itemList = new ArrayList<>();
 
@@ -33,10 +37,10 @@ public class ShoppingListActivity extends AppCompatActivity {
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
     recyclerView = findViewById(R.id.shoppingList_recycler);
 
-    // Set up shoppingListAdapter
-    shoppingListAdapter = new ShoppingListAdapter(this);
+    // Set up itemListAdapter
+    itemListAdapter = new ItemListAdapter(this);
 
-    shoppingListAdapter.setStockChangedListener(new ShoppingListAdapter.StockChangedListener() {
+    itemListAdapter.setStockChangedListener(new ItemListAdapter.StockChangedListener() {
       @Override
       public void onStockLevelChanged(int position, Item item) {
         // Get the new item level and save it to the activity
@@ -45,7 +49,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     });
 
     // Set up RecyclerView
-    recyclerView.setAdapter(shoppingListAdapter);
+    recyclerView.setAdapter(itemListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Observe the LiveData
@@ -53,7 +57,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       @Override
       public void onChanged(List<Item> items) {
         itemList = items;
-        shoppingListAdapter.setIngredientStockList(itemList);
+        itemListAdapter.setData(itemList);
       }
     });
 
@@ -63,5 +67,50 @@ public class ShoppingListActivity extends AppCompatActivity {
   protected void onPause() {
     super.onPause();
     itemViewModel.addItem(itemList);
+  }
+
+
+  // - - - - - - - - - - - - - - - Load Items AsyncTask - - - - - - - - - - - - - - -
+
+  private class LoadItemsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    // Member variables
+    private List<Item> itemList;
+    private ProgressBar progressBar;
+    private NestedScrollView contentScrollView;
+    private ItemListAdapter itemListAdapter;
+
+
+    // Constructor
+    LoadItemsAsyncTask(ProgressBar progressBar,
+                       NestedScrollView contentScrollView,
+                       ItemListAdapter itemListAdapter) {
+      this.progressBar = progressBar;
+      this.contentScrollView = contentScrollView;
+      this.itemListAdapter = itemListAdapter;
+    }
+
+
+    // AsyncTask Methods
+    @Override
+    protected Void doInBackground(Void... voids) {
+      itemList = itemViewModel.getAllItems();
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+
+      // Update adapter
+      itemListAdapter.setData(itemList);
+
+      // Update UI
+      progressBar.setVisibility(View.GONE);
+      contentScrollView.setVisibility(View.VISIBLE);
+
+      // Save data to Activity
+      ShoppingListActivity.this.itemList = itemList;
+    }
   }
 }
