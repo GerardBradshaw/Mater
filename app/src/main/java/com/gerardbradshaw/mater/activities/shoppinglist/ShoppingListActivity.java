@@ -48,6 +48,8 @@ public class ShoppingListActivity extends AppCompatActivity {
       }
     });
 
+    //new LoadItemsAsyncTask()
+
     // Set up RecyclerView
     recyclerView.setAdapter(itemListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
