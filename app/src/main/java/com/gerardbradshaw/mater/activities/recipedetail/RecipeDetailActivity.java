@@ -181,8 +181,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     LayoutInflater inflater = (LayoutInflater) getApplicationContext()
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    // Get the insert point
+    // Get the insert point and clear it
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_stepsLayout);
+    insertPoint.removeAllViews();
 
     for (Step step : steps) {
       String description = step.getDescription();

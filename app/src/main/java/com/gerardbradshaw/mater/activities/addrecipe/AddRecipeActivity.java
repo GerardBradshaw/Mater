@@ -69,7 +69,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private AddStepListAdapter stepListAdapter;
 
   private static final int REQUEST_IMAGE_IMPORT = 1;
-  private static final String LOG_TAG = "AddRecipeActivity";
+  private static final String LOG_TAG = "GGG - AddRecipeActivity";
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -293,9 +293,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       Log.d(LOG_TAG, "Cannot save because there are no steps");
 
     } else {
+
       for (int i = 0; i < stepHolders.size(); i++) {
         if (stepHolders.get(i).isEmpty()) {
           stepHolders.remove(i);
+          i--;
           Log.d(LOG_TAG, "Blank step removed");
         }
       }
