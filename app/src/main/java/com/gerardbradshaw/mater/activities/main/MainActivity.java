@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;

@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.MaterRepository;
-import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.room.entities.Item;
 
 import java.util.List;
 
@@ -32,20 +32,20 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
 
-  public LiveData<List<Ingredient>> getLiveAllIngredients() {
+  public LiveData<List<Item>> getLiveAllIngredients() {
     return repository.getLiveAllIngredients();
   }
 
-  public void addIngredient(Ingredient... ingredients) {
-    repository.addIngredient(ingredients);
+  public void addIngredient(Item... items) {
+    repository.addItem(items);
   }
 
-  public void addIngredient(List<Ingredient> ingredients) {
-    repository.addIngredient(ingredients);
+  public void addIngredient(List<Item> items) {
+    repository.addItem(items);
   }
 
-  public Ingredient getIngredient(int ingredientId) {
-    return repository.getIngredient(ingredientId);
+  public Item getIngredient(int ingredientId) {
+    return repository.getItem(ingredientId);
   }
 
 }

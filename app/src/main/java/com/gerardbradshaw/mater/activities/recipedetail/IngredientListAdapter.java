@@ -1,8 +1,6 @@
 package com.gerardbradshaw.mater.activities.recipedetail;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
-import com.gerardbradshaw.mater.room.entities.Summary;
+import com.gerardbradshaw.mater.pojos.IngredientHolder;
 
 import java.util.List;
 
@@ -27,7 +22,7 @@ public class IngredientListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<RecipeIngredientHolder> recipeIngredientHolders; // Cached copy
+  private List<IngredientHolder> ingredientHolders; // Cached copy
   private Context context;
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
@@ -66,10 +61,10 @@ public class IngredientListAdapter
    */
   @Override
   public void onBindViewHolder(@NonNull IngredientViewHolder viewHolder, int position) {
-    if (recipeIngredientHolders != null) {
+    if (ingredientHolders != null) {
       viewHolder.checkBox.setVisibility(View.VISIBLE);
 
-      RecipeIngredientHolder holder = recipeIngredientHolders.get(position);
+      IngredientHolder holder = ingredientHolders.get(position);
       String name = holder.getName();
       String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
 
@@ -92,8 +87,8 @@ public class IngredientListAdapter
    */
   @Override
   public int getItemCount() {
-    if(recipeIngredientHolders != null) {
-      return recipeIngredientHolders.size();
+    if(ingredientHolders != null) {
+      return ingredientHolders.size();
 
     } else {
       return 0;
@@ -103,13 +98,13 @@ public class IngredientListAdapter
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setRecipeIngredientList(List<RecipeIngredientHolder> recipeIngredientHolders) {
-    this.recipeIngredientHolders = recipeIngredientHolders;
+  public void setIngredientList(List<IngredientHolder> ingredientHolders) {
+    this.ingredientHolders = ingredientHolders;
     notifyDataSetChanged();
   }
 
-  public RecipeIngredientHolder getRecipeIngredientHolderIdAtPosition(int position) {
-    return recipeIngredientHolders.get(position);
+  public IngredientHolder getIngredientHolderIdAtPosition(int position) {
+    return ingredientHolders.get(position);
   }
 
 

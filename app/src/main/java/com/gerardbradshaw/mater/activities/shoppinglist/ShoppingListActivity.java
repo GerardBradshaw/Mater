@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
   private ShoppingListAdapter shoppingListAdapter;
   private RecyclerView recyclerView;
-  private List<Ingredient> ingredientList = new ArrayList<>();
+  private List<Item> itemList = new ArrayList<>();
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -38,9 +38,9 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     shoppingListAdapter.setStockChangedListener(new ShoppingListAdapter.StockChangedListener() {
       @Override
-      public void onStockLevelChanged(int position, Ingredient ingredient) {
-        // Get the new ingredient level and save it to the activity
-        ingredientList.add(position, ingredient);
+      public void onStockLevelChanged(int position, Item item) {
+        // Get the new item level and save it to the activity
+        itemList.add(position, item);
       }
     });
 
@@ -49,11 +49,11 @@ public class ShoppingListActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Observe the LiveData
-    ingredientViewModel.getLiveAllIngredients().observe(this, new Observer<List<Ingredient>>() {
+    ingredientViewModel.getLiveAllIngredients().observe(this, new Observer<List<Item>>() {
       @Override
-      public void onChanged(List<Ingredient> ingredients) {
-        ingredientList = ingredients;
-        shoppingListAdapter.setIngredientStockList(ingredientList);
+      public void onChanged(List<Item> items) {
+        itemList = items;
+        shoppingListAdapter.setIngredientStockList(itemList);
       }
     });
 
@@ -62,6 +62,6 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    ingredientViewModel.addIngredient(ingredientList);
+    ingredientViewModel.addIngredient(itemList);
   }
 }

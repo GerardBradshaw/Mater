@@ -43,6 +43,7 @@ public class AsyncTaskScheduler {
   }
 
   public void setTaskFinished() {
+    Log.d(LOG_TAG, "Ready for next task");
     taskRunning = false;
     executeNextTask();
   }

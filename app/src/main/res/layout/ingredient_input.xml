@@ -7,9 +7,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".activities.AddRecipeActivity">
+    tools:context=".activities.addrecipe.AddRecipeActivity">
 
-    <!-- Ingredient Name Input -->
+    <!-- Item Name Input -->
     <EditText
         android:id="@+id/ingredientInput_nameInput"
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:maxLength="50"
         android:inputType="text" />
 
-    <!-- Ingredient Amount Input -->
+    <!-- Item Amount Input -->
     <EditText
         android:id="@+id/ingredientInput_amountInput"
         android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
         android:inputType="numberDecimal"
         android:textColor="@color/textColorPrimary" />
 
-    <!-- Ingredient Units Spinner -->
+    <!-- Item Units Spinner -->
     <Spinner
         android:id="@+id/ingredientInput_unitSpinner"
         android:layout_width="wrap_content"
