@@ -114,7 +114,6 @@ public class AddRecipeActivity extends AppCompatActivity {
       toolbar.setTitle(getString(R.string.addRecipe_pageHeader_edit));
       setSupportActionBar(toolbar);
       loadExistingRecipe(recipeId);
-
     } else {
       toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
       setSupportActionBar(toolbar);
@@ -367,8 +366,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void loadExistingRecipe(int recipeId) {
 
     // Start AsyncTask to load RecipeHolder for recipe
-    new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput, descriptionInput,
-        imageNameView, ingredientListAdapter, stepListAdapter).execute(recipeId);
+    new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput,
+        descriptionInput, imageNameView, ingredientListAdapter, stepListAdapter).execute(recipeId);
 
   }
 
