@@ -375,20 +375,13 @@ public class AddRecipeActivity extends AppCompatActivity {
     try {
       // Use the MediaStore to load the imageName.
       Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-
       if (image != null) {
-
         this.image = image;
-        // Tell the presenter to import this imageName.
-        // TODO the imageName has been imported as a bitmap.
-        //  Add the imageName to the database using the repo.
-        //mPresenter.onImportImage(imageName);
-
       }
+
     } catch (IOException e) {
       e.printStackTrace();
-      Log.e(LOG_TAG, "Error: " + e.getMessage() + "Could not open URI: "
-          + uri.toString());
+      Log.e(LOG_TAG, "Error: " + e.getMessage() + "Could not open URI: " + uri.toString());
     }
   }
 

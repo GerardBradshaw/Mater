@@ -88,7 +88,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     // Get intent info
     recipeId = getIntent().getIntExtra(MainActivity.EXTRA_RECIPE_ID, 0);
     context = this;
-
+    
     // Observe title
     detailViewModel.getLiveTitle(recipeId).observe(this, new Observer<String>() {
       @Override
