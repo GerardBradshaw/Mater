@@ -63,12 +63,13 @@ public class MaterApplication extends Application {
   private RecipeHolder createLasagneRecipeHolder() {
 
     // Create a new RecipeHolder object
-    RecipeHolder recipe = new RecipeHolder();
+    RecipeHolder holder = new RecipeHolder();
 
-    // Set the title and description of the recipe
-    recipe.setTitle("Vegan Lasagne");
-    recipe.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
-    recipe.setServings(8);
+    // Set the title and description of the holder
+    holder.setTitle("Vegan Lasagne");
+    holder.setDescription("A delicious comfort food that will leave you thinking \"I can't believe I just ate a whole lasagne\".");
+    holder.setImageDirectory("Default image");
+    holder.setServings(8);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -84,8 +85,8 @@ public class MaterApplication extends Application {
     steps.add("Allow lasagne to cool for 5-10 minutes and slice into desired portion sizes.");
     steps.add("Enjoy!");
 
-    // Add the steps to the recipe
-    recipe.setSteps(steps);
+    // Add the steps to the holder
+    holder.setSteps(steps);
 
     // Create a IngredientHolder object
     List<IngredientHolder> ingredients = new ArrayList<>();
@@ -127,10 +128,10 @@ public class MaterApplication extends Application {
         vegenaise, 100d, Mass.GRAMS));
 
     // Add the Ingredients to the Recipe
-    recipe.setIngredientHolders(ingredients);
+    holder.setIngredientHolders(ingredients);
 
-    // Return the recipe
-    return recipe;
+    // Return the holder
+    return holder;
 
   }
 
@@ -141,6 +142,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tikka Masala Curry");
     holder.setDescription("Tired of hot curries? Try this bad boy; not too spicy, not too weak.");
+    holder.setImageDirectory("Default image");
     holder.setServings(20);
 
     // Create the cooking steps
@@ -207,6 +209,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tofu Satay");
     holder.setDescription("Smooth, nutty, and just the right amount of fantastic.");
+    holder.setImageDirectory("Default image");
     holder.setServings(12);
 
     // Create the cooking steps

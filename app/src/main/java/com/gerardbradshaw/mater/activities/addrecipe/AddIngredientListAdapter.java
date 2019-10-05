@@ -113,8 +113,11 @@ public class AddIngredientListAdapter
         @Override
         public void afterTextChanged(Editable editable) {
           if (amountEditedListener != null) {
-            amountEditedListener.onAmountEdited(viewHolder.getAdapterPosition(),
-                Double.parseDouble(editable.toString()));
+            double amount = 0;
+            if (!editable.toString().isEmpty()) {
+              amount = Double.parseDouble(editable.toString());
+            }
+            amountEditedListener.onAmountEdited(viewHolder.getAdapterPosition(), amount);
           }
         }
       });
