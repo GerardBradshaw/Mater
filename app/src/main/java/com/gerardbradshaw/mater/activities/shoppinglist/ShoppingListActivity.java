@@ -1,6 +1,7 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +41,11 @@ public class ShoppingListActivity extends AppCompatActivity {
     recyclerView = findViewById(R.id.shoppingList_recycler);
     progressBar = findViewById(R.id.shoppingList_progressBar);
     contentView = findViewById(R.id.shoppingList_contentLinearLayout);
+
+    // Set up ToolBar
+    Toolbar toolbar = findViewById(R.id.shoppingList_toolbar);
+    toolbar.setTitle("My Shopping List");
+    setSupportActionBar(toolbar);
 
     // Set up UI
     progressBar.setVisibility(View.VISIBLE);
