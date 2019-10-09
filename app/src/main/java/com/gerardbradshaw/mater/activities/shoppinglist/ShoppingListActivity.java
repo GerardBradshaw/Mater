@@ -106,38 +106,14 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private void buildShoppingList() {
 
-    // Create a runnable task
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
+        new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter, summaryViewModel).execute();
       }
     };
 
     taskScheduler.addNewPriorityTask(runnable);
-
-
-
-    // Get all recipe IDs
-
-    // Get all ingredients for each recipe and create recipeIngredientsList
-
-    Map<Integer, Summary> summaryMap = new HashMap<>();
-    List<Ingredient> ingredientList = new ArrayList<>();
-    Map<Integer, List<Ingredient>> ingredientRecipeMap = new HashMap<>();
-
-    for (Ingredient ingredient : ingredientList) {
-      int recipeId = ingredient.getRecipeId();
-
-      if (summaryMap.containsKey(recipeId)) {
-        ingredientRecipeMap.get(recipeId).add(ingredient);
-
-      } else {
-        ArrayList<Ingredient> newIngredientList = new ArrayList<>();
-        newIngredientList.add(ingredient);
-        ingredientRecipeMap.put(recipeId, newIngredientList);
-      }
-    }
   }
 
 
@@ -151,27 +127,69 @@ public class ShoppingListActivity extends AppCompatActivity {
     private LinearLayout contentView;
     private ItemListAdapter itemListAdapter;
 
+    private SummaryViewModel summaryViewModel;
+    private DetailViewModel detailViewModel;
+
 
     // Constructor
     LoadItemsAsyncTask(ProgressBar progressBar,
                        LinearLayout contentView,
-                       ItemListAdapter itemListAdapter) {
+                       ItemListAdapter itemListAdapter,
+                       SummaryViewModel summaryViewModel) {
       this.progressBar = progressBar;
       this.contentView = contentView;
       this.itemListAdapter = itemListAdapter;
+      this.summaryViewModel = summaryViewModel;
     }
 
 
     // AsyncTask Methods
     @Override
     protected Void doInBackground(Void... voids) {
+
+
       itemList = itemViewModel.getAllItems();
+
+      // Get all summaries
+      List<Summary> summaryList = summaryViewModel.getAllSummaries();
+
+      // Get the ingredients for each summary
+      for (Summary summary : summaryList) {
+
+        int recipeId = summary.getRecipeId();
+        //List<Ingredient> ingredientList =
+
+      }
+
+
+      // Get all ingredients for each recipe and create recipeIngredientsList
+
+      Map<Integer, Summary> summaryMap = new HashMap<>();
+      List<Ingredient> ingredientList = new ArrayList<>();
+      Map<Integer, List<Ingredient>> ingredientRecipeMap = new HashMap<>();
+
+      for (Ingredient ingredient : ingredientList) {
+        int recipeId = ingredient.getRecipeId();
+
+        if (summaryMap.containsKey(recipeId)) {
+          ingredientRecipeMap.get(recipeId).add(ingredient);
+
+        } else {
+          ArrayList<Ingredient> newIngredientList = new ArrayList<>();
+          newIngredientList.add(ingredient);
+          ingredientRecipeMap.put(recipeId, newIngredientList);
+        }
+      }
+
+
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
+
+      taskScheduler.setTaskFinished();
 
       // Update adapter
       itemListAdapter.setData(itemList);
