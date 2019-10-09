@@ -40,7 +40,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private LinearLayout contentView;
 
   private ItemViewModel itemViewModel;
-  private DetailViewModel detailViewModel;
+  private SummaryViewModel summaryViewModel;
   private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
 
@@ -57,7 +57,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     setContentView(R.layout.activity_shopping_list);
 
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
-    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
 
     recyclerView = findViewById(R.id.shoppingList_recycler);
     progressBar = findViewById(R.id.shoppingList_progressBar);
@@ -99,6 +99,16 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private void buildShoppingList() {
 
+    // Create a runnable task
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
+      }
+    };
+
+
+
     // Get all recipe IDs
 
     // Get all ingredients for each recipe and create recipeIngredientsList
@@ -122,7 +132,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   }
 
 
-  // - - - - - - - - - - - - - - - Load Items AsyncTask - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - AsyncTasks - - - - - - - - - - - - - - -
 
   private class LoadItemsAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -165,4 +175,5 @@ public class ShoppingListActivity extends AppCompatActivity {
       ShoppingListActivity.this.itemList = itemList;
     }
   }
+
 }
