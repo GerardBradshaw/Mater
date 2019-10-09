@@ -82,26 +82,65 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private void buildShoppingList() {
 
-    Runnable runnable = new Runnable() {
+    // Load the data from the database
+    Runnable pairsRunnable = new Runnable() {
       @Override
       public void run() {
-        new LoadTitleIngredientPairs(progressBar, contentView, itemListAdapter,
-            summaryViewModel, ingredientViewModel).execute();
+        new LoadTitleIngredientPairsAsyncTask(summaryViewModel, ingredientViewModel).execute();
       }
     };
-    taskScheduler.addNewPriorityTask(runnable);
+    taskScheduler.addNewPriorityTask(pairsRunnable);
+
+    // Set up the RecyclerViews
+    Runnable recyclerRunnable = new Runnable() {
+      @Override
+      public void run() {
+        new SetUpRecyclerViewsAsyncTask(progressBar, contentView, itemListAdapter).execute();
+      }
+    };
+    taskScheduler.addNewPriorityTask(recyclerRunnable);
   }
 
 
   // - - - - - - - - - - - - - - - AsyncTasks - - - - - - - - - - - - - - -
 
-  private class LoadTitleIngredientPairs extends AsyncTask<Void, Void, Void> {
+  private class SetUpRecyclerViewsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     // Member variables
     private ProgressBar progressBar;
     private LinearLayout contentView;
     private ItemListAdapter itemListAdapter;
 
+
+    // Constructor
+    SetUpRecyclerViewsAsyncTask(ProgressBar progressBar,
+                                LinearLayout contentView,
+                                ItemListAdapter itemListAdapter) {
+      this.progressBar = progressBar;
+      this.contentView = contentView;
+      this.itemListAdapter = itemListAdapter;
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+      taskScheduler.setTaskFinished();
+
+      progressBar.setVisibility(View.GONE);
+      contentView.setVisibility(View.VISIBLE);
+
+    }
+  }
+
+
+  private class LoadTitleIngredientPairsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    // Member variables
     private SummaryViewModel summaryViewModel;
     private IngredientViewModel ingredientViewModel;
 
@@ -109,14 +148,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
 
     // Constructor
-    LoadTitleIngredientPairs(ProgressBar progressBar,
-                             LinearLayout contentView,
-                             ItemListAdapter itemListAdapter,
-                             SummaryViewModel summaryViewModel,
-                             IngredientViewModel ingredientViewModel) {
-      this.progressBar = progressBar;
-      this.contentView = contentView;
-      this.itemListAdapter = itemListAdapter;
+    LoadTitleIngredientPairsAsyncTask(SummaryViewModel summaryViewModel,
+                                      IngredientViewModel ingredientViewModel) {
       this.summaryViewModel = summaryViewModel;
       this.ingredientViewModel = ingredientViewModel;
     }
@@ -146,7 +179,6 @@ public class ShoppingListActivity extends AppCompatActivity {
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
-
       taskScheduler.setTaskFinished();
 
       // Save data to Activity
