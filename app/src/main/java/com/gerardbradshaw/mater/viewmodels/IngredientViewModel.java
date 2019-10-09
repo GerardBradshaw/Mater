@@ -27,7 +27,7 @@ public class IngredientViewModel extends AndroidViewModel {
     MaterApplication materApplication = (MaterApplication) application;
     repository = materApplication.getRepository();
   }
-  
+
   public List<Ingredient> getAllIngredients(int recipeId) {
     return repository.getIngredients(recipeId);
   }

@@ -26,6 +26,7 @@ import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
+import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 
@@ -43,6 +44,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private ItemViewModel itemViewModel;
   private SummaryViewModel summaryViewModel;
+  private IngredientViewModel ingredientViewModel;
+
   private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
 
@@ -62,6 +65,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
+    ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
 
     MaterApplication materApplication = (MaterApplication) getApplication();
     taskScheduler = materApplication.getTaskScheduler();
@@ -109,7 +113,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter, summaryViewModel).execute();
+        new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter, summaryViewModel, ingredientViewModel).execute();
       }
     };
 
@@ -128,18 +132,20 @@ public class ShoppingListActivity extends AppCompatActivity {
     private ItemListAdapter itemListAdapter;
 
     private SummaryViewModel summaryViewModel;
-    private DetailViewModel detailViewModel;
+    private IngredientViewModel ingredientViewModel;
 
 
     // Constructor
     LoadItemsAsyncTask(ProgressBar progressBar,
                        LinearLayout contentView,
                        ItemListAdapter itemListAdapter,
-                       SummaryViewModel summaryViewModel) {
+                       SummaryViewModel summaryViewModel,
+                       IngredientViewModel ingredientViewModel) {
       this.progressBar = progressBar;
       this.contentView = contentView;
       this.itemListAdapter = itemListAdapter;
       this.summaryViewModel = summaryViewModel;
+      this.ingredientViewModel = ingredientViewModel;
     }
 
 
