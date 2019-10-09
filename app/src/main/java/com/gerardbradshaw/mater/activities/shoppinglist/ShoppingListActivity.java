@@ -191,7 +191,7 @@ public class ShoppingListActivity extends AppCompatActivity {
           .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
       // Get the insert point and clear it
-      ViewGroup insertPoint = findViewById(R.id.shoppingList_contentLinearLayout);
+      ViewGroup insertPoint = findViewById(R.id.shoppingList_listInsertPoint);
       insertPoint.removeAllViews();
 
       for (Pair pair : titleIngredientPairs) {
@@ -220,7 +220,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         insertPoint.addView(titleView, index, layoutParams);
         insertPoint.addView(recyclerView, index + 1, layoutParams);
       }
-        
+
       return null;
     }
 

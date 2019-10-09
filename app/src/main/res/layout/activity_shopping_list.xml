@@ -65,11 +65,11 @@
             </LinearLayout>
 
             <!-- RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/shoppingList_recycler"
+            <LinearLayout
+                android:id="@+id/shoppingList_listInsertPoint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:orientation="vertical" />
 
         </LinearLayout>
 
