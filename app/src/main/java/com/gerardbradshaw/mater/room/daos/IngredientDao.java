@@ -36,6 +36,9 @@ public interface IngredientDao {
   @Query("select item_id from ingredient_table where recipe_id = :recipeId")
   int[] getIngredientIds(int recipeId);
 
+  @Query("select name from ingredient_table where recipe_id = :recipeId")
+  List<String> getIngredientNames(int recipeId);
+
   @Query("select * from ingredient_table where recipe_id = :recipeId")
   List<Ingredient> getIngredients(int recipeId);
 }
