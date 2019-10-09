@@ -3,7 +3,9 @@ package com.gerardbradshaw.mater.activities.shoppinglist;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.util.Pair;
+import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -203,13 +205,17 @@ public class ShoppingListActivity extends AppCompatActivity {
             .inflate(R.layout.shopping_list_category, insertPoint, false);
         titleView.setText(title);
 
-        // Add a RecyclerView
-        RecyclerView recyclerView = (RecyclerView) inflater
+        // Add a NestedScrollView containing a RecyclerView
+        NestedScrollView scrollView = (NestedScrollView) inflater
             .inflate(R.layout.shopping_list_recycler, insertPoint, false);
+
+        RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
 
         // Create an adapter
         ItemListAdapter adapter = new ItemListAdapter(context);
         adapter.setData(ingredientList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Get the index for insertion and create layout parameters
         int index = 2 * titleIngredientPairs.size() - 2;
@@ -218,7 +224,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
         // Insert the views into the main view
         insertPoint.addView(titleView, index, layoutParams);
-        insertPoint.addView(recyclerView, index + 1, layoutParams);
+        insertPoint.addView(scrollView, index + 1, layoutParams);
       }
 
       return null;
