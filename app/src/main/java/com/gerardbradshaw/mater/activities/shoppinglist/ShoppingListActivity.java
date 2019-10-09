@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.room.entities.Step;
@@ -49,6 +51,8 @@ public class ShoppingListActivity extends AppCompatActivity {
   private List<Pair<String, List<Ingredient>>> recipeIngredientsList = new ArrayList<>();
   private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
+  private AsyncTaskScheduler taskScheduler;
+
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   @Override
@@ -58,6 +62,9 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
+
+    MaterApplication materApplication = (MaterApplication) getApplication();
+    taskScheduler = materApplication.getTaskScheduler();
 
     recyclerView = findViewById(R.id.shoppingList_recycler);
     progressBar = findViewById(R.id.shoppingList_progressBar);
@@ -83,7 +90,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       }
     });
 
-    new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
+    //new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
 
     // Set up RecyclerView
     recyclerView.setAdapter(itemListAdapter);
@@ -106,6 +113,8 @@ public class ShoppingListActivity extends AppCompatActivity {
         new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
       }
     };
+
+    taskScheduler.addNewPriorityTask(runnable);
 
 
 

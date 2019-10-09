@@ -51,7 +51,7 @@ public class MaterRepository {
   private static File storage;
 
   private Context context;
-  private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
+  private AsyncTaskScheduler taskScheduler;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -68,6 +68,7 @@ public class MaterRepository {
     // Downcast the application and set the context
     MaterApplication materApplication = (MaterApplication) application;
     context = materApplication.getApplicationContext();
+    taskScheduler = materApplication.getTaskScheduler();
 
     // Cache LiveData
     liveRecipeSummaryList = summaryDao.getLiveAllSummaries();

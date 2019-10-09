@@ -14,7 +14,12 @@ import java.util.List;
 
 public class MaterApplication extends Application {
 
+  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
+
   private MaterRepository repository;
+
+  private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
+
 
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
@@ -276,9 +281,12 @@ public class MaterApplication extends Application {
 
   }
 
-
   public MaterRepository getRepository() {
     return repository;
+  }
+
+  public AsyncTaskScheduler getTaskScheduler() {
+    return taskScheduler;
   }
 
 }
