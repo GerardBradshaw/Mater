@@ -112,6 +112,10 @@ public class MaterRepository {
     return summaryDao.getLiveRecipeId(recipeTitle);
   }
 
+  public List<Summary> getAllSummaries() {
+    return summaryDao.getAllSummaries();
+  }
+
 
   // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
 
