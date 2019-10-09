@@ -124,6 +124,10 @@ public class MaterRepository {
     return ingredientDao.getLiveIngredients(recipeId);
   }
 
+  public List<Ingredient> getIngredients(int recipeId) {
+    return ingredientDao.getIngredients(recipeId);
+  }
+
 
   // - - - - - - - - - - - - - - - Step Data - - - - - - - - - - - - - - -
 
