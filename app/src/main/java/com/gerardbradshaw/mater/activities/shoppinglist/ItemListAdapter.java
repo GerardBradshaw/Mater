@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 
@@ -26,10 +27,10 @@ public class ItemListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<Item> itemList = new ArrayList<>();
   private static String LOG_TAG = "GGG - ItemListAdapter";
   private StockChangedListener stockChangedListener;
   private Context context;
+  private List<Ingredient> ingredientList = new ArrayList<>();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -68,22 +69,15 @@ public class ItemListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    if(position %2 == 1) {
-      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.opaqueAccent));
-    } else {
-      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
-    }
+    Ingredient currentIngredient = ingredientList.get(position);
+    final boolean inStock = currentIngredient.getInStock();
+    holder.textView.setText(currentIngredient.getName());
 
-    Item currentItem = itemList.get(position);
-    final int stockLevel = currentItem.getStockLevel();
-    holder.textView.setText(currentItem.getName());
+    // TODO change stockInput to CheckBox and set to inStock
 
-    if (stockLevel != 0) {
-      holder.stockInput.setText(Integer.toString(stockLevel));
-    } else {
-      holder.stockInput.setText(null);
-    }
 
+    // TODO change this to a CheckBox onChanged listener
+    /*
     holder.stockInput.addTextChangedListener(new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -106,6 +100,7 @@ public class ItemListAdapter
         }
       }
     });
+     */
 
   }
 
@@ -118,15 +113,15 @@ public class ItemListAdapter
    */
   @Override
   public int getItemCount() {
-    if(itemList != null) {
-      return itemList.size();
+    if(ingredientList != null) {
+      return ingredientList.size();
     } else {
       return 0;
     }
   }
 
-  public void setData(List<Item> itemList) {
-    this.itemList = itemList;
+  public void setData(List<Ingredient> ingredientList) {
+    this.ingredientList = ingredientList;
     notifyDataSetChanged();
   }
 
