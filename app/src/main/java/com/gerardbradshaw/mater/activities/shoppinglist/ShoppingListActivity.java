@@ -23,7 +23,9 @@ import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
+import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
 import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
+import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,9 +40,13 @@ public class ShoppingListActivity extends AppCompatActivity {
   private LinearLayout contentView;
 
   private ItemViewModel itemViewModel;
+  private DetailViewModel detailViewModel;
   private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
+
   private List<Item> itemList = new ArrayList<>();
+
+  private List<Pair<String, List<Ingredient>>> recipeIngredientsList = new ArrayList<>();
   private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -49,7 +55,10 @@ public class ShoppingListActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_shopping_list);
+
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
+    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+
     recyclerView = findViewById(R.id.shoppingList_recycler);
     progressBar = findViewById(R.id.shoppingList_progressBar);
     contentView = findViewById(R.id.shoppingList_contentLinearLayout);
@@ -89,6 +98,10 @@ public class ShoppingListActivity extends AppCompatActivity {
   }
 
   private void buildShoppingList() {
+
+    // Get all recipe IDs
+
+    // Get all ingredients for each recipe and create recipeIngredientsList
 
     Map<Integer, Summary> summaryMap = new HashMap<>();
     List<Ingredient> ingredientList = new ArrayList<>();

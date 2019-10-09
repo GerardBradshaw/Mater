@@ -41,6 +41,9 @@ public class Ingredient {
   @ColumnInfo(name = "name")
   private String name;
 
+  @ColumnInfo(name = "category")
+  private String category;
+
   @ColumnInfo(name = "amount")
   private double amount;
 
@@ -62,12 +65,13 @@ public class Ingredient {
     name = "not_set";
   }
 
-  public Ingredient(String name, int recipeId, int itemId, double amount, String units) {
+  public Ingredient(String name, String category, int recipeId, int itemId, double amount, String units) {
     this.name = name;
     this.recipeId = recipeId;
     this.itemId = itemId;
     this.amount = amount;
     this.units = units;
+    this.category = category;
     inStock = false;
   }
 
@@ -88,6 +92,10 @@ public class Ingredient {
 
   public String getName() {
     return name;
+  }
+
+  public String getCategory() {
+    return category;
   }
 
   public double getAmount() {
@@ -120,6 +128,10 @@ public class Ingredient {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public void setAmount(double amount) {
