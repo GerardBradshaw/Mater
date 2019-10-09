@@ -18,6 +18,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Item;
 import com.gerardbradshaw.mater.room.entities.Step;
@@ -40,7 +42,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private LinearLayout contentView;
 
   private ItemViewModel itemViewModel;
-  private DetailViewModel detailViewModel;
+  private SummaryViewModel summaryViewModel;
   private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
 
@@ -48,6 +50,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private List<Pair<String, List<Ingredient>>> recipeIngredientsList = new ArrayList<>();
   private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
+
+  private AsyncTaskScheduler taskScheduler;
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -57,7 +61,10 @@ public class ShoppingListActivity extends AppCompatActivity {
     setContentView(R.layout.activity_shopping_list);
 
     itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
-    detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
+    summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
+
+    MaterApplication materApplication = (MaterApplication) getApplication();
+    taskScheduler = materApplication.getTaskScheduler();
 
     recyclerView = findViewById(R.id.shoppingList_recycler);
     progressBar = findViewById(R.id.shoppingList_progressBar);
@@ -83,7 +90,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       }
     });
 
-    new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
+    //new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
 
     // Set up RecyclerView
     recyclerView.setAdapter(itemListAdapter);
@@ -99,30 +106,18 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private void buildShoppingList() {
 
-    // Get all recipe IDs
-
-    // Get all ingredients for each recipe and create recipeIngredientsList
-
-    Map<Integer, Summary> summaryMap = new HashMap<>();
-    List<Ingredient> ingredientList = new ArrayList<>();
-    Map<Integer, List<Ingredient>> ingredientRecipeMap = new HashMap<>();
-
-    for (Ingredient ingredient : ingredientList) {
-      int recipeId = ingredient.getRecipeId();
-
-      if (summaryMap.containsKey(recipeId)) {
-        ingredientRecipeMap.get(recipeId).add(ingredient);
-
-      } else {
-        ArrayList<Ingredient> newIngredientList = new ArrayList<>();
-        newIngredientList.add(ingredient);
-        ingredientRecipeMap.put(recipeId, newIngredientList);
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter, summaryViewModel).execute();
       }
-    }
+    };
+
+    taskScheduler.addNewPriorityTask(runnable);
   }
 
 
-  // - - - - - - - - - - - - - - - Load Items AsyncTask - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - AsyncTasks - - - - - - - - - - - - - - -
 
   private class LoadItemsAsyncTask extends AsyncTask<Void, Void, Void> {
 
@@ -132,27 +127,69 @@ public class ShoppingListActivity extends AppCompatActivity {
     private LinearLayout contentView;
     private ItemListAdapter itemListAdapter;
 
+    private SummaryViewModel summaryViewModel;
+    private DetailViewModel detailViewModel;
+
 
     // Constructor
     LoadItemsAsyncTask(ProgressBar progressBar,
                        LinearLayout contentView,
-                       ItemListAdapter itemListAdapter) {
+                       ItemListAdapter itemListAdapter,
+                       SummaryViewModel summaryViewModel) {
       this.progressBar = progressBar;
       this.contentView = contentView;
       this.itemListAdapter = itemListAdapter;
+      this.summaryViewModel = summaryViewModel;
     }
 
 
     // AsyncTask Methods
     @Override
     protected Void doInBackground(Void... voids) {
+
+
       itemList = itemViewModel.getAllItems();
+
+      // Get all summaries
+      List<Summary> summaryList = summaryViewModel.getAllSummaries();
+
+      // Get the ingredients for each summary
+      for (Summary summary : summaryList) {
+
+        int recipeId = summary.getRecipeId();
+        //List<Ingredient> ingredientList =
+
+      }
+
+
+      // Get all ingredients for each recipe and create recipeIngredientsList
+
+      Map<Integer, Summary> summaryMap = new HashMap<>();
+      List<Ingredient> ingredientList = new ArrayList<>();
+      Map<Integer, List<Ingredient>> ingredientRecipeMap = new HashMap<>();
+
+      for (Ingredient ingredient : ingredientList) {
+        int recipeId = ingredient.getRecipeId();
+
+        if (summaryMap.containsKey(recipeId)) {
+          ingredientRecipeMap.get(recipeId).add(ingredient);
+
+        } else {
+          ArrayList<Ingredient> newIngredientList = new ArrayList<>();
+          newIngredientList.add(ingredient);
+          ingredientRecipeMap.put(recipeId, newIngredientList);
+        }
+      }
+
+
       return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
+
+      taskScheduler.setTaskFinished();
 
       // Update adapter
       itemListAdapter.setData(itemList);
@@ -165,4 +202,5 @@ public class ShoppingListActivity extends AppCompatActivity {
       ShoppingListActivity.this.itemList = itemList;
     }
   }
+
 }
