@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.room.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -36,11 +37,18 @@ public class Ingredient {
   @ColumnInfo(name = "item_id")
   private int itemId;
 
+  @NonNull
+  @ColumnInfo(name = "name")
+  private String name;
+
   @ColumnInfo(name = "amount")
   private double amount;
 
   @ColumnInfo(name = "units")
   private String units;
+
+  @ColumnInfo(name = "in_stock")
+  private boolean inStock;
 
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
@@ -50,6 +58,17 @@ public class Ingredient {
     this.itemId = itemId;
     this.amount = amount;
     this.units = units;
+    inStock = false;
+    name = "not_set";
+  }
+
+  public Ingredient(String name, int recipeId, int itemId, double amount, String units) {
+    this.name = name;
+    this.recipeId = recipeId;
+    this.itemId = itemId;
+    this.amount = amount;
+    this.units = units;
+    inStock = false;
   }
 
 
@@ -67,12 +86,20 @@ public class Ingredient {
     return itemId;
   }
 
+  public String getName() {
+    return name;
+  }
+
   public double getAmount() {
     return amount;
   }
 
   public String getUnits() {
     return units;
+  }
+
+  public boolean getInStock() {
+    return inStock;
   }
 
 
@@ -91,6 +118,10 @@ public class Ingredient {
     this.itemId = itemId;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   public void setAmount(double amount) {
     this.amount = amount;
   }
@@ -105,6 +136,10 @@ public class Ingredient {
 
   public void setUnits(Units.MiscUnits units) {
     this.units = units.name();
+  }
+
+  public void setInStock(boolean inStock) {
+    this.inStock = inStock;
   }
 
 }
