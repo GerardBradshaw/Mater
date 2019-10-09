@@ -49,8 +49,6 @@ public class ShoppingListActivity extends AppCompatActivity {
   private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
 
-  private List<Item> itemList = new ArrayList<>();
-
   private List<Pair<String, List<Ingredient>>> recipeIngredientsList = new ArrayList<>();
   private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
@@ -83,22 +81,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     progressBar.setVisibility(View.VISIBLE);
     contentView.setVisibility(View.GONE);
 
-    // buildShoppingList();
-
-    // Set up itemListAdapter
-    itemListAdapter = new ItemListAdapter(this);
-    itemListAdapter.setStockChangedListener(new ItemListAdapter.StockChangedListener() {
-      @Override
-      public void onStockLevelChanged(int position, int newStockLevel) {
-        itemList.get(position).setStockLevel(newStockLevel);
-      }
-    });
-
-    //new LoadItemsAsyncTask(progressBar, contentView, itemListAdapter).execute();
-
-    // Set up RecyclerView
-    recyclerView.setAdapter(itemListAdapter);
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    buildShoppingList();
 
   }
 
@@ -152,9 +135,6 @@ public class ShoppingListActivity extends AppCompatActivity {
     // AsyncTask Methods
     @Override
     protected Void doInBackground(Void... voids) {
-
-
-      itemList = itemViewModel.getAllItems();
 
       // Get all summaries
       List<Summary> summaryList = summaryViewModel.getAllSummaries();
