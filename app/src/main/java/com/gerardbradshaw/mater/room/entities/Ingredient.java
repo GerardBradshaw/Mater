@@ -42,6 +42,9 @@ public class Ingredient {
   @ColumnInfo(name = "units")
   private String units;
 
+  @ColumnInfo(name = "in_stock")
+  private boolean inStock;
+
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
@@ -50,6 +53,7 @@ public class Ingredient {
     this.itemId = itemId;
     this.amount = amount;
     this.units = units;
+    inStock = false;
   }
 
 
@@ -73,6 +77,10 @@ public class Ingredient {
 
   public String getUnits() {
     return units;
+  }
+
+  public boolean getInStock() {
+    return inStock;
   }
 
 
@@ -105,6 +113,10 @@ public class Ingredient {
 
   public void setUnits(Units.MiscUnits units) {
     this.units = units.name();
+  }
+
+  public void setInStock(boolean inStock) {
+    this.inStock = inStock;
   }
 
 }
