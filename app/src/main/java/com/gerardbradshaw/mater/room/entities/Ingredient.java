@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.room.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -36,6 +37,10 @@ public class Ingredient {
   @ColumnInfo(name = "item_id")
   private int itemId;
 
+  @NonNull
+  @ColumnInfo(name = "name")
+  private String name;
+
   @ColumnInfo(name = "amount")
   private double amount;
 
@@ -49,6 +54,16 @@ public class Ingredient {
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
   public Ingredient(int recipeId, int itemId, double amount, String units) {
+    this.recipeId = recipeId;
+    this.itemId = itemId;
+    this.amount = amount;
+    this.units = units;
+    inStock = false;
+    name = "not_set";
+  }
+
+  public Ingredient(String name, int recipeId, int itemId, double amount, String units) {
+    this.name = name;
     this.recipeId = recipeId;
     this.itemId = itemId;
     this.amount = amount;
@@ -69,6 +84,10 @@ public class Ingredient {
 
   public int getItemId() {
     return itemId;
+  }
+
+  public String getName() {
+    return name;
   }
 
   public double getAmount() {
@@ -97,6 +116,10 @@ public class Ingredient {
 
   public void setItemId(int itemId) {
     this.itemId = itemId;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 
   public void setAmount(double amount) {
