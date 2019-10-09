@@ -7,16 +7,11 @@
     android:background="@drawable/background_border"
     android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/shoppingListItem_stockInput"
-        android:layout_width="60sp"
+    <CheckBox
+        android:id="@+id/shoppingListItem_inStockCheckBox"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
-        android:hint="0"
-        android:inputType="number"
-        android:maxLength="3"
-        android:textAlignment="center" />
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:id="@+id/shoppingListItem_textView"
