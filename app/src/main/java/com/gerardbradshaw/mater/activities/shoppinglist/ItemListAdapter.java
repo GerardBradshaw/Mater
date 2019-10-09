@@ -1,6 +1,7 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.room.entities.Item;
+import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +29,14 @@ public class ItemListAdapter
   private List<Item> itemList = new ArrayList<>();
   private static String LOG_TAG = "GGG - ItemListAdapter";
   private StockChangedListener stockChangedListener;
+  private Context context;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public ItemListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
+    this.context = context;
   }
 
 
@@ -63,6 +67,12 @@ public class ItemListAdapter
    */
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
+
+    if(position %2 == 1) {
+      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.opaqueAccent));
+    } else {
+      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
+    }
 
     Item currentItem = itemList.get(position);
     final int stockLevel = currentItem.getStockLevel();

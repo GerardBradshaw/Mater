@@ -1,22 +1,34 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Item;
+import com.gerardbradshaw.mater.room.entities.Step;
+import com.gerardbradshaw.mater.room.entities.Summary;
+import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShoppingListActivity extends AppCompatActivity {
 
@@ -29,6 +41,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private ItemListAdapter itemListAdapter;
   private RecyclerView recyclerView;
   private List<Item> itemList = new ArrayList<>();
+  private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
@@ -41,9 +54,16 @@ public class ShoppingListActivity extends AppCompatActivity {
     progressBar = findViewById(R.id.shoppingList_progressBar);
     contentView = findViewById(R.id.shoppingList_contentLinearLayout);
 
+    // Set up ToolBar
+    Toolbar toolbar = findViewById(R.id.shoppingList_toolbar);
+    toolbar.setTitle("My Shopping List");
+    setSupportActionBar(toolbar);
+
     // Set up UI
     progressBar.setVisibility(View.VISIBLE);
     contentView.setVisibility(View.GONE);
+
+    // buildShoppingList();
 
     // Set up itemListAdapter
     itemListAdapter = new ItemListAdapter(this);
@@ -66,6 +86,26 @@ public class ShoppingListActivity extends AppCompatActivity {
   protected void onPause() {
     super.onPause();
     itemViewModel.updateItem(itemList);
+  }
+
+  private void buildShoppingList() {
+
+    Map<Integer, Summary> summaryMap = new HashMap<>();
+    List<Ingredient> ingredientList = new ArrayList<>();
+    Map<Integer, List<Ingredient>> ingredientRecipeMap = new HashMap<>();
+
+    for (Ingredient ingredient : ingredientList) {
+      int recipeId = ingredient.getRecipeId();
+
+      if (summaryMap.containsKey(recipeId)) {
+        ingredientRecipeMap.get(recipeId).add(ingredient);
+
+      } else {
+        ArrayList<Ingredient> newIngredientList = new ArrayList<>();
+        newIngredientList.add(ingredient);
+        ingredientRecipeMap.put(recipeId, newIngredientList);
+      }
+    }
   }
 
 

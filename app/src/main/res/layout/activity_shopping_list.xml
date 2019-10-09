@@ -38,8 +38,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="8dp"
-                android:orientation="horizontal">
+                android:background="@color/colorAccent"
+                android:orientation="horizontal"
+                android:paddingVertical="8dp">
 
                 <TextView
                     android:id="@+id/shoppingList_stockCountHeader"
@@ -47,9 +48,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
-                    android:textStyle="bold"
                     android:text="In Stock"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textColor="@color/textColorSecondary"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/shoppingList_textViewHeader"
@@ -57,8 +59,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="8dp"
-                    android:textStyle="bold"
-                    android:text="Ingredient"/>
+                    android:text="Ingredient"
+                    android:textColor="@color/textColorSecondary"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
             <!-- RecyclerView -->
