@@ -39,12 +39,8 @@ public class ShoppingListActivity extends AppCompatActivity {
   private ProgressBar progressBar;
   private LinearLayout contentView;
 
-  private ItemViewModel itemViewModel;
   private SummaryViewModel summaryViewModel;
   private IngredientViewModel ingredientViewModel;
-
-  private ItemListAdapter itemListAdapter;
-  private RecyclerView recyclerView;
 
   private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
   private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
@@ -58,14 +54,12 @@ public class ShoppingListActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_shopping_list);
 
-    itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
     ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
 
     MaterApplication materApplication = (MaterApplication) getApplication();
     taskScheduler = materApplication.getTaskScheduler();
 
-    recyclerView = findViewById(R.id.shoppingList_recycler);
     progressBar = findViewById(R.id.shoppingList_progressBar);
     contentView = findViewById(R.id.shoppingList_contentLinearLayout);
 
@@ -103,8 +97,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     Runnable recyclerRunnable = new Runnable() {
       @Override
       public void run() {
-        new SetUpRecyclerViewsAsyncTask(ShoppingListActivity.this, progressBar,
-            contentView, itemListAdapter).execute();
+        new SetUpRecyclerViewsAsyncTask(progressBar, contentView).execute();
       }
     };
     taskScheduler.addNewPriorityTask(recyclerRunnable);
@@ -164,20 +157,14 @@ public class ShoppingListActivity extends AppCompatActivity {
   private class SetUpRecyclerViewsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     // Member variables
-    private Context context;
     private ProgressBar progressBar;
     private LinearLayout contentView;
-    private ItemListAdapter itemListAdapter;
 
 
     // Constructor
-    SetUpRecyclerViewsAsyncTask(Context context,
-                                ProgressBar progressBar,
-                                LinearLayout contentView,
-                                ItemListAdapter itemListAdapter) {
+    SetUpRecyclerViewsAsyncTask(ProgressBar progressBar, LinearLayout contentView) {
       this.progressBar = progressBar;
       this.contentView = contentView;
-      this.itemListAdapter = itemListAdapter;
     }
 
 
@@ -212,10 +199,10 @@ public class ShoppingListActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
 
         // Create an adapter
-        ItemListAdapter adapter = new ItemListAdapter(context);
+        ItemListAdapter adapter = new ItemListAdapter(ShoppingListActivity.this);
         adapter.setData(ingredientList);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setLayoutManager(new LinearLayoutManager(ShoppingListActivity.this));
 
         // Get the index for insertion and create layout parameters
         int index = 2 * titleIngredientPairs.size() - 2;
