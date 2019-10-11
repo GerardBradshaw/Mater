@@ -49,7 +49,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private AsyncTaskScheduler taskScheduler;
 
-  private boolean categoryView = false;
+  private boolean categoryView = true;
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -73,13 +73,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     toolbar.setTitle("My Shopping List");
     setSupportActionBar(toolbar);
 
-    // Set up UI
-    progressBar.setVisibility(View.VISIBLE);
-    contentView.setVisibility(View.GONE);
-
-    loadPairs();
-    buildLayout();
-
+    initialSetUp();
   }
 
   @Override
@@ -102,12 +96,9 @@ public class ShoppingListActivity extends AppCompatActivity {
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
 
-    if (id == R.id.action_edit) {
+    if (id == R.id.action_sort) {
       categoryView = !categoryView;
-      progressBar.setVisibility(View.VISIBLE);
-      contentView.setVisibility(View.GONE);
-
-      buildLayout();
+      buildRecyclerViews();
 
       // TODO save current stock levels
     }
@@ -118,50 +109,120 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-  private void loadPairs() {
+  private void initialSetUp() {
     // Load the data from the database
     Runnable pairsRunnable = new Runnable() {
       @Override
       public void run() {
-        new LoadPairsAsyncTask(summaryViewModel, ingredientViewModel).execute();
+        new InitialSetUpAsyncTask(contentView ,progressBar ,summaryViewModel, ingredientViewModel)
+            .execute();
       }
     };
     taskScheduler.addNewPriorityTask(pairsRunnable);
   }
 
-  private void buildLayout() {
+  private void buildLayoutDeprecated() {
     // Set up the RecyclerViews
     Runnable recyclerRunnable = new Runnable() {
       @Override
       public void run() {
-        new BuildLayoutAsyncTask(categoryView, progressBar, contentView).execute();
+        new BuildLayoutDeprecatedAsyncTask(categoryView, progressBar, contentView).execute();
       }
     };
     taskScheduler.addNewPriorityTask(recyclerRunnable);
   }
 
+  private void buildRecyclerViews() {
+    // Clear the ViewHolder references
+    recyclerAndAdapterPairs.clear();
+
+    // Instantiate a layout inflater
+    LayoutInflater inflater = (LayoutInflater) getApplicationContext()
+        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    // Get the insert point and clear it
+    ViewGroup insertPoint = findViewById(R.id.shoppingList_contentInsertPoint);
+    insertPoint.removeAllViews();
+
+    List<Pair<String, List<Ingredient>>> setupPairs;
+    if (categoryView) {
+      setupPairs = categoryIngredientPairs;
+    }
+    else {
+      setupPairs = titleIngredientPairs;
+    }
+
+    for (Pair pair : setupPairs) {
+      String header = (String) pair.first;
+      List<Ingredient> ingredientList = (ArrayList<Ingredient>) pair.second;
+
+      // Create a section title and set the text
+      TextView titleView = (TextView) inflater
+          .inflate(R.layout.shopping_list_category, insertPoint, false);
+      titleView.setText(header);
+
+      // Add a NestedScrollView containing a RecyclerView
+      NestedScrollView scrollView = (NestedScrollView) inflater
+          .inflate(R.layout.shopping_list_recycler, insertPoint, false);
+
+      RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
+
+      // Create an adapter
+      IngredientListAdapter adapter = new IngredientListAdapter(ShoppingListActivity.this);
+      adapter.setData(ingredientList);
+      recyclerView.setAdapter(adapter);
+      recyclerView.setLayoutManager(new LinearLayoutManager(ShoppingListActivity.this));
+
+      // Add the RecyclerView and Adapter to the holder
+      recyclerAndAdapterPairs.add(new Pair<>(recyclerView, adapter));
+
+      // Get the index for insertion and create layout parameters
+      int index = 2 * recyclerAndAdapterPairs.size() - 2;
+      ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
+          ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+      // Insert the views into the main view
+      insertPoint.addView(titleView, index, layoutParams);
+      insertPoint.addView(scrollView, index + 1, layoutParams);
+    }
+  }
+
 
   // - - - - - - - - - - - - - - - AsyncTasks - - - - - - - - - - - - - - -
 
-  private class LoadPairsAsyncTask extends AsyncTask<Void, Void, Void> {
+  private class InitialSetUpAsyncTask extends AsyncTask<Void, Void, Void> {
 
     // Member variables
     private SummaryViewModel summaryViewModel;
     private IngredientViewModel ingredientViewModel;
+
+    private ProgressBar progressBar;
+    private NestedScrollView contentView;
 
     private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
     private List<Pair<String, List<Ingredient>>> categoryIngredientPairs = new ArrayList<>();
 
 
     // Constructor
-    LoadPairsAsyncTask(SummaryViewModel summaryViewModel,
-                       IngredientViewModel ingredientViewModel) {
+    InitialSetUpAsyncTask(NestedScrollView contentView,
+                          ProgressBar progressBar,
+                          SummaryViewModel summaryViewModel,
+                          IngredientViewModel ingredientViewModel) {
+      this.contentView = contentView;
+      this.progressBar = progressBar;
       this.summaryViewModel = summaryViewModel;
       this.ingredientViewModel = ingredientViewModel;
     }
 
 
     // AsyncTask methods
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      contentView.setVisibility(View.INVISIBLE);
+      progressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
 
@@ -213,10 +274,15 @@ public class ShoppingListActivity extends AppCompatActivity {
       // Save data to Activity
       ShoppingListActivity.this.titleIngredientPairs = titleIngredientPairs;
       ShoppingListActivity.this.categoryIngredientPairs = categoryIngredientPairs;
+
+      // Build layout
+      buildRecyclerViews();
+      contentView.setVisibility(View.VISIBLE);
+      progressBar.setVisibility(View.INVISIBLE);
     }
   }
 
-  private class BuildLayoutAsyncTask extends AsyncTask<Void, Void, Void> {
+  private class BuildLayoutDeprecatedAsyncTask extends AsyncTask<Void, Void, Void> {
 
     // Member variables
     private ProgressBar progressBar;
@@ -225,7 +291,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
 
     // Constructor
-    BuildLayoutAsyncTask(boolean categoryView, ProgressBar progressBar, NestedScrollView contentView) {
+    BuildLayoutDeprecatedAsyncTask(boolean categoryView, ProgressBar progressBar, NestedScrollView contentView) {
       this.progressBar = progressBar;
       this.contentView = contentView;
       this.categoryView = categoryView;
@@ -233,6 +299,13 @@ public class ShoppingListActivity extends AppCompatActivity {
 
 
     // AsyncTask methods
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      contentView.setVisibility(View.GONE);
+      progressBar.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
 
