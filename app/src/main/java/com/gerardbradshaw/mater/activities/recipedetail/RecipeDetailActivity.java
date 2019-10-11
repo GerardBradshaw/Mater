@@ -30,12 +30,10 @@ import com.gerardbradshaw.mater.activities.main.MainActivity;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
-import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
