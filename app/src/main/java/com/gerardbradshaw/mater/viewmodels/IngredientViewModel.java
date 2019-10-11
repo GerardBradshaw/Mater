@@ -29,7 +29,7 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Get Items - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Get Ingredients - - - - - - - - - - - - - - -
 
   public List<Ingredient> getIngredients(int recipeId) {
     return repository.getIngredients(recipeId);
@@ -44,7 +44,7 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Add Items - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Add Ingredients - - - - - - - - - - - - - - -
 
   public void addIngredient(Ingredient... ingredients) {
     repository.addIngredient(ingredients);
@@ -55,7 +55,7 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Update Items - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Update Ingredients - - - - - - - - - - - - - - -
 
   public void updateIngredient(Ingredient... ingredients) {
     repository.updateIngredient(ingredients);
