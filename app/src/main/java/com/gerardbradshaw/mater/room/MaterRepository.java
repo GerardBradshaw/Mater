@@ -250,7 +250,7 @@ public class MaterRepository {
   public List<Item> getAllItems() {
     return itemDao.getAllItems();
   }
-  
+
   public Item getItem(final int itemId) {
     try {
       return new GetItemAsyncTask(itemDao).execute(itemId).get();

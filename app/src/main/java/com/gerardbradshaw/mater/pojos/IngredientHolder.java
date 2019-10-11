@@ -12,29 +12,34 @@ public class IngredientHolder {
   private String name;
   private double amount;
   private String unit;
+  private String category;
+  private boolean inStock = false;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientHolder(String name, double amount, Volume unit) {
+  public IngredientHolder(String name, String category, double amount, Volume unit) {
     this.name = name;
+    this.category = category;
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  public IngredientHolder(String name, double amount, Mass unit) {
+  public IngredientHolder(String name, String category, double amount, Mass unit) {
     this.name = name;
+    this.category = category;
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  public IngredientHolder(String name, double amount, MiscUnits unit) {
+  public IngredientHolder(String name, String category, double amount, MiscUnits unit) {
     this.name = name;
+    this.category = category;
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  public IngredientHolder(String name, double amount, String unit) {
+  public IngredientHolder(String name, String category, double amount, String unit) {
     if (Units.getVolumeEnum(unit) != null || Units.getMassEnum(unit) != null
         || Units.getMiscUnitsEnum(unit) != null) {
       this.unit = unit;
@@ -44,11 +49,13 @@ public class IngredientHolder {
     }
 
     this.name = name;
+    this.category = category;
     this.amount = amount;
   }
 
   public IngredientHolder() {
     name = "";
+    category = "";
     amount = 0;
     unit = "";
   }
@@ -60,12 +67,20 @@ public class IngredientHolder {
     return name;
   }
 
+  public String getCategory() {
+    return category;
+  }
+
   public double getAmount() {
     return amount;
   }
 
   public String getUnit() {
     return unit;
+  }
+
+  public boolean getInStock() {
+    return inStock;
   }
 
 
@@ -75,11 +90,19 @@ public class IngredientHolder {
     this.name = name;
   }
 
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
   public void setAmount(double amount) {
     this.amount = amount;
   }
 
   public void setUnit(String unit) {
     this.unit = unit;
+  }
+
+  public void setInStock(boolean inStock) {
+    this.inStock = inStock;
   }
 }
