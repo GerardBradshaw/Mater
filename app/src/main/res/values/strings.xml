@@ -6,7 +6,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Mater</string>
-    <string name="nav_header_subtitle">TODO</string>
+    <string name="nav_header_subtitle">You mater!</string>
     <string name="nav_header_desc">Navigation header</string>
     <!-- Nav menu -->
     <string name="nav_menu_shoppingList">Shopping List</string>
