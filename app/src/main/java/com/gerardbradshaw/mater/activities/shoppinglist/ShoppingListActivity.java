@@ -40,7 +40,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
 
   private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
-  private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
+  private List<Pair<RecyclerView, IngredientListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   private AsyncTaskScheduler taskScheduler;
 
@@ -196,7 +196,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
 
         // Create an adapter
-        ItemListAdapter adapter = new ItemListAdapter(ShoppingListActivity.this);
+        IngredientListAdapter adapter = new IngredientListAdapter(ShoppingListActivity.this);
         adapter.setData(ingredientList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ShoppingListActivity.this));

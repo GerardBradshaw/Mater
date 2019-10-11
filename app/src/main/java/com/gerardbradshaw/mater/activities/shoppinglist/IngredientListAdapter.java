@@ -17,13 +17,13 @@ import com.gerardbradshaw.mater.room.entities.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemListAdapter
-    extends RecyclerView.Adapter<ItemListAdapter.IngredientViewHolder> {
+public class IngredientListAdapter
+    extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private static String LOG_TAG = "GGG - ItemListAdapter";
+  private static String LOG_TAG = "GGG - IngredientListAdapter";
   private StockChangedListener stockChangedListener;
   private Context context;
   private List<Ingredient> ingredientList = new ArrayList<>();
@@ -31,7 +31,7 @@ public class ItemListAdapter
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public ItemListAdapter(Context context) {
+  public IngredientListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
     this.context = context;
   }
@@ -111,9 +111,9 @@ public class ItemListAdapter
 
     final CheckBox inStock;
     final TextView textView;
-    final ItemListAdapter adapter;
+    final IngredientListAdapter adapter;
 
-    public IngredientViewHolder(@NonNull View itemView, ItemListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
