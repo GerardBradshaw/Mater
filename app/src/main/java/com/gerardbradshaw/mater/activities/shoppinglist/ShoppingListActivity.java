@@ -2,6 +2,7 @@ package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
@@ -9,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -19,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
@@ -44,7 +50,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private AsyncTaskScheduler taskScheduler;
 
-  // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
+
+  // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +85,30 @@ public class ShoppingListActivity extends AppCompatActivity {
     super.onPause();
     // TODO update the database
   }
+
+
+  // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    // Inflate the menu; this adds items to the action bar if it is present.
+    getMenuInflater().inflate(R.menu.shopping_list, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+
+    if (id == R.id.action_edit) {
+      // TODO change sort method
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
+
+
+  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
   private void buildShoppingList() {
 

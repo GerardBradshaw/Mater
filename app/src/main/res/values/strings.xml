@@ -55,4 +55,9 @@
     <string name="action_servings">Servings</string>
     <string name="addRecipe_cancelButton">Cancel</string>
 
+    <!-- Shopping List Activity -->
+    <!-- AppBar Menu -->
+    <string name="shoppingListMenu_sort">Sort</string>
+
+
 </resources>
