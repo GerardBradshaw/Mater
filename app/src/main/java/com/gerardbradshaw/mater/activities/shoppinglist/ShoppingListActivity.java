@@ -49,6 +49,8 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private AsyncTaskScheduler taskScheduler;
 
+  private boolean categoryView = true;
+
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -75,7 +77,8 @@ public class ShoppingListActivity extends AppCompatActivity {
     progressBar.setVisibility(View.VISIBLE);
     contentView.setVisibility(View.GONE);
 
-    buildShoppingList();
+    loadPairs();
+    buildLayout();
 
   }
 
@@ -100,7 +103,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     if (id == R.id.action_edit) {
-      // TODO change sort method
+      categoryView = !categoryView;
     }
 
     return super.onOptionsItemSelected(item);
@@ -109,8 +112,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-  private void buildShoppingList() {
-
+  private void loadPairs() {
     // Load the data from the database
     Runnable pairsRunnable = new Runnable() {
       @Override
@@ -119,12 +121,14 @@ public class ShoppingListActivity extends AppCompatActivity {
       }
     };
     taskScheduler.addNewPriorityTask(pairsRunnable);
+  }
 
+  private void buildLayout() {
     // Set up the RecyclerViews
     Runnable recyclerRunnable = new Runnable() {
       @Override
       public void run() {
-        new SetUpRecyclerViewsAsyncTask(progressBar, contentView).execute();
+        new BuildLayoutAsyncTask(categoryView, progressBar, contentView).execute();
       }
     };
     taskScheduler.addNewPriorityTask(recyclerRunnable);
@@ -206,17 +210,19 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
   }
 
-  private class SetUpRecyclerViewsAsyncTask extends AsyncTask<Void, Void, Void> {
+  private class BuildLayoutAsyncTask extends AsyncTask<Void, Void, Void> {
 
     // Member variables
     private ProgressBar progressBar;
     private NestedScrollView contentView;
+    private boolean categoryView;
 
 
     // Constructor
-    SetUpRecyclerViewsAsyncTask(ProgressBar progressBar, NestedScrollView contentView) {
+    BuildLayoutAsyncTask(boolean categoryView, ProgressBar progressBar, NestedScrollView contentView) {
       this.progressBar = progressBar;
       this.contentView = contentView;
+      this.categoryView = categoryView;
     }
 
 
@@ -235,14 +241,22 @@ public class ShoppingListActivity extends AppCompatActivity {
       ViewGroup insertPoint = findViewById(R.id.shoppingList_contentInsertPoint);
       insertPoint.removeAllViews();
 
-      for (Pair pair : titleIngredientPairs) {
-        String title = (String) pair.first;
+      List<Pair<String, List<Ingredient>>> setupPairs;
+      if (categoryView) {
+        setupPairs = categoryIngredientPairs;
+      }
+      else {
+        setupPairs = titleIngredientPairs;
+      }
+
+      for (Pair pair : setupPairs) {
+        String header = (String) pair.first;
         List<Ingredient> ingredientList = (ArrayList<Ingredient>) pair.second;
 
         // Create a section title and set the text
         TextView titleView = (TextView) inflater
             .inflate(R.layout.shopping_list_category, insertPoint, false);
-        titleView.setText(title);
+        titleView.setText(header);
 
         // Add a NestedScrollView containing a RecyclerView
         NestedScrollView scrollView = (NestedScrollView) inflater
