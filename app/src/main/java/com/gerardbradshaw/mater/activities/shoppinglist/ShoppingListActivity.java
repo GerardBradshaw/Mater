@@ -22,11 +22,8 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
-import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.room.entities.Summary;
-import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
-import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 
 import java.util.ArrayList;
@@ -133,7 +130,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       for (Summary summary : summaryList) {
 
         List<Ingredient> ingredientList
-            = ingredientViewModel.getAllIngredients(summary.getRecipeId());
+            = ingredientViewModel.getIngredients(summary.getRecipeId());
 
         Pair<String, List<Ingredient>> titleIngredientPair
             = new Pair<>(summary.getTitle(), ingredientList);
