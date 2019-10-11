@@ -40,6 +40,12 @@ public class Categories {
   }
 
   public static String getCategoryString(Category category) {
+    String noCategory = "Uncategorised";
+
+    if (category == null) {
+      return noCategory;
+    }
+
     switch (category) {
       case FRESH_FRUIT_AND_VEG:
         return "Fresh fruit & vegetables";
@@ -74,7 +80,7 @@ public class Categories {
       case JUICES:
         return "Juices";
       default:
-        return "Uncategorised";
+        return noCategory;
     }
   }
 
