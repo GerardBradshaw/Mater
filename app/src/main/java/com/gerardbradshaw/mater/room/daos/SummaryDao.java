@@ -49,11 +49,14 @@ public interface SummaryDao {
   // - - - - - - - - - - - - - - - Non-LiveData queries - - - - - - - - - - - - - - -
 
   @Query("select * from summary_table LIMIT 1")
-  Summary[] getAnySummary();
+  Summary getAnySummary();
 
   @Query("select recipe_id from summary_table where title = :recipeTitle")
   int getRecipeId(String recipeTitle);
 
   @Query("select * from summary_table where recipe_id = :recipeId")
   Summary getSummary(int recipeId);
+
+  @Query("select * from summary_table")
+  List<Summary> getAllSummaries();
 }

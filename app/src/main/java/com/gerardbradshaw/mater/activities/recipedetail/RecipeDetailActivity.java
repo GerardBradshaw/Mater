@@ -30,7 +30,6 @@ import com.gerardbradshaw.mater.activities.main.MainActivity;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
@@ -51,7 +50,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private TextView servingsView;
   private Toolbar toolbar;
 
-  private List<IngredientViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<IngredientHolder> customIngredientHolders = new ArrayList<>();
   private final List<IngredientHolder> defaultIngredientHolders = new ArrayList<>();
@@ -163,13 +161,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
     defaultIngredientHolders.clear();
     customIngredientHolders.clear();
 
-    for (Ingredient r : ingredientList) {
-      String name = ingredientViewModel.getIngredient(r.getItemId()).getName();
-      double amount = r.getAmount();
-      String unit = r.getUnits();
-      final IngredientHolder finalHolder = new IngredientHolder(name, amount, unit);
-      defaultIngredientHolders.add(finalHolder);
-      customIngredientHolders.add(new IngredientHolder(name, amount, unit));
+    for (Ingredient ingredient : ingredientList) {
+      defaultIngredientHolders.add(new IngredientHolder(
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits()));
+
+      customIngredientHolders.add(new IngredientHolder(
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits()));
     }
   }
 
@@ -237,7 +240,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         // Update defaultIngredientHolders
         for (IngredientHolder holder : defaultIngredientHolders) {
           IngredientHolder customHolder = new IngredientHolder(
-              holder.getName(), holder.getAmount() * servingsMultiplier, holder.getUnit());
+              holder.getName(),
+              holder.getCategory(),
+              holder.getAmount() * servingsMultiplier,
+              holder.getUnit());
           customIngredientHolders.add(customHolder);
         }
 

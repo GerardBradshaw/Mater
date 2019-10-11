@@ -4,11 +4,10 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.MaterRepository;
-import com.gerardbradshaw.mater.room.entities.Item;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.List;
 
@@ -30,22 +29,40 @@ public class IngredientViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Get Ingredients - - - - - - - - - - - - - - -
 
-  public LiveData<List<Item>> getLiveAllIngredients() {
-    return repository.getLiveAllIngredients();
+  public List<Ingredient> getIngredients(int recipeId) {
+    return repository.getIngredients(recipeId);
   }
 
-  public void addIngredient(Item... items) {
-    repository.addItem(items);
+  public List<Ingredient> getAllIngredients() {
+    return repository.getAllIngredients();
   }
 
-  public void addIngredient(List<Item> items) {
-    repository.addItem(items);
+  public Ingredient getIngredient(int ingredientId) {
+    return repository.getIngredient(ingredientId);
   }
 
-  public Item getIngredient(int ingredientId) {
-    return repository.getItem(ingredientId);
+
+  // - - - - - - - - - - - - - - - Add Ingredients - - - - - - - - - - - - - - -
+
+  public void addIngredient(Ingredient... ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
+  public void addIngredient(List<Ingredient> ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
+
+  // - - - - - - - - - - - - - - - Update Ingredients - - - - - - - - - - - - - - -
+
+  public void updateIngredient(Ingredient... ingredients) {
+    repository.updateIngredient(ingredients);
+  }
+
+  public void updateIngredient(List<Ingredient> ingredients) {
+    repository.updateIngredient(ingredients);
   }
 
 }

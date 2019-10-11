@@ -3,6 +3,7 @@ package com.gerardbradshaw.mater.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -34,16 +35,25 @@ public class SummaryViewModel extends AndroidViewModel {
   }
 
 
-  // - - - - - - - - - - - - - - - Getter methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Get summaries - - - - - - - - - - - - - - -
 
   public LiveData<List<Summary>> getAllRecipeSummaries() {
     return recipeSummaryList;
   }
 
+  /**
+   * Simple method for returning all recipes from the database. Must be run on another thread.
+   * @return a list of all summaries in the database
+   */
+  public List<Summary> getAllSummaries() {
+    return repository.getAllSummaries();
+  }
 
-  // - - - - - - - - - - - - - - - Other repo methods - - - - - - - - - - - - - - -
+
+  // - - - - - - - - - - - - - - - Delete recipes - - - - - - - - - - - - - - -
 
   public void deleteRecipe(int recipeId) {
     repository.deleteRecipe(recipeId);
   }
+
 }

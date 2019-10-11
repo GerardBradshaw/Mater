@@ -1,8 +1,10 @@
 package com.gerardbradshaw.mater.room.entities;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -16,12 +18,8 @@ import static androidx.room.ForeignKey.CASCADE;
     @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
         childColumns = "recipe_id",
-        onDelete = CASCADE),
-    @ForeignKey(entity = Item.class,
-        parentColumns = "item_id",
-        childColumns = "item_id",
         onDelete = CASCADE)},
-    indices = {@Index(value = "recipe_id"), @Index(value = "item_id")})
+    indices = {@Index(value = "recipe_id")})
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -33,8 +31,12 @@ public class Ingredient {
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
 
-  @ColumnInfo(name = "item_id")
-  private int itemId;
+  @NonNull
+  @ColumnInfo(name = "name")
+  private String name;
+
+  @ColumnInfo(name = "category")
+  private String category;
 
   @ColumnInfo(name = "amount")
   private double amount;
@@ -42,14 +44,38 @@ public class Ingredient {
   @ColumnInfo(name = "units")
   private String units;
 
+  @ColumnInfo(name = "in_stock")
+  private boolean inStock;
+
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public Ingredient(int recipeId, int itemId, double amount, String units) {
+  @Ignore
+  private Ingredient(int recipeId, double amount, String units) {
     this.recipeId = recipeId;
-    this.itemId = itemId;
     this.amount = amount;
     this.units = units;
+    inStock = false;
+    name = "No name";
+  }
+
+  public Ingredient(String name, String category, int recipeId, double amount, String units) {
+    this.name = name;
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    this.category = category;
+    inStock = false;
+  }
+
+  @Ignore
+  public Ingredient(String name, int recipeId, double amount, String units) {
+    this.name = name;
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    category = "Uncategorised";
+    inStock = false;
   }
 
 
@@ -63,8 +89,12 @@ public class Ingredient {
     return recipeId;
   }
 
-  public int getItemId() {
-    return itemId;
+  public String getName() {
+    return name;
+  }
+
+  public String getCategory() {
+    return category;
   }
 
   public double getAmount() {
@@ -73,6 +103,10 @@ public class Ingredient {
 
   public String getUnits() {
     return units;
+  }
+
+  public boolean getInStock() {
+    return inStock;
   }
 
 
@@ -87,8 +121,12 @@ public class Ingredient {
     this.recipeId = recipeId;
   }
 
-  public void setItemId(int itemId) {
-    this.itemId = itemId;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public void setAmount(double amount) {
@@ -105,6 +143,10 @@ public class Ingredient {
 
   public void setUnits(Units.MiscUnits units) {
     this.units = units.name();
+  }
+
+  public void setInStock(boolean inStock) {
+    this.inStock = inStock;
   }
 
 }
