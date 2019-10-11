@@ -49,7 +49,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private AsyncTaskScheduler taskScheduler;
 
-  private boolean categoryView = true;
+  private boolean categoryView = false;
 
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -104,6 +104,12 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     if (id == R.id.action_edit) {
       categoryView = !categoryView;
+      progressBar.setVisibility(View.VISIBLE);
+      contentView.setVisibility(View.GONE);
+
+      buildLayout();
+
+      // TODO save current stock levels
     }
 
     return super.onOptionsItemSelected(item);

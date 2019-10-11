@@ -202,10 +202,7 @@ public class MaterApplication extends Application {
     // Add the list to the RecipeHolder
     holder.setIngredientHolders(ingredients);
 
-    // Return the holder
-
     return holder;
-
   }
 
   private RecipeHolder createSatayRecipeHolder() {

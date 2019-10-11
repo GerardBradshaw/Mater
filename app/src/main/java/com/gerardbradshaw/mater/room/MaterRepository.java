@@ -334,6 +334,7 @@ public class MaterRepository {
     }
   }
 
+
   // - - - - - - - - - - - - - - - Insert Recipe - - - - - - - - - - - - - - -
 
   /**
@@ -451,9 +452,10 @@ public class MaterRepository {
         String name = ingredients.get(i).getName();
         double amount = ingredients.get(i).getAmount();
         String units = ingredients.get(i).getUnit();
+        String category = ingredients.get(i).getCategory();
 
         // Create a Ingredient and add it to the database
-        Ingredient ingredient = new Ingredient(name, recipeId, amount, units);
+        Ingredient ingredient = new Ingredient(name, category, recipeId, amount, units);
         ingredientDao.insertIngredient(ingredient);
       }
     }
@@ -589,5 +591,4 @@ public class MaterRepository {
       return null;
     }
   }
-
 }
