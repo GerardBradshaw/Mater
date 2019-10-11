@@ -245,16 +245,12 @@ public class MaterRepository {
   }
 
 
-  // - - - - - - - - - - - - - - - Loading Items - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Loading Ingredients - - - - - - - - - - - - - - -
 
   public List<Item> getAllItems() {
     return itemDao.getAllItems();
   }
-
-  public LiveData<List<Item>> getLiveAllItems() {
-    return itemDao.getLiveAllItems();
-  }
-
+  
   public Item getItem(final int itemId) {
     try {
       return new GetItemAsyncTask(itemDao).execute(itemId).get();
