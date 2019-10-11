@@ -5,6 +5,7 @@ import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Categories.Category;
 
 public class IngredientHolder {
 
@@ -19,23 +20,23 @@ public class IngredientHolder {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  private IngredientHolder(String name, String category, double amount, Volume unit) {
+  public IngredientHolder(String name, Category category, double amount, Volume unit) {
     this.name = name;
-    this.category = category;
+    this.category = category.name();
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  private IngredientHolder(String name, String category, double amount, Mass unit) {
+  public IngredientHolder(String name, Category category, double amount, Mass unit) {
     this.name = name;
-    this.category = category;
+    this.category = category.name();
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  private IngredientHolder(String name, String category, double amount, MiscUnits unit) {
+  public IngredientHolder(String name, Category category, double amount, MiscUnits unit) {
     this.name = name;
-    this.category = category;
+    this.category = category.name();
     this.amount = amount;
     this.unit = unit.name();
   }
