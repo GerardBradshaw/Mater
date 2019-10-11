@@ -34,7 +34,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private ProgressBar progressBar;
-  private LinearLayout contentView;
+  private NestedScrollView contentView;
 
   private SummaryViewModel summaryViewModel;
   private IngredientViewModel ingredientViewModel;
@@ -58,7 +58,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     taskScheduler = materApplication.getTaskScheduler();
 
     progressBar = findViewById(R.id.shoppingList_progressBar);
-    contentView = findViewById(R.id.shoppingList_contentLinearLayout);
+    contentView = findViewById(R.id.shoppingList_contentView);
 
     // Set up ToolBar
     Toolbar toolbar = findViewById(R.id.shoppingList_toolbar);
@@ -155,11 +155,11 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     // Member variables
     private ProgressBar progressBar;
-    private LinearLayout contentView;
+    private NestedScrollView contentView;
 
 
     // Constructor
-    SetUpRecyclerViewsAsyncTask(ProgressBar progressBar, LinearLayout contentView) {
+    SetUpRecyclerViewsAsyncTask(ProgressBar progressBar, NestedScrollView contentView) {
       this.progressBar = progressBar;
       this.contentView = contentView;
     }
@@ -177,7 +177,7 @@ public class ShoppingListActivity extends AppCompatActivity {
           .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
       // Get the insert point and clear it
-      ViewGroup insertPoint = findViewById(R.id.shoppingList_listInsertPoint);
+      ViewGroup insertPoint = findViewById(R.id.shoppingList_contentInsertPoint);
       insertPoint.removeAllViews();
 
       for (Pair pair : titleIngredientPairs) {
