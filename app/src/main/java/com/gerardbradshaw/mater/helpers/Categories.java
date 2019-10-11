@@ -15,7 +15,18 @@ public class Categories {
     PERSONAL_HYGIENE,
     CLEANING_SUPPLIES,
     SUPPLEMENTS_AND_MEDICINES,
-    MISCELLANEOUS;
+    NO_CATEGORY;
+  }
+
+  public static Category getCategoryEnum(String category) {
+
+    for (Category categoryValue : Category.values()) {
+      if (categoryValue.name().equals(category)) {
+        return categoryValue;
+      }
+    }
+
+    return null;
   }
 
 }

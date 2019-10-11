@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.pojos;
 
+import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
@@ -18,21 +19,21 @@ public class IngredientHolder {
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientHolder(String name, String category, double amount, Volume unit) {
+  private IngredientHolder(String name, String category, double amount, Volume unit) {
     this.name = name;
     this.category = category;
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  public IngredientHolder(String name, String category, double amount, Mass unit) {
+  private IngredientHolder(String name, String category, double amount, Mass unit) {
     this.name = name;
     this.category = category;
     this.amount = amount;
     this.unit = unit.name();
   }
 
-  public IngredientHolder(String name, String category, double amount, MiscUnits unit) {
+  private IngredientHolder(String name, String category, double amount, MiscUnits unit) {
     this.name = name;
     this.category = category;
     this.amount = amount;
@@ -43,13 +44,17 @@ public class IngredientHolder {
     if (Units.getVolumeEnum(unit) != null || Units.getMassEnum(unit) != null
         || Units.getMiscUnitsEnum(unit) != null) {
       this.unit = unit;
-
     } else {
       this.unit = MiscUnits.NO_UNIT.name();
     }
 
+    if (Categories.getCategoryEnum(category) != null) {
+      this.category = category;
+    } else {
+      this.category = Categories.Category.NO_CATEGORY.name();
+    }
+
     this.name = name;
-    this.category = category;
     this.amount = amount;
   }
 
