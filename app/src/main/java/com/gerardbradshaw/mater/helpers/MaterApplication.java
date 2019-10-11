@@ -8,6 +8,7 @@ import com.gerardbradshaw.mater.room.MaterRepository;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Categories.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,34 +104,34 @@ public class MaterApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new IngredientHolder(
-        "sweet potato", 800d, Mass.GRAMS));
+        "sweet potato", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "capsicum", 1d, MiscUnits.NO_UNIT));
+        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "zucchini", 1d, MiscUnits.NO_UNIT));
+        "zucchini", Category.FRESH_FRUIT_AND_VEG, 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "frozen spinach", 100d, Mass.GRAMS));
+        "frozen spinach", Category.COLD_FOOD, 100d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "diced mater", 800d, Mass.GRAMS));
+        "diced tomato", Category.CANNED_GOODS, 800d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        beyondBurgers, 4d, MiscUnits.NO_UNIT));
+        beyondBurgers, Category.COLD_FOOD, 4d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "merlot", 500d, Volume.MILLILITRES));
+        "merlot", Category.BEVERAGES, 500d, Volume.MILLILITRES));
 
     ingredients.add(new IngredientHolder(
-        lasagneSheets, 1d, MiscUnits.NO_UNIT));
+        lasagneSheets, Category.RICE_AND_PASTA, 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "vegan cheese slices", 18d, MiscUnits.NO_UNIT));
+        "vegan cheese slices", Category.COLD_FOOD, 18d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        vegenaise, 100d, Mass.GRAMS));
+        vegenaise, Category.COLD_FOOD, 100d, Mass.GRAMS));
 
     // Add the Ingredients to the Recipe
     holder.setIngredientHolders(ingredients);
@@ -175,28 +176,28 @@ public class MaterApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new IngredientHolder(
-        "rice (dry)", 5d, Volume.AU_CUPS));
+        "rice (dry)", Category.RICE_AND_PASTA, 5d, Volume.AU_CUPS));
 
     ingredients.add(new IngredientHolder(
-        tofu, 454d, Mass.GRAMS));
+        tofu, Category.COLD_FOOD, 454d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "frozen broccoli", 454d, Mass.GRAMS));
+        "frozen broccoli", Category.COLD_FOOD, 454d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "carrots", 800d, Mass.GRAMS));
+        "carrots", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "potatoes", 800d, Mass.GRAMS));
+        "potatoes", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "bamboo shoots", 225d, Mass.GRAMS));
+        "bamboo shoots", Category.CANNED_GOODS, 225d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        curryPaste, 566d, Mass.GRAMS));
+        curryPaste, Category.INTERNATIONAL_FOOD, 566d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        coconutMilk, 600d, Volume.MILLILITRES));
+        coconutMilk, Category.CANNED_GOODS, 600d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
     holder.setIngredientHolders(ingredients);
@@ -243,34 +244,34 @@ public class MaterApplication extends Application {
 
     // Add each ingredient to the list
     ingredients.add(new IngredientHolder(
-        tofu, 600d, Mass.GRAMS));
+        tofu, Category.COLD_FOOD, 600d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "capsicum", 1d, MiscUnits.NO_UNIT));
+        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "frozen broccoli", 454d, Mass.GRAMS));
+        "frozen broccoli", Category.COLD_FOOD, 454d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "bok-choy", 2d, MiscUnits.NO_UNIT));
+        "bok-choy", Category.FRESH_FRUIT_AND_VEG, 2d, MiscUnits.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        pasta, 320d, Mass.GRAMS));
+        pasta, Category.RICE_AND_PASTA, 320d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        peanutButter, 285d, Mass.GRAMS));
+        peanutButter, Category.CEREALS_AND_SPREADS, 285d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        soySauce, 90d, Volume.MILLILITRES));
+        soySauce, Category.OILS_AND_CONDIMENTS, 90d, Volume.MILLILITRES));
 
     ingredients.add(new IngredientHolder(
-        "sesame oil", 60d, Volume.MILLILITRES));
+        "sesame oil", Category.OILS_AND_CONDIMENTS, 60d, Volume.MILLILITRES));
 
     ingredients.add(new IngredientHolder(
-        "lime juice", 120d, Volume.MILLILITRES));
+        "lime juice", Category.JUICES, 120d, Volume.MILLILITRES));
 
     ingredients.add(new IngredientHolder(
-        "water", 180d, Volume.MILLILITRES));
+        "water", Category.NO_CATEGORY, 180d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
     holder.setIngredientHolders(ingredients);

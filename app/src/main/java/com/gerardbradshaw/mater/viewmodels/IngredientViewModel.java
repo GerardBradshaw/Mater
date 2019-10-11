@@ -28,8 +28,41 @@ public class IngredientViewModel extends AndroidViewModel {
     repository = materApplication.getRepository();
   }
 
-  public List<Ingredient> getAllIngredients(int recipeId) {
+
+  // - - - - - - - - - - - - - - - Get Ingredients - - - - - - - - - - - - - - -
+
+  public List<Ingredient> getIngredients(int recipeId) {
     return repository.getIngredients(recipeId);
+  }
+
+  public List<Ingredient> getAllIngredients() {
+    return repository.getAllIngredients();
+  }
+
+  public Ingredient getIngredient(int ingredientId) {
+    return repository.getIngredient(ingredientId);
+  }
+
+
+  // - - - - - - - - - - - - - - - Add Ingredients - - - - - - - - - - - - - - -
+
+  public void addIngredient(Ingredient... ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
+  public void addIngredient(List<Ingredient> ingredients) {
+    repository.addIngredient(ingredients);
+  }
+
+
+  // - - - - - - - - - - - - - - - Update Ingredients - - - - - - - - - - - - - - -
+
+  public void updateIngredient(Ingredient... ingredients) {
+    repository.updateIngredient(ingredients);
+  }
+
+  public void updateIngredient(List<Ingredient> ingredients) {
+    repository.updateIngredient(ingredients);
   }
 
 }

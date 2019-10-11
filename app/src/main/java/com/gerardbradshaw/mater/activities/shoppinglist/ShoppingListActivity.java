@@ -22,11 +22,8 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
-import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.room.entities.Summary;
-import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
-import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 
 import java.util.ArrayList;
@@ -43,7 +40,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
 
   private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
-  private List<Pair<RecyclerView, ItemListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
+  private List<Pair<RecyclerView, IngredientListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   private AsyncTaskScheduler taskScheduler;
 
@@ -133,7 +130,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       for (Summary summary : summaryList) {
 
         List<Ingredient> ingredientList
-            = ingredientViewModel.getAllIngredients(summary.getRecipeId());
+            = ingredientViewModel.getIngredients(summary.getRecipeId());
 
         Pair<String, List<Ingredient>> titleIngredientPair
             = new Pair<>(summary.getTitle(), ingredientList);
@@ -199,7 +196,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
 
         // Create an adapter
-        ItemListAdapter adapter = new ItemListAdapter(ShoppingListActivity.this);
+        IngredientListAdapter adapter = new IngredientListAdapter(ShoppingListActivity.this);
         adapter.setData(ingredientList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ShoppingListActivity.this));

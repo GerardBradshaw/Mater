@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -17,12 +18,8 @@ import static androidx.room.ForeignKey.CASCADE;
     @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
         childColumns = "recipe_id",
-        onDelete = CASCADE),
-    @ForeignKey(entity = Item.class,
-        parentColumns = "item_id",
-        childColumns = "item_id",
         onDelete = CASCADE)},
-    indices = {@Index(value = "recipe_id"), @Index(value = "item_id")})
+    indices = {@Index(value = "recipe_id")})
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -33,9 +30,6 @@ public class Ingredient {
 
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
-
-  @ColumnInfo(name = "item_id")
-  private int itemId;
 
   @NonNull
   @ColumnInfo(name = "name")
@@ -56,22 +50,31 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public Ingredient(int recipeId, int itemId, double amount, String units) {
+  @Ignore
+  private Ingredient(int recipeId, double amount, String units) {
     this.recipeId = recipeId;
-    this.itemId = itemId;
     this.amount = amount;
     this.units = units;
     inStock = false;
-    name = "not_set";
+    name = "No name";
   }
 
-  public Ingredient(String name, String category, int recipeId, int itemId, double amount, String units) {
+  public Ingredient(String name, String category, int recipeId, double amount, String units) {
     this.name = name;
     this.recipeId = recipeId;
-    this.itemId = itemId;
     this.amount = amount;
     this.units = units;
     this.category = category;
+    inStock = false;
+  }
+
+  @Ignore
+  public Ingredient(String name, int recipeId, double amount, String units) {
+    this.name = name;
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    category = "Uncategorised";
     inStock = false;
   }
 
@@ -84,10 +87,6 @@ public class Ingredient {
 
   public int getRecipeId() {
     return recipeId;
-  }
-
-  public int getItemId() {
-    return itemId;
   }
 
   public String getName() {
@@ -120,10 +119,6 @@ public class Ingredient {
 
   public void setRecipeId(int recipeId) {
     this.recipeId = recipeId;
-  }
-
-  public void setItemId(int itemId) {
-    this.itemId = itemId;
   }
 
   public void setName(String name) {
