@@ -38,4 +38,10 @@ public interface IngredientDao {
 
   @Query("select * from ingredient_table where recipe_id = :recipeId")
   List<Ingredient> getIngredients(int recipeId);
+
+  @Query("select * from ingredient_table")
+  List<Ingredient> getAllIngredients();
+
+  @Query("select * from ingredient_table where ingredient_id = :ingredientId limit 1")
+  Ingredient getIngredient(int ingredientId);
 }
