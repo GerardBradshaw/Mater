@@ -17,12 +17,8 @@ import static androidx.room.ForeignKey.CASCADE;
     @ForeignKey(entity = Summary.class,
         parentColumns = "recipe_id",
         childColumns = "recipe_id",
-        onDelete = CASCADE),
-    @ForeignKey(entity = Item.class,
-        parentColumns = "item_id",
-        childColumns = "item_id",
         onDelete = CASCADE)},
-    indices = {@Index(value = "recipe_id"), @Index(value = "item_id")})
+    indices = {@Index(value = "recipe_id")})
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -33,9 +29,6 @@ public class Ingredient {
 
   @ColumnInfo(name = "recipe_id")
   private int recipeId;
-
-  @ColumnInfo(name = "item_id")
-  private int itemId;
 
   @NonNull
   @ColumnInfo(name = "name")
@@ -56,9 +49,8 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  private Ingredient(int recipeId, int itemId, double amount, String units) {
+  private Ingredient(int recipeId, double amount, String units) {
     this.recipeId = recipeId;
-    this.itemId = itemId;
     this.amount = amount;
     this.units = units;
     inStock = false;
@@ -72,7 +64,6 @@ public class Ingredient {
     this.units = units;
     this.category = category;
     inStock = false;
-    itemId = 0;
   }
 
   public Ingredient(String name, int recipeId, double amount, String units) {
@@ -82,7 +73,6 @@ public class Ingredient {
     this.units = units;
     category = "Uncategorised";
     inStock = false;
-    itemId = 0;
   }
 
 
@@ -94,10 +84,6 @@ public class Ingredient {
 
   public int getRecipeId() {
     return recipeId;
-  }
-
-  public int getItemId() {
-    return itemId;
   }
 
   public String getName() {
@@ -130,10 +116,6 @@ public class Ingredient {
 
   public void setRecipeId(int recipeId) {
     this.recipeId = recipeId;
-  }
-
-  public void setItemId(int itemId) {
-    this.itemId = itemId;
   }
 
   public void setName(String name) {
