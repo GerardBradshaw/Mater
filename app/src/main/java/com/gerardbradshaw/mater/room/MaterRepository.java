@@ -486,26 +486,8 @@ public class MaterRepository {
         double amount = ingredients.get(i).getAmount();
         String units = ingredients.get(i).getUnit();
 
-        // Get the ID of the ingredient from the DB. If it does not exist yet, the ID = 0.
-        int ingredientId = itemDao.getItemId(name);
-
-        // If the ingredient does not exist in the ingredient_table, then add it
-        if (ingredientId == 0) {
-          // Create an item from the name
-          Item item = new Item(name);
-
-          // Add the Item to the DAO
-          itemDao.insertItem(item);
-
-          // Get the ID of the item from the DAO
-          ingredientId = itemDao.getItemId(name);
-        }
-
-        // Create a Ingredient using this ID along with the Summary ID, amount, and units
-        Ingredient ingredient =
-            new Ingredient(recipeId, ingredientId, amount, units);
-
-        // Add the Ingredient to the DAO
+        // Create a Ingredient and add it to the database
+        Ingredient ingredient = new Ingredient(name, recipeId, amount, units);
         ingredientDao.insertIngredient(ingredient);
       }
     }

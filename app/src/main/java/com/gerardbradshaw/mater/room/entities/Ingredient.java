@@ -56,23 +56,33 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public Ingredient(int recipeId, int itemId, double amount, String units) {
+  private Ingredient(int recipeId, int itemId, double amount, String units) {
     this.recipeId = recipeId;
     this.itemId = itemId;
     this.amount = amount;
     this.units = units;
     inStock = false;
-    name = "not_set";
+    name = "No name";
   }
 
-  public Ingredient(String name, String category, int recipeId, int itemId, double amount, String units) {
+  public Ingredient(String name, String category, int recipeId, double amount, String units) {
     this.name = name;
     this.recipeId = recipeId;
-    this.itemId = itemId;
     this.amount = amount;
     this.units = units;
     this.category = category;
     inStock = false;
+    itemId = 0;
+  }
+
+  public Ingredient(String name, int recipeId, double amount, String units) {
+    this.name = name;
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    category = "Uncategorised";
+    inStock = false;
+    itemId = 0;
   }
 
 
