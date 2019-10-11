@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/SectionHeaderStyle"
+    android:paddingTop="8dp"
+    android:paddingBottom="0dp"
     tools:text="Fresh Vegetables">
 
 </TextView>

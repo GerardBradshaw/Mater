@@ -31,9 +31,11 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/shoppingList_contentView"
             android:layout_width="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:layout_height="match_parent" >
 
-            <!-- RecyclerView -->
+            <!-- Insert Point -->
             <LinearLayout
                 android:id="@+id/shoppingList_contentInsertPoint"
                 android:layout_width="match_parent"
