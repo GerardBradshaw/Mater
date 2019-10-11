@@ -201,8 +201,11 @@ public class ShoppingListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ShoppingListActivity.this));
 
+        // Add the RecyclerView and Adapter to the holder
+        recyclerAndAdapterPairs.add(new Pair<>(recyclerView, adapter));
+
         // Get the index for insertion and create layout parameters
-        int index = 2 * titleIngredientPairs.size() - 2;
+        int index = 2 * recyclerAndAdapterPairs.size() - 2;
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -219,8 +222,8 @@ public class ShoppingListActivity extends AppCompatActivity {
       super.onPostExecute(aVoid);
       taskScheduler.setTaskFinished();
 
-      progressBar.setVisibility(View.GONE);
       contentView.setVisibility(View.VISIBLE);
+      progressBar.setVisibility(View.GONE);
     }
   }
 
