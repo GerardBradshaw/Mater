@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -49,6 +50,7 @@ public class Ingredient {
 
   // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
+  @Ignore
   private Ingredient(int recipeId, double amount, String units) {
     this.recipeId = recipeId;
     this.amount = amount;
@@ -66,6 +68,7 @@ public class Ingredient {
     inStock = false;
   }
 
+  @Ignore
   public Ingredient(String name, int recipeId, double amount, String units) {
     this.name = name;
     this.recipeId = recipeId;
