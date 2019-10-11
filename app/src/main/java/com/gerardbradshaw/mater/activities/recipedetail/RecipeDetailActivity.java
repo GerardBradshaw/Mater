@@ -34,6 +34,7 @@ import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
+import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 import com.gerardbradshaw.mater.viewmodels.ItemViewModel;
 
 import java.util.ArrayList;
@@ -44,14 +45,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
   // - - - - - - - - - - - - - - - Member Variables - - - - - - - - - - - - - - -
 
   private ImageViewModel imageViewModel;
-  private ItemViewModel itemViewModel;
+  private IngredientViewModel ingredientViewModel;
 
   private TextView descriptionView;
   private ImageView imageView;
   private TextView servingsView;
   private Toolbar toolbar;
 
-  private List<IngredientViewHolder> ingredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
   private List<IngredientHolder> customIngredientHolders = new ArrayList<>();
   private final List<IngredientHolder> defaultIngredientHolders = new ArrayList<>();
@@ -75,7 +75,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_recipe_detail);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
-    itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
+    ingredientViewModel = ViewModelProviders.of(this).get(IngredientViewModel.class);
     DetailViewModel detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
 
     // Get a handle to the Views and set up Toolbar
@@ -163,13 +163,18 @@ public class RecipeDetailActivity extends AppCompatActivity {
     defaultIngredientHolders.clear();
     customIngredientHolders.clear();
 
-    for (Ingredient r : ingredientList) {
-      String name = itemViewModel.getItem(r.getItemId()).getName();
-      double amount = r.getAmount();
-      String unit = r.getUnits();
-      final IngredientHolder finalHolder = new IngredientHolder(name, amount, unit);
-      defaultIngredientHolders.add(finalHolder);
-      customIngredientHolders.add(new IngredientHolder(name, amount, unit));
+    for (Ingredient ingredient : ingredientList) {
+      defaultIngredientHolders.add(new IngredientHolder(
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits()));
+
+      customIngredientHolders.add(new IngredientHolder(
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits()));
     }
   }
 
@@ -237,7 +242,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         // Update defaultIngredientHolders
         for (IngredientHolder holder : defaultIngredientHolders) {
           IngredientHolder customHolder = new IngredientHolder(
-              holder.getName(), holder.getAmount() * servingsMultiplier, holder.getUnit());
+              holder.getName(),
+              holder.getCategory(),
+              holder.getAmount() * servingsMultiplier,
+              holder.getUnit());
           customIngredientHolders.add(customHolder);
         }
 
