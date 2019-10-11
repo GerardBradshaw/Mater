@@ -2,7 +2,6 @@ package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,14 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
-import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Summary;
@@ -33,7 +29,9 @@ import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ShoppingListActivity extends AppCompatActivity {
 
@@ -46,6 +44,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private IngredientViewModel ingredientViewModel;
 
   private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
+  private List<Pair<String, List<Ingredient>>> categoryIngredientPairs = new ArrayList<>();
   private List<Pair<RecyclerView, IngredientListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   private AsyncTaskScheduler taskScheduler;
@@ -116,7 +115,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     Runnable pairsRunnable = new Runnable() {
       @Override
       public void run() {
-        new LoadTitleIngredientPairsAsyncTask(summaryViewModel, ingredientViewModel).execute();
+        new LoadPairsAsyncTask(summaryViewModel, ingredientViewModel).execute();
       }
     };
     taskScheduler.addNewPriorityTask(pairsRunnable);
@@ -134,18 +133,19 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - AsyncTasks - - - - - - - - - - - - - - -
 
-  private class LoadTitleIngredientPairsAsyncTask extends AsyncTask<Void, Void, Void> {
+  private class LoadPairsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     // Member variables
     private SummaryViewModel summaryViewModel;
     private IngredientViewModel ingredientViewModel;
 
     private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
+    private List<Pair<String, List<Ingredient>>> categoryIngredientPairs = new ArrayList<>();
 
 
     // Constructor
-    LoadTitleIngredientPairsAsyncTask(SummaryViewModel summaryViewModel,
-                                      IngredientViewModel ingredientViewModel) {
+    LoadPairsAsyncTask(SummaryViewModel summaryViewModel,
+                       IngredientViewModel ingredientViewModel) {
       this.summaryViewModel = summaryViewModel;
       this.ingredientViewModel = ingredientViewModel;
     }
@@ -157,7 +157,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
       List<Summary> summaryList = summaryViewModel.getAllSummaries();
 
-      // Get the ingredients for each summary
+      // Get the ingredients for each summary and create titleIngredientPairs
       for (Summary summary : summaryList) {
 
         List<Ingredient> ingredientList
@@ -167,6 +167,29 @@ public class ShoppingListActivity extends AppCompatActivity {
             = new Pair<>(summary.getTitle(), ingredientList);
 
         titleIngredientPairs.add(titleIngredientPair);
+      }
+
+      // Get the category for each Ingredient and create categoryIngredientPairs
+      List<Ingredient> allIngredientsList = ingredientViewModel.getAllIngredients();
+      Map<String, List<Ingredient>> categoryIngredientMap = new HashMap<>();
+
+      for (Ingredient ingredient : allIngredientsList) {
+        String categoryTitle = Categories.getCategoryString(ingredient.getCategory());
+
+        if (categoryIngredientMap.containsKey(categoryTitle)) {
+          categoryIngredientMap.get(categoryTitle).add(ingredient);
+        }
+        else {
+          List<Ingredient> ingredientList = new ArrayList<>();
+          ingredientList.add(ingredient);
+          categoryIngredientMap.put(categoryTitle, ingredientList);
+        }
+      }
+
+      for (Map.Entry<String, List<Ingredient>> entry : categoryIngredientMap.entrySet()) {
+        String category = entry.getKey();
+        List<Ingredient> ingredientList = entry.getValue();
+        categoryIngredientPairs.add(new Pair<>(category, ingredientList));
       }
 
       return null;
@@ -179,6 +202,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
       // Save data to Activity
       ShoppingListActivity.this.titleIngredientPairs = titleIngredientPairs;
+      ShoppingListActivity.this.categoryIngredientPairs = categoryIngredientPairs;
     }
   }
 
