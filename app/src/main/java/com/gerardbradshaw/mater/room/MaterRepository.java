@@ -303,6 +303,7 @@ public class MaterRepository {
         new UpdateIngredientAsyncTask(ingredientDao).execute(ingredients);
       }
     };
+    taskScheduler.addNewTask(runnable);
   }
 
   public void updateIngredient(final List<Ingredient> ingredients) {
