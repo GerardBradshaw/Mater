@@ -29,7 +29,7 @@ public class IngredientListAdapter
 
   private Context context;
 
-  private static String LOG_TAG = "GGG - IngredientListAdapter";
+  private static String LOG_TAG = "GGG - ShoppingListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
