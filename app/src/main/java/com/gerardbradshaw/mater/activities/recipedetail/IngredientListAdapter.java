@@ -27,8 +27,8 @@ public class IngredientListAdapter
 
   private List<Ingredient> ingredientList;
 
-  private Context context
-      ;
+  private Context context;
+
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
 

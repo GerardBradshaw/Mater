@@ -79,7 +79,11 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    // TODO update the database
+
+    // Save the stock level of the ingredients to the database
+    for (int i = 0; i < titleIngredientPairs.size(); i++) {
+      ingredientViewModel.updateIngredient(titleIngredientPairs.get(i).second);
+    }
   }
 
 
