@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.List;
 
@@ -22,8 +24,11 @@ public class IngredientListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<IngredientHolder> ingredientHolders; // Cached copy
-  private Context context;
+
+  private List<Ingredient> ingredientList;
+
+  private Context context
+      ;
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
 
@@ -61,15 +66,24 @@ public class IngredientListAdapter
    */
   @Override
   public void onBindViewHolder(@NonNull IngredientViewHolder viewHolder, int position) {
-    if (ingredientHolders != null) {
+    if (ingredientList != null) {
       viewHolder.checkBox.setVisibility(View.VISIBLE);
 
-      IngredientHolder holder = ingredientHolders.get(position);
-      String name = holder.getName();
-      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
+      final Ingredient ingredient = ingredientList.get(position);
+      String name = ingredient.getName();
+      String quantity = Units.formatForDetailView(ingredient.getAmount(), ingredient.getUnits());
+      boolean inStock = ingredient.getInStock();
 
       viewHolder.name.setText(name);
       viewHolder.quantity.setText(quantity);
+      viewHolder.checkBox.setChecked(inStock);
+
+      viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+          ingredient.setInStock(b);
+        }
+      });
 
     } else {
       viewHolder.name.setText(context.getResources().getString(R.string.no_ingredients_message));
@@ -87,8 +101,8 @@ public class IngredientListAdapter
    */
   @Override
   public int getItemCount() {
-    if(ingredientHolders != null) {
-      return ingredientHolders.size();
+    if(ingredientList != null) {
+      return ingredientList.size();
 
     } else {
       return 0;
@@ -98,13 +112,13 @@ public class IngredientListAdapter
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setIngredientList(List<IngredientHolder> ingredientHolders) {
-    this.ingredientHolders = ingredientHolders;
+  public void setData(List<Ingredient> ingredients) {
+    this.ingredientList = ingredients;
     notifyDataSetChanged();
   }
 
-  public IngredientHolder getIngredientHolderIdAtPosition(int position) {
-    return ingredientHolders.get(position);
+  public Ingredient getIngredientAtPosition(int position) {
+    return ingredientList.get(position);
   }
 
 
@@ -129,7 +143,5 @@ public class IngredientListAdapter
       this.adapter = adapter;
     }
   }
-
-
 
 }
