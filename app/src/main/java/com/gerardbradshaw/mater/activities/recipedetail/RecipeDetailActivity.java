@@ -147,6 +147,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    // TODO save new stock state of ingredients to the database
+    //ingredientViewModel.updateIngredient();
+
+  }
 
   // - - - - - - - - - - - - - - - Helper Methods - - - - - - - - - - - - - - -
 
