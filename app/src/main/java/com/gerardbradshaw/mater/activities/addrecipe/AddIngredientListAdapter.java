@@ -76,13 +76,13 @@ public class AddIngredientListAdapter
       String unit = holder.getUnit();
       String category = holder.getCategory();
 
-      // Set up the units Spinner and the drop down appearance
+      // Set up the unitSpinner Spinner and the drop down appearance
       ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
           context, R.array.global_units_array, android.R.layout.simple_spinner_item);
       spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for unit changes
-      viewHolder.units.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      viewHolder.unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -95,12 +95,12 @@ public class AddIngredientListAdapter
       });
 
       // Set the adapter to the spinner
-      viewHolder.units.setAdapter(spinnerAdapter);
+      viewHolder.unitSpinner.setAdapter(spinnerAdapter);
 
-      // TODO Set up category Spinner and the drop down appearance
+      // TODO Set up categorySpinner Spinner and the drop down appearance
 
-      // Set the name, amount, unit and category if a name exists, otherwise make them empty
-      // TODO set default unit and category
+      // Set the name, amount, unit and categorySpinner if a name exists, otherwise make them empty
+      // TODO set default unit and categorySpinner
       if (!name.isEmpty()) {
         viewHolder.name.setText(name);
 
@@ -201,7 +201,8 @@ public class AddIngredientListAdapter
     // Member variables
     private EditText name;
     private EditText amount;
-    private Spinner units;
+    private Spinner unitSpinner;
+    private Spinner categorySpinner;
     final AddIngredientListAdapter adapter;
 
     // Constructor
@@ -211,7 +212,8 @@ public class AddIngredientListAdapter
       // Initialize the views and adapter.
       name = itemView.findViewById(R.id.ingredientInput_nameInput);
       amount = itemView.findViewById(R.id.ingredientInput_amountInput);
-      units = itemView.findViewById(R.id.ingredientInput_unitSpinner);
+      unitSpinner = itemView.findViewById(R.id.ingredientInput_unitSpinner);
+      categorySpinner = itemView.findViewById(R.id.ingredientInput_categorySpinner);
       this.adapter = adapter;
     }
   }
