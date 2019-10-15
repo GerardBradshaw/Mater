@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.List;
@@ -86,7 +85,7 @@ public class IngredientListAdapter
       });
 
     } else {
-      viewHolder.name.setText(context.getResources().getString(R.string.no_ingredients_message));
+      viewHolder.name.setText(context.getResources().getString(R.string.recipe_detail_text_no_ingredients));
       viewHolder.checkBox.setVisibility(View.GONE);
     }
 

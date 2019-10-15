@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,14 +17,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -36,8 +31,6 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
 import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
@@ -111,11 +104,11 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
     if (recipeId != 0) {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader_edit));
+      toolbar.setTitle(getString(R.string.add_recipe_header_edit));
       setSupportActionBar(toolbar);
       loadExistingRecipe(recipeId);
     } else {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      toolbar.setTitle(getString(R.string.add_recipe_header));
       setSupportActionBar(toolbar);
     }
 
@@ -341,7 +334,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void showCancelDialog() {
     // Set up dialog for user confirmation
     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AddRecipeActivity.this);
-    alertBuilder.setMessage(getString(R.string.discard_changes));
+    alertBuilder.setMessage(getString(R.string.add_recipe_dialog_discard_changes));
 
     alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
       @Override

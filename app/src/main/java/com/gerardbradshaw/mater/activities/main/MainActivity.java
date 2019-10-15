@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
     NavigationView navigationView = findViewById(R.id.main_navDrawer);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity
   private void deleteRecipe(final int position) {
     final Summary recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
     String alertMessage =
-        getString(R.string.dialog_confirm_delete) + " \"" + recipeToDelete.getTitle() + "\"?";
+        getString(R.string.main_dialog_delete) + " \"" + recipeToDelete.getTitle() + "\"?";
 
     // Set up dialog for user confirmation
     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);

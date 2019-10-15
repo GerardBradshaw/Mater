@@ -1,62 +1,66 @@
 <resources>
+    <!-- Global -->
     <string name="app_name">Mater</string>
+    <string name="global_header_steps">Steps</string>
+    <string name="global_header_ingredients">Ingredients</string>
+    <string name="global_content_description_image">Recipe Image</string>
+    <string name="global_menu_settings">Settings</string>
+    <string name="global_menu_edit">Edit</string>
+    <string name="global_action_servings">Servings</string>
+    <string-array name="global_category_array">
+        <item>Fresh fruit &amp; vegetables</item>
+        <item>Bakery</item>
+        <item>Cereals &amp; spreads</item>
+        <item>Canned goods</item>
+        <item>International food</item>
+        <item>Rice &amp; pasta</item>
+        <item>Cold food</item>
+        <item>Oils &amp; condiments</item>
+        <item>Baking</item>
+        <item>Spices</item>
+        <item>Kitchen supplies</item>
+        <item>Personal hygiene</item>
+        <item>Cleaning supplies</item>
+        <item>Supplements &amp; medicines</item>
+        <item>Beverages</item>
+        <item>Juices</item>
+        <item>Uncategorised</item>
+    </string-array>
 
     <!-- Main Activity -->
-    <!-- Nav drawer -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_drawer_open">Open navigation drawer</string>
+    <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Mater</string>
     <string name="nav_header_subtitle">You mater!</string>
     <string name="nav_header_desc">Navigation header</string>
-    <!-- Nav menu -->
     <string name="nav_menu_shoppingList">Shopping List</string>
     <string name="nav_menu_settings">Settings</string>
-    <!-- AppBar Menu -->
-    <string name="action_settings">Settings</string>
-    <!-- Alert Dialogs -->
-    <string name="dialog_confirm_delete">Permanently delete</string>
+    <string name="main_dialog_delete">Permanently delete</string>
+    <string name="main_text_no_recipes">No recipes</string>
+    <string name="main_text_no_recipes_instructions">Add a new recipe with the + button!</string>
 
-    <!-- General Strings -->
-    <string name="stepsHeader">Steps</string>
-    <string name="ingredientsHeader">Ingredients</string>
-    <string name="image_contentDescription">Recipe Image</string>
-
-    <!-- Add recipe activity -->
-    <!-- Headers -->
-    <string name="addRecipe_pageHeader">Add new recipe</string>
-    <string name="addRecipe_pageHeader_edit">Edit recipe</string>
-    <!-- Buttons -->
-    <string name="addRecipe_saveButton">Save Recipe</string>
-    <string name="addRecipe_addIngredientButton">Add</string>
-    <string name="addRecipe_addStepButton">Add</string>
-    <!-- EditText hints -->
-    <string name="addRecipe_titleInput_hint">Title…</string>
-    <string name="addRecipe_descriptionInput_hint">Short description…</string>
-    <string name="addRecipe_addIngredient_nameInput_hint">Ingredient name…</string>
-    <string name="addRecipe_addIngredient_amountInput_hint">Amount</string>
-    <string name="addRecipe_addStep_stepInput_hint">Describe the step…</string>
-    <string name="addRecipe_servingsInput_hint">0</string>
-    <!-- Alert Dialogs -->
-    <string name="discard_changes">Discard changes?</string>
+    <!-- Add Recipe Activity -->
+    <string name="add_recipe_header">Add new recipe</string>
+    <string name="add_recipe_header_edit">Edit recipe</string>
+    <string name="add_recipe_button_save">Save Recipe</string>
+    <string name="add_recipe_button_add_ingredient">Add</string>
+    <string name="add_recipe_button_add_step">Add</string>
+    <string name="add_recipe_button_select_image">Select Image</string>
+    <string name="add_recipe_button_cancel">Cancel</string>
+    <string name="add_recipe_hint_title">Title…</string>
+    <string name="add_recipe_hint_description">Short description…</string>
+    <string name="add_recipe_hint_ingredient_name">Ingredient name…</string>
+    <string name="add_recipe_hint_ingredient_amount">Amount</string>
+    <string name="add_recipe_hint_step">Describe the step…</string>
+    <string name="add_recipe_hint_servings">0</string>
+    <string name="add_recipe_dialog_discard_changes">Discard changes?</string>
+    <string name="add_recipe_text_no_image_selected">No image selected</string>
 
     <!-- Recipe Detail Activity -->
-    <!-- Content Descriptions -->
-    <string name="recipeDetail_image_contentDescription">Photo of dish</string>
-    <!-- Messages -->
-    <string name="no_recipes_message">No recipes</string>
-    <string name="no_recipe_instruction">Add a new recipe with the + button!</string>
-    <string name="no_ingredients_message">No items set!</string>
-    <!-- Buttons -->
-    <string name="recipeDetail_selectImageButton">Select Image</string>
-    <string name="addRecipe_imageNameTextView">No image selected</string>
-    <string name="recipeDetail_ingredientHeaderSubtitle">Tick an item to add it to your shopping list!</string>
-    <!-- AppBar Menu -->
-    <string name="action_edit">Edit recipe</string>
-    <string name="action_servings">Servings</string>
-    <string name="addRecipe_cancelButton">Cancel</string>
+    <string name="recipe_detail_text_no_ingredients">No items set!</string>
+    <string name="recipe_detail_header_ingredient_instructions">Tick ingredients you already have in the pantry. This will sync to your shopping list!</string>
 
     <!-- Shopping List Activity -->
-    <!-- AppBar Menu -->
     <string name="shoppingListMenu_sort">Sort</string>
 
 

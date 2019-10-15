@@ -57,7 +57,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="200dp"
                             android:adjustViewBounds="true"
-                            android:contentDescription="@string/recipeDetail_image_contentDescription"
+                            android:contentDescription="@string/global_content_description_image"
                             android:scaleType="centerCrop"
                             android:transitionName="imageTransition"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -120,12 +120,12 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="0dp"
-                    android:text="@string/ingredientsHeader" />
+                    android:text="@string/global_header_ingredients" />
 
                 <!-- Ingredients Subtitle -->
                 <TextView
                     android:id="@+id/recipeDetail_ingredientsSubtitle"
-                    android:text="@string/recipeDetail_ingredientHeaderSubtitle"
+                    android:text="@string/recipe_detail_header_ingredient_instructions"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:paddingBottom="9dp"
@@ -147,7 +147,7 @@
                     style="@style/SectionHeaderStyle"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:text="@string/stepsHeader" />
+                    android:text="@string/global_header_steps" />
 
                 <!-- Steps Layout -->
                 <LinearLayout
