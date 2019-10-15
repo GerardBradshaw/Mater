@@ -138,6 +138,8 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
+    // TODO listen to spinners
+
     // Listen to all buttons
     listenToButtons();
 

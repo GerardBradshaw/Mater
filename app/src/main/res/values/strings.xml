@@ -8,6 +8,7 @@
     <string name="global_menu_edit">Edit</string>
     <string name="global_action_servings">Servings</string>
     <string-array name="global_category_array">
+        <item>Uncategorised</item>
         <item>Fresh fruit &amp; vegetables</item>
         <item>Bakery</item>
         <item>Cereals &amp; spreads</item>
@@ -24,9 +25,9 @@
         <item>Supplements &amp; medicines</item>
         <item>Beverages</item>
         <item>Juices</item>
-        <item>Uncategorised</item>
     </string-array>
     <string-array name="global_units_array">
+        <item>no unit</item>
         <item>g</item>
         <item>kg</item>
         <item>mL</item>
@@ -42,7 +43,6 @@
         <item>tbsp (US)</item>
         <item>drops</item>
         <item>pinch</item>
-        <item>no unit</item>
     </string-array>
 
     <!-- Main Activity -->

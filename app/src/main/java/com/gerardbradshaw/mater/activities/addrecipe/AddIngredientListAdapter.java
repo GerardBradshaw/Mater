@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +31,8 @@ public class AddIngredientListAdapter
 
   private NameEditedListener nameEditedListener;
   private AmountEditedListener amountEditedListener;
+  private UnitEditedListener unitEditedListener;
+  private CategoryEditedListener categoryEditedListener;
 
   private Context context;
 
@@ -77,7 +80,7 @@ public class AddIngredientListAdapter
       String category = holder.getCategory();
 
       // Set up the unitSpinner and the drop down appearance
-      ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
+      final ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
           context, R.array.global_units_array, android.R.layout.simple_spinner_item);
       unitSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -85,7 +88,10 @@ public class AddIngredientListAdapter
       viewHolder.unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-          // TODO do do something with changes
+          if (unitEditedListener != null) {
+            unitEditedListener.onUnitsEdited(viewHolder.getAdapterPosition(),
+                adapterView.getSelectedItem().toString());
+          }
         }
 
         @Override
@@ -106,7 +112,10 @@ public class AddIngredientListAdapter
           new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-          // TODO do something with changes
+          if (categoryEditedListener != null) {
+            categoryEditedListener.onCategoryEdited(viewHolder.getAdapterPosition(),
+                adapterView.getSelectedItem().toString());
+          }
         }
 
         @Override
@@ -247,7 +256,7 @@ public class AddIngredientListAdapter
     void onAmountEdited(int position, double amount);
   }
 
-  public interface UnitsEditedListener {
+  public interface UnitEditedListener {
     void onUnitsEdited(int position, String unit);
   }
 
