@@ -51,7 +51,7 @@
                         android:id="@+id/addRecipe_titleInput"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/addRecipe_titleInput_hint"
+                        android:hint="@string/add_recipe_hint_title"
                         android:inputType="textCapWords"
                         android:maxLength="30"
                         android:layout_weight="70"/>
@@ -61,7 +61,7 @@
                         android:id="@+id/addRecipe_servingsInput"
                         android:layout_width="36sp"
                         android:layout_height="match_parent"
-                        android:hint="@string/addRecipe_servingsInput_hint"
+                        android:hint="@string/add_recipe_hint_servings"
                         android:layout_weight="0"
                         android:inputType="number"
                         android:maxLength="3"/>
@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLength="300"
-                    android:hint="@string/addRecipe_descriptionInput_hint"
+                    android:hint="@string/add_recipe_hint_description"
                     android:inputType="textCapSentences|textMultiLine" />
 
                 <!-- Image Name -->
@@ -88,7 +88,7 @@
                     style="@style/DescriptionStyle"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/addRecipe_imageNameTextView" />
+                    android:text="@string/add_recipe_text_no_image_selected" />
 
                 <!-- Select Image Button -->
                 <Button
@@ -97,13 +97,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/recipeDetail_selectImageButton" />
+                    android:text="@string/add_recipe_button_select_image" />
 
                 <!-- Ingredients Header -->
                 <TextView
                     android:id="@+id/addRecipe_ingredientsHeaderTextView"
                     style="@style/SectionHeaderStyle"
-                    android:text="@string/ingredientsHeader" />
+                    android:text="@string/global_header_ingredients" />
 
                 <!-- Ingredient Recycler -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -124,13 +124,13 @@
                 <Button
                     android:id="@+id/addRecipe_addIngredientButton"
                     style="@style/ButtonStyle"
-                    android:text="@string/addRecipe_addIngredientButton" />
+                    android:text="@string/add_recipe_button_add_ingredient" />
 
                 <!-- Add Steps Header -->
                 <TextView
                     android:id="@+id/addRecipe_addStepsHeaderTextView"
                     style="@style/SectionHeaderStyle"
-                    android:text="@string/stepsHeader" />
+                    android:text="@string/global_header_steps" />
 
                 <!-- Steps Recycler -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -151,7 +151,7 @@
                 <Button
                     android:id="@+id/addRecipe_addStepButton"
                     style="@style/ButtonStyle"
-                    android:text="@string/addRecipe_addStepButton" />
+                    android:text="@string/add_recipe_button_add_step" />
 
                 <!-- Save Recipe Button -->
                 <Button
@@ -159,14 +159,14 @@
                     style="@style/ButtonStyle"
                     android:layout_width="match_parent"
                     android:layout_marginTop="24dp"
-                    android:text="@string/addRecipe_saveButton" />
+                    android:text="@string/add_recipe_button_save" />
 
                 <!-- Cancel Button -->
                 <Button
                     android:id="@+id/addRecipe_cancel"
                     style="@style/ButtonStyle"
                     android:layout_width="match_parent"
-                    android:text="@string/addRecipe_cancelButton" />
+                    android:text="@string/add_recipe_button_cancel" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

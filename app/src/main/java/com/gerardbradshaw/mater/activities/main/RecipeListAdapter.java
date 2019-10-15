@@ -2,7 +2,6 @@ package com.gerardbradshaw.mater.activities.main;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,10 +84,10 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     } else {
       holder.recipeTitleView
-          .setText(context.getResources().getString(R.string.no_recipes_message));
+          .setText(context.getResources().getString(R.string.main_text_no_recipes));
 
       holder.recipeDescriptionView
-          .setText(context.getResources().getString(R.string.no_recipe_instruction));
+          .setText(context.getResources().getString(R.string.main_text_no_recipes_instructions));
     }
 
     // Set up listener for clicks

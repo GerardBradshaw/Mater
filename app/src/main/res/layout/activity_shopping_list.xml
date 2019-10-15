@@ -28,50 +28,21 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!-- Content -->
-        <LinearLayout
-            android:id="@+id/shoppingList_contentLinearLayout"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/shoppingList_contentView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_height="match_parent" >
 
-            <!-- Header -->
+            <!-- Insert Point -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:orientation="horizontal"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:id="@+id/shoppingList_stockCountHeader"
-                    android:layout_width="60sp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
-                    android:text="In Stock"
-                    android:textAlignment="center"
-                    android:textColor="@color/textColorSecondary"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/shoppingList_textViewHeader"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="8dp"
-                    android:text="Ingredient"
-                    android:textColor="@color/textColorSecondary"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-
-            <!-- RecyclerView -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/shoppingList_recycler"
+                android:id="@+id/shoppingList_contentInsertPoint"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical" />
+                android:orientation="vertical" />
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <!-- ProgressBar -->
         <ProgressBar
@@ -79,7 +50,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
             tools:visibility="visible"/>
 
     </FrameLayout>

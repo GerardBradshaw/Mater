@@ -1,42 +1,36 @@
 package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.room.entities.Item;
-import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemListAdapter
-    extends RecyclerView.Adapter<ItemListAdapter.IngredientViewHolder> {
+public class ShoppingListAdapter
+    extends RecyclerView.Adapter<ShoppingListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<Item> itemList = new ArrayList<>();
-  private static String LOG_TAG = "GGG - ItemListAdapter";
-  private StockChangedListener stockChangedListener;
-  private Context context;
+  private static String LOG_TAG = "GGG - ShoppingListAdapter";
+  private List<Ingredient> ingredientList = new ArrayList<>();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public ItemListAdapter(Context context) {
+  public ShoppingListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
-    this.context = context;
   }
 
 
@@ -68,45 +62,18 @@ public class ItemListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    if(position %2 == 1) {
-      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.opaqueAccent));
-    } else {
-      holder.itemView.setBackgroundColor(context.getResources().getColor(R.color.white));
-    }
+    final Ingredient currentIngredient = ingredientList.get(position);
+    final boolean inStock = currentIngredient.getInStock();
+    holder.textView.setText(currentIngredient.getName());
+    holder.inStock.setChecked(currentIngredient.getInStock());
 
-    Item currentItem = itemList.get(position);
-    final int stockLevel = currentItem.getStockLevel();
-    holder.textView.setText(currentItem.getName());
-
-    if (stockLevel != 0) {
-      holder.stockInput.setText(Integer.toString(stockLevel));
-    } else {
-      holder.stockInput.setText(null);
-    }
-
-    holder.stockInput.addTextChangedListener(new TextWatcher() {
+    // Set up onCheckedChangedListener
+    holder.inStock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
-      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-      }
-
-      @Override
-      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-      }
-
-      @Override
-      public void afterTextChanged(Editable editable) {
-        int newStockLevel = 0;
-
-        if (!editable.toString().isEmpty()) {
-          newStockLevel = Integer.parseInt(editable.toString());
-        }
-
-        if (stockChangedListener != null) {
-          stockChangedListener.onStockLevelChanged(position, newStockLevel);
-        }
+      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        currentIngredient.setInStock(b);
       }
     });
-
   }
 
   /**
@@ -118,20 +85,19 @@ public class ItemListAdapter
    */
   @Override
   public int getItemCount() {
-    if(itemList != null) {
-      return itemList.size();
+    if(ingredientList != null) {
+      return ingredientList.size();
     } else {
       return 0;
     }
   }
 
-  public void setData(List<Item> itemList) {
-    this.itemList = itemList;
-    notifyDataSetChanged();
-  }
 
-  public void setStockChangedListener(StockChangedListener stockChangedListener) {
-    this.stockChangedListener = stockChangedListener;
+  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
+  public void setData(List<Ingredient> ingredientList) {
+    this.ingredientList = ingredientList;
+    notifyDataSetChanged();
   }
 
 
@@ -139,21 +105,18 @@ public class ItemListAdapter
 
   class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-    final EditText stockInput;
+    final CheckBox inStock;
     final TextView textView;
-    final ItemListAdapter adapter;
+    final ShoppingListAdapter adapter;
 
-    public IngredientViewHolder(@NonNull View itemView, ItemListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, ShoppingListAdapter adapter) {
       super(itemView);
 
       // Initialize the views in the adapter
-      stockInput = itemView.findViewById(R.id.shoppingListItem_stockInput);
+      inStock = itemView.findViewById(R.id.shoppingListItem_inStockCheckBox);
       textView = itemView.findViewById(R.id.shoppingListItem_textView);
       this.adapter = adapter;
     }
   }
 
-  public interface StockChangedListener {
-    void onStockLevelChanged(int position, int newStockLevel);
-  }
 }
