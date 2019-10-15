@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,13 +25,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.main.MainActivity;
-import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.RecipeIngredientViewHolder;
 import com.gerardbradshaw.mater.viewholders.StepViewViewHolder;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
@@ -53,10 +49,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private TextView servingsView;
   private Toolbar toolbar;
 
-  private List<RecipeIngredientViewHolder> recipeIngredientViewHolders = new ArrayList<>();
   private List<StepViewViewHolder> stepViewHolders = new ArrayList<>();
-  private List<RecipeIngredientHolder> customRecipeIngredientHolders = new ArrayList<>();
-  private final List<RecipeIngredientHolder> defaultRecipeIngredientHolders = new ArrayList<>();
+  private List<Ingredient> defaultIngredients = new ArrayList<>();
+  private List<Ingredient> customIngredients = new ArrayList<>();
 
   private Context context;
   private String recipeTitle;
@@ -134,11 +129,11 @@ public class RecipeDetailActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Observe ingredients
-    detailViewModel.getLiveRecipeIngredients(recipeId).observe(this, new Observer<List<RecipeIngredient>>() {
+    detailViewModel.getLiveIngredients(recipeId).observe(this, new Observer<List<Ingredient>>() {
       @Override
-      public void onChanged(List<RecipeIngredient> recipeIngredientList) {
-        createRecipeIngredientHolders(recipeIngredientList);
-        ingredientListAdapter.setRecipeIngredientList(customRecipeIngredientHolders);
+      public void onChanged(List<Ingredient> ingredientList) {
+        getIngredientsLists(ingredientList);
+        ingredientListAdapter.setData(customIngredients);
       }
     });
 
@@ -151,6 +146,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+    // Save the inStock level of each ingredient to the database
+    ingredientViewModel.updateIngredient(customIngredients);
+  }
 
   // - - - - - - - - - - - - - - - Helper Methods - - - - - - - - - - - - - - -
 
@@ -161,17 +162,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         .into(imageView);
   }
 
-  private void createRecipeIngredientHolders(List<RecipeIngredient> recipeIngredientList) {
-    defaultRecipeIngredientHolders.clear();
-    customRecipeIngredientHolders.clear();
+  private void getIngredientsLists(List<Ingredient> ingredientList) {
+    defaultIngredients.clear();
+    customIngredients.clear();
 
-    for (RecipeIngredient r : recipeIngredientList) {
-      String name = ingredientViewModel.getIngredient(r.getIngredientId()).getName();
-      double amount = r.getAmount();
-      String unit = r.getUnits();
-      final RecipeIngredientHolder finalHolder = new RecipeIngredientHolder(name, amount, unit);
-      defaultRecipeIngredientHolders.add(finalHolder);
-      customRecipeIngredientHolders.add(new RecipeIngredientHolder(name, amount, unit));
+    for (Ingredient ingredient : ingredientList) {
+      defaultIngredients.add(ingredient);
+      customIngredients.add(ingredient);
     }
   }
 
@@ -183,8 +180,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     LayoutInflater inflater = (LayoutInflater) getApplicationContext()
         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    // Get the insert point
+    // Get the insert point and clear it
     ViewGroup insertPoint = findViewById(R.id.recipeDetail_stepsLayout);
+    insertPoint.removeAllViews();
 
     for (Step step : steps) {
       String description = step.getDescription();
@@ -232,14 +230,17 @@ public class RecipeDetailActivity extends AppCompatActivity {
         customServings = Integer.parseInt(input.getText().toString());
         double servingsMultiplier = customServings / defaultServings;
 
-        // Reset the customRecipeIngredientHolder
-        customRecipeIngredientHolders.clear();
+        // Reset customIngredients
+        customIngredients.clear();
 
-        // Update recipeIngredientHolders
-        for (RecipeIngredientHolder holder : defaultRecipeIngredientHolders) {
-          RecipeIngredientHolder customHolder = new RecipeIngredientHolder(
-              holder.getName(), holder.getAmount() * servingsMultiplier, holder.getUnit());
-          customRecipeIngredientHolders.add(customHolder);
+        for (Ingredient ingredient : defaultIngredients) {
+          Ingredient newIngredient = new Ingredient(
+              ingredient.getName(),
+              ingredient.getCategory(),
+              ingredient.getRecipeId(),
+              ingredient.getAmount() * servingsMultiplier,
+              ingredient.getUnits());
+          customIngredients.add(newIngredient);
         }
 
         ingredientListAdapter.notifyDataSetChanged();

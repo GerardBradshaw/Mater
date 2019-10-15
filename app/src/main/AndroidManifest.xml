@@ -28,7 +28,7 @@
 
         <!-- Add Recipe Activity -->
         <activity
-            android:name="com.gerardbradshaw.mater.activities.AddRecipeActivity"
+            android:name="com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <!-- Recipe Detail Activity -->

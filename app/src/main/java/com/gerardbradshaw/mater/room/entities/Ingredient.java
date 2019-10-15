@@ -3,10 +3,23 @@ package com.gerardbradshaw.mater.room.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.gerardbradshaw.mater.helpers.Units;
+
+import static androidx.room.ForeignKey.CASCADE;
+
 @Entity(
-    tableName = "ingredient_table")
+    tableName = "ingredient_table",
+    foreignKeys = {
+    @ForeignKey(entity = Summary.class,
+        parentColumns = "recipe_id",
+        childColumns = "recipe_id",
+        onDelete = CASCADE)},
+    indices = {@Index(value = "recipe_id")})
 public class Ingredient {
 
   // - - - - - - - - - - - - - - - DB columns - - - - - - - - - - - - - - -
@@ -15,60 +28,54 @@ public class Ingredient {
   @ColumnInfo(name = "ingredient_id")
   private int ingredientId;
 
+  @ColumnInfo(name = "recipe_id")
+  private int recipeId;
+
   @NonNull
   @ColumnInfo(name = "name")
   private String name;
 
-  @ColumnInfo(name = "stockLevel")
-  private int stockLevel;
+  @ColumnInfo(name = "category")
+  private String category;
 
-  @ColumnInfo(name = "containsMilk")
-  private String containsMilk;
+  @ColumnInfo(name = "amount")
+  private double amount;
 
-  @ColumnInfo(name = "containsEgg")
-  private String containsEgg;
+  @ColumnInfo(name = "units")
+  private String units;
 
-  @ColumnInfo(name = "containsFish")
-  private String containsFish;
-
-  @ColumnInfo(name = "containsCrustacean")
-  private String containsCrustacean;
-
-  @ColumnInfo(name = "containsTreeNuts")
-  private String containsTreeNuts;
-
-  @ColumnInfo(name = "containsPeanuts")
-  private String containsPeanuts;
-
-  @ColumnInfo(name = "containsWheat")
-  private String containsWheat;
-
-  @ColumnInfo(name = "containsSoy")
-  private String containsSoy;
-
-  @ColumnInfo(name = "containsFodmap")
-  private String containsFodmap;
+  @ColumnInfo(name = "in_stock")
+  private boolean inStock;
 
 
-  // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Constructor(s) - - - - - - - - - - - - - - -
 
-  public Ingredient(@NonNull String name) {
+  @Ignore
+  private Ingredient(int recipeId, double amount, String units) {
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    inStock = false;
+    name = "No name";
+  }
+
+  public Ingredient(String name, String category, int recipeId, double amount, String units) {
     this.name = name;
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    this.category = category;
+    inStock = false;
+  }
 
-    stockLevel = 0;
-
-    // Set all allergens as not present
-    String CONTAINS_NONE = ContainsAllergen.CONTAINS_NONE.name();
-    containsMilk = CONTAINS_NONE;
-    containsEgg = CONTAINS_NONE;
-    containsFish = CONTAINS_NONE;
-    containsCrustacean = CONTAINS_NONE;
-    containsTreeNuts = CONTAINS_NONE;
-    containsPeanuts = CONTAINS_NONE;
-    containsWheat = CONTAINS_NONE;
-    containsSoy = CONTAINS_NONE;
-    containsFodmap = CONTAINS_NONE;
-
+  @Ignore
+  public Ingredient(String name, int recipeId, double amount, String units) {
+    this.name = name;
+    this.recipeId = recipeId;
+    this.amount = amount;
+    this.units = units;
+    category = "Uncategorised";
+    inStock = false;
   }
 
 
@@ -78,110 +85,68 @@ public class Ingredient {
     return ingredientId;
   }
 
-  @NonNull
+  public int getRecipeId() {
+    return recipeId;
+  }
+
   public String getName() {
     return name;
   }
 
-  public int getStockLevel() {
-    return stockLevel;
+  public String getCategory() {
+    return category;
   }
 
-  public String getContainsMilk() {
-    return containsMilk;
+  public double getAmount() {
+    return amount;
   }
 
-  public String getContainsEgg() {
-    return containsEgg;
+  public String getUnits() {
+    return units;
   }
 
-  public String getContainsFish() {
-    return containsFish;
-  }
-
-  public String getContainsCrustacean() {
-    return containsCrustacean;
-  }
-
-  public String getContainsTreeNuts() {
-    return containsTreeNuts;
-  }
-
-  public String getContainsPeanuts() {
-    return containsPeanuts;
-  }
-
-  public String getContainsWheat() {
-    return containsWheat;
-  }
-
-  public String getContainsSoy() {
-    return containsSoy;
-  }
-
-  public String getContainsFodmap() {
-    return containsFodmap;
+  public boolean getInStock() {
+    return inStock;
   }
 
 
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
+
   public void setIngredientId(int ingredientId) {
     this.ingredientId = ingredientId;
   }
 
-  public void setName(@NonNull String name) {
+  public void setRecipeId(int recipeId) {
+    this.recipeId = recipeId;
+  }
+
+  public void setName(String name) {
     this.name = name;
   }
 
-  public void setStockLevel(int stockLevel) {
-    this.stockLevel = stockLevel;
+  public void setCategory(String category) {
+    this.category = category;
   }
 
-  public void setContainsMilk(String containsMilk) {
-    this.containsMilk = containsMilk;
+  public void setAmount(double amount) {
+    this.amount = amount;
   }
 
-  public void setContainsEgg(String containsEgg) {
-    this.containsEgg = containsEgg;
+  public void setUnits(Units.Volume units) {
+    this.units = units.name();
   }
 
-  public void setContainsFish(String containsFish) {
-    this.containsFish = containsFish;
+  public void setUnits(Units.Mass units) {
+    this.units = units.name();
   }
 
-  public void setContainsCrustacean(String containsCrustacean) {
-    this.containsCrustacean = containsCrustacean;
+  public void setUnits(Units.MiscUnits units) {
+    this.units = units.name();
   }
 
-  public void setContainsTreeNuts(String containsTreeNuts) {
-    this.containsTreeNuts = containsTreeNuts;
+  public void setInStock(boolean inStock) {
+    this.inStock = inStock;
   }
-
-  public void setContainsPeanuts(String containsPeanuts) {
-    this.containsPeanuts = containsPeanuts;
-  }
-
-  public void setContainsWheat(String containsWheat) {
-    this.containsWheat = containsWheat;
-  }
-
-  public void setContainsSoy(String containsSoy) {
-    this.containsSoy = containsSoy;
-  }
-
-  public void setContainsFodmap(String containsFodmap) {
-    this.containsFodmap = containsFodmap;
-  }
-
-
-
-  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
-
-  public enum ContainsAllergen {
-    CONTAINS_NONE,
-    CONTAINS_TRACES,
-    CONTAINS_AS_INGREDIENT;
-  };
 
 }

@@ -6,13 +6,17 @@
     <item
         android:id="@+id/action_servings"
         android:orderInCategory="10"
-        android:title="@string/action_servings"
+        android:title="@string/global_action_servings"
+        android:icon="@drawable/ic_utensils"
+        android:iconTint="@color/textColorSecondary"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_edit"
         android:orderInCategory="100"
-        android:title="@string/action_edit"
-        app:showAsAction="never" />
+        android:title="@string/global_menu_edit"
+        android:icon="@drawable/ic_edit"
+        android:iconTint="@color/textColorSecondary"
+        app:showAsAction="ifRoom" />
 
 </menu>
