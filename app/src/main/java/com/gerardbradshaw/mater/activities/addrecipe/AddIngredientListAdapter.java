@@ -6,6 +6,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -31,11 +33,14 @@ public class AddIngredientListAdapter
   private NameEditedListener nameEditedListener;
   private AmountEditedListener amountEditedListener;
 
+  private Context context;
+
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public AddIngredientListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
+    this.context = context;
   }
 
 
@@ -72,6 +77,28 @@ public class AddIngredientListAdapter
       double amount = holder.getAmount();
       String unit = holder.getUnit();
 
+      // Set up the units Spinner and the drop down appearance
+      ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
+          context, R.array.global_category_array, android.R.layout.simple_spinner_item);
+      spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+      // Set up listener for unit changes
+      viewHolder.units.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+      });
+
+      // Set the adapter to the spinner
+      viewHolder.units.setAdapter(spinnerAdapter);
+
+      // Set the name, amount, and unit if a name exists, otherwise make them empty
       if (!name.isEmpty()) {
         viewHolder.name.setText(name);
 
@@ -84,6 +111,7 @@ public class AddIngredientListAdapter
         viewHolder.amount.setText(null);
       }
 
+      // Set up listener for name changes
       viewHolder.name.addTextChangedListener(new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -101,6 +129,7 @@ public class AddIngredientListAdapter
         }
       });
 
+      // Set up listener for amount changes
       viewHolder.amount.addTextChangedListener(new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -121,6 +150,7 @@ public class AddIngredientListAdapter
           }
         }
       });
+
     }
   }
 
