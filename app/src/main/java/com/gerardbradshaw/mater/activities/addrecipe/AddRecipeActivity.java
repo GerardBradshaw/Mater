@@ -130,6 +130,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
+    // Listen for edited steps
     stepListAdapter.setStepEditedListener(new AddStepListAdapter.StepEditedListener() {
       @Override
       public void onDescriptionEdited(int position, String newDescription) {
@@ -137,50 +138,9 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
-    // Set listener for selectImageButton
-    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
-    selectImageButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        importImage();
-      }
-    });
+    // Listen to all buttons
+    listenToButtons();
 
-    // Set listener for addIngredientButton
-    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
-    addIngredientButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        addIngredientToRecycler();
-      }
-    });
-
-    // Set listener for addStepButton
-    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
-    addStepButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        addStepToRecycler();
-      }
-    });
-
-    // Set listener for saveButton
-    Button saveButton = findViewById(R.id.addRecipe_saveButton);
-    saveButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        saveRecipeToRepository();
-      }
-    });
-
-    // Set up cancel button
-    Button cancelButton = findViewById(R.id.addRecipe_cancel);
-    cancelButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        showCancelDialog();
-      }
-    });
   }
 
   @Override
@@ -355,6 +315,53 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
+  private void listenToButtons() {
+    // Set listener for selectImageButton
+    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
+    selectImageButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        importImage();
+      }
+    });
+
+    // Set listener for addIngredientButton
+    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
+    addIngredientButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        addIngredientToRecycler();
+      }
+    });
+
+    // Set listener for addStepButton
+    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
+    addStepButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        addStepToRecycler();
+      }
+    });
+
+    // Set listener for saveButton
+    Button saveButton = findViewById(R.id.addRecipe_saveButton);
+    saveButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        saveRecipeToRepository();
+      }
+    });
+
+    // Set up cancel button
+    Button cancelButton = findViewById(R.id.addRecipe_cancel);
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        showCancelDialog();
+      }
+    });
+  }
 
   private void loadExistingRecipe(int recipeId) {
 
