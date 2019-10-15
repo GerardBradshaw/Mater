@@ -76,6 +76,7 @@ public class AddIngredientListAdapter
       final String name = holder.getName();
       double amount = holder.getAmount();
       String unit = holder.getUnit();
+      String category = holder.getCategory();
 
       // Set up the units Spinner and the drop down appearance
       ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
@@ -98,7 +99,10 @@ public class AddIngredientListAdapter
       // Set the adapter to the spinner
       viewHolder.units.setAdapter(spinnerAdapter);
 
-      // Set the name, amount, and unit if a name exists, otherwise make them empty
+      // TODO Set up category Spinner and the drop down appearance
+
+      // Set the name, amount, unit and category if a name exists, otherwise make them empty
+      // TODO set default unit and category
       if (!name.isEmpty()) {
         viewHolder.name.setText(name);
 
