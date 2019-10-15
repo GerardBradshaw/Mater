@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
-import com.gerardbradshaw.mater.room.entities.Summary;
 
 import java.util.List;
 
@@ -56,7 +54,7 @@ public class AddIngredientListAdapter
   @NonNull
   @Override
   public NewIngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View itemView = inflater.inflate(R.layout.ingredient_input, parent, false);
+    View itemView = inflater.inflate(R.layout.ingredient_add, parent, false);
     return new NewIngredientViewHolder(itemView, this);
   }
 

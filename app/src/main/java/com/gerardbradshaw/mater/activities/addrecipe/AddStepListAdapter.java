@@ -12,10 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.room.entities.Step;
 
 import java.util.List;
-import java.util.Locale;
 
 public class AddStepListAdapter
     extends RecyclerView.Adapter<AddStepListAdapter.NewStepViewHolder> {
@@ -48,7 +46,7 @@ public class AddStepListAdapter
   @NonNull
   @Override
   public NewStepViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View itemView = inflater.inflate(R.layout.step_input, parent, false);
+    View itemView = inflater.inflate(R.layout.step_add, parent, false);
     return new NewStepViewHolder(itemView, this);
   }
 
