@@ -237,7 +237,7 @@ public class AddIngredientListAdapter
   }
 
 
-  // - - - - - - - - - - - - - - - IngredientModifiedListener Interface - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Listener Interfaces - - - - - - - - - - - - - - -
 
   public interface NameEditedListener {
     void onNameEdited(int position, String newName);
@@ -245,6 +245,14 @@ public class AddIngredientListAdapter
 
   public interface AmountEditedListener {
     void onAmountEdited(int position, double amount);
+  }
+
+  public interface UnitsEditedListener {
+    void onUnitsEdited(int position, String unit);
+  }
+
+  public interface CategoryEditedListener {
+    void onCategoryEdited(int position, String category);
   }
 
 }
