@@ -26,6 +26,24 @@
         <item>Juices</item>
         <item>Uncategorised</item>
     </string-array>
+    <string-array name="global_units_array">
+        <item>g</item>
+        <item>kg</item>
+        <item>mL</item>
+        <item>cups (AU)</item>
+        <item>tsp (AU)</item>
+        <item>tbsp (AU)</item>
+        <item>lbs</item>
+        <item>Oz</item>
+        <item>cups (US)</item>
+        <item>flOz</item>
+        <item>qt</item>
+        <item>tsp (US)</item>
+        <item>tbsp (US)</item>
+        <item>drops</item>
+        <item>pinch</item>
+        <item>no unit</item>
+    </string-array>
 
     <!-- Main Activity -->
     <string name="nav_drawer_open">Open navigation drawer</string>

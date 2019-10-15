@@ -80,7 +80,7 @@ public class AddIngredientListAdapter
 
       // Set up the units Spinner and the drop down appearance
       ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
-          context, R.array.global_category_array, android.R.layout.simple_spinner_item);
+          context, R.array.global_units_array, android.R.layout.simple_spinner_item);
       spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for unit changes
