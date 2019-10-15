@@ -46,7 +46,7 @@ public class ShoppingListActivity extends AppCompatActivity {
   private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
   private List<Pair<String, List<Ingredient>>> categoryIngredientPairs = new ArrayList<>();
   private List<Pair<String, List<Ingredient>>> currentPairs = new ArrayList<>();
-  private List<Pair<RecyclerView, ShoppingListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
+  private List<Pair<RecyclerView, IngredientListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   private AsyncTaskScheduler taskScheduler;
 
@@ -169,7 +169,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       RecyclerView recyclerView = (RecyclerView) scrollView.getChildAt(0);
 
       // Create an adapter
-      ShoppingListAdapter adapter = new ShoppingListAdapter(ShoppingListActivity.this);
+      IngredientListAdapter adapter = new IngredientListAdapter(ShoppingListActivity.this);
       adapter.setData(ingredientList);
       recyclerView.setAdapter(adapter);
       recyclerView.setLayoutManager(new LinearLayoutManager(ShoppingListActivity.this));
