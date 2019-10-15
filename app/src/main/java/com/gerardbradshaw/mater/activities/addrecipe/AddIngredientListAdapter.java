@@ -76,28 +76,46 @@ public class AddIngredientListAdapter
       String unit = holder.getUnit();
       String category = holder.getCategory();
 
-      // Set up the unitSpinner Spinner and the drop down appearance
-      ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(
+      // Set up the unitSpinner and the drop down appearance
+      ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
           context, R.array.global_units_array, android.R.layout.simple_spinner_item);
-      spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+      unitSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for unit changes
       viewHolder.unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+          // TODO do do something with changes
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> adapterView) {
-
         }
       });
 
       // Set the adapter to the spinner
-      viewHolder.unitSpinner.setAdapter(spinnerAdapter);
+      viewHolder.unitSpinner.setAdapter(unitSpinnerAdapter);
 
-      // TODO Set up categorySpinner Spinner and the drop down appearance
+      // Set up categorySpinner and the drop down appearance
+      ArrayAdapter<CharSequence> categorySpinnerAdapter = ArrayAdapter.createFromResource(
+          context, R.array.global_category_array, android.R.layout.simple_spinner_item);
+      categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+      // Set up listener for category changes
+      viewHolder.categorySpinner.setOnItemSelectedListener(
+          new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          // TODO do something with changes
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+      });
+
+      // Set the adapter to the spinner
+      viewHolder.categorySpinner.setAdapter(categorySpinnerAdapter);
 
       // Set the name, amount, unit and categorySpinner if a name exists, otherwise make them empty
       // TODO set default unit and categorySpinner
