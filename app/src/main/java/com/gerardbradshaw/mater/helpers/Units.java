@@ -157,8 +157,9 @@ public class Units {
     }
     else if (miscBiMap.containsKey(uiString)) {
       return miscBiMap.get(uiString).name();
+    } else {
+      return null;
     }
-    return null;
   }
 
   public static String getUiStringFromName(String name) {

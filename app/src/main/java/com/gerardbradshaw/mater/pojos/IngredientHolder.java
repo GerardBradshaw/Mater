@@ -42,8 +42,7 @@ public class IngredientHolder {
   }
 
   public IngredientHolder(String name, String category, double amount, String unit) {
-    if (Units.getVolumeFromUiString(unit) != null || Units.getMassFromUiString(unit) != null
-        || Units.getMiscFromUiString(unit) != null) {
+    if (Units.getNameFromUiString(unit) != null) {
       this.unit = unit;
     } else {
       this.unit = Misc.NO_UNIT.name();
