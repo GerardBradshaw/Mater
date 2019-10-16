@@ -1,11 +1,11 @@
 package com.gerardbradshaw.mater.helpers;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
 import java.util.Locale;
 
 public class Units {
-
-  static boolean isMetric = true;  // TODO add this to shared preferences
-
 
   // - - - - - - - - - - - - - - - Private constructor - - - - - - - - - - - - - - -
 
@@ -14,35 +14,185 @@ public class Units {
   }
 
 
-  // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  public static Volume getVolumeEnum(String unit) {
-    for (Volume volumeValue : Volume.values()) {
-      if (volumeValue.name().equals(unit)) {
-        return volumeValue;
-      }
+  static boolean isMetric = true;  // TODO add this to shared preferences
+
+  public enum Volume {
+    MILLILITRES,
+    AU_CUPS,
+    AU_TEASPOONS,
+    AU_TABLESPOONS,
+    US_CUPS,
+    FLUID_OUNCES,
+    QUARTS,
+    US_TEASPOONS,
+    US_TABLESPOONS;
+  }
+
+  public enum Mass {
+    GRAMS,
+    KILOGRAMS,
+    POUNDS,
+    OUNCES;
+  }
+
+  public enum Misc {
+    DROPS,
+    NO_UNIT,
+    PINCH;
+  }
+
+  private static final BiMap<String, Volume> volumeBiMap = HashBiMap.create();
+  private static final BiMap<String, Mass> massBiMap = HashBiMap.create();
+  private static final BiMap<String, Misc> miscBiMap = HashBiMap.create();
+
+  static {
+    volumeBiMap.put("ml", Volume.MILLILITRES);
+    volumeBiMap.put("cups (AU)", Volume.AU_CUPS);
+    volumeBiMap.put("tsp (AU)", Volume.AU_TEASPOONS);
+    volumeBiMap.put("tbsp (AU)", Volume.AU_TABLESPOONS);
+    volumeBiMap.put("cups (US)", Volume.US_CUPS);
+    volumeBiMap.put("flOz", Volume.FLUID_OUNCES);
+    volumeBiMap.put("qt", Volume.QUARTS);
+    volumeBiMap.put("tsp (US)", Volume.US_TEASPOONS);
+    volumeBiMap.put("tbsp (US)", Volume.US_TABLESPOONS);
+
+    massBiMap.put("g", Mass.GRAMS);
+    massBiMap.put("kg", Mass.KILOGRAMS);
+    massBiMap.put("lbs", Mass.POUNDS);
+    massBiMap.put("Oz", Mass.OUNCES);
+
+    miscBiMap.put("drops", Misc.DROPS);
+    miscBiMap.put("x", Misc.NO_UNIT);
+    miscBiMap.put("pinch", Misc.PINCH);
+  }
+
+  // - - - - - - - - - - - - - - - Volume methods - - - - - - - - - - - - - - -
+
+  public static Volume getVolumeFromUiString(String uiString) {
+    return volumeBiMap.get(uiString);
+  }
+
+  public static Volume getVolumeFromVolumeName(String volumeName) {
+    try {
+      return Volume.valueOf(volumeName);
+
+    } catch (IllegalArgumentException e) {
+      return null;
     }
+  }
 
+  private static String getUiStringFromVolumeName(String volumeName) {
+    try {
+      Volume volume = Volume.valueOf(volumeName);
+      return volumeBiMap.inverse().get(volume);
+
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
+
+  // - - - - - - - - - - - - - - - Mass methods - - - - - - - - - - - - - - -
+
+  public static Mass getMassFromUiString(String uiString) {
+    return massBiMap.get(uiString);
+  }
+
+  public static Mass getMassFromMassName(String massName) {
+    try {
+      return Mass.valueOf(massName);
+
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
+  private static String getUiStringFromMassName(String massName) {
+    try {
+      Mass mass = Mass.valueOf(massName);
+      return massBiMap.inverse().get(mass);
+
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
+
+  // - - - - - - - - - - - - - - - Misc methods - - - - - - - - - - - - - - -
+
+  public static Misc getMiscFromUiString(String uiString) {
+    return miscBiMap.get(uiString);
+  }
+
+  public static Misc getMiscFromMiscName(String miscName) {
+    try {
+      return Misc.valueOf(miscName);
+
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
+  private static String getUiStringFromMiscName(String miscName) {
+    try {
+      Misc misc = Misc.valueOf(miscName);
+      return miscBiMap.inverse().get(misc);
+
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
+  }
+
+
+  // - - - - - - - - - - - - - - - Any-unit methods - - - - - - - - - - - - - - -
+
+  public static String getNameFromUiString(String uiString) {
+    if (volumeBiMap.containsKey(uiString)) {
+      return volumeBiMap.get(uiString).name();
+    }
+    else if (massBiMap.containsKey(uiString)){
+      return massBiMap.get(uiString).name();
+    }
+    else if (miscBiMap.containsKey(uiString)) {
+      return miscBiMap.get(uiString).name();
+    }
     return null;
   }
 
-  public static Mass getMassEnum(String unit) {
-    for (Mass massValue : Mass.values()) {
-      if (massValue.name().equals(unit)) {
-        return massValue;
-      }
+  public static String getUiStringFromName(String name) {
+    if (getUiStringFromVolumeName(name) != null) {
+      return getUiStringFromVolumeName(name);
+
+    } else if (getUiStringFromMassName(name) != null) {
+      return getUiStringFromMassName(name);
+
+    } else if (getUiStringFromMiscName(name) != null) {
+      return getUiStringFromMiscName(name);
+
+    } else {
+      return Misc.NO_UNIT.name();
     }
-    return null;
   }
 
-  public static MiscUnits getMiscUnitsEnum(String unit) {
-    for(MiscUnits miscUnitsValue : MiscUnits.values()) {
-      if(miscUnitsValue.name().equals(unit)) {
-        return miscUnitsValue;
-      }
+  public static String getNameFromName(String name) {
+    if (getVolumeFromVolumeName(name) != null) {
+      return getVolumeFromVolumeName(name).name();
+
+    } else if (getMassFromMassName(name) != null) {
+      return getMassFromMassName(name).name();
+
+    } else if (getMiscFromMiscName(name) != null) {
+      return getMiscFromMiscName(name).name();
+
+    } else {
+      return Misc.NO_UNIT.name();
     }
-    return null;
   }
+
+
+  // - - - - - - - - - - - - - - - Formatting methods - - - - - - - - - - - - - - -
 
   public static String formatForDetailView(double amount, Volume unit) {
     Volume newUnit;
@@ -119,7 +269,7 @@ public class Units {
     return Units.convertMass(amount, unit, newUnit);
   }
 
-  public static String formatForDetailView(double amount, MiscUnits unit) {
+  public static String formatForDetailView(double amount, Misc unit) {
     String amountString = String.format(Locale.getDefault(), "%.1f", amount);
     switch (unit) {
       case DROPS:
@@ -133,20 +283,20 @@ public class Units {
 
   public static String formatForDetailView(double amount, String unit) {
 
-    if (getVolumeEnum(unit) != null) {
-      return formatForDetailView(amount, getVolumeEnum(unit));
+    if (getVolumeFromUiString(unit) != null) {
+      return formatForDetailView(amount, getVolumeFromUiString(unit));
 
-    } else if (getMassEnum(unit) != null) {
-      return formatForDetailView(amount, getMassEnum(unit));
+    } else if (getMassFromUiString(unit) != null) {
+      return formatForDetailView(amount, getMassFromUiString(unit));
 
-    } else if (getMiscUnitsEnum(unit) != null) {
-      return formatForDetailView(amount, getMiscUnitsEnum(unit));
+    } else if (getMiscFromUiString(unit) != null) {
+      return formatForDetailView(amount, getMiscFromUiString(unit));
     }
     return "Units error";
   }
 
 
-  // - - - - - - - - - - - - - - - Private methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Helpers methods - - - - - - - - - - - - - - -
 
   /**
    * Converts a volume between units.
@@ -332,33 +482,4 @@ public class Units {
         return 0;
     }
   }
-
-
-  // - - - - - - - - - - - - - - - Enums - - - - - - - - - - - - - - -
-
-  public enum Volume {
-    MILLILITRES,
-    AU_CUPS,
-    AU_TEASPOONS,
-    AU_TABLESPOONS,
-    US_CUPS,
-    FLUID_OUNCES,
-    QUARTS,
-    US_TEASPOONS,
-    US_TABLESPOONS;
-  }
-
-  public enum Mass {
-    GRAMS,
-    KILOGRAMS,
-    POUNDS,
-    OUNCES;
-  }
-
-  public enum MiscUnits {
-    DROPS,
-    NO_UNIT,
-    PINCH;
-  }
-
 }

@@ -7,7 +7,7 @@ import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.room.MaterRepository;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
-import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Units.Misc;
 import com.gerardbradshaw.mater.helpers.Categories.Category;
 
 import java.util.ArrayList;
@@ -107,10 +107,10 @@ public class MaterApplication extends Application {
         "sweet potato", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, MiscUnits.NO_UNIT));
+        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "zucchini", Category.FRESH_FRUIT_AND_VEG, 1d, MiscUnits.NO_UNIT));
+        "zucchini", Category.FRESH_FRUIT_AND_VEG, 1d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
         "frozen spinach", Category.COLD_FOOD, 100d, Mass.GRAMS));
@@ -119,16 +119,16 @@ public class MaterApplication extends Application {
         "diced tomato", Category.CANNED_GOODS, 800d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        beyondBurgers, Category.COLD_FOOD, 4d, MiscUnits.NO_UNIT));
+        beyondBurgers, Category.COLD_FOOD, 4d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
         "merlot", Category.BEVERAGES, 500d, Volume.MILLILITRES));
 
     ingredients.add(new IngredientHolder(
-        lasagneSheets, Category.RICE_AND_PASTA, 1d, MiscUnits.NO_UNIT));
+        lasagneSheets, Category.RICE_AND_PASTA, 1d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
-        "vegan cheese slices", Category.COLD_FOOD, 18d, MiscUnits.NO_UNIT));
+        "vegan cheese slices", Category.COLD_FOOD, 18d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
         vegenaise, Category.COLD_FOOD, 100d, Mass.GRAMS));
@@ -244,13 +244,13 @@ public class MaterApplication extends Application {
         tofu, Category.COLD_FOOD, 600d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, MiscUnits.NO_UNIT));
+        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
         "frozen broccoli", Category.COLD_FOOD, 454d, Mass.GRAMS));
 
     ingredients.add(new IngredientHolder(
-        "bok-choy", Category.FRESH_FRUIT_AND_VEG, 2d, MiscUnits.NO_UNIT));
+        "bok-choy", Category.FRESH_FRUIT_AND_VEG, 2d, Misc.NO_UNIT));
 
     ingredients.add(new IngredientHolder(
         pasta, Category.RICE_AND_PASTA, 320d, Mass.GRAMS));

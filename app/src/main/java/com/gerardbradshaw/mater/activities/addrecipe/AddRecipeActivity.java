@@ -31,7 +31,7 @@ import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Units.Misc;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
 
@@ -268,7 +268,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         // TODO implement retrieval from spinner
 
         if (holder.getUnit().isEmpty()) {
-          holder.setUnit(MiscUnits.NO_UNIT.name());
+          holder.setUnit(Misc.NO_UNIT.name());
         }
       }
 

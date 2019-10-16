@@ -4,7 +4,7 @@ import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
-import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Units.Misc;
 import com.gerardbradshaw.mater.helpers.Categories.Category;
 
 public class IngredientHolder {
@@ -34,7 +34,7 @@ public class IngredientHolder {
     this.unit = unit.name();
   }
 
-  public IngredientHolder(String name, Category category, double amount, MiscUnits unit) {
+  public IngredientHolder(String name, Category category, double amount, Misc unit) {
     this.name = name;
     this.category = category.name();
     this.amount = amount;
@@ -42,11 +42,11 @@ public class IngredientHolder {
   }
 
   public IngredientHolder(String name, String category, double amount, String unit) {
-    if (Units.getVolumeEnum(unit) != null || Units.getMassEnum(unit) != null
-        || Units.getMiscUnitsEnum(unit) != null) {
+    if (Units.getVolumeFromUiString(unit) != null || Units.getMassFromUiString(unit) != null
+        || Units.getMiscFromUiString(unit) != null) {
       this.unit = unit;
     } else {
-      this.unit = MiscUnits.NO_UNIT.name();
+      this.unit = Misc.NO_UNIT.name();
     }
 
     if (Categories.getCategory(category) != null) {
