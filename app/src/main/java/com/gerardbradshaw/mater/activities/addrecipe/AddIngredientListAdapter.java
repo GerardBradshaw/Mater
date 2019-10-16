@@ -104,7 +104,7 @@ public class AddIngredientListAdapter
 
       // Set up categorySpinner and the drop down appearance
       ArrayAdapter<String> categorySpinnerAdapter = new ArrayAdapter<>(context,
-          android.R.layout.simple_spinner_dropdown_item, Categories.getCategoryStrings());
+          android.R.layout.simple_spinner_dropdown_item, Categories.getCategoryList());
       categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for category changes

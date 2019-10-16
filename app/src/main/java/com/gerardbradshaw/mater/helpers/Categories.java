@@ -3,6 +3,10 @@ package com.gerardbradshaw.mater.helpers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 public class Categories {
 
   // - - - - - - - - - - - - - - - Private constructor - - - - - - - - - - - - - - -
@@ -79,7 +83,7 @@ public class Categories {
     return getUiString(getCategory(categoryString));
   }
 
-  public static String[] getCategoryStrings() {
-    return (String[]) categoryBiMap.keySet().toArray();
+  public static List<String> getCategoryList() {
+    return new ArrayList<>(categoryBiMap.keySet());
   }
 }
