@@ -503,8 +503,10 @@ public class MaterRepository {
     for (Ingredient ingredient : ingredients) {
 
       IngredientHolder ingredientHolder = new IngredientHolder(
-          ingredient.getName(), ingredient.getCategory(),
-          ingredient.getAmount(), ingredient.getUnits());
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits());
 
       ingredientHolder.setInStock(ingredient.getInStock());
       ingredientHolders.add(ingredientHolder);

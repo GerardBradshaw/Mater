@@ -42,18 +42,8 @@ public class IngredientHolder {
   }
 
   public IngredientHolder(String name, String category, double amount, String unit) {
-    if (Units.getNameFromUiString(unit) != null) {
-      this.unit = unit;
-    } else {
-      this.unit = Misc.NO_UNIT.name();
-    }
-
-    if (Categories.getCategory(category) != null) {
-      this.category = category;
-    } else {
-      this.category = Categories.Category.NO_CATEGORY.name();
-    }
-
+    this.unit = Units.getNameFromName(unit);
+    this.category = Categories.getCategory(category).name();
     this.name = name;
     this.amount = amount;
   }
