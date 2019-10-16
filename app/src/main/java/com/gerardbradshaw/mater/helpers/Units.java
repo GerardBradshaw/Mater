@@ -1,5 +1,7 @@
 package com.gerardbradshaw.mater.helpers;
 
+import android.util.Log;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -17,6 +19,7 @@ public class Units {
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   static boolean isMetric = true;  // TODO add this to shared preferences
+  private static final String LOG_TAG = "GGG - Units";
 
   public enum Volume {
     MILLILITRES,
@@ -195,105 +198,100 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Formatting methods - - - - - - - - - - - - - - -
 
-  public static String formatForDetailView(double amount, Volume unit) {
-    Volume newUnit;
+  public static String formatForDetailView(double amount, Volume volume) {
+    Volume newVolume;
 
     if(isMetric) {
-      switch (unit) {
+      switch (volume) {
         case US_CUPS:
-          newUnit = Volume.AU_CUPS;
+          newVolume = Volume.AU_CUPS;
           break;
         case FLUID_OUNCES:
-          newUnit = Volume.MILLILITRES;
+          newVolume = Volume.MILLILITRES;
           break;
         case QUARTS:
-          newUnit = Volume.AU_CUPS;
+          newVolume = Volume.AU_CUPS;
           break;
         case US_TEASPOONS:
-          newUnit = Volume.AU_TEASPOONS;
+          newVolume = Volume.AU_TEASPOONS;
           break;
         case US_TABLESPOONS:
-          newUnit = Volume.AU_TABLESPOONS;
+          newVolume = Volume.AU_TABLESPOONS;
           break;
         default:
-          newUnit = unit;
+          newVolume = volume;
       }
     } else {
-      switch (unit) {
+      switch (volume) {
         case MILLILITRES:
-          newUnit = Volume.FLUID_OUNCES;
+          newVolume = Volume.FLUID_OUNCES;
           break;
         case AU_CUPS:
-          newUnit = Volume.US_CUPS;
+          newVolume = Volume.US_CUPS;
           break;
         case AU_TEASPOONS:
-          newUnit = Volume.US_TEASPOONS;
+          newVolume = Volume.US_TEASPOONS;
           break;
         case AU_TABLESPOONS:
-          newUnit = Volume.US_TABLESPOONS;
+          newVolume = Volume.US_TABLESPOONS;
           break;
         default:
-          newUnit = unit;
+          newVolume = volume;
       }
     }
-    return Units.convertVolume(amount, unit, newUnit);
+    return Units.convertVolume(amount, volume, newVolume);
   }
 
-  public static String formatForDetailView(double amount, Mass unit) {
+  public static String formatForDetailView(double amount, Mass mass) {
 
-    Mass newUnit;
+    Mass newMass;
 
     if (isMetric) {
-      switch (unit) {
+      switch (mass) {
         case OUNCES:
-          newUnit = Mass.GRAMS;
+          newMass = Mass.GRAMS;
           break;
         case POUNDS:
-          newUnit = Mass.GRAMS;
+          newMass = Mass.GRAMS;
           break;
         default:
-          newUnit = unit;
+          newMass = mass;
       }
 
     } else {
-      switch (unit) {
+      switch (mass) {
         case GRAMS:
-          newUnit = Mass.OUNCES;
+          newMass = Mass.OUNCES;
           break;
         case KILOGRAMS:
-          newUnit = Mass.POUNDS;
+          newMass = Mass.POUNDS;
           break;
         default:
-          newUnit = unit;
+          newMass = mass;
       }
     }
-    return Units.convertMass(amount, unit, newUnit);
+    return Units.convertMass(amount, mass, newMass);
   }
 
   public static String formatForDetailView(double amount, Misc unit) {
     String amountString = String.format(Locale.getDefault(), "%.1f", amount);
-    switch (unit) {
-      case DROPS:
-        return amountString + " drops ";
-      case PINCH:
-        return amountString + " pinch ";
-      default:
-        return amountString + "x ";
-    }
+    String unitString = miscBiMap.inverse().get(unit);
+    return amountString + " " + unitString + " ";
   }
 
-  public static String formatForDetailView(double amount, String unit) {
+  public static String formatForDetailView(double amount, String unitName) {
 
-    if (getVolumeFromUiString(unit) != null) {
-      return formatForDetailView(amount, getVolumeFromUiString(unit));
+    if (getVolumeFromVolumeName(unitName) != null) {
+      return formatForDetailView(amount, getVolumeFromVolumeName(unitName));
 
-    } else if (getMassFromUiString(unit) != null) {
-      return formatForDetailView(amount, getMassFromUiString(unit));
+    } else if (getMassFromMassName(unitName) != null) {
+      return formatForDetailView(amount, getMassFromMassName(unitName));
 
-    } else if (getMiscFromUiString(unit) != null) {
-      return formatForDetailView(amount, getMiscFromUiString(unit));
+    } else if (getMiscFromMiscName(unitName) != null) {
+      return formatForDetailView(amount, getMiscFromMiscName(unitName));
     }
-    return "Units error";
+    Log.d(LOG_TAG,unitName + " not recognised as a Unit name.");
+    return null;
   }
 
 
@@ -322,7 +320,7 @@ public class Units {
     }
 
     String newAmountString = String.format(Locale.getDefault(), format, newAmount);
-    return newAmountString + unit;
+    return newAmountString + " " + unit + " ";
   }
 
   /**
@@ -352,7 +350,7 @@ public class Units {
     }
 
     String newAmountString = String.format(Locale.getDefault(), format, newAmount);
-    return newAmountString + unit;
+    return newAmountString + " " + unit + " ";
   }
 
 
