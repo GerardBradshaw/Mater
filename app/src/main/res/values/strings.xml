@@ -49,7 +49,7 @@
     <string name="add_recipe_hint_title">Title…</string>
     <string name="add_recipe_hint_description">Short description…</string>
     <string name="add_recipe_hint_ingredient_name">Name…</string>
-    <string name="add_recipe_hint_ingredient_amount">Amount</string>
+    <string name="add_recipe_hint_ingredient_amount">Amount...</string>
     <string name="add_recipe_hint_step">Describe the step…</string>
     <string name="add_recipe_hint_servings">0</string>
     <string name="add_recipe_dialog_discard_changes">Discard changes?</string>
