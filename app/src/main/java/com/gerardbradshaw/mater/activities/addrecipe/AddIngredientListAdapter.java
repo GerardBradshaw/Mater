@@ -10,12 +10,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 
 import java.util.List;
@@ -103,8 +103,8 @@ public class AddIngredientListAdapter
       viewHolder.unitSpinner.setAdapter(unitSpinnerAdapter);
 
       // Set up categorySpinner and the drop down appearance
-      ArrayAdapter<CharSequence> categorySpinnerAdapter = ArrayAdapter.createFromResource(
-          context, R.array.global_category_array, android.R.layout.simple_spinner_item);
+      ArrayAdapter<String> categorySpinnerAdapter = new ArrayAdapter<>(context,
+          android.R.layout.simple_spinner_dropdown_item, Categories.getCategoryStrings());
       categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for category changes

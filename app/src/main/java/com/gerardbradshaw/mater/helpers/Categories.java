@@ -1,5 +1,10 @@
 package com.gerardbradshaw.mater.helpers;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+
+import java.util.Set;
+
 public class Categories {
 
   // - - - - - - - - - - - - - - - Private constructor - - - - - - - - - - - - - - -
@@ -8,7 +13,11 @@ public class Categories {
     throw new RuntimeException("DO NOT INSTANTIATE!");
   }
 
+
+  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
+
   public enum Category {
+    NO_CATEGORY,
     FRESH_FRUIT_AND_VEG,
     BAKERY,
     CEREALS_AND_SPREADS,
@@ -24,68 +33,56 @@ public class Categories {
     CLEANING_SUPPLIES,
     SUPPLEMENTS_AND_MEDICINES,
     BEVERAGES,
-    JUICES,
-    NO_CATEGORY;
+    JUICES
   }
 
-  public static Category getCategoryEnum(String category) {
+  private static final BiMap<String, Category> categoryBiMap = HashBiMap.create();
 
-    for (Category categoryValue : Category.values()) {
-      if (categoryValue.name().equals(category)) {
-        return categoryValue;
-      }
-    }
-
-    return null;
+  static {
+    categoryBiMap.put("Uncategorised", Category.NO_CATEGORY);
+    categoryBiMap.put("Fresh fruit & vegetables", Category.FRESH_FRUIT_AND_VEG);
+    categoryBiMap.put("Bakery", Category.BAKERY);
+    categoryBiMap.put("Cereals & spreads", Category.CEREALS_AND_SPREADS);
+    categoryBiMap.put("Canned goods", Category.CANNED_GOODS);
+    categoryBiMap.put("International food", Category.INTERNATIONAL_FOOD);
+    categoryBiMap.put("Rice & pasta", Category.RICE_AND_PASTA);
+    categoryBiMap.put("Cold food", Category.COLD_FOOD);
+    categoryBiMap.put("Oils & condiments", Category.OILS_AND_CONDIMENTS);
+    categoryBiMap.put("Baking", Category.BAKING);
+    categoryBiMap.put("Spices", Category.SPICES);
+    categoryBiMap.put("Kitchen supplies", Category.KITCHEN_GOODS);
+    categoryBiMap.put("Personal hygiene", Category.PERSONAL_HYGIENE);
+    categoryBiMap.put("Cleaning supplies", Category.CLEANING_SUPPLIES);
+    categoryBiMap.put("Supplements & medicines", Category.SUPPLEMENTS_AND_MEDICINES);
+    categoryBiMap.put("Beverages", Category.BEVERAGES);
+    categoryBiMap.put("Juices", Category.JUICES);
   }
 
-  public static String getCategoryString(Category category) {
-    String noCategory = "Uncategorised";
 
-    if (category == null) {
-      return noCategory;
-    }
 
-    switch (category) {
-      case FRESH_FRUIT_AND_VEG:
-        return "Fresh fruit & vegetables";
-      case BAKERY:
-        return "Bakery";
-      case CEREALS_AND_SPREADS:
-        return "Cereals & spreads";
-      case CANNED_GOODS:
-        return "Canned goods";
-      case INTERNATIONAL_FOOD:
-        return "International food";
-      case RICE_AND_PASTA:
-        return "Rice & pasta";
-      case COLD_FOOD:
-        return "Cold food";
-      case OILS_AND_CONDIMENTS:
-        return "Oils & condiments";
-      case BAKING:
-        return "Baking";
-      case SPICES:
-        return "Spices";
-      case KITCHEN_GOODS:
-        return "Kitchen supplies";
-      case PERSONAL_HYGIENE:
-        return "Personal hygiene";
-      case CLEANING_SUPPLIES:
-        return "Cleaning supplies";
-      case SUPPLEMENTS_AND_MEDICINES:
-        return "Supplements & medicines";
-      case BEVERAGES:
-        return "Beverages";
-      case JUICES:
-        return "Juices";
-      default:
-        return noCategory;
+  // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
+
+  public static String getString(Category category) {
+    if (categoryBiMap.containsValue(category)) {
+      return categoryBiMap.inverse().get(category);
+    } else {
+      return categoryBiMap.inverse().get(Category.NO_CATEGORY);
     }
   }
 
-  public static String getCategoryString(String category) {
-    return getCategoryString(getCategoryEnum(category));
+  public static Category getCategory(String categoryString) {
+    if (categoryBiMap.containsKey(categoryString)) {
+      return categoryBiMap.get(categoryString);
+    } else {
+      return Category.NO_CATEGORY;
+    }
   }
 
+  public static String getString(String categoryString) {
+    return getString(getCategory(categoryString));
+  }
+
+  public static String[] getCategoryStrings() {
+    return (String[]) categoryBiMap.keySet().toArray();
+  }
 }

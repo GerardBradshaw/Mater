@@ -49,7 +49,7 @@ public class IngredientHolder {
       this.unit = MiscUnits.NO_UNIT.name();
     }
 
-    if (Categories.getCategoryEnum(category) != null) {
+    if (Categories.getCategory(category) != null) {
       this.category = category;
     } else {
       this.category = Categories.Category.NO_CATEGORY.name();

@@ -248,7 +248,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       Map<String, List<Ingredient>> categoryIngredientMap = new HashMap<>();
 
       for (Ingredient ingredient : allIngredientsList) {
-        String categoryTitle = Categories.getCategoryString(ingredient.getCategory());
+        String categoryTitle = Categories.getString(ingredient.getCategory());
 
         if (categoryIngredientMap.containsKey(categoryTitle)) {
           categoryIngredientMap.get(categoryTitle).add(ingredient);
