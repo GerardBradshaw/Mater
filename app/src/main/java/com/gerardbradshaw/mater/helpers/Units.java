@@ -312,53 +312,16 @@ public class Units {
     double newAmount = convertFromMl(mlAmount, to);
     String format;
 
-    String unit;
+    String unit = volumeBiMap.inverse().get(to);
 
-    switch (to) {
-      case MILLILITRES:
-        unit = "mL ";
-        format = "%.0f";
-        break;
-      case AU_CUPS:
-        unit = " cups ";
-        format = "%.2f";
-        break;
-      case AU_TEASPOONS:
-        unit = " tsp ";
-        format = "%.2f";
-        break;
-      case AU_TABLESPOONS:
-        unit = " tbsp ";
-        format = "%.2f";
-        break;
-      case US_CUPS:
-        unit = " cups ";
-        format = "%.2f";
-        break;
-      case FLUID_OUNCES:
-        unit = "flOz ";
-        format = "%.2f";
-        break;
-      case QUARTS:
-        unit = "qt ";
-        format = "%.2f";
-        break;
-      case US_TEASPOONS:
-        unit = " tsp (US) ";
-        format = "%.2f";
-        break;
-      case US_TABLESPOONS:
-        unit = " tbsp (US) ";
-        format = "%.2f";
-        break;
-      default:
-        unit = "x ";
-        format = "%.1f";
+    if (to == Volume.MILLILITRES) {
+      format = "%.0f";
+    } else {
+      format = "%.2f";
     }
 
     String newAmountString = String.format(Locale.getDefault(), format, newAmount);
     return newAmountString + unit;
-
   }
 
   /**
@@ -375,33 +338,24 @@ public class Units {
     double newAmount = convertFromGrams(gramAmount, to);
     String format;
 
-    String unit;
+    String unit = massBiMap.inverse().get(to);
 
-    switch (to) {
-      case GRAMS:
-        unit = "g ";
-        format = "%.0f";
-        break;
-      case KILOGRAMS:
-        unit = "kgs ";
-        format = "%.2f";
-        break;
-      case OUNCES:
-        unit = "oz ";
-        format = "%.1f";
-        break;
-      case POUNDS:
-        unit = "lbs ";
-        format = "%.2f";
-        break;
-      default:
-        unit = "x ";
-        format = "%.1f";
+    if (to == Mass.GRAMS) {
+      format = "%.0f";
+
+    } else if (to == Mass.KILOGRAMS || to == Mass.POUNDS) {
+      format = "%.2f";
+
+    } else {
+      format = "%.1f";
     }
 
     String newAmountString = String.format(Locale.getDefault(), format, newAmount);
     return newAmountString + unit;
   }
+
+
+  // - - - - - - - - - - - - - - - Conversion methods - - - - - - - - - - - - - - -
 
   private static double convertToMl(double amount, Volume originalUnit) {
     switch (originalUnit) {
