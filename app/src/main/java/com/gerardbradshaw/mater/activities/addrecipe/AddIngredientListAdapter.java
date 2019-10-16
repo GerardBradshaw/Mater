@@ -34,6 +34,8 @@ public class AddIngredientListAdapter
   private UnitEditedListener unitEditedListener;
   private CategoryEditedListener categoryEditedListener;
 
+  private final List<String> categoryList = Categories.getCategoryList();
+
   private Context context;
 
 
@@ -80,7 +82,7 @@ public class AddIngredientListAdapter
       String category = holder.getCategory();
 
       // Set up the unitSpinner and the drop down appearance
-      final ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
+      ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
           context, R.array.global_units_array, android.R.layout.simple_spinner_item);
       unitSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -104,7 +106,7 @@ public class AddIngredientListAdapter
 
       // Set up categorySpinner and the drop down appearance
       ArrayAdapter<String> categorySpinnerAdapter = new ArrayAdapter<>(context,
-          android.R.layout.simple_spinner_dropdown_item, Categories.getCategoryList());
+          android.R.layout.simple_spinner_dropdown_item, categoryList);
       categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for category changes
@@ -133,6 +135,10 @@ public class AddIngredientListAdapter
 
         if (!(Double.isNaN(amount) || amount == 0)) {
           viewHolder.amount.setText(Double.toString(amount));
+        }
+
+        if (categoryList.indexOf(unit) != -1) {
+          viewHolder.unitSpinner.setSelection(categoryList.indexOf(unit));
         }
 
       } else {
