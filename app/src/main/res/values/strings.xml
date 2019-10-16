@@ -7,25 +7,6 @@
     <string name="global_menu_settings">Settings</string>
     <string name="global_menu_edit">Edit</string>
     <string name="global_action_servings">Servings</string>
-    <string-array name="global_category_array">
-        <item>Uncategorised</item>
-        <item>Fresh fruit &amp; vegetables</item>
-        <item>Bakery</item>
-        <item>Cereals &amp; spreads</item>
-        <item>Canned goods</item>
-        <item>International food</item>
-        <item>Rice &amp; pasta</item>
-        <item>Cold food</item>
-        <item>Oils &amp; condiments</item>
-        <item>Baking</item>
-        <item>Spices</item>
-        <item>Kitchen supplies</item>
-        <item>Personal hygiene</item>
-        <item>Cleaning supplies</item>
-        <item>Supplements &amp; medicines</item>
-        <item>Beverages</item>
-        <item>Juices</item>
-    </string-array>
     <string-array name="global_units_array">
         <item>no unit</item>
         <item>g</item>
