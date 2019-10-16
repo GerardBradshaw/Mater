@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.helpers.Units.Misc;
@@ -64,6 +66,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private static final int REQUEST_IMAGE_IMPORT = 1;
   private static final String LOG_TAG = "GGG - AddRecipeActivity";
 
+  private AsyncTaskScheduler taskScheduler;
+
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -73,6 +77,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
     detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+
+    MaterApplication materApplication = (MaterApplication) getApplication();
+    taskScheduler = materApplication.getTaskScheduler();
 
     // Get a handle on the views
     progressBar = findViewById(R.id.addRecipe_progressBar);
@@ -365,12 +372,17 @@ public class AddRecipeActivity extends AppCompatActivity {
     });
   }
 
-  private void loadExistingRecipe(int recipeId) {
+  private void loadExistingRecipe(final int recipeId) {
+    hideUi();
 
-    // Start AsyncTask to load RecipeHolder for recipe
-    new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput,
-        descriptionInput, imageNameView, ingredientListAdapter, stepListAdapter).execute(recipeId);
-
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new LoadRecipeAsyncTask(titleInput, servingsInput, descriptionInput, imageNameView,
+            ingredientListAdapter, stepListAdapter).execute(recipeId);
+      }
+    };
+    taskScheduler.addNewPriorityTask(runnable);
   }
 
   private void importImageFromUri(@NonNull Uri uri) {
@@ -415,14 +427,22 @@ public class AddRecipeActivity extends AppCompatActivity {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
   }
 
+  private void hideUi() {
+    contentScrollView.setVisibility(View.GONE);
+    progressBar.setVisibility(View.VISIBLE);
+  }
+
+  private void showUi() {
+    progressBar.setVisibility(View.GONE);
+    contentScrollView.setVisibility(View.VISIBLE);
+  }
+
 
   // - - - - - - - - - - - - - - - Load Recipe AsyncTask - - - - - - - - - - - - - - -
 
   private class LoadRecipeAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
 
     // Member variables
-    private ProgressBar progressBar;
-    private NestedScrollView contentScrollView;
     private EditText titleInput;
     private EditText servingsInput;
     private EditText descriptionInput;
@@ -432,16 +452,12 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 
     // Constructor
-    LoadRecipeAsyncTask(ProgressBar progressBar,
-                        NestedScrollView contentScrollView,
-                        EditText titleInput,
+    LoadRecipeAsyncTask(EditText titleInput,
                         EditText servingsInput,
                         EditText descriptionInput,
                         TextView imageNameView,
                         AddIngredientListAdapter addIngredientListAdapter,
                         AddStepListAdapter addStepListAdapter) {
-      this.progressBar = progressBar;
-      this.contentScrollView = contentScrollView;
       this.titleInput = titleInput;
       this.servingsInput = servingsInput;
       this.descriptionInput = descriptionInput;
@@ -455,8 +471,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      contentScrollView.setVisibility(View.GONE);
-      progressBar.setVisibility(View.VISIBLE);
+      hideUi();
     }
 
     @Override
@@ -482,9 +497,10 @@ public class AddRecipeActivity extends AppCompatActivity {
       AddRecipeActivity.this.ingredientHolders = recipeHolder.getIngredientHolders();
       AddRecipeActivity.this.stepHolders = recipeHolder.getSteps();
 
+      taskScheduler.setTaskFinished();
+
       // Update UI
-      progressBar.setVisibility(View.GONE);
-      contentScrollView.setVisibility(View.VISIBLE);
+      showUi();
     }
   }
 }
