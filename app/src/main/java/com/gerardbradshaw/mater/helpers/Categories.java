@@ -3,8 +3,6 @@ package com.gerardbradshaw.mater.helpers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import java.util.Set;
-
 public class Categories {
 
   // - - - - - - - - - - - - - - - Private constructor - - - - - - - - - - - - - - -
@@ -59,10 +57,9 @@ public class Categories {
   }
 
 
-
   // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
-  public static String getString(Category category) {
+  public static String getUiString(Category category) {
     if (categoryBiMap.containsValue(category)) {
       return categoryBiMap.inverse().get(category);
     } else {
@@ -78,8 +75,8 @@ public class Categories {
     }
   }
 
-  public static String getString(String categoryString) {
-    return getString(getCategory(categoryString));
+  public static String getUiString(String categoryString) {
+    return getUiString(getCategory(categoryString));
   }
 
   public static String[] getCategoryStrings() {
