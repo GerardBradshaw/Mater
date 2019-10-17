@@ -150,7 +150,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onPause() {
     super.onPause();
     // Save the inStock level of each ingredient to the database
-    ingredientViewModel.updateIngredient(customIngredients);
+    ingredientViewModel.updateIngredients(customIngredients);
   }
 
   // - - - - - - - - - - - - - - - Helper Methods - - - - - - - - - - - - - - -
@@ -214,7 +214,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
   }
 
   private void updateServings() {
-
     // Set up dialog for user confirmation
     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
     final EditText input = new EditText(this);
@@ -228,7 +227,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       public void onClick(DialogInterface dialogInterface, int i) {
 
         customServings = Integer.parseInt(input.getText().toString());
-        double servingsMultiplier = customServings / defaultServings;
+        double servingsMultiplier = (double) customServings / defaultServings;
 
         // Reset customIngredients
         customIngredients.clear();

@@ -302,7 +302,7 @@ public class MaterRepository {
     }
   }
 
-  public void updateIngredient(final Ingredient... ingredients) {
+  public void updateIngredients(final Ingredient... ingredients) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
@@ -312,10 +312,10 @@ public class MaterRepository {
     taskScheduler.addNewTask(runnable);
   }
 
-  public void updateIngredient(final List<Ingredient> ingredients) {
+  public void updateIngredients(final List<Ingredient> ingredients) {
     Ingredient[] ingredientArray = new Ingredient[ingredients.size()];
     ingredientArray = ingredients.toArray(ingredientArray);
-    updateIngredient(ingredientArray);
+    updateIngredients(ingredientArray);
   }
 
   private class UpdateIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {

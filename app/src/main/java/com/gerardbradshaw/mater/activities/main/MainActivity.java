@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.activities.settings.SettingsActivity;
 import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
@@ -197,7 +198,8 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.action_settings) {
-
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
+      startActivity(settingsIntent);
     }
 
     return super.onOptionsItemSelected(item);
@@ -227,7 +229,8 @@ public class MainActivity extends AppCompatActivity
       startActivity(intent);
 
     } else if (id == R.id.nav_settings) {
-      // TODO settings screen
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
+      startActivity(settingsIntent);
 
     } else {
       return  false;

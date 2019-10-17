@@ -44,5 +44,16 @@
     <!-- Shopping List Activity -->
     <string name="shoppingListMenu_sort">Sort</string>
 
+    <!-- Settings -->
+    <string name="settings_activity_title">Settings</string>
+    <!-- Display preferences -->
+    <string name="settings_display_header">Display</string>
+    <string name="setting_default_units">Default units</string>
+    <!-- Notification Preferences -->
+    <string name="settings_notifications_header">Reminder Notifications</string>
+    <string name="setting_notifications_on">Enable reminders</string>
+    <string name="setting_notifications_breakfast">Breakfast reminder</string>
+    <string name="setting_notifications_lunch">Lunch reminder</string>
+    <string name="setting_notifications_dinner">Dinner reminder</string>
 
 </resources>

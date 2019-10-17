@@ -1,0 +1,55 @@
+<!--
+  ~ Copyright 2018 The app Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/settings_display_header">
+
+        <ListPreference
+            app:defaultValue="Automatic"
+            app:entries="@array/default_unit_entries"
+            app:entryValues="@array/default_unit_values"
+            app:key="default_units"
+            app:title="@string/setting_default_units"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/settings_notifications_header">
+
+        <SwitchPreferenceCompat
+            app:key="notifications_on"
+            app:title="@string/setting_notifications_on" />
+
+        <SwitchPreferenceCompat
+            app:key="breakfast_notification"
+            app:dependency="notifications_on"
+            app:title="@string/setting_notifications_breakfast" />
+
+        <SwitchPreferenceCompat
+            android:key="lunch_notification"
+            android:dependency="notifications_on"
+            android:title="@string/setting_notifications_lunch" />
+
+        <SwitchPreferenceCompat
+            android:key="dinner_notification"
+            android:dependency="notifications_on"
+            android:title="@string/setting_notifications_dinner" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

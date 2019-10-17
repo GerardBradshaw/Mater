@@ -68,10 +68,10 @@ public class DetailIngredientListAdapter
     if (ingredientList != null) {
       viewHolder.checkBox.setVisibility(View.VISIBLE);
 
-      final Ingredient ingredient = ingredientList.get(position);
-      String name = ingredient.getName();
-      String quantity = Units.formatForDetailView(ingredient.getAmount(), ingredient.getUnits());
-      boolean inStock = ingredient.getInStock();
+      final Ingredient currentIngredient = ingredientList.get(position);
+      String name = currentIngredient.getName();
+      String quantity = Units.formatForDetailView(currentIngredient.getAmount(), currentIngredient.getUnits());
+      boolean inStock = currentIngredient.getInStock();
 
       viewHolder.name.setText(name);
       viewHolder.quantity.setText(quantity);
@@ -80,7 +80,7 @@ public class DetailIngredientListAdapter
       viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-          ingredient.setInStock(b);
+          currentIngredient.setInStock(b);
         }
       });
 
@@ -111,8 +111,8 @@ public class DetailIngredientListAdapter
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setData(List<Ingredient> ingredients) {
-    this.ingredientList = ingredients;
+  public void setData(List<Ingredient> ingredientList) {
+    this.ingredientList = ingredientList;
     notifyDataSetChanged();
   }
 
