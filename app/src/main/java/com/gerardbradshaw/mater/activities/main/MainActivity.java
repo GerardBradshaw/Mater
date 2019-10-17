@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity
     } else if (id == R.id.nav_settings) {
       Intent settingsIntent = new Intent(this, SettingsActivity.class);
       startActivity(settingsIntent);
-      
+
     } else {
       return  false;
     }

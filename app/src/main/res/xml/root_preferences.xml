@@ -14,37 +14,41 @@
   ~ limitations under the License.
   -->
 
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
-
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="@string/settings_display_header">
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:defaultValue="Automatic"
+            app:entries="@array/default_unit_entries"
+            app:entryValues="@array/default_unit_values"
+            app:key="default_units"
+            app:title="@string/setting_default_units"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="@string/settings_notifications_header">
 
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            app:key="notifications_on"
+            app:title="@string/setting_notifications_on" />
 
         <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:key="breakfast_notification"
+            app:dependency="notifications_on"
+            app:title="@string/setting_notifications_breakfast" />
+
+        <SwitchPreferenceCompat
+            android:key="lunch_notification"
+            android:dependency="notifications_on"
+            android:title="@string/setting_notifications_lunch" />
+
+        <SwitchPreferenceCompat
+            android:key="dinner_notification"
+            android:dependency="notifications_on"
+            android:title="@string/setting_notifications_dinner" />
 
     </PreferenceCategory>
 
