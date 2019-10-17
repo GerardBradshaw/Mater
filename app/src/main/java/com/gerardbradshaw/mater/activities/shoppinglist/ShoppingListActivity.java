@@ -45,6 +45,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
   private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
   private List<Pair<String, List<Ingredient>>> categoryIngredientPairs = new ArrayList<>();
+  private List<Pair<String, List<Ingredient>>> currentPairs = new ArrayList<>();
   private List<Pair<RecyclerView, IngredientListAdapter>> recyclerAndAdapterPairs = new ArrayList<>();
 
   private AsyncTaskScheduler taskScheduler;
@@ -79,7 +80,11 @@ public class ShoppingListActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
-    // TODO update the database
+
+    // Save the stock level of the ingredients to the database
+    for (int i = 0; i < currentPairs.size(); i++) {
+      ingredientViewModel.updateIngredient(currentPairs.get(i).second);
+    }
   }
 
 
@@ -97,10 +102,19 @@ public class ShoppingListActivity extends AppCompatActivity {
     int id = item.getItemId();
 
     if (id == R.id.action_sort) {
-      categoryView = !categoryView;
-      buildRecyclerViews();
 
-      // TODO save current stock levels
+      categoryView = !categoryView;
+
+      // Save the stock levels that the user may have changed
+      Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+          new SaveStockAsyncTask().execute();
+        }
+      };
+      taskScheduler.addNewPriorityTask(runnable);
+
+
     }
 
     return super.onOptionsItemSelected(item);
@@ -114,8 +128,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     Runnable pairsRunnable = new Runnable() {
       @Override
       public void run() {
-        new InitialSetUpAsyncTask(contentView ,progressBar ,summaryViewModel, ingredientViewModel)
-            .execute();
+        new InitialSetUpAsyncTask(summaryViewModel, ingredientViewModel).execute();
       }
     };
     taskScheduler.addNewPriorityTask(pairsRunnable);
@@ -133,15 +146,14 @@ public class ShoppingListActivity extends AppCompatActivity {
     ViewGroup insertPoint = findViewById(R.id.shoppingList_contentInsertPoint);
     insertPoint.removeAllViews();
 
-    List<Pair<String, List<Ingredient>>> setupPairs;
     if (categoryView) {
-      setupPairs = categoryIngredientPairs;
+      currentPairs = categoryIngredientPairs;
     }
     else {
-      setupPairs = titleIngredientPairs;
+      currentPairs = titleIngredientPairs;
     }
 
-    for (Pair pair : setupPairs) {
+    for (Pair pair : currentPairs) {
       String header = (String) pair.first;
       List<Ingredient> ingredientList = (ArrayList<Ingredient>) pair.second;
 
@@ -176,6 +188,16 @@ public class ShoppingListActivity extends AppCompatActivity {
     }
   }
 
+  void setUiLoadingFinished() {
+    contentView.setVisibility(View.VISIBLE);
+    progressBar.setVisibility(View.INVISIBLE);
+  }
+
+  void setUiLoadingStarted() {
+    contentView.setVisibility(View.INVISIBLE);
+    progressBar.setVisibility(View.VISIBLE);
+  }
+
 
   // - - - - - - - - - - - - - - - AsyncTasks - - - - - - - - - - - - - - -
 
@@ -185,20 +207,13 @@ public class ShoppingListActivity extends AppCompatActivity {
     private SummaryViewModel summaryViewModel;
     private IngredientViewModel ingredientViewModel;
 
-    private ProgressBar progressBar;
-    private NestedScrollView contentView;
-
     private List<Pair<String, List<Ingredient>>> titleIngredientPairs = new ArrayList<>();
     private List<Pair<String, List<Ingredient>>> categoryIngredientPairs = new ArrayList<>();
 
 
     // Constructor
-    InitialSetUpAsyncTask(NestedScrollView contentView,
-                          ProgressBar progressBar,
-                          SummaryViewModel summaryViewModel,
+    InitialSetUpAsyncTask(SummaryViewModel summaryViewModel,
                           IngredientViewModel ingredientViewModel) {
-      this.contentView = contentView;
-      this.progressBar = progressBar;
       this.summaryViewModel = summaryViewModel;
       this.ingredientViewModel = ingredientViewModel;
     }
@@ -208,8 +223,7 @@ public class ShoppingListActivity extends AppCompatActivity {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      contentView.setVisibility(View.INVISIBLE);
-      progressBar.setVisibility(View.VISIBLE);
+      setUiLoadingStarted();
     }
 
     @Override
@@ -234,7 +248,7 @@ public class ShoppingListActivity extends AppCompatActivity {
       Map<String, List<Ingredient>> categoryIngredientMap = new HashMap<>();
 
       for (Ingredient ingredient : allIngredientsList) {
-        String categoryTitle = Categories.getCategoryString(ingredient.getCategory());
+        String categoryTitle = Categories.getUiStringFromName(ingredient.getCategory());
 
         if (categoryIngredientMap.containsKey(categoryTitle)) {
           categoryIngredientMap.get(categoryTitle).add(ingredient);
@@ -266,8 +280,36 @@ public class ShoppingListActivity extends AppCompatActivity {
 
       // Build layout
       buildRecyclerViews();
-      contentView.setVisibility(View.VISIBLE);
-      progressBar.setVisibility(View.INVISIBLE);
+      setUiLoadingFinished();
+    }
+  }
+
+  private class SaveStockAsyncTask extends AsyncTask<Void, Void, Void> {
+
+    // Constructor
+    SaveStockAsyncTask() {
+    }
+
+    // AsyncTask methods
+    @Override
+    protected void onPreExecute() {
+      super.onPreExecute();
+      setUiLoadingStarted();
+    }
+
+    @Override
+    protected Void doInBackground(Void... voids) {
+      for (int i = 0; i < currentPairs.size(); i++) {
+        ingredientViewModel.updateIngredientOnCurrentThread(currentPairs.get(i).second);
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+      taskScheduler.setTaskFinished();
+      initialSetUp();
     }
   }
 

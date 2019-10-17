@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,14 +17,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -34,11 +29,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.room.entities.Step;
-import com.gerardbradshaw.mater.viewholders.StepInputViewHolder;
-import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Units.Misc;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
 
@@ -71,6 +66,8 @@ public class AddRecipeActivity extends AppCompatActivity {
   private static final int REQUEST_IMAGE_IMPORT = 1;
   private static final String LOG_TAG = "GGG - AddRecipeActivity";
 
+  private AsyncTaskScheduler taskScheduler;
+
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -80,6 +77,9 @@ public class AddRecipeActivity extends AppCompatActivity {
     setContentView(R.layout.activity_add_recipe);
     detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+
+    MaterApplication materApplication = (MaterApplication) getApplication();
+    taskScheduler = materApplication.getTaskScheduler();
 
     // Get a handle on the views
     progressBar = findViewById(R.id.addRecipe_progressBar);
@@ -111,11 +111,11 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Pre-fill data if loading from existing recipe
     int recipeId = getIntent().getIntExtra(RecipeDetailActivity.EXTRA_RECIPE_ID, 0);
     if (recipeId != 0) {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader_edit));
+      toolbar.setTitle(getString(R.string.add_recipe_header_edit));
       setSupportActionBar(toolbar);
       loadExistingRecipe(recipeId);
     } else {
-      toolbar.setTitle(getString(R.string.addRecipe_pageHeader));
+      toolbar.setTitle(getString(R.string.add_recipe_header));
       setSupportActionBar(toolbar);
     }
 
@@ -137,6 +137,7 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
+    // Listen for edited steps
     stepListAdapter.setStepEditedListener(new AddStepListAdapter.StepEditedListener() {
       @Override
       public void onDescriptionEdited(int position, String newDescription) {
@@ -144,50 +145,11 @@ public class AddRecipeActivity extends AppCompatActivity {
       }
     });
 
-    // Set listener for selectImageButton
-    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
-    selectImageButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        importImage();
-      }
-    });
+    // TODO listen to spinners
 
-    // Set listener for addIngredientButton
-    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
-    addIngredientButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        addIngredientToRecycler();
-      }
-    });
+    // Listen to all buttons
+    listenToButtons();
 
-    // Set listener for addStepButton
-    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
-    addStepButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        addStepToRecycler();
-      }
-    });
-
-    // Set listener for saveButton
-    Button saveButton = findViewById(R.id.addRecipe_saveButton);
-    saveButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        saveRecipeToRepository();
-      }
-    });
-
-    // Set up cancel button
-    Button cancelButton = findViewById(R.id.addRecipe_cancel);
-    cancelButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        showCancelDialog();
-      }
-    });
   }
 
   @Override
@@ -313,7 +275,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         // TODO implement retrieval from spinner
 
         if (holder.getUnit().isEmpty()) {
-          holder.setUnit(MiscUnits.NO_UNIT.name());
+          holder.setUnit(Misc.NO_UNIT.name());
         }
       }
 
@@ -341,7 +303,7 @@ public class AddRecipeActivity extends AppCompatActivity {
   private void showCancelDialog() {
     // Set up dialog for user confirmation
     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AddRecipeActivity.this);
-    alertBuilder.setMessage(getString(R.string.discard_changes));
+    alertBuilder.setMessage(getString(R.string.add_recipe_dialog_discard_changes));
 
     alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
       @Override
@@ -363,12 +325,64 @@ public class AddRecipeActivity extends AppCompatActivity {
 
   // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-  private void loadExistingRecipe(int recipeId) {
+  private void listenToButtons() {
+    // Set listener for selectImageButton
+    Button selectImageButton = findViewById(R.id.addRecipe_selectImageButton);
+    selectImageButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        importImage();
+      }
+    });
 
-    // Start AsyncTask to load RecipeHolder for recipe
-    new LoadRecipeAsyncTask(progressBar, contentScrollView, titleInput, servingsInput,
-        descriptionInput, imageNameView, ingredientListAdapter, stepListAdapter).execute(recipeId);
+    // Set listener for addIngredientButton
+    Button addIngredientButton = findViewById(R.id.addRecipe_addIngredientButton);
+    addIngredientButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        addIngredientToRecycler();
+      }
+    });
 
+    // Set listener for addStepButton
+    Button addStepButton = findViewById(R.id.addRecipe_addStepButton);
+    addStepButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        addStepToRecycler();
+      }
+    });
+
+    // Set listener for saveButton
+    Button saveButton = findViewById(R.id.addRecipe_saveButton);
+    saveButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        saveRecipeToRepository();
+      }
+    });
+
+    // Set up cancel button
+    Button cancelButton = findViewById(R.id.addRecipe_cancel);
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        showCancelDialog();
+      }
+    });
+  }
+
+  private void loadExistingRecipe(final int recipeId) {
+    hideUi();
+
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new LoadRecipeAsyncTask(titleInput, servingsInput, descriptionInput, imageNameView,
+            ingredientListAdapter, stepListAdapter).execute(recipeId);
+      }
+    };
+    taskScheduler.addNewPriorityTask(runnable);
   }
 
   private void importImageFromUri(@NonNull Uri uri) {
@@ -413,14 +427,22 @@ public class AddRecipeActivity extends AppCompatActivity {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
   }
 
+  private void hideUi() {
+    contentScrollView.setVisibility(View.GONE);
+    progressBar.setVisibility(View.VISIBLE);
+  }
+
+  private void showUi() {
+    progressBar.setVisibility(View.GONE);
+    contentScrollView.setVisibility(View.VISIBLE);
+  }
+
 
   // - - - - - - - - - - - - - - - Load Recipe AsyncTask - - - - - - - - - - - - - - -
 
   private class LoadRecipeAsyncTask extends AsyncTask<Integer, Void, RecipeHolder> {
 
     // Member variables
-    private ProgressBar progressBar;
-    private NestedScrollView contentScrollView;
     private EditText titleInput;
     private EditText servingsInput;
     private EditText descriptionInput;
@@ -430,16 +452,12 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 
     // Constructor
-    LoadRecipeAsyncTask(ProgressBar progressBar,
-                        NestedScrollView contentScrollView,
-                        EditText titleInput,
+    LoadRecipeAsyncTask(EditText titleInput,
                         EditText servingsInput,
                         EditText descriptionInput,
                         TextView imageNameView,
                         AddIngredientListAdapter addIngredientListAdapter,
                         AddStepListAdapter addStepListAdapter) {
-      this.progressBar = progressBar;
-      this.contentScrollView = contentScrollView;
       this.titleInput = titleInput;
       this.servingsInput = servingsInput;
       this.descriptionInput = descriptionInput;
@@ -453,8 +471,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     @Override
     protected void onPreExecute() {
       super.onPreExecute();
-      contentScrollView.setVisibility(View.GONE);
-      progressBar.setVisibility(View.VISIBLE);
+      hideUi();
     }
 
     @Override
@@ -480,9 +497,10 @@ public class AddRecipeActivity extends AppCompatActivity {
       AddRecipeActivity.this.ingredientHolders = recipeHolder.getIngredientHolders();
       AddRecipeActivity.this.stepHolders = recipeHolder.getSteps();
 
+      taskScheduler.setTaskFinished();
+
       // Update UI
-      progressBar.setVisibility(View.GONE);
-      contentScrollView.setVisibility(View.VISIBLE);
+      showUi();
     }
   }
 }

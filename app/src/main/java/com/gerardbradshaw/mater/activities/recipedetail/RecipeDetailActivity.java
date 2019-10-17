@@ -59,7 +59,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   private int customServings = 1;
   private int defaultServings;
 
-  private IngredientListAdapter ingredientListAdapter;
+  private DetailIngredientListAdapter detailIngredientListAdapter;
 
   private static String LOG_TAG = "GGG - RecipeDetailActivity";
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
@@ -123,9 +123,9 @@ public class RecipeDetailActivity extends AppCompatActivity {
     });
 
     // Set up RecyclerView for ingredients
-    ingredientListAdapter = new IngredientListAdapter(this);
+    detailIngredientListAdapter = new DetailIngredientListAdapter(this);
     RecyclerView recyclerView = findViewById(R.id.recipeDetail_recyclerView);
-    recyclerView.setAdapter(ingredientListAdapter);
+    recyclerView.setAdapter(detailIngredientListAdapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     // Observe ingredients
@@ -133,7 +133,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
       @Override
       public void onChanged(List<Ingredient> ingredientList) {
         getIngredientsLists(ingredientList);
-        ingredientListAdapter.setData(customIngredients);
+        detailIngredientListAdapter.setData(customIngredients);
       }
     });
 
@@ -243,7 +243,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
           customIngredients.add(newIngredient);
         }
 
-        ingredientListAdapter.notifyDataSetChanged();
+        detailIngredientListAdapter.notifyDataSetChanged();
 
         // Update the card view
         String servingsString = "x" + customServings;

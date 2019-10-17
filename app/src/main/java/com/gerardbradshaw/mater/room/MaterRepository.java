@@ -296,6 +296,12 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - Updating Ingredients - - - - - - - - - - - - - - -
 
+  public void updateIngredientOnCurrentThread(List<Ingredient> ingredients) {
+    for (Ingredient i : ingredients) {
+      ingredientDao.updateIngredient(i);
+    }
+  }
+
   public void updateIngredient(final Ingredient... ingredients) {
     Runnable runnable = new Runnable() {
       @Override
@@ -497,8 +503,10 @@ public class MaterRepository {
     for (Ingredient ingredient : ingredients) {
 
       IngredientHolder ingredientHolder = new IngredientHolder(
-          ingredient.getName(), ingredient.getCategory(),
-          ingredient.getAmount(), ingredient.getUnits());
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits());
 
       ingredientHolder.setInStock(ingredient.getInStock());
       ingredientHolders.add(ingredientHolder);

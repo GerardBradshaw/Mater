@@ -6,16 +6,18 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.helpers.Categories;
+import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
-import com.gerardbradshaw.mater.room.entities.Summary;
 
 import java.util.List;
 
@@ -30,12 +32,20 @@ public class AddIngredientListAdapter
 
   private NameEditedListener nameEditedListener;
   private AmountEditedListener amountEditedListener;
+  private UnitEditedListener unitEditedListener;
+  private CategoryEditedListener categoryEditedListener;
+
+  private final List<String> uiCategoryList = Categories.getCategoryList();
+  private final List<String> uiUnitList = Units.getUnitList();
+
+  private Context context;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public AddIngredientListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
+    this.context = context;
   }
 
 
@@ -51,7 +61,7 @@ public class AddIngredientListAdapter
   @NonNull
   @Override
   public NewIngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View itemView = inflater.inflate(R.layout.ingredient_input, parent, false);
+    View itemView = inflater.inflate(R.layout.ingredient_add, parent, false);
     return new NewIngredientViewHolder(itemView, this);
   }
 
@@ -70,8 +80,59 @@ public class AddIngredientListAdapter
       IngredientHolder holder = ingredientHolders.get(position);
       final String name = holder.getName();
       double amount = holder.getAmount();
-      String unit = holder.getUnit();
+      String unitName = holder.getUnit();
+      String uiUnit = Units.getUiStringFromName(unitName);
+      String categoryName = holder.getCategory();
+      String uiCategory = Categories.getUiStringFromName(categoryName);
 
+      // Set up the unitSpinner and the drop down appearance
+      ArrayAdapter<String> unitSpinnerAdapter = new ArrayAdapter<>(context,
+          android.R.layout.simple_spinner_dropdown_item, uiUnitList);
+      unitSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+      // Set up listener for unit changes
+      viewHolder.unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          if (unitEditedListener != null) {
+            unitEditedListener.onUnitsEdited(viewHolder.getAdapterPosition(),
+                adapterView.getSelectedItem().toString());
+          }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+      });
+
+      // Set the adapter to the spinner
+      viewHolder.unitSpinner.setAdapter(unitSpinnerAdapter);
+
+      // Set up categorySpinner and the drop down appearance
+      ArrayAdapter<String> categorySpinnerAdapter = new ArrayAdapter<>(context,
+          android.R.layout.simple_spinner_dropdown_item, uiCategoryList);
+      categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+      // Set up listener for category changes
+      viewHolder.categorySpinner.setOnItemSelectedListener(
+          new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          if (categoryEditedListener != null) {
+            categoryEditedListener.onCategoryEdited(viewHolder.getAdapterPosition(),
+                adapterView.getSelectedItem().toString());
+          }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+        }
+      });
+
+      // Set the adapter to the spinner
+      viewHolder.categorySpinner.setAdapter(categorySpinnerAdapter);
+
+      // Set the name, amount, unit and categorySpinner if a name exists, otherwise make them empty
       if (!name.isEmpty()) {
         viewHolder.name.setText(name);
 
@@ -79,11 +140,20 @@ public class AddIngredientListAdapter
           viewHolder.amount.setText(Double.toString(amount));
         }
 
+        if (uiCategoryList.indexOf(uiCategory) != -1) {
+          viewHolder.categorySpinner.setSelection(uiCategoryList.indexOf(uiCategory));
+        }
+
+        if (uiUnitList.indexOf(uiUnit) != -1) {
+          viewHolder.unitSpinner.setSelection(uiUnitList.indexOf(uiUnit));
+        }
+
       } else {
         viewHolder.name.setText(null);
         viewHolder.amount.setText(null);
       }
 
+      // Set up listener for name changes
       viewHolder.name.addTextChangedListener(new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -101,6 +171,7 @@ public class AddIngredientListAdapter
         }
       });
 
+      // Set up listener for amount changes
       viewHolder.amount.addTextChangedListener(new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -121,6 +192,7 @@ public class AddIngredientListAdapter
           }
         }
       });
+
     }
   }
 
@@ -169,7 +241,8 @@ public class AddIngredientListAdapter
     // Member variables
     private EditText name;
     private EditText amount;
-    private Spinner units;
+    private Spinner unitSpinner;
+    private Spinner categorySpinner;
     final AddIngredientListAdapter adapter;
 
     // Constructor
@@ -179,13 +252,14 @@ public class AddIngredientListAdapter
       // Initialize the views and adapter.
       name = itemView.findViewById(R.id.ingredientInput_nameInput);
       amount = itemView.findViewById(R.id.ingredientInput_amountInput);
-      units = itemView.findViewById(R.id.ingredientInput_unitSpinner);
+      unitSpinner = itemView.findViewById(R.id.ingredientInput_unitSpinner);
+      categorySpinner = itemView.findViewById(R.id.ingredientInput_categorySpinner);
       this.adapter = adapter;
     }
   }
 
 
-  // - - - - - - - - - - - - - - - IngredientModifiedListener Interface - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Listener Interfaces - - - - - - - - - - - - - - -
 
   public interface NameEditedListener {
     void onNameEdited(int position, String newName);
@@ -193,6 +267,14 @@ public class AddIngredientListAdapter
 
   public interface AmountEditedListener {
     void onAmountEdited(int position, double amount);
+  }
+
+  public interface UnitEditedListener {
+    void onUnitsEdited(int position, String unit);
+  }
+
+  public interface CategoryEditedListener {
+    void onCategoryEdited(int position, String category);
   }
 
 }

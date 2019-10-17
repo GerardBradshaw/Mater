@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.NoActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:theme="@style/AppTheme.NoActionBar"
+    tools:context=".activities.addrecipe.AddRecipeActivity">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Name and category -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <!-- Name Input -->
+                <EditText
+                    android:id="@+id/ingredientInput_nameInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_recipe_hint_ingredient_name"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:layout_weight="1"/>
+
+                <!-- Category Spinner -->
+                <Spinner
+                    android:id="@+id/ingredientInput_categorySpinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <!-- Amount and unit -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <!-- Amount Input -->
+                <EditText
+                    android:id="@+id/ingredientInput_amountInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_recipe_hint_ingredient_amount"
+                    android:inputType="numberDecimal"
+                    android:maxLength="4"
+                    android:textColor="@color/textColorPrimary" />
+
+                <!-- Units Spinner -->
+                <Spinner
+                    android:id="@+id/ingredientInput_unitSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -24,8 +24,6 @@ public class IngredientListAdapter
 
   private final LayoutInflater inflater;
   private static String LOG_TAG = "GGG - IngredientListAdapter";
-  private StockChangedListener stockChangedListener;
-  private Context context;
   private List<Ingredient> ingredientList = new ArrayList<>();
 
 
@@ -33,7 +31,6 @@ public class IngredientListAdapter
 
   public IngredientListAdapter(Context context) {
     inflater = LayoutInflater.from(context);
-    this.context = context;
   }
 
 
@@ -65,7 +62,7 @@ public class IngredientListAdapter
   @Override
   public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-    Ingredient currentIngredient = ingredientList.get(position);
+    final Ingredient currentIngredient = ingredientList.get(position);
     final boolean inStock = currentIngredient.getInStock();
     holder.textView.setText(currentIngredient.getName());
     holder.inStock.setChecked(currentIngredient.getInStock());
@@ -74,7 +71,7 @@ public class IngredientListAdapter
     holder.inStock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        stockChangedListener.onStockLevelChanged(position, b);
+        currentIngredient.setInStock(b);
       }
     });
   }
@@ -95,13 +92,12 @@ public class IngredientListAdapter
     }
   }
 
+
+  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
+
   public void setData(List<Ingredient> ingredientList) {
     this.ingredientList = ingredientList;
     notifyDataSetChanged();
-  }
-
-  public void setStockChangedListener(StockChangedListener stockChangedListener) {
-    this.stockChangedListener = stockChangedListener;
   }
 
 
@@ -123,7 +119,4 @@ public class IngredientListAdapter
     }
   }
 
-  public interface StockChangedListener {
-    void onStockLevelChanged(int position, boolean inStock);
-  }
 }

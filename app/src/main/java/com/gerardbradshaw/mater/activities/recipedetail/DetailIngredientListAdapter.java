@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.List;
 
-public class IngredientListAdapter
-    extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
+public class DetailIngredientListAdapter
+    extends RecyclerView.Adapter<DetailIngredientListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
@@ -27,14 +26,14 @@ public class IngredientListAdapter
 
   private List<Ingredient> ingredientList;
 
-  private Context context
-      ;
+  private Context context;
+
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientListAdapter(Context context) {
+  public DetailIngredientListAdapter(Context context) {
     this.context = context;
     inflater = LayoutInflater.from(context);
   }
@@ -86,7 +85,7 @@ public class IngredientListAdapter
       });
 
     } else {
-      viewHolder.name.setText(context.getResources().getString(R.string.no_ingredients_message));
+      viewHolder.name.setText(context.getResources().getString(R.string.recipe_detail_text_no_ingredients));
       viewHolder.checkBox.setVisibility(View.GONE);
     }
 
@@ -130,10 +129,10 @@ public class IngredientListAdapter
     private final CheckBox checkBox;
     private final TextView quantity;
     private final TextView name;
-    final IngredientListAdapter adapter;
+    final DetailIngredientListAdapter adapter;
 
     // Constructor
-    public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, DetailIngredientListAdapter adapter) {
       super(itemView);
 
       // Initialize the views and adapter.
