@@ -77,7 +77,7 @@ public class Units {
     return volumeBiMap.get(uiString);
   }
 
-  public static Volume getVolumeFromVolumeName(String volumeName) {
+  private static Volume getVolumeFromVolumeName(String volumeName) {
     try {
       return Volume.valueOf(volumeName);
 
@@ -103,7 +103,7 @@ public class Units {
     return massBiMap.get(uiString);
   }
 
-  public static Mass getMassFromMassName(String massName) {
+  private static Mass getMassFromMassName(String massName) {
     try {
       return Mass.valueOf(massName);
 
@@ -129,7 +129,7 @@ public class Units {
     return miscBiMap.get(uiString);
   }
 
-  public static Misc getMiscFromMiscName(String miscName) {
+  private static Misc getMiscFromMiscName(String miscName) {
     try {
       return Misc.valueOf(miscName);
 
@@ -198,7 +198,7 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Formatting methods - - - - - - - - - - - - - - -
 
-  public static String formatForDetailView(double amount, Volume volume) {
+  private static String formatForDetailView(double amount, Volume volume) {
     Volume newVolume;
 
     if(isMetric) {
@@ -242,7 +242,7 @@ public class Units {
     return Units.convertVolume(amount, volume, newVolume);
   }
 
-  public static String formatForDetailView(double amount, Mass mass) {
+  private static String formatForDetailView(double amount, Mass mass) {
 
     Mass newMass;
 
@@ -273,7 +273,7 @@ public class Units {
     return Units.convertMass(amount, mass, newMass);
   }
 
-  public static String formatForDetailView(double amount, Misc unit) {
+  private static String formatForDetailView(double amount, Misc unit) {
     String amountString = String.format(Locale.getDefault(), "%.1f", amount);
     String unitString = miscBiMap.inverse().get(unit);
     return amountString + " " + unitString + " ";

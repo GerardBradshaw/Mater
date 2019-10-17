@@ -43,7 +43,7 @@ public class IngredientHolder {
 
   public IngredientHolder(String name, String category, double amount, String unit) {
     this.unit = Units.getNameFromName(unit);
-    this.category = Categories.getCategory(category).name();
+    this.category = Categories.getCategoryFromName(category).name();
     this.name = name;
     this.amount = amount;
   }

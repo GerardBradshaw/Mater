@@ -5,7 +5,6 @@ import com.google.common.collect.HashBiMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Categories {
 
@@ -63,7 +62,7 @@ public class Categories {
 
   // - - - - - - - - - - - - - - - Methods - - - - - - - - - - - - - - -
 
-  public static String getUiString(Category category) {
+  private static String getUiStringFromCategory(Category category) {
     if (categoryBiMap.containsValue(category)) {
       return categoryBiMap.inverse().get(category);
     } else {
@@ -71,16 +70,25 @@ public class Categories {
     }
   }
 
-  public static Category getCategory(String categoryString) {
-    if (categoryBiMap.containsKey(categoryString)) {
-      return categoryBiMap.get(categoryString);
+  public static Category getCategoryFromName(String categoryName) {
+    try {
+      return Category.valueOf(categoryName);
+
+    } catch (IllegalArgumentException e) {
+      return Category.NO_CATEGORY;
+    }
+  }
+
+  private static Category getCategoryFromUiString(String categoryName) {
+    if (categoryBiMap.containsKey(categoryName)) {
+      return categoryBiMap.get(categoryName);
     } else {
       return Category.NO_CATEGORY;
     }
   }
 
-  public static String getUiString(String categoryString) {
-    return getUiString(getCategory(categoryString));
+  public static String getUiStringFromCategory(String categoryString) {
+    return getUiStringFromCategory(getCategoryFromUiString(categoryString));
   }
 
   public static List<String> getCategoryList() {
