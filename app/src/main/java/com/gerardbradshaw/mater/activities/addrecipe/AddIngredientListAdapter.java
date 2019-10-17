@@ -19,7 +19,6 @@ import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AddIngredientListAdapter
@@ -37,7 +36,7 @@ public class AddIngredientListAdapter
   private CategoryEditedListener categoryEditedListener;
 
   private final List<String> uiCategoryList = Categories.getCategoryList();
-  private final List<String> uiUnitList = new ArrayList<>();
+  private final List<String> uiUnitList = Units.getUnitList();
 
   private Context context;
 
@@ -87,8 +86,8 @@ public class AddIngredientListAdapter
       String uiCategory = Categories.getUiStringFromName(categoryName);
 
       // Set up the unitSpinner and the drop down appearance
-      ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
-          context, R.array.global_units_array, android.R.layout.simple_spinner_item);
+      ArrayAdapter<String> unitSpinnerAdapter = new ArrayAdapter<>(context,
+          android.R.layout.simple_spinner_dropdown_item, uiUnitList);
       unitSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for unit changes
