@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Units {
@@ -71,7 +73,7 @@ public class Units {
     miscBiMap.put("pinch", Misc.PINCH);
   }
 
-  // - - - - - - - - - - - - - - - Volume methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Volume - - - - - - - - - - - - - - -
 
   public static Volume getVolumeFromUiString(String uiString) {
     return volumeBiMap.get(uiString);
@@ -97,7 +99,7 @@ public class Units {
   }
 
 
-  // - - - - - - - - - - - - - - - Mass methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Mass - - - - - - - - - - - - - - -
 
   public static Mass getMassFromUiString(String uiString) {
     return massBiMap.get(uiString);
@@ -123,7 +125,7 @@ public class Units {
   }
 
 
-  // - - - - - - - - - - - - - - - Misc methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Misc - - - - - - - - - - - - - - -
 
   public static Misc getMiscFromUiString(String uiString) {
     return miscBiMap.get(uiString);
@@ -149,7 +151,7 @@ public class Units {
   }
 
 
-  // - - - - - - - - - - - - - - - Any-unit methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Any-unit - - - - - - - - - - - - - - -
 
   public static String getNameFromUiString(String uiString) {
     if (volumeBiMap.containsKey(uiString)) {
@@ -195,8 +197,16 @@ public class Units {
     }
   }
 
+  public static List<String> getUnitList() {
+    List<String> unitList = new ArrayList<>();
+    unitList.addAll(volumeBiMap.keySet());
+    unitList.addAll(massBiMap.keySet());
+    unitList.addAll(miscBiMap.keySet());
+    return unitList;
+  }
 
-  // - - - - - - - - - - - - - - - Formatting methods - - - - - - - - - - - - - - -
+
+  // - - - - - - - - - - - - - - - Formatting - - - - - - - - - - - - - - -
 
   private static String formatForDetailView(double amount, Volume volume) {
     Volume newVolume;
@@ -295,7 +305,7 @@ public class Units {
   }
 
 
-  // - - - - - - - - - - - - - - - Helpers methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
   /**
    * Converts a volume between units.
@@ -354,7 +364,7 @@ public class Units {
   }
 
 
-  // - - - - - - - - - - - - - - - Conversion methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Conversion - - - - - - - - - - - - - - -
 
   private static double convertToMl(double amount, Volume originalUnit) {
     switch (originalUnit) {

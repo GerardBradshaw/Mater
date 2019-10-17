@@ -148,7 +148,7 @@ public class AddIngredientListAdapter
         if (uiUnitList.indexOf(uiUnit) != -1) {
           viewHolder.unitSpinner.setSelection(uiUnitList.indexOf(uiUnit));
         }
-        
+
       } else {
         viewHolder.name.setText(null);
         viewHolder.amount.setText(null);
