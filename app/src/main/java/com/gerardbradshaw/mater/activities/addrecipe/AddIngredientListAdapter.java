@@ -19,6 +19,7 @@ import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddIngredientListAdapter
@@ -36,6 +37,7 @@ public class AddIngredientListAdapter
   private CategoryEditedListener categoryEditedListener;
 
   private final List<String> uiCategoryList = Categories.getCategoryList();
+  private final List<String> uiUnitList = new ArrayList<>();
 
   private Context context;
 
@@ -80,6 +82,7 @@ public class AddIngredientListAdapter
       final String name = holder.getName();
       double amount = holder.getAmount();
       String unitName = holder.getUnit();
+      String uiUnit = Units.getUiStringFromName(unitName);
       String categoryName = holder.getCategory();
       String uiCategory = Categories.getUiStringFromName(categoryName);
 
@@ -131,7 +134,6 @@ public class AddIngredientListAdapter
       viewHolder.categorySpinner.setAdapter(categorySpinnerAdapter);
 
       // Set the name, amount, unit and categorySpinner if a name exists, otherwise make them empty
-      // TODO set default unit and categorySpinner
       if (!name.isEmpty()) {
         viewHolder.name.setText(name);
 
@@ -143,6 +145,10 @@ public class AddIngredientListAdapter
           viewHolder.categorySpinner.setSelection(uiCategoryList.indexOf(uiCategory));
         }
 
+        if (uiUnitList.indexOf(uiUnit) != -1) {
+          viewHolder.unitSpinner.setSelection(uiUnitList.indexOf(uiUnit));
+        }
+        
       } else {
         viewHolder.name.setText(null);
         viewHolder.amount.setText(null);
