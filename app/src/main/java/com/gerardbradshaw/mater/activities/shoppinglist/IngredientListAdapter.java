@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.activities.recipedetail;
+package com.gerardbradshaw.mater.activities.shoppinglist;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,9 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IngredientListAdapter
@@ -23,18 +23,13 @@ public class IngredientListAdapter
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-
-  private List<Ingredient> ingredientList;
-
-  private Context context;
-
-  private static String LOG_TAG = "GGG - ShoppingListAdapter";
+  private static String LOG_TAG = "GGG - IngredientListAdapter";
+  private List<Ingredient> ingredientList = new ArrayList<>();
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
   public IngredientListAdapter(Context context) {
-    this.context = context;
     inflater = LayoutInflater.from(context);
   }
 
@@ -51,7 +46,8 @@ public class IngredientListAdapter
   @NonNull
   @Override
   public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View itemView = inflater.inflate(R.layout.ingredient_detail, parent, false);
+
+    View itemView = inflater.inflate(R.layout.shopping_list_item, parent, false);
     return new IngredientViewHolder(itemView, this);
   }
 
@@ -60,35 +56,24 @@ public class IngredientListAdapter
    * listeners. This method updates the contents of the itemView to reflect the item at the given
    * position.
    *
-   * @param viewHolder the ViewHolder which should be updated to represent the contents of the item at the given position in the data set
+   * @param holder the ViewHolder which should be updated to represent the contents of the item at the given position in the data set
    * @param position the position of the item within the adapter's data set
    */
   @Override
-  public void onBindViewHolder(@NonNull IngredientViewHolder viewHolder, int position) {
-    if (ingredientList != null) {
-      viewHolder.checkBox.setVisibility(View.VISIBLE);
+  public void onBindViewHolder(@NonNull final IngredientViewHolder holder, final int position) {
 
-      final Ingredient ingredient = ingredientList.get(position);
-      String name = ingredient.getName();
-      String quantity = Units.formatForDetailView(ingredient.getAmount(), ingredient.getUnits());
-      boolean inStock = ingredient.getInStock();
+    final Ingredient currentIngredient = ingredientList.get(position);
+    final boolean inStock = currentIngredient.getInStock();
+    holder.textView.setText(currentIngredient.getName());
+    holder.inStock.setChecked(currentIngredient.getInStock());
 
-      viewHolder.name.setText(name);
-      viewHolder.quantity.setText(quantity);
-      viewHolder.checkBox.setChecked(inStock);
-
-      viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-          ingredient.setInStock(b);
-        }
-      });
-
-    } else {
-      viewHolder.name.setText(context.getResources().getString(R.string.recipe_detail_text_no_ingredients));
-      viewHolder.checkBox.setVisibility(View.GONE);
-    }
-
+    // Set up onCheckedChangedListener
+    holder.inStock.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        currentIngredient.setInStock(b);
+      }
+    });
   }
 
   /**
@@ -102,43 +87,34 @@ public class IngredientListAdapter
   public int getItemCount() {
     if(ingredientList != null) {
       return ingredientList.size();
-
     } else {
       return 0;
     }
   }
 
 
-  // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Helpers - - - - - - - - - - - - - - -
 
-  public void setData(List<Ingredient> ingredients) {
-    this.ingredientList = ingredients;
+  public void setData(List<Ingredient> ingredientList) {
+    this.ingredientList = ingredientList;
     notifyDataSetChanged();
   }
 
-  public Ingredient getIngredientAtPosition(int position) {
-    return ingredientList.get(position);
-  }
 
-
-  // - - - - - - - - - - - - - - - ViewHolder Class - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - ViewHolder - - - - - - - - - - - - - - -
 
   class IngredientViewHolder extends RecyclerView.ViewHolder {
 
-    // Member variables
-    private final CheckBox checkBox;
-    private final TextView quantity;
-    private final TextView name;
+    final CheckBox inStock;
+    final TextView textView;
     final IngredientListAdapter adapter;
 
-    // Constructor
     public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
       super(itemView);
 
-      // Initialize the views and adapter.
-      checkBox = itemView.findViewById(R.id.ingredientView_checkBox);
-      quantity = itemView.findViewById(R.id.ingredientView_amount);
-      name = itemView.findViewById(R.id.ingredientView_name);
+      // Initialize the views in the adapter
+      inStock = itemView.findViewById(R.id.shoppingListItem_inStockCheckBox);
+      textView = itemView.findViewById(R.id.shoppingListItem_textView);
       this.adapter = adapter;
     }
   }

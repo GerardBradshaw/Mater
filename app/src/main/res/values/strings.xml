@@ -7,25 +7,6 @@
     <string name="global_menu_settings">Settings</string>
     <string name="global_menu_edit">Edit</string>
     <string name="global_action_servings">Servings</string>
-    <string-array name="global_category_array">
-        <item>Fresh fruit &amp; vegetables</item>
-        <item>Bakery</item>
-        <item>Cereals &amp; spreads</item>
-        <item>Canned goods</item>
-        <item>International food</item>
-        <item>Rice &amp; pasta</item>
-        <item>Cold food</item>
-        <item>Oils &amp; condiments</item>
-        <item>Baking</item>
-        <item>Spices</item>
-        <item>Kitchen supplies</item>
-        <item>Personal hygiene</item>
-        <item>Cleaning supplies</item>
-        <item>Supplements &amp; medicines</item>
-        <item>Beverages</item>
-        <item>Juices</item>
-        <item>Uncategorised</item>
-    </string-array>
 
     <!-- Main Activity -->
     <string name="nav_drawer_open">Open navigation drawer</string>
@@ -49,8 +30,8 @@
     <string name="add_recipe_button_cancel">Cancel</string>
     <string name="add_recipe_hint_title">Title…</string>
     <string name="add_recipe_hint_description">Short description…</string>
-    <string name="add_recipe_hint_ingredient_name">Ingredient name…</string>
-    <string name="add_recipe_hint_ingredient_amount">Amount</string>
+    <string name="add_recipe_hint_ingredient_name">Name…</string>
+    <string name="add_recipe_hint_ingredient_amount">Amount...</string>
     <string name="add_recipe_hint_step">Describe the step…</string>
     <string name="add_recipe_hint_servings">0</string>
     <string name="add_recipe_dialog_discard_changes">Discard changes?</string>
