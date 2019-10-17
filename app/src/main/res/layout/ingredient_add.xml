@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingStart="4dp"
-    android:paddingEnd="4dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
     android:theme="@style/AppTheme.NoActionBar"
     tools:context=".activities.addrecipe.AddRecipeActivity">
 
