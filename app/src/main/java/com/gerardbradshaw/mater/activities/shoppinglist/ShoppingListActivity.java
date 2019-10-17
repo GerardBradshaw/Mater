@@ -112,7 +112,7 @@ public class ShoppingListActivity extends AppCompatActivity {
           new SaveStockAsyncTask().execute();
         }
       };
-      taskScheduler.addNewPriorityTask(runnable);
+      taskScheduler.addNewTask(runnable);
 
 
     }
@@ -131,7 +131,7 @@ public class ShoppingListActivity extends AppCompatActivity {
         new InitialSetUpAsyncTask(summaryViewModel, ingredientViewModel).execute();
       }
     };
-    taskScheduler.addNewPriorityTask(pairsRunnable);
+    taskScheduler.addNewTask(pairsRunnable);
   }
 
   private void buildRecyclerViews() {

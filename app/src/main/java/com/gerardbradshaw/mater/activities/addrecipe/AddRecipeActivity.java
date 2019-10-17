@@ -382,7 +382,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             ingredientListAdapter, stepListAdapter).execute(recipeId);
       }
     };
-    taskScheduler.addNewPriorityTask(runnable);
+    taskScheduler.addNewTask(runnable);
   }
 
   private void importImageFromUri(@NonNull Uri uri) {
