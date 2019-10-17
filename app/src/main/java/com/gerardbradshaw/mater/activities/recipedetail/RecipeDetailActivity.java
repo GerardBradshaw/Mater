@@ -150,7 +150,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
   protected void onPause() {
     super.onPause();
     // Save the inStock level of each ingredient to the database
-    ingredientViewModel.updateIngredient(customIngredients);
+    ingredientViewModel.updateIngredients(customIngredients);
   }
 
   // - - - - - - - - - - - - - - - Helper Methods - - - - - - - - - - - - - - -

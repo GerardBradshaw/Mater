@@ -83,7 +83,7 @@ public class ShoppingListActivity extends AppCompatActivity {
 
     // Save the stock level of the ingredients to the database
     for (int i = 0; i < currentPairs.size(); i++) {
-      ingredientViewModel.updateIngredient(currentPairs.get(i).second);
+      ingredientViewModel.updateIngredients(currentPairs.get(i).second);
     }
   }
 
