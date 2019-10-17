@@ -73,22 +73,22 @@ public class Categories {
   public static Category getCategoryFromName(String categoryName) {
     try {
       return Category.valueOf(categoryName);
-
     } catch (IllegalArgumentException e) {
       return Category.NO_CATEGORY;
     }
   }
 
-  private static Category getCategoryFromUiString(String categoryName) {
-    if (categoryBiMap.containsKey(categoryName)) {
-      return categoryBiMap.get(categoryName);
+  private static Category getCategoryFromUiString(String uiString) {
+    if (categoryBiMap.containsKey(uiString)) {
+      return categoryBiMap.get(uiString);
     } else {
       return Category.NO_CATEGORY;
     }
   }
 
-  public static String getUiStringFromCategory(String categoryString) {
-    return getUiStringFromCategory(getCategoryFromUiString(categoryString));
+  public static String getUiStringFromName(String categoryName) {
+    Category category = getCategoryFromName(categoryName);
+    return getUiStringFromCategory(category);
   }
 
   public static List<String> getCategoryList() {

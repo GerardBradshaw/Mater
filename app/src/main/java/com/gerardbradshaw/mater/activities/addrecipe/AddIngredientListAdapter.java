@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.Categories;
+import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public class AddIngredientListAdapter
   private UnitEditedListener unitEditedListener;
   private CategoryEditedListener categoryEditedListener;
 
-  private final List<String> categoryList = Categories.getCategoryList();
+  private final List<String> uiCategoryList = Categories.getCategoryList();
 
   private Context context;
 
@@ -78,8 +79,9 @@ public class AddIngredientListAdapter
       IngredientHolder holder = ingredientHolders.get(position);
       final String name = holder.getName();
       double amount = holder.getAmount();
-      String unit = holder.getUnit();
-      String category = holder.getCategory();
+      String unitName = holder.getUnit();
+      String categoryName = holder.getCategory();
+      String uiCategory = Categories.getUiStringFromName(categoryName);
 
       // Set up the unitSpinner and the drop down appearance
       ArrayAdapter<CharSequence> unitSpinnerAdapter = ArrayAdapter.createFromResource(
@@ -106,7 +108,7 @@ public class AddIngredientListAdapter
 
       // Set up categorySpinner and the drop down appearance
       ArrayAdapter<String> categorySpinnerAdapter = new ArrayAdapter<>(context,
-          android.R.layout.simple_spinner_dropdown_item, categoryList);
+          android.R.layout.simple_spinner_dropdown_item, uiCategoryList);
       categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
       // Set up listener for category changes
@@ -137,8 +139,8 @@ public class AddIngredientListAdapter
           viewHolder.amount.setText(Double.toString(amount));
         }
 
-        if (categoryList.indexOf(unit) != -1) {
-          viewHolder.unitSpinner.setSelection(categoryList.indexOf(unit));
+        if (uiCategoryList.indexOf(uiCategory) != -1) {
+          viewHolder.categorySpinner.setSelection(uiCategoryList.indexOf(uiCategory));
         }
 
       } else {
