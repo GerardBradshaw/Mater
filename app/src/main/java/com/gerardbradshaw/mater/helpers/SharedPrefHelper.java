@@ -37,6 +37,7 @@ public class SharedPrefHelper {
 
   }
 
+
   // - - - - - - - - - - - - - - - Setters - - - - - - - - - - - - - - -
 
   /**
@@ -48,9 +49,9 @@ public class SharedPrefHelper {
     editor.apply();
   }
 
-  public void putInt(String key, int number) {
+  public void putInt(String key, int i) {
     SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putInt(key, number);
+    editor.putInt(key, i);
     editor.apply();
   }
 
@@ -58,9 +59,9 @@ public class SharedPrefHelper {
     return sharedPreferences.getInt(key, defaultValue);
   }
 
-  public void putString(String key, String string) {
+  public void putString(String key, String s) {
     SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putString(key, string);
+    editor.putString(key, s);
     editor.apply();
   }
 
@@ -68,9 +69,9 @@ public class SharedPrefHelper {
     return sharedPreferences.getString(key, defaultValue);
   }
 
-  public void putBoolean(String key, boolean bool) {
+  public void putBoolean(String key, boolean b) {
     SharedPreferences.Editor editor = sharedPreferences.edit();
-    editor.putBoolean(key, bool);
+    editor.putBoolean(key, b);
     editor.apply();
   }
 
