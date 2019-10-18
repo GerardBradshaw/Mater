@@ -306,10 +306,11 @@ public class Units {
 
   public static boolean getIsMetric(String default_units) {
     String countryCode = Locale.getDefault().getCountry();
+    boolean isImperialCountry =
+        countryCode.equals("US") || countryCode.equals("LR") || countryCode.equals("MM");
+
     if (default_units.equals("imperial")
-        || countryCode.contains("US")
-        || countryCode.contains("LR")
-        || countryCode.contains("MM")) {
+        || (default_units.equals("automatic") && isImperialCountry)) {
       return false;
 
     } else {
