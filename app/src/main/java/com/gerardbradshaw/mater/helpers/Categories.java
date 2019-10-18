@@ -91,6 +91,10 @@ public class Categories {
     return getUiStringFromCategory(category);
   }
 
+  public static String getNameFromUiString(String uiString) {
+    return categoryBiMap.get(uiString).name();
+  }
+
   public static List<String> getCategoryList() {
     return new ArrayList<>(categoryBiMap.keySet());
   }
