@@ -35,6 +35,7 @@
         <SwitchPreference
             app:key="notifications_on"
             app:title="@string/setting_notifications_on"
+            android:icon="@drawable/ic_notification"
             android:defaultValue="false"/>
 
         <SwitchPreference
