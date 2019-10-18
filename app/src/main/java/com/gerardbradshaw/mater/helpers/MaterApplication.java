@@ -1,6 +1,7 @@
 package com.gerardbradshaw.mater.helpers;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -24,6 +25,9 @@ public class MaterApplication extends Application {
 
   private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
 
+  private final String sharedPrefFile = "com.gerardbradshaw.mater";
+  private final String FIRST_LAUNCH = "launched";
+
 
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
@@ -31,17 +35,18 @@ public class MaterApplication extends Application {
   public void onCreate() {
     super.onCreate();
 
-    // Initialize the repository and application
+    // Initialize the repo and shared prefs
     repository = new MaterRepository(this);
-
-    // Initialize shared prefs
-    SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
+    SharedPreferences sharedPrefs = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE);
 
     // Check if the application has been launched before. If not, create some recipes.
-    if (sharedPrefHelper.isFirstLaunch()) {
+    boolean isFirstLaunch = sharedPrefs.getBoolean(FIRST_LAUNCH, true);
+    if (isFirstLaunch) {
 
       // Updated the firstLaunched status
-      sharedPrefHelper.setAsLaunched();
+      SharedPreferences.Editor prefEditor = sharedPrefs.edit();
+      prefEditor.putBoolean(FIRST_LAUNCH, false);
+      prefEditor.apply();
 
       // Create the default recipes
       RecipeHolder lasagneRecipeHolder = createLasagneRecipeHolder();
