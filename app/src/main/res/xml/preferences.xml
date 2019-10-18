@@ -31,24 +31,24 @@
 
     <PreferenceCategory app:title="@string/settings_notifications_header">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             app:key="notifications_on"
             app:title="@string/setting_notifications_on"
             android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             app:key="breakfast_notification"
             app:dependency="notifications_on"
             app:title="@string/setting_notifications_breakfast"
             android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="lunch_notification"
             android:dependency="notifications_on"
             android:title="@string/setting_notifications_lunch"
             android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="dinner_notification"
             android:dependency="notifications_on"
             android:title="@string/setting_notifications_dinner"

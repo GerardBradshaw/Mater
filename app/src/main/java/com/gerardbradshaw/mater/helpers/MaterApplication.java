@@ -1,6 +1,7 @@
 package com.gerardbradshaw.mater.helpers;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.gerardbradshaw.mater.R;
@@ -30,7 +31,7 @@ public class MaterApplication extends Application {
   public void onCreate() {
     super.onCreate();
 
-    // Initialize the repository
+    // Initialize the repository and application
     repository = new MaterRepository(this);
 
     // Initialize shared prefs
@@ -42,9 +43,6 @@ public class MaterApplication extends Application {
       // Updated the firstLaunched status
       sharedPrefHelper.setAsLaunched();
 
-      // Set default preferences
-      PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-      
       // Create the default recipes
       RecipeHolder lasagneRecipeHolder = createLasagneRecipeHolder();
       RecipeHolder curryRecipeHolder = createCurryRecipeHolder();

@@ -1,6 +1,8 @@
 package com.gerardbradshaw.mater.activities.recipedetail;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.helpers.SharedPrefHelper;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
+import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 
 import java.util.List;
+import java.util.Locale;
 
 public class DetailIngredientListAdapter
     extends RecyclerView.Adapter<DetailIngredientListAdapter.IngredientViewHolder> {
@@ -28,6 +33,8 @@ public class DetailIngredientListAdapter
 
   private Context context;
 
+  private boolean isMetric;
+
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
 
@@ -36,6 +43,10 @@ public class DetailIngredientListAdapter
   public DetailIngredientListAdapter(Context context) {
     this.context = context;
     inflater = LayoutInflater.from(context);
+
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String defaultUnit = sharedPrefs.getString("default_units", "automatic");
+    isMetric = Units.getIsMetric(defaultUnit);
   }
 
 
@@ -70,7 +81,7 @@ public class DetailIngredientListAdapter
 
       final Ingredient currentIngredient = ingredientList.get(position);
       String name = currentIngredient.getName();
-      String quantity = Units.formatForDetailView(currentIngredient.getAmount(), currentIngredient.getUnits());
+      String quantity = Units.formatForDetailView(currentIngredient.getAmount(), currentIngredient.getUnits(), isMetric);
       boolean inStock = currentIngredient.getInStock();
 
       viewHolder.name.setText(name);
