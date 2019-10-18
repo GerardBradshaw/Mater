@@ -61,9 +61,6 @@ public class MainActivity extends AppCompatActivity
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
 
-    // Set up user preferences
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
     setSupportActionBar(toolbar);

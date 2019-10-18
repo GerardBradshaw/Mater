@@ -1,7 +1,9 @@
 package com.gerardbradshaw.mater.helpers;
 
 import android.app.Application;
+import android.preference.PreferenceManager;
 
+import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
 import com.gerardbradshaw.mater.room.MaterRepository;
@@ -40,6 +42,9 @@ public class MaterApplication extends Application {
       // Updated the firstLaunched status
       sharedPrefHelper.setAsLaunched();
 
+      // Set default preferences
+      PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+      
       // Create the default recipes
       RecipeHolder lasagneRecipeHolder = createLasagneRecipeHolder();
       RecipeHolder curryRecipeHolder = createCurryRecipeHolder();

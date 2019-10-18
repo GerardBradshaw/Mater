@@ -39,17 +39,20 @@
         <SwitchPreferenceCompat
             app:key="breakfast_notification"
             app:dependency="notifications_on"
-            app:title="@string/setting_notifications_breakfast" />
+            app:title="@string/setting_notifications_breakfast"
+            android:defaultValue="false"/>
 
         <SwitchPreferenceCompat
             android:key="lunch_notification"
             android:dependency="notifications_on"
-            android:title="@string/setting_notifications_lunch" />
+            android:title="@string/setting_notifications_lunch"
+            android:defaultValue="false"/>
 
         <SwitchPreferenceCompat
             android:key="dinner_notification"
             android:dependency="notifications_on"
-            android:title="@string/setting_notifications_dinner" />
+            android:title="@string/setting_notifications_dinner"
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
