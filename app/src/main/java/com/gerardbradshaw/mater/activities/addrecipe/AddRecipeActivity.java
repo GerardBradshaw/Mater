@@ -232,7 +232,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     // Remove ingredients without a name
     for (int i = 0; i < ingredientHolders.size(); i++) {
       if (ingredientHolders.get(i).getName().isEmpty() && ingredientHolders.size() > 1) {
-        stepHolders.remove(i);
+        ingredientHolders.remove(i);
         i--;
         Log.d(LOG_TAG, "Blank ingredient removed");
       }
