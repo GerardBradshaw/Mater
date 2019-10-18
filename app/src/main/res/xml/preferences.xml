@@ -20,7 +20,7 @@
     <PreferenceCategory app:title="@string/settings_display_header">
 
         <ListPreference
-            app:defaultValue="Automatic"
+            app:defaultValue="automatic"
             app:entries="@array/default_unit_entries"
             app:entryValues="@array/default_unit_values"
             app:key="default_units"
@@ -33,7 +33,8 @@
 
         <SwitchPreferenceCompat
             app:key="notifications_on"
-            app:title="@string/setting_notifications_on" />
+            app:title="@string/setting_notifications_on"
+            android:defaultValue="false"/>
 
         <SwitchPreferenceCompat
             app:key="breakfast_notification"

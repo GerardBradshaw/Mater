@@ -14,6 +14,7 @@ import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main_drawer);
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+
+    // Set up user preferences
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -200,6 +204,7 @@ public class MainActivity extends AppCompatActivity
     if (id == R.id.action_settings) {
       Intent settingsIntent = new Intent(this, SettingsActivity.class);
       startActivity(settingsIntent);
+      return true;
     }
 
     return super.onOptionsItemSelected(item);
