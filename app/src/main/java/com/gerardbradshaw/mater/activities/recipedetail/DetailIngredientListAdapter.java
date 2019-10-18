@@ -14,13 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.helpers.SharedPrefHelper;
 import com.gerardbradshaw.mater.helpers.Units;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
-import com.gerardbradshaw.mater.viewholders.IngredientViewHolder;
 
 import java.util.List;
-import java.util.Locale;
 
 public class DetailIngredientListAdapter
     extends RecyclerView.Adapter<DetailIngredientListAdapter.IngredientViewHolder> {
