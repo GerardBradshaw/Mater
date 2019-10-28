@@ -1,9 +1,12 @@
 package com.gerardbradshaw.mater.activities.main;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -43,6 +47,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.widget.ImageView;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -70,9 +75,10 @@ public class MainActivity extends AppCompatActivity
 
     // Set default preferences
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-    // Set up notifications
-    setUpMealReminders();
+    // Set up meal reminders
+    setUpMealReminders(sharedPrefs.getBoolean("notifications_on", false));
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -197,10 +203,25 @@ public class MainActivity extends AppCompatActivity
     alertBuilder.show();
   }
 
-  private void setUpMealReminders() {
-    // Initialise the notification manager
-    NotificationManager notificationManager =
-        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+  private boolean setUpMealReminders(boolean remindersOn) {
+    // Initialise system services
+    NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+    // Set up alarm intent
+    Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+    PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(
+        this,
+        ALARM_NOTIF_ID,
+        notifyIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT);
+
+    // Turn the alarm off if it should be
+    if (alarmManager != null && !remindersOn) {
+      alarmManager.cancel(notifyPendingIntent);
+      return false;
+    }
 
     // Create the notification channel (API >= 26)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -216,10 +237,26 @@ public class MainActivity extends AppCompatActivity
       notificationChannel.setDescription("Reminders to start making a meal");
 
       // Create the channel
-      notificationManager.createNotificationChannel(notificationChannel);
+      notifManager.createNotificationChannel(notificationChannel);
     }
 
+    // Set up repeating alarm
+    // TODO add alarm for each meal if turned on
+    if (alarmManager != null) {
 
+      Calendar cal = Calendar.getInstance();
+      cal.setTimeInMillis(System.currentTimeMillis());
+      cal.set(Calendar.HOUR_OF_DAY, 16);
+      cal.set(Calendar.MINUTE, 0);
+
+      alarmManager.setInexactRepeating(
+          AlarmManager.RTC_WAKEUP,
+          cal.getTimeInMillis(),
+          AlarmManager.INTERVAL_DAY,
+          notifyPendingIntent);
+    }
+
+    return true;
   }
 
 
