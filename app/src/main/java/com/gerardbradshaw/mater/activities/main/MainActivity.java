@@ -1,7 +1,11 @@
 package com.gerardbradshaw.mater.activities.main;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
@@ -52,6 +56,10 @@ public class MainActivity extends AppCompatActivity
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
 
+  private static final String ALARM_NOTIF_CHANNEL_ID
+      = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
+  private static final int ALARM_NOTIF_ID = 1;
+
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
   @Override
@@ -63,6 +71,9 @@ public class MainActivity extends AppCompatActivity
 
     // Set default preferences
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+    // Set up notifications
+    setUpMealReminders();
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -185,6 +196,31 @@ public class MainActivity extends AppCompatActivity
     });
 
     alertBuilder.show();
+  }
+
+  private void setUpMealReminders() {
+    // Initialise the notification manager
+    NotificationManager notificationManager =
+        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+    // Create the notification channel (API >= 26)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel notificationChannel = new NotificationChannel(
+          ALARM_NOTIF_CHANNEL_ID,
+          "Meal reminders",
+          NotificationManager.IMPORTANCE_DEFAULT);
+
+      // Configure initial channel settings
+      notificationChannel.enableVibration(true);
+      notificationChannel.enableLights(true);
+      notificationChannel.setLightColor(Color.RED);
+      notificationChannel.setDescription("Reminders to start making a meal");
+
+      // Create the channel
+      notificationManager.createNotificationChannel(notificationChannel);
+    }
+
+
   }
 
 
