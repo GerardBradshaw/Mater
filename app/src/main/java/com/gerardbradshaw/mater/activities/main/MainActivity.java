@@ -56,9 +56,8 @@ public class MainActivity extends AppCompatActivity
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
 
-  private static final String ALARM_NOTIF_CHANNEL_ID
-      = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
-  private static final int ALARM_NOTIF_ID = 1;
+  static final String ALARM_NOTIF_CHANNEL_ID = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
+  static final int ALARM_NOTIF_ID = 1;
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
