@@ -12,16 +12,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
-import com.gerardbradshaw.mater.helpers.SharedPrefHelper;
+import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.pojos.StockHolder;
 import com.gerardbradshaw.mater.room.daos.IngredientDao;
 import com.gerardbradshaw.mater.room.daos.SummaryDao;
-import com.gerardbradshaw.mater.room.daos.RecipeIngredientDao;
 import com.gerardbradshaw.mater.room.daos.StepDao;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
 import com.gerardbradshaw.mater.room.entities.Step;
 import com.gerardbradshaw.mater.room.entities.Summary;
 
@@ -37,18 +33,22 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  private IngredientDao ingredientDao;
   private SummaryDao summaryDao;
-  private RecipeIngredientDao recipeIngredientDao;
+  private IngredientDao ingredientDao;
   private StepDao stepDao;
+
   private LiveData<List<Summary>> liveRecipeSummaryList;
+
   private static MutableLiveData<Integer> liveImageChanger = new MutableLiveData<>();
   private static AtomicInteger updateCount = new AtomicInteger(0);
+
   private static final String LOG_TAG = "GGG - Repository";
   private static final String PATH = "";
+
   private static File storage;
+
   private Context context;
-  private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
+  private AsyncTaskScheduler taskScheduler;
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
@@ -57,14 +57,14 @@ public class MaterRepository {
 
     // Initialize the database and get a handle on the DAOs
     MaterRoomDatabase db = MaterRoomDatabase.getDatabase(application);
-    ingredientDao = db.ingredientDao();
     summaryDao = db.recipeDao();
-    recipeIngredientDao = db.recipeIngredientDao();
+    ingredientDao = db.ingredientDao();
     stepDao = db.recipeStepDao();
 
     // Downcast the application and set the context
     MaterApplication materApplication = (MaterApplication) application;
     context = materApplication.getApplicationContext();
+    taskScheduler = materApplication.getTaskScheduler();
 
     // Cache LiveData
     liveRecipeSummaryList = summaryDao.getLiveAllSummaries();
@@ -109,11 +109,19 @@ public class MaterRepository {
     return summaryDao.getLiveRecipeId(recipeTitle);
   }
 
+  public List<Summary> getAllSummaries() {
+    return summaryDao.getAllSummaries();
+  }
 
-  // - - - - - - - - - - - - - - - RecipeIngredient Data - - - - - - - - - - - - - - -
 
-  public LiveData<List<RecipeIngredient>> getLiveRecipeIngredients(int recipeId) {
-    return recipeIngredientDao.getLiveRecipeIngredients(recipeId);
+  // - - - - - - - - - - - - - - - Ingredient Data - - - - - - - - - - - - - - -
+
+  public LiveData<List<Ingredient>> getLiveIngredients(int recipeId) {
+    return ingredientDao.getLiveIngredients(recipeId);
+  }
+
+  public List<Ingredient> getIngredients(int recipeId) {
+    return ingredientDao.getIngredients(recipeId);
   }
 
 
@@ -123,7 +131,7 @@ public class MaterRepository {
     return stepDao.getLiveSteps(recipeId);
   }
 
-  public Step[] getSteps(int recipeId) {
+  public List<Step> getSteps(int recipeId) {
     return stepDao.getSteps(recipeId);
   }
 
@@ -235,38 +243,16 @@ public class MaterRepository {
 
   // - - - - - - - - - - - - - - - Loading Ingredients - - - - - - - - - - - - - - -
 
-  public LiveData<List<Ingredient>> getLiveAllIngredients() {
-    return ingredientDao.getLiveAllIngredients();
+  public List<Ingredient> getAllIngredients() {
+    return ingredientDao.getAllIngredients();
   }
 
-  public Ingredient getIngredient(int ingredientId) {
-    try {
-      return new getIngredientAsyncTask(ingredientDao).execute(ingredientId).get();
-    } catch (Exception e) {
-      // TODO handle exception
-      return null;
-    }
-
-  }
-
-  private static class getIngredientAsyncTask extends AsyncTask<Integer, Void, Ingredient> {
-
-    // Member variables
-    private IngredientDao ingredientDao;
-
-    // Constructor
-    getIngredientAsyncTask(IngredientDao ingredientDao) {
-      this.ingredientDao = ingredientDao;
-    }
-
-    @Override
-    protected Ingredient doInBackground(Integer... recipeIds) {
-      return ingredientDao.getIngredient(recipeIds[0]);
-    }
+  public Ingredient getIngredient(final int ingredientId) {
+    return ingredientDao.getIngredient(ingredientId);
   }
 
 
-  // - - - - - - - - - - - - - - - Saving Ingredients - - - - - - - - - - - - - - -
+  // - - - - - - - - - - - - - - - Saving New Ingredients - - - - - - - - - - - - - - -
 
   public void addIngredient(final Ingredient... ingredients) {
     Runnable runnable = new Runnable() {
@@ -279,9 +265,9 @@ public class MaterRepository {
   }
 
   public void addIngredient(final List<Ingredient> ingredients) {
-    Ingredient[] ingredientArray = new Ingredient[ingredients.size()];
-    ingredientArray = ingredients.toArray(ingredientArray);
-    addIngredient(ingredientArray);
+    Ingredient[] ingredientsArray = new Ingredient[ingredients.size()];
+    ingredientsArray = ingredients.toArray(ingredientsArray);
+    addIngredient(ingredientsArray);
   }
 
   private class InsertIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
@@ -300,6 +286,59 @@ public class MaterRepository {
       return null;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+      taskScheduler.setTaskFinished();
+    }
+  }
+
+
+  // - - - - - - - - - - - - - - - Updating Ingredients - - - - - - - - - - - - - - -
+
+  public void updateIngredientOnCurrentThread(List<Ingredient> ingredients) {
+    for (Ingredient i : ingredients) {
+      ingredientDao.updateIngredient(i);
+    }
+  }
+
+  public void updateIngredients(final Ingredient... ingredients) {
+    Runnable runnable = new Runnable() {
+      @Override
+      public void run() {
+        new UpdateIngredientAsyncTask(ingredientDao).execute(ingredients);
+      }
+    };
+    taskScheduler.addNewTask(runnable);
+  }
+
+  public void updateIngredients(final List<Ingredient> ingredients) {
+    Ingredient[] ingredientArray = new Ingredient[ingredients.size()];
+    ingredientArray = ingredients.toArray(ingredientArray);
+    updateIngredients(ingredientArray);
+  }
+
+  private class UpdateIngredientAsyncTask extends AsyncTask<Ingredient, Void, Void> {
+
+    private IngredientDao ingredientDao;
+
+    UpdateIngredientAsyncTask(IngredientDao ingredientDao) {
+      this.ingredientDao = ingredientDao;
+    }
+
+    @Override
+    protected Void doInBackground(Ingredient... ingredients) {
+      for (Ingredient i : ingredients) {
+        ingredientDao.updateIngredient(i);
+      }
+      return null;
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+      super.onPostExecute(aVoid);
+      taskScheduler.setTaskFinished();
+    }
   }
 
 
@@ -314,31 +353,27 @@ public class MaterRepository {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new InsertRecipeFromHolderAsyncTask(summaryDao, recipeIngredientDao, stepDao, ingredientDao)
-            .execute(recipeHolder);
+        new InsertRecipeFromHolderAsyncTask(summaryDao, ingredientDao, stepDao).execute(recipeHolder);
       }
     };
     taskScheduler.addNewTask(runnable);
   }
 
-  private class InsertRecipeFromHolderAsyncTask
-      extends AsyncTask<RecipeHolder, Void, Void> {
+  private class InsertRecipeFromHolderAsyncTask extends AsyncTask<RecipeHolder, Void, Void> {
 
     // Member variables
     private SummaryDao summaryDao;
-    private RecipeIngredientDao recipeIngredientDao;
-    private StepDao stepDao;
     private IngredientDao ingredientDao;
+    private StepDao stepDao;
+
 
     // Constructor
     InsertRecipeFromHolderAsyncTask(
-        SummaryDao summaryDao, RecipeIngredientDao recipeIngredientDao,
-        StepDao stepDao, IngredientDao ingredientDao) {
+        SummaryDao summaryDao, IngredientDao ingredientDao, StepDao stepDao) {
 
       this.summaryDao = summaryDao;
-      this.recipeIngredientDao = recipeIngredientDao;
-      this.stepDao = stepDao;
       this.ingredientDao = ingredientDao;
+      this.stepDao = stepDao;
     }
 
     @Override
@@ -360,7 +395,7 @@ public class MaterRepository {
       addStepsToDb(recipeId, recipe.getSteps());
 
       // Add the ingredients to database
-      addIngredientsToDb(recipeId, recipe.getRecipeIngredients());
+      addIngredientsToDb(recipeId, recipe.getIngredientHolders());
 
       return null;
     }
@@ -391,7 +426,14 @@ public class MaterRepository {
       // Create a Summary from the input
       Summary summary = new Summary(title, description, imageDirectory, servings);
 
-      // Add the title and description to the database.
+      // Determine if the recipe has already been added before (ID = 0)
+      int recipeId = summaryDao.getRecipeId(title);
+
+      if (recipeId != 0) {
+        summary.setRecipeId(recipeId);
+      }
+
+      // Add summary to database
       summaryDao.insertSummary(summary);
 
     }
@@ -399,7 +441,6 @@ public class MaterRepository {
     private void addStepsToDb(int recipeId, List<String> steps) {
 
       for(int i = 0; i < steps.size(); i++) {
-
         // Define the step number
         int stepNumber = i + 1;
 
@@ -411,40 +452,68 @@ public class MaterRepository {
       }
     }
 
-    private void addIngredientsToDb(int recipeId, List<RecipeIngredientHolder> ingredients) {
+    private void addIngredientsToDb(int recipeId, List<IngredientHolder> ingredients) {
 
       for(int i = 0; i < ingredients.size(); i++) {
-
         // Get the name, amount, and units of the ingredient from the array
         String name = ingredients.get(i).getName();
         double amount = ingredients.get(i).getAmount();
         String units = ingredients.get(i).getUnit();
+        String category = ingredients.get(i).getCategory();
 
-        // Get the ID of the ingredient from the DB. If it does not exist yet, the ID = 0.
-        int ingredientId = ingredientDao.getIngredientId(name);
-
-        // If the ingredient does not exist in the ingredient_table, then add it
-        if (ingredientId == 0) {
-          // Create an ingredient from the name
-          Ingredient ingredient = new Ingredient(name);
-
-          // Add the Ingredient to the DAO
-          ingredientDao.insertIngredient(ingredient);
-
-          // Get the ID of the ingredient from the DAO
-          ingredientId = ingredientDao.getIngredientId(name);
-        }
-
-        // Create a RecipeIngredient using this ID along with the Summary ID, amount, and units
-        RecipeIngredient recipeIngredient =
-            new RecipeIngredient(recipeId, ingredientId, amount, units);
-
-        // Add the RecipeIngredient to the DAO
-        recipeIngredientDao.insertRecipeIngredient(recipeIngredient);
-
+        // Create a Ingredient and add it to the database
+        Ingredient ingredient = new Ingredient(name, category, recipeId, amount, units);
+        ingredientDao.insertIngredient(ingredient);
       }
     }
+  }
 
+
+  // - - - - - - - - - - - - - - - Get Recipe - - - - - - - - - - - - - - -
+
+  /**
+   * Returns a RecipeHolder containing all information for the requested RecipeID. Do not call on UI
+   * thread.
+   * @param recipeId, int
+   * @return RecipeHolder
+   */
+  public RecipeHolder getRecipeHolder(int recipeId) {
+
+    RecipeHolder holder = new RecipeHolder();
+
+    // Set the summary information
+    Summary summary = summaryDao.getSummary(recipeId);
+    holder.setTitle(summary.getTitle());
+    holder.setDescription(summary.getDescription());
+    holder.setImageDirectory(summary.getImageDirectory());
+    holder.setServings(summary.getServings());
+
+    // Set the step information
+    List<Step> steps = stepDao.getSteps(recipeId);
+    List<String> stepStrings = new ArrayList<>();
+    for (Step step : steps) {
+      stepStrings.add(step.getDescription());
+    }
+    holder.setSteps(stepStrings);
+
+    // Set the ingredient information
+    List<Ingredient> ingredients = ingredientDao.getIngredients(recipeId);
+    List<IngredientHolder> ingredientHolders = new ArrayList<>();
+
+    for (Ingredient ingredient : ingredients) {
+
+      IngredientHolder ingredientHolder = new IngredientHolder(
+          ingredient.getName(),
+          ingredient.getCategory(),
+          ingredient.getAmount(),
+          ingredient.getUnits());
+
+      ingredientHolder.setInStock(ingredient.getInStock());
+      ingredientHolders.add(ingredientHolder);
+    }
+    holder.setIngredientHolders(ingredientHolders);
+
+    return holder;
   }
 
 
@@ -454,11 +523,9 @@ public class MaterRepository {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        new DeleteRecipeAsyncTask(summaryDao, recipeIngredientDao, stepDao, ingredientDao)
-            .execute(recipeId);
+        new DeleteRecipeAsyncTask(summaryDao, ingredientDao, stepDao).execute(recipeId);
       }
     };
-
     taskScheduler.addNewTask(runnable);
   }
 
@@ -466,20 +533,17 @@ public class MaterRepository {
 
     // Member variables
     private SummaryDao summaryDao;
-    private RecipeIngredientDao recipeIngredientDao;
-    private StepDao stepDao;
     private IngredientDao ingredientDao;
+    private StepDao stepDao;
     private int recipeId;
 
     // Constructor
     DeleteRecipeAsyncTask(
-        SummaryDao summaryDao, RecipeIngredientDao recipeIngredientDao,
-        StepDao stepDao, IngredientDao ingredientDao) {
+        SummaryDao summaryDao, IngredientDao ingredientDao, StepDao stepDao) {
 
       this.summaryDao = summaryDao;
-      this.recipeIngredientDao = recipeIngredientDao;
-      this.stepDao = stepDao;
       this.ingredientDao = ingredientDao;
+      this.stepDao = stepDao;
     }
 
     @Override
@@ -497,12 +561,12 @@ public class MaterRepository {
 
     private void deleteRecipe() {
 
-      Summary summary = summaryDao.getSummary(recipeId)[0];
+      Summary summary = summaryDao.getSummary(recipeId);
       summaryDao.deleteSummary(summary);
 
+      // TODO delete steps and ingredients
       //Step[] steps = stepDao.getSteps(recipeId);
       //stepDao.deleteStep(steps);
-
     }
   }
 
@@ -536,5 +600,4 @@ public class MaterRepository {
       return null;
     }
   }
-
 }

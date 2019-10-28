@@ -20,16 +20,10 @@ public class AsyncTaskScheduler {
   public AsyncTaskScheduler() {
   }
 
-
   // - - - - - - - - - - - - - - - Public methods - - - - - - - - - - - - - - -
 
   public void addNewTask(Runnable runnable) {
     runnableList.add(runnable);
-    executeNextTask();
-  }
-
-  public void addNewPriorityTask(Runnable runnable) {
-    runnableList.add(0, runnable);
     executeNextTask();
   }
 
@@ -43,6 +37,7 @@ public class AsyncTaskScheduler {
   }
 
   public void setTaskFinished() {
+    Log.d(LOG_TAG, "Ready for next task");
     taskRunning = false;
     executeNextTask();
   }

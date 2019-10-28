@@ -1,42 +1,49 @@
 package com.gerardbradshaw.mater.activities.recipedetail;
 
 import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
-import com.gerardbradshaw.mater.room.entities.RecipeIngredient;
-import com.gerardbradshaw.mater.room.entities.Summary;
+import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.List;
 
-public class IngredientListAdapter
-    extends RecyclerView.Adapter<IngredientListAdapter.IngredientViewHolder> {
+public class DetailIngredientListAdapter
+    extends RecyclerView.Adapter<DetailIngredientListAdapter.IngredientViewHolder> {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
   private final LayoutInflater inflater;
-  private List<RecipeIngredientHolder> recipeIngredientHolders; // Cached copy
+
+  private List<Ingredient> ingredientList;
+
   private Context context;
+
+  private boolean isMetric;
+
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
 
   // - - - - - - - - - - - - - - - Constructor - - - - - - - - - - - - - - -
 
-  public IngredientListAdapter(Context context) {
+  public DetailIngredientListAdapter(Context context) {
     this.context = context;
     inflater = LayoutInflater.from(context);
+
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String defaultUnit = sharedPrefs.getString("default_units", "automatic");
+    isMetric = Units.getIsMetric(defaultUnit);
   }
 
 
@@ -66,18 +73,27 @@ public class IngredientListAdapter
    */
   @Override
   public void onBindViewHolder(@NonNull IngredientViewHolder viewHolder, int position) {
-    if (recipeIngredientHolders != null) {
+    if (ingredientList != null) {
       viewHolder.checkBox.setVisibility(View.VISIBLE);
 
-      RecipeIngredientHolder holder = recipeIngredientHolders.get(position);
-      String name = holder.getName();
-      String quantity = Units.formatForDetailView(holder.getAmount(), holder.getUnit());
+      final Ingredient currentIngredient = ingredientList.get(position);
+      String name = currentIngredient.getName();
+      String quantity = Units.formatForDetailView(currentIngredient.getAmount(), currentIngredient.getUnits(), isMetric);
+      boolean inStock = currentIngredient.getInStock();
 
       viewHolder.name.setText(name);
       viewHolder.quantity.setText(quantity);
+      viewHolder.checkBox.setChecked(inStock);
+
+      viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+          currentIngredient.setInStock(b);
+        }
+      });
 
     } else {
-      viewHolder.name.setText(context.getResources().getString(R.string.no_ingredients_message));
+      viewHolder.name.setText(context.getResources().getString(R.string.recipe_detail_text_no_ingredients));
       viewHolder.checkBox.setVisibility(View.GONE);
     }
 
@@ -92,8 +108,8 @@ public class IngredientListAdapter
    */
   @Override
   public int getItemCount() {
-    if(recipeIngredientHolders != null) {
-      return recipeIngredientHolders.size();
+    if(ingredientList != null) {
+      return ingredientList.size();
 
     } else {
       return 0;
@@ -103,13 +119,13 @@ public class IngredientListAdapter
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
-  public void setSummaryList(List<RecipeIngredientHolder> recipeIngredientHolders) {
-    this.recipeIngredientHolders = recipeIngredientHolders;
+  public void setData(List<Ingredient> ingredientList) {
+    this.ingredientList = ingredientList;
     notifyDataSetChanged();
   }
 
-  public RecipeIngredientHolder getRecipeIngredientHolderIdAtPosition(int position) {
-    return recipeIngredientHolders.get(position);
+  public Ingredient getIngredientAtPosition(int position) {
+    return ingredientList.get(position);
   }
 
 
@@ -121,10 +137,10 @@ public class IngredientListAdapter
     private final CheckBox checkBox;
     private final TextView quantity;
     private final TextView name;
-    final IngredientListAdapter adapter;
+    final DetailIngredientListAdapter adapter;
 
     // Constructor
-    public IngredientViewHolder(@NonNull View itemView, IngredientListAdapter adapter) {
+    public IngredientViewHolder(@NonNull View itemView, DetailIngredientListAdapter adapter) {
       super(itemView);
 
       // Initialize the views and adapter.
@@ -134,7 +150,5 @@ public class IngredientListAdapter
       this.adapter = adapter;
     }
   }
-
-
 
 }

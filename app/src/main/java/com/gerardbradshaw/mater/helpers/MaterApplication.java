@@ -1,20 +1,33 @@
 package com.gerardbradshaw.mater.helpers;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
+import com.gerardbradshaw.mater.R;
+import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.pojos.RecipeIngredientHolder;
 import com.gerardbradshaw.mater.room.MaterRepository;
 import com.gerardbradshaw.mater.helpers.Units.Mass;
 import com.gerardbradshaw.mater.helpers.Units.Volume;
-import com.gerardbradshaw.mater.helpers.Units.MiscUnits;
+import com.gerardbradshaw.mater.helpers.Units.Misc;
+import com.gerardbradshaw.mater.helpers.Categories.Category;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MaterApplication extends Application {
 
+  // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
+
   private MaterRepository repository;
+
+  private AsyncTaskScheduler taskScheduler = new AsyncTaskScheduler();
+
+  private final String sharedPrefFile = "com.gerardbradshaw.mater";
+  private final String FIRST_LAUNCH = "launched";
+
 
   // - - - - - - - - - - - - - - - Application methods - - - - - - - - - - - - - - -
 
@@ -22,17 +35,18 @@ public class MaterApplication extends Application {
   public void onCreate() {
     super.onCreate();
 
-    // Initialize the repository
+    // Initialize the repo and shared prefs
     repository = new MaterRepository(this);
-
-    // Initialize shared prefs
-    SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
+    SharedPreferences sharedPrefs = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE);
 
     // Check if the application has been launched before. If not, create some recipes.
-    if (sharedPrefHelper.isFirstLaunch()) {
+    boolean isFirstLaunch = sharedPrefs.getBoolean(FIRST_LAUNCH, true);
+    if (isFirstLaunch) {
 
       // Updated the firstLaunched status
-      sharedPrefHelper.setAsLaunched();
+      SharedPreferences.Editor prefEditor = sharedPrefs.edit();
+      prefEditor.putBoolean(FIRST_LAUNCH, false);
+      prefEditor.apply();
 
       // Create the default recipes
       RecipeHolder lasagneRecipeHolder = createLasagneRecipeHolder();
@@ -63,12 +77,13 @@ public class MaterApplication extends Application {
   private RecipeHolder createLasagneRecipeHolder() {
 
     // Create a new RecipeHolder object
-    RecipeHolder recipe = new RecipeHolder();
+    RecipeHolder holder = new RecipeHolder();
 
-    // Set the title and description of the recipe
-    recipe.setTitle("Vegan Lasagne");
-    recipe.setDescription("A delicious comfort food that will leave you thinking \"I CAN'T BELIEVE THIS IS VEGAN!");
-    recipe.setServings(8);
+    // Set the title and description of the holder
+    holder.setTitle("Vegan Lasagne");
+    holder.setDescription("A delicious comfort food that will leave you thinking \"I can't believe I just ate a whole lasagne\".");
+    holder.setImageDirectory("Default image");
+    holder.setServings(8);
 
     // Create the cooking steps
     List<String> steps = new ArrayList<>();
@@ -84,11 +99,11 @@ public class MaterApplication extends Application {
     steps.add("Allow lasagne to cool for 5-10 minutes and slice into desired portion sizes.");
     steps.add("Enjoy!");
 
-    // Add the steps to the recipe
-    recipe.setSteps(steps);
+    // Add the steps to the holder
+    holder.setSteps(steps);
 
-    // Create a RecipeIngredientHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create a IngredientHolder object
+    List<IngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String beyondBurgers = "Beyond burgers";
@@ -96,41 +111,41 @@ public class MaterApplication extends Application {
     String vegenaise = "Vegenaise";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
-        "sweet potato", 800d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "sweet potato", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "capsicum", 1d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "zucchini", 1d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        "zucchini", Category.FRESH_FRUIT_AND_VEG, 1d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "frozen spinach", 100d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "frozen spinach", Category.COLD_FOOD, 100d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "diced mater", 800d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "diced tomato", Category.CANNED_GOODS, 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        beyondBurgers, 4d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        beyondBurgers, Category.COLD_FOOD, 4d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "merlot", 500d, Volume.MILLILITRES));
+    ingredients.add(new IngredientHolder(
+        "merlot", Category.BEVERAGES, 500d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
-        lasagneSheets, 1d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        lasagneSheets, Category.RICE_AND_PASTA, 1d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "vegan cheese slices", 18d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        "vegan cheese slices", Category.COLD_FOOD, 18d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        vegenaise, 100d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        vegenaise, Category.COLD_FOOD, 100d, Mass.GRAMS));
 
-    // Add the RecipeIngredients to the Recipe
-    recipe.setRecipeIngredients(ingredients);
+    // Add the Ingredients to the Recipe
+    holder.setIngredientHolders(ingredients);
 
-    // Return the recipe
-    return recipe;
+    // Return the holder
+    return holder;
 
   }
 
@@ -141,6 +156,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tikka Masala Curry");
     holder.setDescription("Tired of hot curries? Try this bad boy; not too spicy, not too weak.");
+    holder.setImageDirectory("Default image");
     holder.setServings(20);
 
     // Create the cooking steps
@@ -158,8 +174,8 @@ public class MaterApplication extends Application {
     // Add the steps to the recipe
     holder.setSteps(steps);
 
-    // Create the RecipeIngredientsHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create the IngredientsHolder object
+    List<IngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String tofu = "firm tofu";
@@ -167,37 +183,34 @@ public class MaterApplication extends Application {
     String coconutMilk = "coconut milk";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
-        "rice (dry)", 5d, Volume.AU_CUPS));
+    ingredients.add(new IngredientHolder(
+        "rice (dry)", Category.RICE_AND_PASTA, 5d, Volume.AU_CUPS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        tofu, 454d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        tofu, Category.COLD_FOOD, 454d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "frozen broccoli", 454d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "frozen broccoli", Category.COLD_FOOD, 454d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "carrots", 800d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "carrots", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "potatoes", 800d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "potatoes", Category.FRESH_FRUIT_AND_VEG, 800d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "bamboo shoots", 225d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "bamboo shoots", Category.CANNED_GOODS, 225d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        curryPaste, 566d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        curryPaste, Category.INTERNATIONAL_FOOD, 566d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        coconutMilk, 600d, Volume.MILLILITRES));
+    ingredients.add(new IngredientHolder(
+        coconutMilk, Category.CANNED_GOODS, 600d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
-    holder.setRecipeIngredients(ingredients);
-
-    // Return the holder
+    holder.setIngredientHolders(ingredients);
 
     return holder;
-
   }
 
   private RecipeHolder createSatayRecipeHolder() {
@@ -207,6 +220,7 @@ public class MaterApplication extends Application {
 
     holder.setTitle("Tofu Satay");
     holder.setDescription("Smooth, nutty, and just the right amount of fantastic.");
+    holder.setImageDirectory("Default image");
     holder.setServings(12);
 
     // Create the cooking steps
@@ -214,8 +228,8 @@ public class MaterApplication extends Application {
     steps.add("Dice tofu into cubes and fry in saucepan on low temperature. Turn and cook without oil until golden brown.");
     steps.add("Wash and slice bok-choy into 1/2 inch pieces. Set aside.");
     steps.add("Boil water in a medium pot and add cook pasta per packet directions. Set aside once finished.");
-    steps.add("Set tofu aside and saute capsicum and broccoli in the saucepan.");
-    steps.add("Add bok-choy to saucepan during final 5 minutes of saute. All vegetables should be hot and crispy.");
+    steps.add("Set tofu aside and sauté capsicum and broccoli in the saucepan.");
+    steps.add("Add bok-choy to saucepan during final 5 minutes of sauté. All vegetables should be hot and crispy.");
     steps.add("For the sauce, add peanut butter, soy sauce, sesame oil, lime juice, and water to a microwave safe pourer and microwave on high for 3 minutes.");
     steps.add("Blend sauce with electric mixer until it makes a smooth paste.");
     steps.add("Add pasta, vegetables, tofu, and sauce to a bowl and serve.");
@@ -224,8 +238,8 @@ public class MaterApplication extends Application {
     // Add the steps to the recipe
     holder.setSteps(steps);
 
-    // Create the RecipeIngredientsHolder object
-    List<RecipeIngredientHolder> ingredients = new ArrayList<>();
+    // Create the IngredientHolder object
+    List<IngredientHolder> ingredients = new ArrayList<>();
 
     // Define the names of ingredients that contain allergens
     String tofu = "firm tofu";
@@ -234,38 +248,38 @@ public class MaterApplication extends Application {
     String soySauce = "soy sauce";
 
     // Add each ingredient to the list
-    ingredients.add(new RecipeIngredientHolder(
-        tofu, 600d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        tofu, Category.COLD_FOOD, 600d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "capsicum", 1d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        "capsicum", Category.FRESH_FRUIT_AND_VEG, 1d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "frozen broccoli", 454d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        "frozen broccoli", Category.COLD_FOOD, 454d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "bok-choy", 2d, MiscUnits.NO_UNIT));
+    ingredients.add(new IngredientHolder(
+        "bok-choy", Category.FRESH_FRUIT_AND_VEG, 2d, Misc.NO_UNIT));
 
-    ingredients.add(new RecipeIngredientHolder(
-        pasta, 320d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        pasta, Category.RICE_AND_PASTA, 320d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        peanutButter, 285d, Mass.GRAMS));
+    ingredients.add(new IngredientHolder(
+        peanutButter, Category.CEREALS_AND_SPREADS, 285d, Mass.GRAMS));
 
-    ingredients.add(new RecipeIngredientHolder(
-        soySauce, 90d, Volume.MILLILITRES));
+    ingredients.add(new IngredientHolder(
+        soySauce, Category.OILS_AND_CONDIMENTS, 90d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "sesame oil", 60d, Volume.MILLILITRES));
+    ingredients.add(new IngredientHolder(
+        "sesame oil", Category.OILS_AND_CONDIMENTS, 60d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "lime juice", 120d, Volume.MILLILITRES));
+    ingredients.add(new IngredientHolder(
+        "lime juice", Category.JUICES, 120d, Volume.MILLILITRES));
 
-    ingredients.add(new RecipeIngredientHolder(
-        "water", 180d, Volume.MILLILITRES));
+    ingredients.add(new IngredientHolder(
+        "water", Category.NO_CATEGORY, 180d, Volume.MILLILITRES));
 
     // Add the list to the RecipeHolder
-    holder.setRecipeIngredients(ingredients);
+    holder.setIngredientHolders(ingredients);
 
     // Return the holder
 
@@ -273,9 +287,12 @@ public class MaterApplication extends Application {
 
   }
 
-
   public MaterRepository getRepository() {
     return repository;
+  }
+
+  public AsyncTaskScheduler getTaskScheduler() {
+    return taskScheduler;
   }
 
 }

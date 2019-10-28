@@ -1,18 +1,24 @@
 package com.gerardbradshaw.mater.activities.main;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.activities.AddRecipeActivity;
+import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.activities.settings.SettingsActivity;
 import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -50,6 +56,10 @@ public class MainActivity extends AppCompatActivity
   public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
 
+  private static final String ALARM_NOTIF_CHANNEL_ID
+      = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
+  private static final int ALARM_NOTIF_ID = 1;
+
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
   @Override
@@ -58,6 +68,12 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main_drawer);
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+
+    // Set default preferences
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+    // Set up notifications
+    setUpMealReminders();
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -80,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
     NavigationView navigationView = findViewById(R.id.main_navDrawer);
     ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-        this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        this, drawer, toolbar, R.string.nav_drawer_open, R.string.nav_drawer_close);
     drawer.addDrawerListener(toggle);
     toggle.syncState();
     navigationView.setNavigationItemSelectedListener(this);
@@ -158,7 +174,7 @@ public class MainActivity extends AppCompatActivity
   private void deleteRecipe(final int position) {
     final Summary recipeToDelete = recipeListAdapter.getRecipeIdAtPosition(position);
     String alertMessage =
-        getString(R.string.dialog_confirm_delete) + " \"" + recipeToDelete.getTitle() + "\"?";
+        getString(R.string.main_dialog_delete) + " \"" + recipeToDelete.getTitle() + "\"?";
 
     // Set up dialog for user confirmation
     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
@@ -182,6 +198,31 @@ public class MainActivity extends AppCompatActivity
     alertBuilder.show();
   }
 
+  private void setUpMealReminders() {
+    // Initialise the notification manager
+    NotificationManager notificationManager =
+        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+    // Create the notification channel (API >= 26)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel notificationChannel = new NotificationChannel(
+          ALARM_NOTIF_CHANNEL_ID,
+          "Meal reminders",
+          NotificationManager.IMPORTANCE_DEFAULT);
+
+      // Configure initial channel settings
+      notificationChannel.enableVibration(true);
+      notificationChannel.enableLights(true);
+      notificationChannel.setLightColor(Color.RED);
+      notificationChannel.setDescription("Reminders to start making a meal");
+
+      // Create the channel
+      notificationManager.createNotificationChannel(notificationChannel);
+    }
+
+
+  }
+
 
   // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
 
@@ -197,7 +238,9 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.action_settings) {
-
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
+      startActivity(settingsIntent);
+      return true;
     }
 
     return super.onOptionsItemSelected(item);
@@ -227,7 +270,8 @@ public class MainActivity extends AppCompatActivity
       startActivity(intent);
 
     } else if (id == R.id.nav_settings) {
-      // TODO settings screen
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
+      startActivity(settingsIntent);
 
     } else {
       return  false;
