@@ -46,6 +46,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -246,8 +247,8 @@ public class MainActivity extends AppCompatActivity
 
       Calendar cal = Calendar.getInstance();
       cal.setTimeInMillis(System.currentTimeMillis());
-      cal.set(Calendar.HOUR_OF_DAY, 16);
-      cal.set(Calendar.MINUTE, 0);
+      cal.set(Calendar.HOUR_OF_DAY, 17);
+      cal.set(Calendar.MINUTE, 30);
 
       alarmManager.setInexactRepeating(
           AlarmManager.RTC_WAKEUP,
