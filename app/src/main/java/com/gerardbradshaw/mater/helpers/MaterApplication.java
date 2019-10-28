@@ -228,8 +228,8 @@ public class MaterApplication extends Application {
     steps.add("Dice tofu into cubes and fry in saucepan on low temperature. Turn and cook without oil until golden brown.");
     steps.add("Wash and slice bok-choy into 1/2 inch pieces. Set aside.");
     steps.add("Boil water in a medium pot and add cook pasta per packet directions. Set aside once finished.");
-    steps.add("Set tofu aside and saute capsicum and broccoli in the saucepan.");
-    steps.add("Add bok-choy to saucepan during final 5 minutes of saute. All vegetables should be hot and crispy.");
+    steps.add("Set tofu aside and sauté capsicum and broccoli in the saucepan.");
+    steps.add("Add bok-choy to saucepan during final 5 minutes of sauté. All vegetables should be hot and crispy.");
     steps.add("For the sauce, add peanut butter, soy sauce, sesame oil, lime juice, and water to a microwave safe pourer and microwave on high for 3 minutes.");
     steps.add("Blend sauce with electric mixer until it makes a smooth paste.");
     steps.add("Add pasta, vegetables, tofu, and sauce to a bowl and serve.");
