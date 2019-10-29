@@ -45,6 +45,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-  protected static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
+  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
 
   static final String ALARM_NOTIF_CHANNEL_ID = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
@@ -75,13 +76,6 @@ public class MainActivity extends AppCompatActivity
 
     // Set default preferences
     PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-    // Set up meal reminders
-    boolean breakfastOn = sharedPrefs.getBoolean("breakfast_alarm", false);
-    boolean lunchOn = sharedPrefs.getBoolean("lunch_alarm", false);
-    boolean dinnerOn = sharedPrefs.getBoolean("dinner_alarm", false);
-    setUpMealReminders(breakfastOn, lunchOn, dinnerOn);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -176,6 +170,17 @@ public class MainActivity extends AppCompatActivity
     });
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+    boolean breakfastOn = sharedPrefs.getBoolean("breakfast_notification", false);
+    boolean lunchOn = sharedPrefs.getBoolean("lunch_notification", false);
+    boolean dinnerOn = sharedPrefs.getBoolean("dinner_notification", false);
+    setUpMealReminders(breakfastOn, lunchOn, dinnerOn);
+  }
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
@@ -228,7 +233,7 @@ public class MainActivity extends AppCompatActivity
     Intent dinnerNotifyIntent = new Intent(this, AlarmReceiver.class);
     breakfastNotifyIntent.putExtra(EXTRA_MEAL, "dinner");
     PendingIntent dinnerNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ALARM_NOTIF_ID, dinnerNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // Turn the alarm off if it should be, otherwise set up the alarms
     if (alarmManager != null) {
@@ -236,6 +241,7 @@ public class MainActivity extends AppCompatActivity
         alarmManager.cancel(breakfastNotifyPendingIntent);
         alarmManager.cancel(lunchNotifyPendingIntent);
         alarmManager.cancel(dinnerNotifyPendingIntent);
+        Log.d(LOG_TAG, "All alarms off and cancelled");
         return false;
       }
 
@@ -260,7 +266,7 @@ public class MainActivity extends AppCompatActivity
       if (breakfastOn) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, 6);
+        cal.set(Calendar.HOUR_OF_DAY, 18);
         cal.set(Calendar.MINUTE, 0);
 
         alarmManager.setInexactRepeating(
@@ -269,8 +275,11 @@ public class MainActivity extends AppCompatActivity
             AlarmManager.INTERVAL_DAY,
             breakfastNotifyPendingIntent);
 
+        Log.d(LOG_TAG, "Breakfast alarm on");
+
       } else {
         alarmManager.cancel(breakfastNotifyPendingIntent);
+        Log.d(LOG_TAG, "Breakfast alarm off");
       }
 
       // Turn on the lunch alarm
@@ -286,8 +295,11 @@ public class MainActivity extends AppCompatActivity
             AlarmManager.INTERVAL_DAY,
             lunchNotifyPendingIntent);
 
+        Log.d(LOG_TAG, "Lunch alarm on");
+
       } else {
         alarmManager.cancel(lunchNotifyPendingIntent);
+        Log.d(LOG_TAG, "Lunch alarm off");
       }
 
       // Turn on the dinner alarm
@@ -303,8 +315,11 @@ public class MainActivity extends AppCompatActivity
             AlarmManager.INTERVAL_DAY,
             dinnerNotifyPendingIntent);
 
+        Log.d(LOG_TAG, "Dinner alarm on");
+
       } else {
         alarmManager.cancel(dinnerNotifyPendingIntent);
+        Log.d(LOG_TAG, "Dinner alarm off");
       }
     }
 
@@ -347,7 +362,6 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  @SuppressWarnings("StatementWithEmptyBody")
   @Override
   public boolean onNavigationItemSelected(MenuItem item) {
     // Handle navigation view item clicks here.
