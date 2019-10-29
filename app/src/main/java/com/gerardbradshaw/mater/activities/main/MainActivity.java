@@ -240,26 +240,22 @@ public class MainActivity extends AppCompatActivity
         pendingIntent);
   }
 
+  private PendingIntent getNotifyPendingIntent(Intent notifyIntent) {
+    return PendingIntent.getBroadcast(this, ALARM_NOTIF_ID,
+        notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
 
   private boolean setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
     // Initialise system services
     NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-    // Set up breakfast intent
-    Intent breakfastNotifyIntent = new Intent(this, AlarmReceiver.class);
-    PendingIntent breakfastNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        ALARM_NOTIF_ID, breakfastNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    // Set up lunch intent
-    Intent lunchNotifyIntent = new Intent(this, AlarmReceiver.class);
-    PendingIntent lunchNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-    // Set up dinner intent
-    Intent dinnerNotifyIntent = new Intent(this, AlarmReceiver.class);
-    PendingIntent dinnerNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        ALARM_NOTIF_ID, dinnerNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    // Set up breakfast, lunch, and dinner PendingIntents
+    Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+    PendingIntent breakfastNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
+    PendingIntent lunchNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
+    PendingIntent dinnerNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
 
     // Turn the alarm off if it should be, otherwise set up the alarms
     if (alarmManager != null) {
