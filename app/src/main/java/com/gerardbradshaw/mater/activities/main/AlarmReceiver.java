@@ -22,25 +22,12 @@ public class AlarmReceiver extends BroadcastReceiver {
   private static final int ALARM_NOTIF_ID = MainActivity.ALARM_NOTIF_ID;
   private final String LOG_TAG = "GGG - AlarmReceiver";
 
+  private int currentTime = -1;
+
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    String meal = null;
-
-    Bundle intentExtras = intent.getExtras();
-    for (String key : intentExtras.keySet()) {
-      Log.d(LOG_TAG, key + " was included in the intent");
-    }
-
-    if (intent.hasExtra(MainActivity.EXTRA_MEAL)) {
-      meal = intent.getStringExtra(MainActivity.EXTRA_MEAL);
-    }
-
-    if (meal == null || meal.isEmpty()) {
-      meal = "a meal";
-    }
-
-    deliverNotification(context, meal);
+    deliverNotification(context, getMeal(context));
   }
 
   private void deliverNotification(Context context, String meal) {
@@ -71,14 +58,39 @@ public class AlarmReceiver extends BroadcastReceiver {
   }
 
   private String getMeal(Context context) {
-    // Get information about the current time
+    // Save the current time
     Calendar cal = Calendar.getInstance();
     cal.setTimeInMillis(System.currentTimeMillis());
-    int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-    int currentMinute = cal.get(Calendar.MINUTE);
+    currentTime = cal.get(Calendar.HOUR_OF_DAY) * 100 + cal.get(Calendar.MINUTE);
+    Log.d(LOG_TAG, "Current time: " + currentTime);
 
+    // Get the saved times for meals
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    //sharedPrefs.getInt()
+    int breakfastTime = sharedPrefs.getInt(MainActivity.EXTRA_BREAKFAST_TIME, -100);
+    int lunchTime = sharedPrefs.getInt(MainActivity.EXTRA_LUNCH_TIME, -100);
+    int dinnerTime = sharedPrefs.getInt(MainActivity.EXTRA_DINNER_TIME, -100);
+    Log.d(LOG_TAG, "Breakfast time: " + breakfastTime
+        + ", lunch time: " + lunchTime + ", dinner time: " + dinnerTime);
 
+    if (isMeal(breakfastTime) && !isMeal(lunchTime) && !isMeal(dinnerTime)) {
+      return "breakfast";
+
+    } else if (isMeal(lunchTime) && !isMeal(breakfastTime) && !isMeal(dinnerTime)) {
+      return "lunch";
+
+    } else if (isMeal(dinnerTime) && !isMeal(breakfastTime) && !isMeal(lunchTime)) {
+      return "dinner";
+
+    }
+    return "a meal";
+  }
+
+  /**
+   * Returns true if the meal was 5 minutes ago or in 10 minutes
+   * @param mealTime the meal time to check
+   * @return true if it was within specified parameters
+   */
+  private boolean isMeal(int mealTime) {
+    return currentTime < mealTime + 10 && currentTime > mealTime - 5;
   }
 }
