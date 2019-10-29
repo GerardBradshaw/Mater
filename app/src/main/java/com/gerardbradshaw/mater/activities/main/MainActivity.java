@@ -45,7 +45,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -71,6 +70,8 @@ public class MainActivity extends AppCompatActivity
   static final String EXTRA_DINNER_TIME = packageName + ".EXTRA_DINNER_TIME";
 
   private SharedPreferences sharedPrefs;
+  private AlarmManager alarmManager;
+  private NotificationManager notificationManager;
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -181,7 +182,10 @@ public class MainActivity extends AppCompatActivity
   protected void onResume() {
     super.onResume();
 
+    // Initialise system services
     sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+    notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
     boolean breakfastOn = sharedPrefs.getBoolean("breakfast_notification", false);
     boolean lunchOn = sharedPrefs.getBoolean("lunch_notification", false);
@@ -245,12 +249,25 @@ public class MainActivity extends AppCompatActivity
         notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
+  private void createNotificationChannel() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel notificationChannel = new NotificationChannel(
+          ALARM_NOTIF_CHANNEL_ID,
+          "Meal reminders",
+          NotificationManager.IMPORTANCE_DEFAULT);
+
+      // Configure initial channel settings
+      notificationChannel.enableVibration(true);
+      notificationChannel.enableLights(true);
+      notificationChannel.setLightColor(Color.RED);
+      notificationChannel.setDescription("Reminders to start making a meal");
+
+      // Create the channel
+      notificationManager.createNotificationChannel(notificationChannel);
+    }
+  }
 
   private boolean setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
-    // Initialise system services
-    NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-
     // Set up breakfast, lunch, and dinner PendingIntents
     Intent alarmIntent = new Intent(this, AlarmReceiver.class);
     PendingIntent breakfastNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
@@ -267,22 +284,7 @@ public class MainActivity extends AppCompatActivity
         return false;
       }
 
-      // Create the notification channel (API >= 26)
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        NotificationChannel notificationChannel = new NotificationChannel(
-            ALARM_NOTIF_CHANNEL_ID,
-            "Meal reminders",
-            NotificationManager.IMPORTANCE_DEFAULT);
-
-        // Configure initial channel settings
-        notificationChannel.enableVibration(true);
-        notificationChannel.enableLights(true);
-        notificationChannel.setLightColor(Color.RED);
-        notificationChannel.setDescription("Reminders to start making a meal");
-
-        // Create the channel
-        notifManager.createNotificationChannel(notificationChannel);
-      }
+      createNotificationChannel();
 
       // Turn on the breakfast alarm
       if (breakfastOn) {
@@ -314,7 +316,6 @@ public class MainActivity extends AppCompatActivity
         Log.d(LOG_TAG, "Dinner alarm off");
       }
     }
-
     return true;
   }
 

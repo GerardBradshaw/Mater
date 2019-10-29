@@ -78,7 +78,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     int currentMinute = cal.get(Calendar.MINUTE);
 
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-    sharedPrefs.getInt()
+    //sharedPrefs.getInt()
 
   }
 }
