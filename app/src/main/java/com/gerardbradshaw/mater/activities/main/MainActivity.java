@@ -58,12 +58,19 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
 
   static final String ALARM_NOTIF_CHANNEL_ID = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
   static final int ALARM_NOTIF_ID = 1;
-  static final String EXTRA_MEAL = "com.gerardbradshaw.mater.EXTRA_MEAL";
+
+  private static final String packageName = "com.gerardbradshaw.mater";
+  public static final String EXTRA_RECIPE_ID = packageName + ".EXTRA_RECIPE_ID";
+  static final String EXTRA_MEAL = packageName + ".EXTRA_MEAL";
+  static final String EXTRA_BREAKFAST_TIME = packageName + ".EXTRA_BREAKFAST_TIME";
+  static final String EXTRA_LUNCH_TIME = packageName + ".EXTRA_LUNCH_TIME";
+  static final String EXTRA_DINNER_TIME = packageName + ".EXTRA_DINNER_TIME";
+
+  private SharedPreferences sharedPrefs;
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -174,7 +181,7 @@ public class MainActivity extends AppCompatActivity
   protected void onResume() {
     super.onResume();
 
-    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     boolean breakfastOn = sharedPrefs.getBoolean("breakfast_notification", false);
     boolean lunchOn = sharedPrefs.getBoolean("lunch_notification", false);
@@ -211,6 +218,28 @@ public class MainActivity extends AppCompatActivity
     alertBuilder.show();
   }
 
+  private void setAlarm(int hour, int min, PendingIntent pendingIntent) {
+    // Get the AlarmManager service
+    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+    // Create a calendar object
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(System.currentTimeMillis());
+
+    // Set the calendar time
+    cal.set(Calendar.HOUR_OF_DAY, hour);
+    cal.set(Calendar.MINUTE, min);
+
+    // Save to shared preferences
+    int breakfastTime = 1800;
+
+    alarmManager.setInexactRepeating(
+        AlarmManager.RTC_WAKEUP,
+        cal.getTimeInMillis(),
+        AlarmManager.INTERVAL_DAY,
+        pendingIntent);
+  }
+
 
   private boolean setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
     // Initialise system services
@@ -219,19 +248,16 @@ public class MainActivity extends AppCompatActivity
 
     // Set up breakfast intent
     Intent breakfastNotifyIntent = new Intent(this, AlarmReceiver.class);
-    breakfastNotifyIntent.putExtra(EXTRA_MEAL, "breakfast");
     PendingIntent breakfastNotifyPendingIntent = PendingIntent.getBroadcast(this,
         ALARM_NOTIF_ID, breakfastNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // Set up lunch intent
     Intent lunchNotifyIntent = new Intent(this, AlarmReceiver.class);
-    breakfastNotifyIntent.putExtra(EXTRA_MEAL, "lunch");
     PendingIntent lunchNotifyPendingIntent = PendingIntent.getBroadcast(this,
         ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // Set up dinner intent
     Intent dinnerNotifyIntent = new Intent(this, AlarmReceiver.class);
-    breakfastNotifyIntent.putExtra(EXTRA_MEAL, "dinner");
     PendingIntent dinnerNotifyPendingIntent = PendingIntent.getBroadcast(this,
         ALARM_NOTIF_ID, dinnerNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -264,17 +290,7 @@ public class MainActivity extends AppCompatActivity
 
       // Turn on the breakfast alarm
       if (breakfastOn) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, 18);
-        cal.set(Calendar.MINUTE, 0);
-
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            cal.getTimeInMillis(),
-            AlarmManager.INTERVAL_DAY,
-            breakfastNotifyPendingIntent);
-
+        setAlarm(18, 0, breakfastNotifyPendingIntent);
         Log.d(LOG_TAG, "Breakfast alarm on");
 
       } else {
@@ -284,17 +300,7 @@ public class MainActivity extends AppCompatActivity
 
       // Turn on the lunch alarm
       if (lunchOn) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, 12);
-        cal.set(Calendar.MINUTE, 0);
-
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            cal.getTimeInMillis(),
-            AlarmManager.INTERVAL_DAY,
-            lunchNotifyPendingIntent);
-
+        setAlarm(12, 0, lunchNotifyPendingIntent);
         Log.d(LOG_TAG, "Lunch alarm on");
 
       } else {
@@ -304,17 +310,7 @@ public class MainActivity extends AppCompatActivity
 
       // Turn on the dinner alarm
       if (dinnerOn) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        cal.set(Calendar.HOUR_OF_DAY, 17);
-        cal.set(Calendar.MINUTE, 30);
-
-        alarmManager.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            cal.getTimeInMillis(),
-            AlarmManager.INTERVAL_DAY,
-            dinnerNotifyPendingIntent);
-
+        setAlarm(17, 30, dinnerNotifyPendingIntent);
         Log.d(LOG_TAG, "Dinner alarm on");
 
       } else {

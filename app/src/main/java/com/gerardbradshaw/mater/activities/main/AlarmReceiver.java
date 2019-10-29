@@ -5,12 +5,16 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
 import com.gerardbradshaw.mater.R;
+
+import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
@@ -64,5 +68,17 @@ public class AlarmReceiver extends BroadcastReceiver {
             .setPriority(NotificationCompat.PRIORITY_HIGH);
 
     notificationManager.notify(ALARM_NOTIF_ID, builder.build());
+  }
+
+  private String getMeal(Context context) {
+    // Get information about the current time
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(System.currentTimeMillis());
+    int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+    int currentMinute = cal.get(Calendar.MINUTE);
+
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    sharedPrefs.getInt()
+
   }
 }
