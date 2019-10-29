@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
     alertBuilder.show();
   }
 
-  private void setAlarm(int hour, int min, PendingIntent pendingIntent) {
+  private void setAlarm(int hour, int min, PendingIntent pendingIntent, String extraMealKey) {
     // Get the AlarmManager service
     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
@@ -234,9 +234,15 @@ public class MainActivity extends AppCompatActivity
     cal.set(Calendar.HOUR_OF_DAY, hour);
     cal.set(Calendar.MINUTE, min);
 
-    // Save to shared preferences
-    int breakfastTime = 1800;
+    // Create meal time variable
+    int mealTime = hour * 100 + min;
 
+    // Save meal time to shared prefs
+    SharedPreferences.Editor sharedPrefEditor = sharedPrefs.edit();
+    sharedPrefEditor.putInt(extraMealKey, mealTime);
+    sharedPrefEditor.apply();
+
+    // Set the alarm
     alarmManager.setInexactRepeating(
         AlarmManager.RTC_WAKEUP,
         cal.getTimeInMillis(),
@@ -288,7 +294,7 @@ public class MainActivity extends AppCompatActivity
 
       // Turn on the breakfast alarm
       if (breakfastOn) {
-        setAlarm(18, 0, breakfastNotifyPendingIntent);
+        setAlarm(18, 0, breakfastNotifyPendingIntent, EXTRA_BREAKFAST_TIME);
         Log.d(LOG_TAG, "Breakfast alarm on");
 
       } else {
@@ -298,7 +304,7 @@ public class MainActivity extends AppCompatActivity
 
       // Turn on the lunch alarm
       if (lunchOn) {
-        setAlarm(12, 0, lunchNotifyPendingIntent);
+        setAlarm(12, 0, lunchNotifyPendingIntent, EXTRA_LUNCH_TIME);
         Log.d(LOG_TAG, "Lunch alarm on");
 
       } else {
@@ -308,7 +314,7 @@ public class MainActivity extends AppCompatActivity
 
       // Turn on the dinner alarm
       if (dinnerOn) {
-        setAlarm(17, 30, dinnerNotifyPendingIntent);
+        setAlarm(17, 30, dinnerNotifyPendingIntent, EXTRA_DINNER_TIME);
         Log.d(LOG_TAG, "Dinner alarm on");
 
       } else {
