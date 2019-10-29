@@ -12,26 +12,25 @@ import com.gerardbradshaw.mater.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-  private NotificationManager notificationManager;
   private static final String ALARM_NOTIF_CHANNEL_ID = MainActivity.ALARM_NOTIF_CHANNEL_ID;
-  private static final int BREAKFAST_ALARM_NOTIF_ID = MainActivity.BREAKFAST_ALARM_NOTIF_ID;
+  private static final int ALARM_NOTIF_ID = MainActivity.ALARM_NOTIF_ID;
 
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    deliverNotification(context);
+    deliverNotification(context, intent.getStringExtra(MainActivity.EXTRA_MEAL));
   }
 
-  private void deliverNotification(Context context) {
+  private void deliverNotification(Context context, String meal) {
     // Get the notification manager
-    notificationManager =
+    NotificationManager notificationManager =
         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
     // Create content intent and corresponding pending intent
     Intent contentIntent = new Intent(context, MainActivity.class);
     PendingIntent contentPendingIntent = PendingIntent.getActivity(
         context,
-        BREAKFAST_ALARM_NOTIF_ID,
+        ALARM_NOTIF_ID,
         contentIntent,
         PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -40,12 +39,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         new NotificationCompat.Builder(context, ALARM_NOTIF_CHANNEL_ID)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle("Meal reminder")
-            .setContentText("It's time to start cooking!")
+            .setContentText("It's time to start cooking " + meal + "!")
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setAutoCancel(true)
             .setContentIntent(contentPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-    notificationManager.notify(BREAKFAST_ALARM_NOTIF_ID, builder.build());
+    notificationManager.notify(ALARM_NOTIF_ID, builder.build());
   }
 }

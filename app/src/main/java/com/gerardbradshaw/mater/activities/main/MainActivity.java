@@ -61,9 +61,7 @@ public class MainActivity extends AppCompatActivity
   private static String LOG_TAG = "GGG - Main Activity";
 
   static final String ALARM_NOTIF_CHANNEL_ID = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
-  static final int BREAKFAST_ALARM_NOTIF_ID = 1;
-  static final int LUNCH_ALARM_NOTIF_ID = 2;
-  static final int DINNER_ALARM_NOTIF_ID = 3;
+  static final int ALARM_NOTIF_ID = 1;
   static final String EXTRA_MEAL = "com.gerardbradshaw.mater.EXTRA_MEAL";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
@@ -218,19 +216,19 @@ public class MainActivity extends AppCompatActivity
     Intent breakfastNotifyIntent = new Intent(this, AlarmReceiver.class);
     breakfastNotifyIntent.putExtra(EXTRA_MEAL, "breakfast");
     PendingIntent breakfastNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        BREAKFAST_ALARM_NOTIF_ID, breakfastNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ALARM_NOTIF_ID, breakfastNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // Set up lunch intent
     Intent lunchNotifyIntent = new Intent(this, AlarmReceiver.class);
     breakfastNotifyIntent.putExtra(EXTRA_MEAL, "lunch");
     PendingIntent lunchNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        BREAKFAST_ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // Set up dinner intent
     Intent dinnerNotifyIntent = new Intent(this, AlarmReceiver.class);
     breakfastNotifyIntent.putExtra(EXTRA_MEAL, "dinner");
     PendingIntent dinnerNotifyPendingIntent = PendingIntent.getBroadcast(this,
-        BREAKFAST_ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     // Turn the alarm off if it should be, otherwise set up the alarms
     if (alarmManager != null) {
