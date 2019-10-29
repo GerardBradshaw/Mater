@@ -21,7 +21,6 @@ import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +45,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
@@ -59,11 +57,14 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
+  protected static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
 
   static final String ALARM_NOTIF_CHANNEL_ID = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
-  static final int ALARM_NOTIF_ID = 1;
+  static final int BREAKFAST_ALARM_NOTIF_ID = 1;
+  static final int LUNCH_ALARM_NOTIF_ID = 2;
+  static final int DINNER_ALARM_NOTIF_ID = 3;
+  static final String EXTRA_MEAL = "com.gerardbradshaw.mater.EXTRA_MEAL";
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -79,7 +80,10 @@ public class MainActivity extends AppCompatActivity
     SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
     // Set up meal reminders
-    setUpMealReminders(sharedPrefs.getBoolean("notifications_on", false));
+    boolean breakfastOn = sharedPrefs.getBoolean("breakfast_alarm", false);
+    boolean lunchOn = sharedPrefs.getBoolean("lunch_alarm", false);
+    boolean dinnerOn = sharedPrefs.getBoolean("dinner_alarm", false);
+    setUpMealReminders(breakfastOn, lunchOn, dinnerOn);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -205,56 +209,105 @@ public class MainActivity extends AppCompatActivity
   }
 
 
-  private boolean setUpMealReminders(boolean remindersOn) {
+  private boolean setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
     // Initialise system services
     NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-    // Set up alarm intent
-    Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-    PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(
-        this,
-        ALARM_NOTIF_ID,
-        notifyIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT);
+    // Set up breakfast intent
+    Intent breakfastNotifyIntent = new Intent(this, AlarmReceiver.class);
+    breakfastNotifyIntent.putExtra(EXTRA_MEAL, "breakfast");
+    PendingIntent breakfastNotifyPendingIntent = PendingIntent.getBroadcast(this,
+        BREAKFAST_ALARM_NOTIF_ID, breakfastNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-    // Turn the alarm off if it should be
-    if (alarmManager != null && !remindersOn) {
-      alarmManager.cancel(notifyPendingIntent);
-      return false;
-    }
+    // Set up lunch intent
+    Intent lunchNotifyIntent = new Intent(this, AlarmReceiver.class);
+    breakfastNotifyIntent.putExtra(EXTRA_MEAL, "lunch");
+    PendingIntent lunchNotifyPendingIntent = PendingIntent.getBroadcast(this,
+        BREAKFAST_ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-    // Create the notification channel (API >= 26)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      NotificationChannel notificationChannel = new NotificationChannel(
-          ALARM_NOTIF_CHANNEL_ID,
-          "Meal reminders",
-          NotificationManager.IMPORTANCE_DEFAULT);
+    // Set up dinner intent
+    Intent dinnerNotifyIntent = new Intent(this, AlarmReceiver.class);
+    breakfastNotifyIntent.putExtra(EXTRA_MEAL, "dinner");
+    PendingIntent dinnerNotifyPendingIntent = PendingIntent.getBroadcast(this,
+        BREAKFAST_ALARM_NOTIF_ID, lunchNotifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-      // Configure initial channel settings
-      notificationChannel.enableVibration(true);
-      notificationChannel.enableLights(true);
-      notificationChannel.setLightColor(Color.RED);
-      notificationChannel.setDescription("Reminders to start making a meal");
-
-      // Create the channel
-      notifManager.createNotificationChannel(notificationChannel);
-    }
-
-    // Set up repeating alarm
-    // TODO add alarm for each meal if turned on
+    // Turn the alarm off if it should be, otherwise set up the alarms
     if (alarmManager != null) {
+      if (!breakfastOn && !lunchOn && !dinnerOn) {
+        alarmManager.cancel(breakfastNotifyPendingIntent);
+        alarmManager.cancel(lunchNotifyPendingIntent);
+        alarmManager.cancel(dinnerNotifyPendingIntent);
+        return false;
+      }
 
-      Calendar cal = Calendar.getInstance();
-      cal.setTimeInMillis(System.currentTimeMillis());
-      cal.set(Calendar.HOUR_OF_DAY, 17);
-      cal.set(Calendar.MINUTE, 30);
+      // Create the notification channel (API >= 26)
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        NotificationChannel notificationChannel = new NotificationChannel(
+            ALARM_NOTIF_CHANNEL_ID,
+            "Meal reminders",
+            NotificationManager.IMPORTANCE_DEFAULT);
 
-      alarmManager.setInexactRepeating(
-          AlarmManager.RTC_WAKEUP,
-          cal.getTimeInMillis(),
-          AlarmManager.INTERVAL_DAY,
-          notifyPendingIntent);
+        // Configure initial channel settings
+        notificationChannel.enableVibration(true);
+        notificationChannel.enableLights(true);
+        notificationChannel.setLightColor(Color.RED);
+        notificationChannel.setDescription("Reminders to start making a meal");
+
+        // Create the channel
+        notifManager.createNotificationChannel(notificationChannel);
+      }
+
+      // Turn on the breakfast alarm
+      if (breakfastOn) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, 6);
+        cal.set(Calendar.MINUTE, 0);
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            cal.getTimeInMillis(),
+            AlarmManager.INTERVAL_DAY,
+            breakfastNotifyPendingIntent);
+
+      } else {
+        alarmManager.cancel(breakfastNotifyPendingIntent);
+      }
+
+      // Turn on the lunch alarm
+      if (lunchOn) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal.set(Calendar.MINUTE, 0);
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            cal.getTimeInMillis(),
+            AlarmManager.INTERVAL_DAY,
+            lunchNotifyPendingIntent);
+
+      } else {
+        alarmManager.cancel(lunchNotifyPendingIntent);
+      }
+
+      // Turn on the dinner alarm
+      if (dinnerOn) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(Calendar.HOUR_OF_DAY, 17);
+        cal.set(Calendar.MINUTE, 30);
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            cal.getTimeInMillis(),
+            AlarmManager.INTERVAL_DAY,
+            dinnerNotifyPendingIntent);
+
+      } else {
+        alarmManager.cancel(dinnerNotifyPendingIntent);
+      }
     }
 
     return true;

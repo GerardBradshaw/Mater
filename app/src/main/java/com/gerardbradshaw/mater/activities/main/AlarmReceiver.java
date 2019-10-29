@@ -14,7 +14,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
   private NotificationManager notificationManager;
   private static final String ALARM_NOTIF_CHANNEL_ID = MainActivity.ALARM_NOTIF_CHANNEL_ID;
-  private static final int ALARM_NOTIF_ID = MainActivity.ALARM_NOTIF_ID;
+  private static final int BREAKFAST_ALARM_NOTIF_ID = MainActivity.BREAKFAST_ALARM_NOTIF_ID;
 
 
   @Override
@@ -31,7 +31,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     Intent contentIntent = new Intent(context, MainActivity.class);
     PendingIntent contentPendingIntent = PendingIntent.getActivity(
         context,
-        ALARM_NOTIF_ID,
+        BREAKFAST_ALARM_NOTIF_ID,
         contentIntent,
         PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -46,6 +46,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             .setContentIntent(contentPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-    notificationManager.notify(ALARM_NOTIF_ID, builder.build());
+    notificationManager.notify(BREAKFAST_ALARM_NOTIF_ID, builder.build());
   }
 }
