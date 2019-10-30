@@ -234,25 +234,22 @@ public class MainActivity extends AppCompatActivity
     cal.set(Calendar.HOUR_OF_DAY, hour);
     cal.set(Calendar.MINUTE, min);
 
-    // Create meal time variable
-    int mealTime = hour * 100 + min;
-
     // Save meal time to shared prefs
     SharedPreferences.Editor sharedPrefEditor = sharedPrefs.edit();
-    sharedPrefEditor.putInt(extraMealKey, mealTime);
+    sharedPrefEditor.putInt(extraMealKey, hour * 100 + min);
     sharedPrefEditor.apply();
 
     // Set the alarm
-    alarmManager.setInexactRepeating(
-        AlarmManager.RTC_WAKEUP,
-        cal.getTimeInMillis(),
-        AlarmManager.INTERVAL_DAY,
-        pendingIntent);
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+    //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
   }
 
   private PendingIntent getNotifyPendingIntent(Intent notifyIntent) {
-    return PendingIntent.getBroadcast(this, ALARM_NOTIF_ID,
-        notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    return PendingIntent.getBroadcast(
+        this,
+        ALARM_NOTIF_ID,
+        notifyIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT);
   }
 
   private void createNotificationChannel() {
@@ -273,28 +270,21 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  private boolean setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
+  private void setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
     // Set up breakfast, lunch, and dinner PendingIntents
-    Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-    PendingIntent breakfastNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
-    PendingIntent lunchNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
-    PendingIntent dinnerNotifyPendingIntent = getNotifyPendingIntent(alarmIntent);
+    Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+    final PendingIntent breakfastNotifyPendingIntent = getNotifyPendingIntent(notifyIntent);
+    final PendingIntent lunchNotifyPendingIntent = getNotifyPendingIntent(notifyIntent);
+    final PendingIntent dinnerNotifyPendingIntent = getNotifyPendingIntent(notifyIntent);
 
     // Turn the alarm off if it should be, otherwise set up the alarms
     if (alarmManager != null) {
-      if (!breakfastOn && !lunchOn && !dinnerOn) {
-        alarmManager.cancel(breakfastNotifyPendingIntent);
-        alarmManager.cancel(lunchNotifyPendingIntent);
-        alarmManager.cancel(dinnerNotifyPendingIntent);
-        Log.d(LOG_TAG, "All alarms off and cancelled");
-        return false;
-      }
 
       createNotificationChannel();
 
       // Turn on the breakfast alarm
       if (breakfastOn) {
-        setAlarm(18, 0, breakfastNotifyPendingIntent, EXTRA_BREAKFAST_TIME);
+        setAlarm(14, 20, breakfastNotifyPendingIntent, EXTRA_BREAKFAST_TIME);
         Log.d(LOG_TAG, "Breakfast alarm on");
 
       } else {
@@ -322,7 +312,6 @@ public class MainActivity extends AppCompatActivity
         Log.d(LOG_TAG, "Dinner alarm off");
       }
     }
-    return true;
   }
 
 
