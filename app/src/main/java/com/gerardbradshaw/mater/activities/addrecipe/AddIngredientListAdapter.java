@@ -77,12 +77,12 @@ public class AddIngredientListAdapter
   public void onBindViewHolder(@NonNull final NewIngredientViewHolder viewHolder, int position) {
     if (ingredientHolders != null) {
 
-      IngredientHolder holder = ingredientHolders.get(position);
-      final String name = holder.getName();
-      double amount = holder.getAmount();
-      String unitName = holder.getUnit();
+      final IngredientHolder currentIngredientHolder = ingredientHolders.get(position);
+      final String name = currentIngredientHolder.getName();
+      double amount = currentIngredientHolder.getAmount();
+      String unitName = currentIngredientHolder.getUnit();
       String uiUnit = Units.getUiStringFromName(unitName);
-      String categoryName = holder.getCategory();
+      String categoryName = currentIngredientHolder.getCategory();
       String uiCategory = Categories.getUiStringFromName(categoryName);
 
       // Set up the unitSpinner and the drop down appearance
@@ -94,9 +94,12 @@ public class AddIngredientListAdapter
       viewHolder.unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          String unitName = Units.getNameFromUiString(adapterView.getSelectedItem().toString());
+          currentIngredientHolder.setUnit(unitName);
+
           if (unitEditedListener != null) {
-            unitEditedListener.onUnitsEdited(viewHolder.getAdapterPosition(),
-                adapterView.getSelectedItem().toString());
+            unitEditedListener.onUnitsEdited(
+                viewHolder.getAdapterPosition(), adapterView.getSelectedItem().toString());
           }
         }
 
@@ -118,9 +121,13 @@ public class AddIngredientListAdapter
           new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+          String categoryName = Categories.getNameFromUiString(
+              adapterView.getSelectedItem().toString());
+          currentIngredientHolder.setCategory(categoryName);
+
           if (categoryEditedListener != null) {
-            categoryEditedListener.onCategoryEdited(viewHolder.getAdapterPosition(),
-                adapterView.getSelectedItem().toString());
+            categoryEditedListener.onCategoryEdited(
+                viewHolder.getAdapterPosition(), adapterView.getSelectedItem().toString());
           }
         }
 

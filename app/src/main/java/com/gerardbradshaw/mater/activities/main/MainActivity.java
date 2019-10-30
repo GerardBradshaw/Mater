@@ -1,18 +1,27 @@
 package com.gerardbradshaw.mater.activities.main;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.addrecipe.AddRecipeActivity;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
+import com.gerardbradshaw.mater.activities.settings.SettingsActivity;
 import com.gerardbradshaw.mater.activities.shoppinglist.ShoppingListActivity;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.SummaryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 
@@ -37,6 +46,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.widget.ImageView;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -47,8 +57,21 @@ public class MainActivity extends AppCompatActivity
   private RecipeListAdapter recipeListAdapter;
   private SummaryViewModel summaryViewModel;
   private ImageViewModel imageViewModel;
-  public static final String EXTRA_RECIPE_ID = "com.gerardbradshaw.mater.EXTRA_RECIPE_ID";
   private static String LOG_TAG = "GGG - Main Activity";
+
+  static final String ALARM_NOTIF_CHANNEL_ID = "com.gerardbradshaw.mater.ALARM_NOTIF_CHANNEL_ID";
+  static final int ALARM_NOTIF_ID = 1;
+
+  private static final String packageName = "com.gerardbradshaw.mater";
+  public static final String EXTRA_RECIPE_ID = packageName + ".EXTRA_RECIPE_ID";
+  static final String EXTRA_MEAL = packageName + ".EXTRA_MEAL";
+  static final String EXTRA_BREAKFAST_TIME = packageName + ".EXTRA_BREAKFAST_TIME";
+  static final String EXTRA_LUNCH_TIME = packageName + ".EXTRA_LUNCH_TIME";
+  static final String EXTRA_DINNER_TIME = packageName + ".EXTRA_DINNER_TIME";
+
+  private SharedPreferences sharedPrefs;
+  private AlarmManager alarmManager;
+  private NotificationManager notificationManager;
 
   // - - - - - - - - - - - - - - - Activity methods - - - - - - - - - - - - - - -
 
@@ -58,6 +81,9 @@ public class MainActivity extends AppCompatActivity
     setContentView(R.layout.activity_main_drawer);
     summaryViewModel = ViewModelProviders.of(this).get(SummaryViewModel.class);
     imageViewModel = ViewModelProviders.of(this).get(ImageViewModel.class);
+
+    // Set default preferences
+    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
     // Set up toolbar
     Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -152,6 +178,20 @@ public class MainActivity extends AppCompatActivity
     });
   }
 
+  @Override
+  protected void onResume() {
+    super.onResume();
+
+    // Initialise system services
+    sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+    notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+    boolean breakfastOn = sharedPrefs.getBoolean("breakfast_notification", false);
+    boolean lunchOn = sharedPrefs.getBoolean("lunch_notification", false);
+    boolean dinnerOn = sharedPrefs.getBoolean("dinner_notification", false);
+    setUpMealReminders(breakfastOn, lunchOn, dinnerOn);
+  }
 
   // - - - - - - - - - - - - - - - Helper methods - - - - - - - - - - - - - - -
 
@@ -182,6 +222,98 @@ public class MainActivity extends AppCompatActivity
     alertBuilder.show();
   }
 
+  private void setAlarm(int hour, int min, PendingIntent pendingIntent, String extraMealKey) {
+    // Get the AlarmManager service
+    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+    // Create a calendar object
+    Calendar cal = Calendar.getInstance();
+    cal.setTimeInMillis(System.currentTimeMillis());
+
+    // Set the calendar time
+    cal.set(Calendar.HOUR_OF_DAY, hour);
+    cal.set(Calendar.MINUTE, min);
+
+    // Save meal time to shared prefs
+    SharedPreferences.Editor sharedPrefEditor = sharedPrefs.edit();
+    sharedPrefEditor.putInt(extraMealKey, hour * 100 + min);
+    sharedPrefEditor.apply();
+
+    // Set the alarm
+    alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+    //alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+  }
+
+  private PendingIntent getNotifyPendingIntent(Intent notifyIntent) {
+    return PendingIntent.getBroadcast(
+        this,
+        ALARM_NOTIF_ID,
+        notifyIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT);
+  }
+
+  private void createNotificationChannel() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel notificationChannel = new NotificationChannel(
+          ALARM_NOTIF_CHANNEL_ID,
+          "Meal reminders",
+          NotificationManager.IMPORTANCE_DEFAULT);
+
+      // Configure initial channel settings
+      notificationChannel.enableVibration(true);
+      notificationChannel.enableLights(true);
+      notificationChannel.setLightColor(Color.RED);
+      notificationChannel.setDescription("Reminders to start making a meal");
+
+      // Create the channel
+      notificationManager.createNotificationChannel(notificationChannel);
+    }
+  }
+
+  private void setUpMealReminders(boolean breakfastOn, boolean lunchOn, boolean dinnerOn) {
+    // Set up breakfast, lunch, and dinner PendingIntents
+    Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+    final PendingIntent breakfastNotifyPendingIntent = getNotifyPendingIntent(notifyIntent);
+    final PendingIntent lunchNotifyPendingIntent = getNotifyPendingIntent(notifyIntent);
+    final PendingIntent dinnerNotifyPendingIntent = getNotifyPendingIntent(notifyIntent);
+
+    // Turn the alarm off if it should be, otherwise set up the alarms
+    if (alarmManager != null) {
+
+      createNotificationChannel();
+
+      // Turn on the breakfast alarm
+      if (breakfastOn) {
+        setAlarm(14, 20, breakfastNotifyPendingIntent, EXTRA_BREAKFAST_TIME);
+        Log.d(LOG_TAG, "Breakfast alarm on");
+
+      } else {
+        alarmManager.cancel(breakfastNotifyPendingIntent);
+        Log.d(LOG_TAG, "Breakfast alarm off");
+      }
+
+      // Turn on the lunch alarm
+      if (lunchOn) {
+        setAlarm(12, 0, lunchNotifyPendingIntent, EXTRA_LUNCH_TIME);
+        Log.d(LOG_TAG, "Lunch alarm on");
+
+      } else {
+        alarmManager.cancel(lunchNotifyPendingIntent);
+        Log.d(LOG_TAG, "Lunch alarm off");
+      }
+
+      // Turn on the dinner alarm
+      if (dinnerOn) {
+        setAlarm(17, 30, dinnerNotifyPendingIntent, EXTRA_DINNER_TIME);
+        Log.d(LOG_TAG, "Dinner alarm on");
+
+      } else {
+        alarmManager.cancel(dinnerNotifyPendingIntent);
+        Log.d(LOG_TAG, "Dinner alarm off");
+      }
+    }
+  }
+
 
   // - - - - - - - - - - - - - - - Options Menu methods - - - - - - - - - - - - - - -
 
@@ -197,7 +329,9 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.action_settings) {
-
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
+      startActivity(settingsIntent);
+      return true;
     }
 
     return super.onOptionsItemSelected(item);
@@ -216,7 +350,6 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  @SuppressWarnings("StatementWithEmptyBody")
   @Override
   public boolean onNavigationItemSelected(MenuItem item) {
     // Handle navigation view item clicks here.
@@ -227,7 +360,8 @@ public class MainActivity extends AppCompatActivity
       startActivity(intent);
 
     } else if (id == R.id.nav_settings) {
-      // TODO settings screen
+      Intent settingsIntent = new Intent(this, SettingsActivity.class);
+      startActivity(settingsIntent);
 
     } else {
       return  false;

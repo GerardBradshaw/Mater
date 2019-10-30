@@ -2,7 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gerardbradshaw.mater">
-    <!-- Features -->
+
+    <!-- Permissions -->
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:name=".helpers.MaterApplication"
         android:allowBackup="true"
@@ -13,15 +20,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <receiver
+            android:name=".activities.main.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false"></receiver>
+
         <activity
             android:name=".activities.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"
+            android:label="@string/settings_activity_title"
             android:parentActivityName=".activities.main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.gerardbradshaw.mater.activities.main.MainActivity" />
-        </activity>
-        <!-- Shopping List Activity -->
+        </activity> <!-- Shopping List Activity -->
         <activity
             android:name=".activities.shoppinglist.ShoppingListActivity"
             android:theme="@style/AppTheme.NoActionBar" /> <!-- Add Recipe Activity -->
@@ -41,11 +52,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application> <!-- Permissions -->
-    <uses-feature
-        android:name="android.hardware.camera2"
-        android:required="false" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    </application>
 
 </manifest>

@@ -57,12 +57,12 @@ public class IngredientViewModel extends AndroidViewModel {
 
   // - - - - - - - - - - - - - - - Update Ingredients - - - - - - - - - - - - - - -
 
-  public void updateIngredient(Ingredient... ingredients) {
-    repository.updateIngredient(ingredients);
+  public void updateIngredients(Ingredient... ingredients) {
+    repository.updateIngredients(ingredients);
   }
 
-  public void updateIngredient(List<Ingredient> ingredients) {
-    repository.updateIngredient(ingredients);
+  public void updateIngredients(List<Ingredient> ingredients) {
+    repository.updateIngredients(ingredients);
   }
 
   public void updateIngredientOnCurrentThread(List<Ingredient> ingredients) {
