@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
 import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.helpers.Categories;
 import com.gerardbradshaw.mater.helpers.MaterApplication;
 import com.gerardbradshaw.mater.pojos.IngredientHolder;
 import com.gerardbradshaw.mater.pojos.RecipeHolder;
@@ -228,40 +229,46 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     }
 
-    // Check ingredients
-    for(IngredientHolder holder : ingredientHolders) {
-
-      if(holder.getName().isEmpty()) {
-        showToast("Please add names for each ingredient.");
-        allFieldsOk = false;
-        Log.d(LOG_TAG, "Cannot save because of an ingredient name");
+    // Remove ingredients without a name
+    for (int i = 0; i < ingredientHolders.size(); i++) {
+      if (ingredientHolders.get(i).getName().isEmpty() && ingredientHolders.size() > 1) {
+        ingredientHolders.remove(i);
+        i--;
+        Log.d(LOG_TAG, "Blank ingredient removed");
       }
-
-      if(holder.getAmount() == 0) {
-        showToast("Please add amounts for each ingredient.");
-        allFieldsOk = false;
-        Log.d(LOG_TAG, "Cannot save because of an ingredient amount");
-      }
-
-      // TODO add checker for spinner
     }
 
-    // Check the steps
+    // Make sure there is at least 1 ingredient with a name
+    if (ingredientHolders.isEmpty()
+        || (ingredientHolders.get(0).getName().isEmpty() && ingredientHolders.size() ==1)) {
+      showToast("Please add at least 1 ingredient");
+      allFieldsOk = false;
+      Log.d(LOG_TAG, "Cannot save because there are no ingredients");
+    }
+
+    for(IngredientHolder holder : ingredientHolders) {
+      if (holder.getAmount() == 0) {
+        showToast("Please add amounts for each ingredient.");
+        allFieldsOk = false;
+        Log.d(LOG_TAG, "Cannot save because an ingredient amount is zero");
+      }
+    }
+
+    // Remove blank steps
+    for (int i = 0; i < stepHolders.size(); i++) {
+      if (stepHolders.get(i).isEmpty()) {
+        stepHolders.remove(i);
+        i--;
+        Log.d(LOG_TAG, "Blank step removed");
+      }
+    }
+
+    // Make sure there is at least 1 step
     if (stepHolders.isEmpty()
         || (stepHolders.get(0).isEmpty() && stepHolders.size() == 1)) {
       showToast("Please add at least 1 step");
       allFieldsOk = false;
       Log.d(LOG_TAG, "Cannot save because there are no steps");
-
-    } else {
-
-      for (int i = 0; i < stepHolders.size(); i++) {
-        if (stepHolders.get(i).isEmpty()) {
-          stepHolders.remove(i);
-          i--;
-          Log.d(LOG_TAG, "Blank step removed");
-        }
-      }
     }
 
     // If all is well, add the recipe to the database
@@ -270,12 +277,14 @@ public class AddRecipeActivity extends AppCompatActivity {
       // Create a RecipeHolder object
       RecipeHolder recipe = new RecipeHolder();
 
-      // Clean up each IngredientHolder in the Activity
+      // Add a unit and category for each ingredient in case it was missed
       for(IngredientHolder holder : ingredientHolders) {
-        // TODO implement retrieval from spinner
-
         if (holder.getUnit().isEmpty()) {
           holder.setUnit(Misc.NO_UNIT.name());
+        }
+
+        if (holder.getCategory().isEmpty()) {
+          holder.setCategory(Categories.Category.NO_CATEGORY.name());
         }
       }
 

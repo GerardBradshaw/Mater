@@ -1,6 +1,8 @@
 package com.gerardbradshaw.mater.activities.recipedetail;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,8 @@ public class DetailIngredientListAdapter
 
   private Context context;
 
+  private boolean isMetric;
+
   private static String LOG_TAG = "GGG - IngredientListAdapter";
 
 
@@ -36,6 +40,10 @@ public class DetailIngredientListAdapter
   public DetailIngredientListAdapter(Context context) {
     this.context = context;
     inflater = LayoutInflater.from(context);
+
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    String defaultUnit = sharedPrefs.getString("default_units", "automatic");
+    isMetric = Units.getIsMetric(defaultUnit);
   }
 
 
@@ -70,7 +78,7 @@ public class DetailIngredientListAdapter
 
       final Ingredient currentIngredient = ingredientList.get(position);
       String name = currentIngredient.getName();
-      String quantity = Units.formatForDetailView(currentIngredient.getAmount(), currentIngredient.getUnits());
+      String quantity = Units.formatForDetailView(currentIngredient.getAmount(), currentIngredient.getUnits(), isMetric);
       boolean inStock = currentIngredient.getInStock();
 
       viewHolder.name.setText(name);

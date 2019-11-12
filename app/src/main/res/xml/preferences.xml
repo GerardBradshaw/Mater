@@ -20,35 +20,41 @@
     <PreferenceCategory app:title="@string/settings_display_header">
 
         <ListPreference
-            app:defaultValue="Automatic"
+            app:defaultValue="automatic"
             app:entries="@array/default_unit_entries"
             app:entryValues="@array/default_unit_values"
             app:key="default_units"
             app:title="@string/setting_default_units"
+            android:icon="@drawable/ic_region"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/settings_notifications_header">
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             app:key="notifications_on"
-            app:title="@string/setting_notifications_on" />
+            app:title="@string/setting_notifications_on"
+            android:icon="@drawable/ic_notification"
+            android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             app:key="breakfast_notification"
             app:dependency="notifications_on"
-            app:title="@string/setting_notifications_breakfast" />
+            app:title="@string/setting_notifications_breakfast"
+            android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="lunch_notification"
             android:dependency="notifications_on"
-            android:title="@string/setting_notifications_lunch" />
+            android:title="@string/setting_notifications_lunch"
+            android:defaultValue="false"/>
 
-        <SwitchPreferenceCompat
+        <SwitchPreference
             android:key="dinner_notification"
             android:dependency="notifications_on"
-            android:title="@string/setting_notifications_dinner" />
+            android:title="@string/setting_notifications_dinner"
+            android:defaultValue="false"/>
 
     </PreferenceCategory>
 
