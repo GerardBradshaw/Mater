@@ -1,5 +1,6 @@
 package com.gerardbradshaw.mater.helpers;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.common.collect.BiMap;
@@ -20,7 +21,6 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Member variables - - - - - - - - - - - - - - -
 
-  static boolean isMetric = true;  // TODO add this to shared preferences
   private static final String LOG_TAG = "GGG - Units";
 
   public enum Volume {
@@ -208,7 +208,7 @@ public class Units {
 
   // - - - - - - - - - - - - - - - Formatting - - - - - - - - - - - - - - -
 
-  private static String formatForDetailView(double amount, Volume volume) {
+  private static String formatForDetailView(double amount, Volume volume, boolean isMetric) {
     Volume newVolume;
 
     if(isMetric) {
@@ -252,7 +252,7 @@ public class Units {
     return Units.convertVolume(amount, volume, newVolume);
   }
 
-  private static String formatForDetailView(double amount, Mass mass) {
+  private static String formatForDetailView(double amount, Mass mass, boolean isMetric) {
 
     Mass newMass;
 
@@ -289,19 +289,33 @@ public class Units {
     return amountString + " " + unitString + " ";
   }
 
-  public static String formatForDetailView(double amount, String unitName) {
+  public static String formatForDetailView(double amount, String unitName, boolean isMetric) {
 
     if (getVolumeFromVolumeName(unitName) != null) {
-      return formatForDetailView(amount, getVolumeFromVolumeName(unitName));
+      return formatForDetailView(amount, getVolumeFromVolumeName(unitName), isMetric);
 
     } else if (getMassFromMassName(unitName) != null) {
-      return formatForDetailView(amount, getMassFromMassName(unitName));
+      return formatForDetailView(amount, getMassFromMassName(unitName), isMetric);
 
     } else if (getMiscFromMiscName(unitName) != null) {
       return formatForDetailView(amount, getMiscFromMiscName(unitName));
     }
     Log.d(LOG_TAG,unitName + " not recognised as a Unit name.");
     return null;
+  }
+
+  public static boolean getIsMetric(String default_units) {
+    String countryCode = Locale.getDefault().getCountry();
+    boolean isImperialCountry =
+        countryCode.equals("US") || countryCode.equals("LR") || countryCode.equals("MM");
+
+    if (default_units.equals("imperial")
+        || (default_units.equals("automatic") && isImperialCountry)) {
+      return false;
+
+    } else {
+      return true;
+    }
   }
 
 

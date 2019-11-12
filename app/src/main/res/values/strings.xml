@@ -50,7 +50,7 @@
     <string name="settings_display_header">Display</string>
     <string name="setting_default_units">Default units</string>
     <!-- Notification Preferences -->
-    <string name="settings_notifications_header">Reminder Notifications</string>
+    <string name="settings_notifications_header">Meal Reminders</string>
     <string name="setting_notifications_on">Enable reminders</string>
     <string name="setting_notifications_breakfast">Breakfast reminder</string>
     <string name="setting_notifications_lunch">Lunch reminder</string>
