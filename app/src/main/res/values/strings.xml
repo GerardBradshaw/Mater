@@ -12,7 +12,7 @@
     <string name="nav_drawer_open">Open navigation drawer</string>
     <string name="nav_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Mater</string>
-    <string name="nav_header_subtitle">You mater!</string>
+    <string name="nav_header_subtitle">Recipe and shopping mate</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="nav_menu_shoppingList">Shopping List</string>
     <string name="nav_menu_settings">Settings</string>
@@ -31,7 +31,7 @@
     <string name="add_recipe_hint_title">Title…</string>
     <string name="add_recipe_hint_description">Short description…</string>
     <string name="add_recipe_hint_ingredient_name">Name…</string>
-    <string name="add_recipe_hint_ingredient_amount">Amount...</string>
+    <string name="add_recipe_hint_ingredient_amount">Amount…</string>
     <string name="add_recipe_hint_step">Describe the step…</string>
     <string name="add_recipe_hint_servings">0</string>
     <string name="add_recipe_dialog_discard_changes">Discard changes?</string>
