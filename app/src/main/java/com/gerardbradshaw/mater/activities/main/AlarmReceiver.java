@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -18,8 +17,8 @@ import java.util.Calendar;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-  private static final String ALARM_NOTIF_CHANNEL_ID = MainActivity.ALARM_NOTIF_CHANNEL_ID;
-  private static final int ALARM_NOTIF_ID = MainActivity.ALARM_NOTIF_ID;
+  private static final String ALARM_NOTIF_CHANNEL_ID = MainActivity.ALARM_NOTIFICATION_CHANNEL_ID;
+  private static final int ALARM_NOTIF_ID = MainActivity.ALARM_NOTIFICATION_ID;
   private final String LOG_TAG = "GGG - AlarmReceiver";
 
   private int currentTime = -1;
