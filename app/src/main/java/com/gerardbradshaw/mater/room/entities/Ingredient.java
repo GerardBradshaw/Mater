@@ -8,7 +8,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.gerardbradshaw.mater.helpers.Units;
+import com.gerardbradshaw.mater.util.Units;
 
 import static androidx.room.ForeignKey.CASCADE;
 

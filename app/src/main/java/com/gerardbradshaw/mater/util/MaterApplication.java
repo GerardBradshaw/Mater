@@ -1,18 +1,16 @@
-package com.gerardbradshaw.mater.helpers;
+package com.gerardbradshaw.mater.util;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.pojos.IngredientHolder;
-import com.gerardbradshaw.mater.pojos.RecipeHolder;
+import com.gerardbradshaw.mater.models.IngredientHolder;
+import com.gerardbradshaw.mater.models.RecipeHolder;
 import com.gerardbradshaw.mater.room.MaterRepository;
-import com.gerardbradshaw.mater.helpers.Units.Mass;
-import com.gerardbradshaw.mater.helpers.Units.Volume;
-import com.gerardbradshaw.mater.helpers.Units.Misc;
-import com.gerardbradshaw.mater.helpers.Categories.Category;
+import com.gerardbradshaw.mater.util.Units.Mass;
+import com.gerardbradshaw.mater.util.Units.Volume;
+import com.gerardbradshaw.mater.util.Units.Misc;
+import com.gerardbradshaw.mater.util.Categories.Category;
 
 import java.util.ArrayList;
 import java.util.List;

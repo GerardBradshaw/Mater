@@ -29,12 +29,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
 import com.gerardbradshaw.mater.activities.recipedetail.RecipeDetailActivity;
-import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
-import com.gerardbradshaw.mater.helpers.Categories;
-import com.gerardbradshaw.mater.helpers.MaterApplication;
-import com.gerardbradshaw.mater.pojos.IngredientHolder;
-import com.gerardbradshaw.mater.pojos.RecipeHolder;
-import com.gerardbradshaw.mater.helpers.Units.Misc;
+import com.gerardbradshaw.mater.util.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.util.Categories;
+import com.gerardbradshaw.mater.util.MaterApplication;
+import com.gerardbradshaw.mater.models.IngredientHolder;
+import com.gerardbradshaw.mater.models.RecipeHolder;
+import com.gerardbradshaw.mater.util.Units.Misc;
 import com.gerardbradshaw.mater.viewmodels.ImageViewModel;
 import com.gerardbradshaw.mater.viewmodels.DetailViewModel;
 

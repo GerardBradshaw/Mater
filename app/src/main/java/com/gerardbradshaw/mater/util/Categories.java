@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.helpers;
+package com.gerardbradshaw.mater.util;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

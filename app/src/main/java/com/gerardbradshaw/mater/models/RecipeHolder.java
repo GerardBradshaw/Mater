@@ -1,4 +1,4 @@
-package com.gerardbradshaw.mater.pojos;
+package com.gerardbradshaw.mater.models;
 
 import java.util.ArrayList;
 import java.util.List;

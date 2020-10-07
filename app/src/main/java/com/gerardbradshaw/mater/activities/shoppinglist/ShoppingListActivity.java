@@ -20,9 +20,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
-import com.gerardbradshaw.mater.helpers.Categories;
-import com.gerardbradshaw.mater.helpers.MaterApplication;
+import com.gerardbradshaw.mater.util.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.util.Categories;
+import com.gerardbradshaw.mater.util.MaterApplication;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 import com.gerardbradshaw.mater.room.entities.Summary;
 import com.gerardbradshaw.mater.viewmodels.IngredientViewModel;

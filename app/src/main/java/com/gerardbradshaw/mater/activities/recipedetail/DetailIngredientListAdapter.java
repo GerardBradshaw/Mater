@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.helpers.Units;
+import com.gerardbradshaw.mater.util.Units;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 
 import java.util.List;

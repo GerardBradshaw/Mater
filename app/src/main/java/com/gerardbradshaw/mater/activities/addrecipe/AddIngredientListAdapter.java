@@ -15,9 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerardbradshaw.mater.R;
-import com.gerardbradshaw.mater.helpers.Categories;
-import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.pojos.IngredientHolder;
+import com.gerardbradshaw.mater.util.Categories;
+import com.gerardbradshaw.mater.util.Units;
+import com.gerardbradshaw.mater.models.IngredientHolder;
 
 import java.util.List;
 

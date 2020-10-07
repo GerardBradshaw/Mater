@@ -1,11 +1,11 @@
-package com.gerardbradshaw.mater.pojos;
+package com.gerardbradshaw.mater.models;
 
-import com.gerardbradshaw.mater.helpers.Categories;
-import com.gerardbradshaw.mater.helpers.Units;
-import com.gerardbradshaw.mater.helpers.Units.Mass;
-import com.gerardbradshaw.mater.helpers.Units.Volume;
-import com.gerardbradshaw.mater.helpers.Units.Misc;
-import com.gerardbradshaw.mater.helpers.Categories.Category;
+import com.gerardbradshaw.mater.util.Categories;
+import com.gerardbradshaw.mater.util.Units;
+import com.gerardbradshaw.mater.util.Units.Mass;
+import com.gerardbradshaw.mater.util.Units.Volume;
+import com.gerardbradshaw.mater.util.Units.Misc;
+import com.gerardbradshaw.mater.util.Categories.Category;
 
 public class IngredientHolder {
 

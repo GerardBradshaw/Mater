@@ -3,11 +3,10 @@ package com.gerardbradshaw.mater.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Pair;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.gerardbradshaw.mater.helpers.MaterApplication;
+import com.gerardbradshaw.mater.util.MaterApplication;
 import com.gerardbradshaw.mater.room.MaterRepository;
 import com.gerardbradshaw.mater.room.entities.Summary;
 

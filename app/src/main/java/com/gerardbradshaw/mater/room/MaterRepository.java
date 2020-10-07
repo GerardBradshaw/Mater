@@ -10,10 +10,10 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.gerardbradshaw.mater.helpers.AsyncTaskScheduler;
-import com.gerardbradshaw.mater.helpers.MaterApplication;
-import com.gerardbradshaw.mater.pojos.IngredientHolder;
-import com.gerardbradshaw.mater.pojos.RecipeHolder;
+import com.gerardbradshaw.mater.util.AsyncTaskScheduler;
+import com.gerardbradshaw.mater.util.MaterApplication;
+import com.gerardbradshaw.mater.models.IngredientHolder;
+import com.gerardbradshaw.mater.models.RecipeHolder;
 import com.gerardbradshaw.mater.room.daos.IngredientDao;
 import com.gerardbradshaw.mater.room.daos.SummaryDao;
 import com.gerardbradshaw.mater.room.daos.StepDao;

@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.gerardbradshaw.mater.helpers.MaterApplication;
+import com.gerardbradshaw.mater.util.MaterApplication;
 import com.gerardbradshaw.mater.room.MaterRepository;
 import com.gerardbradshaw.mater.room.entities.Ingredient;
 

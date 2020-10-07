@@ -1,6 +1,5 @@
-package com.gerardbradshaw.mater.helpers;
+package com.gerardbradshaw.mater.util;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.common.collect.BiMap;
