@@ -7,8 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 
-@Entity(
-    tableName = "summary_table")
+@Entity(tableName = "summary_table")
 public class Summary {
 
 
@@ -37,9 +36,11 @@ public class Summary {
   // - - - - - - - - - - - - - - - Constructors - - - - - - - - - - - - - - -
 
   // Default constructor
-  public Summary(@NonNull String title,
-                 @NonNull String description,
-                 @NonNull String imageDirectory) {
+  public Summary(
+      @NonNull String title,
+      @NonNull String description,
+      @NonNull String imageDirectory
+  ) {
     this.title = title;
     this.description = description;
     this.imageDirectory = imageDirectory;
@@ -48,10 +49,12 @@ public class Summary {
 
   // Custom constructor (will eventually replace default constructor)
   @Ignore
-  public Summary(@NonNull String title,
-                 @NonNull String description,
-                 @NonNull String imageDirectory,
-                 int servings) {
+  public Summary(
+      @NonNull String title,
+      @NonNull String description,
+      @NonNull String imageDirectory,
+      int servings
+  ) {
     this.title = title;
     this.description = description;
     this.imageDirectory = imageDirectory;
