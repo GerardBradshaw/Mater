@@ -1,23 +1,26 @@
 # Mater
-Culinary adventures are great fun, and if shopping for ingredients is part of your adventure, Mater is just for you! With Mater, you can:
-- Follow your recipes
-- Add new recipes
-- View your shopping list created from your recipe ingredients
-- Change units for your recipes at any time
-- Add meal reminders
+An Android app for saving recipes and making shopping lists. With Mater, you can:
+- Follow your recipes.
+- Add new recipes.
+- View your shopping list created from your recipe ingredients.
+- Change units for your recipes at any time.
+- Add meal reminders.
+
+## Screenshots
+The best way to get to know the app is to start using it. Here's a taste of what you might see when you do:
+<img src="/art/screenshot_recipes.png?raw=true" width="400px"> <img src="/art/screenshot_shopping_list.png?raw=true" width="400px">
 
 ## Play Store
 You can download Mater on the Google Play store [here](https://play.google.com/store/apps/details?id=com.gerardbradshaw.mater)
 
 ## Building from Source
-You can also build the releases from the source for added security or beta versions.
-
-Start by getting a copy of the master branch. You can download it from [Github](https://github.com/GerardBradshaw/Mater/tree/master) or clone it by running:
+You can build this app directly from the source. Enter the terminal command below to clone this repo:
 ```shell
-git clone -b master https://github.com/GerardBradshaw/Mater
+git clone https://github.com/GerardBradshaw/Mater
 ```
 
-## Future Work
-The next steps for Mater are:
-- Cloud backup
-- Custom shopping list items (not associated with a recipe)
+## Compatibility
+This app is compatible with SDK21+.
+
+## License
+This app is available under the Apache Licence 2.0. See the LICENSE file for more info.
